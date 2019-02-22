@@ -1,3 +1,0 @@
-property set QuasiTestProps is
-	Init_State: aadlinteger applies to (system);
-end QuasiTestProps;

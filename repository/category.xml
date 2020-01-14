@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
+   <feature id="com.rockwellcollins.atc.agree.feature">
+      <category name="agree"/>
+   </feature>
+   <feature id="com.rockwellcollins.atc.agree.feature.source">
+      <category name="agree.source"/>
+   </feature>
    <feature id="edu.uah.rsesc.aadlsimulator.agree.feature">
-      <category name="fm.workbench"/>
+      <category name="agree"/>
    </feature>
    <feature id="edu.uah.rsesc.aadlsimulator.feature">
-      <category name="fm.workbench"/>
+      <category name="agree"/>
    </feature>
    <feature id="edu.uah.rsesc.aadlsimulator.agree.feature.source">
-      <category name="fm.workbench.source"/>
+      <category name="agree.source"/>
    </feature>
    <feature id="edu.uah.rsesc.aadlsimulator.feature.source">
-      <category name="fm.workbench.source"/>
+      <category name="agree.source"/>
    </feature>
-   <category-def name="fm.workbench" label="Simulator"/>
-   <category-def name="fm.workbench.source" label="Simulator Source Code"/>
+   <category-def name="agree" label="AGREE (by Collins Aerospace)"/>
+   <category-def name="agree.source" label="AGREE Source Code"/>
 </site>

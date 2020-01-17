@@ -37,6 +37,56 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    </license>
 
+   <includes
+         id="com.collins.trustedsystems.z3.feature"
+         version="4.7.1"/>
+
+   <requires>
+      <import feature="org.osate.core.feature" version="2.5.0.vfinal" match="equivalent"/>
+      <import feature="org.osate.ge.feature" version="2.5.0.vfinal" match="equivalent"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.emf.transaction" version="1.9.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.osate.aadl2.modelsupport" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.console" version="3.5.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.expressions" version="3.4.401" match="greaterOrEqual"/>
+      <import plugin="org.osate.aadl2" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.osate.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.osate.xtext.aadl2.properties" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="com.rockwellcollins.atc.agree" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="com.rockwellcollins.atc.agree.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.osate.ge"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="com.collins.trustedsystems.z3"/>
+      <import plugin="org.apache.commons.lang"/>
+      <import plugin="org.osate.aadl2.instantiation"/>
+      <import plugin="org.osate.annexsupport"/>
+      <import plugin="org.eclipse.xtext.ui"/>
+      <import plugin="org.eclipse.ui.editors" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.ui.shared"/>
+      <import plugin="org.eclipse.xtext.builder"/>
+      <import plugin="org.antlr.runtime"/>
+      <import plugin="org.eclipse.xtext.common.types.ui"/>
+      <import plugin="org.eclipse.compare"/>
+      <import plugin="org.osate.xtext.aadl2.properties.ui"/>
+      <import plugin="org.osate.annexsupport" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.osate.xtext.aadl2.ui"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.eclipse.xtext.xbase.lib"/>
+      <import plugin="org.eclipse.xtext"/>
+      <import plugin="org.osate.aadl2" version="1.0.0"/>
+      <import plugin="org.osate.xtext.aadl2" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.util"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.xtext.common.types"/>
+      <import plugin="com.rockwellcollins.atc.agree" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.9.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui.views.properties.tabbed"/>
+      <import plugin="org.osate.aadl2.edit"/>
+   </requires>
+
    <plugin
          id="com.rockwellcollins.atc.agree.analysis"
          download-size="0"
@@ -82,9 +132,5 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-
-   <includes
-         id="com.collins.trustedsystems.z3.feature"
-         version="4.7.1"/>
 
 </feature>

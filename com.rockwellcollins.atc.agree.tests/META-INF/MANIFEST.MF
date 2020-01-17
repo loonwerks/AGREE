@@ -3,7 +3,7 @@ Automatic-Module-Name: com.rockwellcollins.atc.agree.tests
 Bundle-ManifestVersion: 2
 Bundle-Name: AGREE Language Tests
 Bundle-Vendor: Collins Aerospace
-Bundle-Version: 2.4.0
+Bundle-Version: 2.4.1.qualifier
 Bundle-SymbolicName: com.rockwellcollins.atc.agree.tests;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.google.guava,

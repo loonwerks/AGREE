@@ -2,7 +2,7 @@
 <feature
       id="edu.uah.rsesc.aadlsimulator.agree.feature"
       label="AADL Simulator - AGREE Simulation Engine"
-      version="2.4.1">
+      version="2.4.2.qualifier">
 
    <copyright>
       Copyright (c) 2018, Rockwell Collins.

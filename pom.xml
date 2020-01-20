@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.rockwellcollins.atc.agree</groupId>
-	<version>2.4.1-SNAPSHOT</version>
+	<version>2.4.1</version>
 	<artifactId>com.rockwellcollins.atc.agree.parent</artifactId>
 	<packaging>pom</packaging>
 
@@ -150,7 +150,7 @@
 						<artifact>
 							<groupId>com.rockwellcollins.atc.agree</groupId>
 							<artifactId>com.rockwellcollins.atc.agree.target</artifactId>
-							<version>2.4.1-SNAPSHOT</version>
+							<version>2.4.1</version>
 						</artifact>
 					</target>
 					<environments>
@@ -429,7 +429,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/loonwerks/AGREE.git</connection>
 		<developerConnection>scm:git:https://github.com/loonwerks/AGREE.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>2.4.1-RELEASE</tag>
 	</scm>
 
 </project>

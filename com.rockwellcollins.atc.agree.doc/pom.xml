@@ -4,9 +4,9 @@
   <parent>
     <groupId>com.rockwellcollins.atc.agree</groupId>
     <artifactId>com.rockwellcollins.atc.agree.parent</artifactId>
-    <version>2.4.1-SNAPSHOT</version>
+    <version>2.4.1</version>
   </parent>
   <artifactId>com.rockwellcollins.atc.agree.doc</artifactId>
-  <version>2.4.1-SNAPSHOT</version>
+  <version>2.4.1</version>
   <packaging>eclipse-plugin</packaging>
 </project>

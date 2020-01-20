@@ -42,8 +42,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          version="4.7.1"/>
 
    <requires>
-      <import feature="org.osate.core.feature" version="2.5.0.vfinal" match="equivalent"/>
-      <import feature="org.osate.ge.feature" version="2.5.0.vfinal" match="equivalent"/>
+      <import feature="org.osate.core.feature" version="2.6.0.vfinal" match="equivalent"/>
+      <import feature="org.osate.ge.feature" version="2.6.0.vfinal" match="equivalent"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.emf.transaction" version="1.9.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime"/>

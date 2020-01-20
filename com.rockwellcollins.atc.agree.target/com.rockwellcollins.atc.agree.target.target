@@ -36,14 +36,14 @@
 		<repository location="http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.17.0"/>
 	</location>
 	<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-		<unit id="org.osate.ba.feature.feature.group" version="1.0.0.v20181106-1533"/>
-		<unit id="org.osate.core.feature.feature.group" version="2.5.0.vfinal"/>
-		<unit id="org.osate.ge.feature.feature.group" version="2.5.0.vfinal"/>
+		<unit id="org.osate.ba.feature.feature.group" version="1.0.0.v20190813-0632"/>
+		<unit id="org.osate.core.feature.feature.group" version="2.6.0.vfinal"/>
+		<unit id="org.osate.ge.feature.feature.group" version="2.6.0.vfinal"/>
 		<unit id="org.osate.ocarina.feature.feature.group" version="0.0.1.v20190417-1800"/>
-		<unit id="org.osate.plugins.feature.feature.group" version="2.5.0.vfinal"/>
+		<unit id="org.osate.plugins.feature.feature.group" version="2.6.0.vfinal"/>
 		<unit id="org.osate.utils.feature.feature.group" version="1.0.0.v20181114-1614"/>
-		<unit id="org.osate.xtext.aadl2.errormodel.feature.feature.group" version="2.5.0.vfinal"/>
-		<repository location="https://osate-build.sei.cmu.edu/download/osate/stable/2.5.0/updates/"/>
+		<unit id="org.osate.xtext.aadl2.errormodel.feature.feature.group" version="2.6.0.vfinal"/>
+		<repository location="https://osate-build.sei.cmu.edu/download/osate/stable/2.6.0/updates/"/>
 	</location>
 </locations>
 </target>

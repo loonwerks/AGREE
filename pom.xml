@@ -427,8 +427,8 @@
 	</dependencies>
 
 	<scm>
-		<connection>scm:git:git@github.com:loonwerks/AGREE.git</connection>
-		<developerConnection>scm:git:git@github.com:loonwerks/AGREE.git</developerConnection>
+		<connection>scm:git:https://github.com/loonwerks/AGREE.git</connection>
+		<developerConnection>scm:git:https://github.com/loonwerks/AGREE.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 

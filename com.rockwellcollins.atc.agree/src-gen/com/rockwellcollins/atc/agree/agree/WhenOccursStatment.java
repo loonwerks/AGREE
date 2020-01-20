@@ -25,10 +25,6 @@ public interface WhenOccursStatment extends WhenStatement
   /**
    * Returns the value of the '<em><b>Times</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Times</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Times</em>' containment reference.
    * @see #setTimes(Expr)
@@ -51,10 +47,6 @@ public interface WhenOccursStatment extends WhenStatement
   /**
    * Returns the value of the '<em><b>Interval</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Interval</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Interval</em>' containment reference.
    * @see #setInterval(TimeInterval)

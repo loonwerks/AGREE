@@ -26,10 +26,6 @@ public interface WheneverStatement extends PatternStatement
   /**
    * Returns the value of the '<em><b>Cause</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Cause</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Cause</em>' containment reference.
    * @see #setCause(Expr)
@@ -52,10 +48,6 @@ public interface WheneverStatement extends PatternStatement
   /**
    * Returns the value of the '<em><b>Excl</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Excl</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Excl</em>' attribute.
    * @see #setExcl(String)
@@ -78,10 +70,6 @@ public interface WheneverStatement extends PatternStatement
   /**
    * Returns the value of the '<em><b>Interval</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Interval</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Interval</em>' containment reference.
    * @see #setInterval(TimeInterval)

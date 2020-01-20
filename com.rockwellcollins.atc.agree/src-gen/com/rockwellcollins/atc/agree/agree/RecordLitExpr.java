@@ -29,10 +29,6 @@ public interface RecordLitExpr extends Expr
   /**
    * Returns the value of the '<em><b>Record Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Record Type</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Record Type</em>' containment reference.
    * @see #setRecordType(DoubleDotRef)
@@ -56,10 +52,6 @@ public interface RecordLitExpr extends Expr
    * Returns the value of the '<em><b>Args</b></em>' reference list.
    * The list contents are of type {@link org.osate.aadl2.NamedElement}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Args</em>' reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Args</em>' reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getRecordLitExpr_Args()
@@ -72,10 +64,6 @@ public interface RecordLitExpr extends Expr
    * Returns the value of the '<em><b>Arg Expr</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Expr}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Arg Expr</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Arg Expr</em>' containment reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getRecordLitExpr_ArgExpr()

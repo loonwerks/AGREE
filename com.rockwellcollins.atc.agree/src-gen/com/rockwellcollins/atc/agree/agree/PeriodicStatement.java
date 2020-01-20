@@ -24,10 +24,6 @@ public interface PeriodicStatement extends RealTimeStatement
   /**
    * Returns the value of the '<em><b>Period</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Period</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Period</em>' containment reference.
    * @see #setPeriod(Expr)

@@ -25,10 +25,6 @@ public interface TagExpr extends Expr
   /**
    * Returns the value of the '<em><b>Stem</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Stem</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Stem</em>' containment reference.
    * @see #setStem(Expr)
@@ -51,10 +47,6 @@ public interface TagExpr extends Expr
   /**
    * Returns the value of the '<em><b>Tag</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Tag</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Tag</em>' attribute.
    * @see #setTag(String)

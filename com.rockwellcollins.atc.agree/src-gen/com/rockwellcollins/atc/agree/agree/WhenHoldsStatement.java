@@ -25,10 +25,6 @@ public interface WhenHoldsStatement extends WhenStatement
   /**
    * Returns the value of the '<em><b>Condition Interval</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Condition Interval</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Condition Interval</em>' containment reference.
    * @see #setConditionInterval(TimeInterval)
@@ -51,10 +47,6 @@ public interface WhenHoldsStatement extends WhenStatement
   /**
    * Returns the value of the '<em><b>Event Interval</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Event Interval</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Event Interval</em>' containment reference.
    * @see #setEventInterval(TimeInterval)

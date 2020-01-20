@@ -27,10 +27,6 @@ public interface RecordUpdateExpr extends Expr
   /**
    * Returns the value of the '<em><b>Record</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Record</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Record</em>' containment reference.
    * @see #setRecord(Expr)
@@ -53,10 +49,6 @@ public interface RecordUpdateExpr extends Expr
   /**
    * Returns the value of the '<em><b>Key</b></em>' reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Key</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Key</em>' reference.
    * @see #setKey(NamedElement)
@@ -79,10 +71,6 @@ public interface RecordUpdateExpr extends Expr
   /**
    * Returns the value of the '<em><b>Expr</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Expr</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr</em>' containment reference.
    * @see #setExpr(Expr)

@@ -26,10 +26,6 @@ public interface SynchStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Val</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Val</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Val</em>' attribute.
    * @see #setVal(String)
@@ -52,10 +48,6 @@ public interface SynchStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Val2</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Val2</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Val2</em>' attribute.
    * @see #setVal2(String)
@@ -78,10 +70,6 @@ public interface SynchStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Sim</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Sim</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sim</em>' attribute.
    * @see #setSim(String)

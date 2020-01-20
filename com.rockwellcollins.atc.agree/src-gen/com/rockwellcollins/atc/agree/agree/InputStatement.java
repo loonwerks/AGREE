@@ -28,10 +28,6 @@ public interface InputStatement extends Element, SpecStatement
    * Returns the value of the '<em><b>Lhs</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Arg}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Lhs</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Lhs</em>' containment reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getInputStatement_Lhs()

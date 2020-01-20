@@ -28,10 +28,6 @@ public interface PrimType extends Type
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
@@ -54,10 +50,6 @@ public interface PrimType extends Type
   /**
    * Returns the value of the '<em><b>Low Neg</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Low Neg</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Low Neg</em>' attribute.
    * @see #setLowNeg(String)
@@ -80,10 +72,6 @@ public interface PrimType extends Type
   /**
    * Returns the value of the '<em><b>Range Low</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Range Low</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Range Low</em>' attribute.
    * @see #setRangeLow(String)
@@ -106,10 +94,6 @@ public interface PrimType extends Type
   /**
    * Returns the value of the '<em><b>High Neg</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>High Neg</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>High Neg</em>' attribute.
    * @see #setHighNeg(String)
@@ -132,10 +116,6 @@ public interface PrimType extends Type
   /**
    * Returns the value of the '<em><b>Range High</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Range High</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Range High</em>' attribute.
    * @see #setRangeHigh(String)

@@ -25,10 +25,6 @@ public interface PrevExpr extends Expr
   /**
    * Returns the value of the '<em><b>Delay</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Delay</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Delay</em>' containment reference.
    * @see #setDelay(Expr)
@@ -51,10 +47,6 @@ public interface PrevExpr extends Expr
   /**
    * Returns the value of the '<em><b>Init</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Init</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Init</em>' containment reference.
    * @see #setInit(Expr)

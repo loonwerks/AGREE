@@ -26,10 +26,6 @@ public interface IfThenElseExpr extends Expr
   /**
    * Returns the value of the '<em><b>A</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>A</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>A</em>' containment reference.
    * @see #setA(Expr)
@@ -52,10 +48,6 @@ public interface IfThenElseExpr extends Expr
   /**
    * Returns the value of the '<em><b>B</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>B</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>B</em>' containment reference.
    * @see #setB(Expr)
@@ -78,10 +70,6 @@ public interface IfThenElseExpr extends Expr
   /**
    * Returns the value of the '<em><b>C</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>C</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>C</em>' containment reference.
    * @see #setC(Expr)

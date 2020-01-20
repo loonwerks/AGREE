@@ -26,10 +26,6 @@ public interface ConnectionStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Conn</b></em>' reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Conn</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Conn</em>' reference.
    * @see #setConn(NamedElement)
@@ -52,10 +48,6 @@ public interface ConnectionStatement extends SpecStatement
   /**
    * Returns the value of the '<em><b>Expr</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Expr</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr</em>' containment reference.
    * @see #setExpr(Expr)

@@ -26,10 +26,6 @@ public interface CallExpr extends Expr
   /**
    * Returns the value of the '<em><b>Ref</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ref</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ref</em>' containment reference.
    * @see #setRef(DoubleDotRef)
@@ -53,10 +49,6 @@ public interface CallExpr extends Expr
    * Returns the value of the '<em><b>Args</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Expr}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Args</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Args</em>' containment reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getCallExpr_Args()

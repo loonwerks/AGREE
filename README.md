@@ -46,6 +46,12 @@ master branch onto the special-purpose branch to capture the updated
 versioning information and to avoid conflicts merging back into the
 develop branch.
 
+Branch names should be chosen to describe the activity to be taken on
+the branch.  For example, to develop a new feature 'A', the branch
+might be named 'develop-feature-A.'  Or to fix an issue recorded in
+the issue base the branch might be named 'fix-issue-x' where x is the
+sequence number assigned to the issue.
+
 Tags are typically reserved for releases, but may be used to mark
 special points in the development process.
 
@@ -82,8 +88,12 @@ follows:
    CI/CD automation of interim development builds.
 
    During this process maven will ask for the tag to applied to the
-   release. Following convention, the form of the tag should be
-   'x.y.z-release'. (For example 1.1.0-release.)
+   release. Release tags shall be of the form 'x.y.z-RELEASE' where
+   `x` is the major version number, `y` is the minor version number,
+   and `z` is the patch version number.  Ordinarily, AGREE would
+   follow the [Semantic Versioning](https://semver.org/) method.
+   However, OSATE does not guarantee that micro versions have backward
+   compatible API changes and AGREE must follow this.
 
    Also during the process an apparent bug in the Tycho release plugin
    will likely be encountered due to the apparent failure to be able
@@ -99,9 +109,15 @@ follows:
    155, updating to the new development version.  Then, again, resume
    the release process with the same command line as before.
 
-1. Perform the release:
+1. Ordinarily one would expect to actually perform the release using
+   the customary `mvn release:perform -Dgoals="clean verify"` command.
+   However, this appears to run into difficulty fetching the appropriate
+   tag to build.  Instead do the following:
 
-   `mvn release:perform -Dgoals="clean verify"`
+   `git checkout x.x.x-RELEASE`
+   `mvn clean verify`
+
+   where `x.x.x` is the version number to be released.
 
 1. Commit the release binaries into the companion releases repository at
    git@github.com:loonwerks/AGREE-releases.git:

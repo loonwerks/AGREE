@@ -25,6 +25,8 @@ before_install:
 - pip3 install --user GitPython github3.py
 - "./git-setup.sh"
 
+install: /bin/true
+
 script:
 - mvn clean verify
 

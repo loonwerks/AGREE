@@ -53,21 +53,38 @@ from within an OSATE/Eclipse development environment.
 ### Building the Documentation
 
 The documentation source code is maintained in
-[Markdown](https://en.wikipedia.org/wiki/Markdown) from which HTML and
-PDF output is generated.  HTML output includes indexes for application
-as in-tool help files.  As there is no formal standard for Markdown,
-the [Pandoc
+[Markdown](https://en.wikipedia.org/wiki/Markdown) from which HTML,
+PDF, and DOCX output is generated.  HTML output includes indexes for
+application as in-tool help files.  As there is no formal standard for
+Markdown, the [Pandoc
 variant](https://rmarkdown.rstudio.com/authoring_pandoc_markdown.html%23raw-tex)
 is used.  Building the documentation output requires
 [Pandoc](https://pandoc.org),
 [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref), and a
 LaTeX distribution.  An Apache ANT build script provided in the AGREE
 distribution can be used to automate the documentation build provided
-the required build tools have been installed.
+the required build tools have been installed.  Since installation of
+the LaTeX distribution is intensive, documentation is not presently
+automatically built as a portion of the Travis-CI build process.
+Accordingly, pre-built generated documentation artifacts (HTML, PDF,
+and DOCX) are maintained in this repository.
 
 ### Building in Tycho-Maven
 
-TBD
+[Tycho](https://www.eclipse.org/tycho/) is a collection of
+[Maven](https://maven.apache.org/) plugins that map the Eclipse builds
+into Maven.  Principally, it maps the OSGi dependencies into maven
+dependencies.  Accordingly, the contents of the AGREE plugin manifests
+are combined with the pom.xml configurations to produce a unified
+builod environment.
+
+To build and package AGREE as an Eclipse P2 repository apply the command line
+
+`mvn clean verify`
+
+This command deletes generated files (except Xtext artifacts and
+documenation outputs), compiles, runs tests and completes the
+packaging.
 
 ### Branches and Tags
 

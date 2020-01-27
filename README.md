@@ -22,6 +22,51 @@ com.rockwellcollins.atc.agree.doc project.
 
 ## Development Guide
 
+### Setting-Up a Development Environment
+
+The AGREE development environement is essentially the same as that for
+OSATE with the addition of the AGREE source projects.  It is
+recommended to use the [setup
+instructions](https://osate.org/setup-development.html) provided by
+the OSATE team and then import the AGREE projects.  Note that as OSATE
+does not guarantee backward compatibility for minor version updates,
+it is important to match the version of OSATE to the version of AGREE.
+Presently, AGREE is being developed with respect to OSATE version
+2.6.x on Eclipse 2019-09.
+
+### Xtext Artifacts
+
+AGREE uses Xtext to generate its language API and integration with
+OSATE as an annex language.  While facilities to run the Xtext work
+flow as a build step under the Tycho/Maven build tool, this is not
+presently done.  Since AGREE uses the
+[Ecore](https://wiki.eclipse.org/Ecore) meta model and classes,
+successful generation of Xtext artifacts under Tycho/Maven is not
+presently possible due the [Xtext Core Issue
+41](https://github.com/eclipse/xtext-core/issues/41).  As a
+workaround, generated Xtext artifacts are stored in configuration
+management in this repository.  Further, the Xtext artifacts are
+re-generated manually by application of the MWE workflow
+[GenerateAgree.mwe2](https://github.com/loonwerks/AGREE/blob/master/com.rockwellcollins.atc.agree/src/com/rockwellcollins/atc/agree/GenerateAgree.mwe2)
+from within an OSATE/Eclipse development environment.
+
+### Building the Documentation
+
+The documentation source code is maintained in
+[Markdown](https://en.wikipedia.org/wiki/Markdown) from which HTML and
+PDF output is generated.  HTML output includes indexes for application
+as in-tool help files.  As there is no formal standard for Markdown,
+the [Pandoc
+variant](https://rmarkdown.rstudio.com/authoring_pandoc_markdown.html%23raw-tex)
+is used.  Building the documentation output requires
+[Pandoc](https://pandoc.org),
+[pandoc-crossref](https://github.com/lierdakil/pandoc-crossref), and a
+LaTeX distribution.  An Apache ANT build script provided in the AGREE
+distribution can be used to automate the documentation build provided
+the required build tools have been installed.
+
+### Building in Tycho-Maven
+
 TBD
 
 ### Branches and Tags

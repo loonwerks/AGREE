@@ -1,3 +1,6 @@
+//outlet.DEFAULT_OUTPUT.sourceFolder.src/main/java.directory=xtend-gen
+//outlet.DEFAULT_OUTPUT.sourceFolder.src/test/java.directory=xtend-gen
+BuilderConfiguration.is_project_specific=true
 blank.line.around.expressions=0
 blank.lines.after.imports=1
 blank.lines.after.last.member=0
@@ -23,6 +26,9 @@ newline.after.method.annotations=false
 newline.after.parameter.annotations=false
 org.eclipse.xtend.formatter.version=1
 org.eclipse.xtend.ide.default.eclipse_profile=_OSATE
+outlet.DEFAULT_OUTPUT.hideLocalSyntheticVariables=true
+outlet.DEFAULT_OUTPUT.installDslAsPrimarySource=false
+outlet.DEFAULT_OUTPUT.userOutputPerSourceFolder=true
 preserve.blank.lines=1
 preserve.new.lines=true
 whitespace.between.keyword.and.parenthesis=true

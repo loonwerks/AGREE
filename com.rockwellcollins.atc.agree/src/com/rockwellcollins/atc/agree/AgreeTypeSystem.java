@@ -247,10 +247,9 @@ public class AgreeTypeSystem {
 						&& ((DataImplementation) c).getType() != null)) {
 			// Includes special case for data implementations implementing extensions of primitive types
 			List<PropertyAssociation> pas = c.getAllPropertyAssociations();
-			List<Classifier> exts = (c instanceof DataImplementation ? ((DataImplementation) c).getType() : c)
-					.getSelfPlusAllExtended();
-			for (Classifier ext : exts) {
-				if (ext != null && (ext instanceof AadlInteger || hasIntegerDataRepresentation(ext))) {
+			Classifier classifierType = c instanceof DataImplementation ? ((DataImplementation) c).getType() : c;
+			for (Classifier classType : classifierType.getSelfPlusAllExtended()) {
+				if (classType != null && hasIntegerDataRepresentation(classType)) {
 
 					for (PropertyAssociation choice : pas) {
 						Property p = choice.getProperty();
@@ -274,7 +273,7 @@ public class AgreeTypeSystem {
 					}
 					return Prim.IntTypeDef;
 
-				} else if (ext != null && (ext instanceof AadlReal || hasFloatDataRepresentation(ext))) {
+				} else if (classType != null && hasFloatDataRepresentation(classType)) {
 
 					for (PropertyAssociation choice : pas) {
 						Property p = choice.getProperty();
@@ -298,7 +297,7 @@ public class AgreeTypeSystem {
 					}
 					return Prim.RealTypeDef;
 
-				} else if (ext != null && (ext instanceof AadlBoolean || hasBooleanDataRepresentation(ext))) {
+				} else if (classType != null && hasBooleanDataRepresentation(classType)) {
 					return Prim.BoolTypeDef;
 				}
 			}

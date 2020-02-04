@@ -11,7 +11,10 @@ import org.eclipse.xtext.testing.XtextRunner
 import com.itemis.xtext.testing.XtextTest
 import com.itemis.xtext.testing.FluentIssueCollection
 
+import org.osate.aadl2.AadlBoolean
+import org.osate.aadl2.AadlInteger
 import org.osate.aadl2.AadlPackage
+import org.osate.aadl2.AadlReal
 import org.osate.aadl2.DataPort
 import org.osate.aadl2.DataType
 import org.osate.aadl2.DefaultAnnexSubclause
@@ -21,6 +24,7 @@ import com.rockwellcollins.atc.agree.AgreeTypeSystem
 import com.rockwellcollins.atc.agree.agree.AgreeContract
 import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause
 import com.rockwellcollins.atc.agree.agree.EqStatement
+import com.rockwellcollins.atc.agree.agree.GetPropertyExpr
 import com.rockwellcollins.atc.agree.agree.NamedElmExpr
 
 import com.rockwellcollins.atc.agree.tests.testsupport.TestHelper
@@ -122,6 +126,96 @@ class AgreeTypeInferenceTest extends XtextTest {
 									Assert.assertEquals(port3, elm)
 									elm as DataPort => [
 										Assert.assertEquals(realDataType, dataFeatureClassifier)
+									]
+								]
+								Assert.assertEquals(AgreeTypeSystem.Prim.RealTypeDef, AgreeTypeSystem.infer(expr))
+							]
+						]
+					]
+				]
+			]
+		]
+
+		assertConstraints(issueCollection.sizeIs(0))
+	}
+
+	@Test
+	def void testPropertyTypes() {
+		val model = '''
+			package Scratch
+			public
+				with SEI;
+			
+				system SystemP
+					properties
+						SEI::Broadcast_Protocol => true;
+						SEI::SafetyCriticality => 3;
+						SEI::GrossWeight => 220.0 kg;
+					annex agree {**
+						eq zb : bool = Get_Property(this, SEI::Broadcast_Protocol);
+						eq zi : int = Get_Property(this, SEI::SafetyCriticality);
+						eq zr : real = Get_Property(this, SEI::GrossWeight);
+					**};
+			
+				end SystemP;
+			
+			end Scratch;
+		'''
+
+		val testResult = issues = testHelper.testString(model)
+		val issueCollection = new FluentIssueCollection(testResult.resource, newArrayList, newArrayList)
+
+		// parseResult => [
+		testResult.resource.contents.head as AadlPackage => [
+			Assert.assertEquals(1, publicSection.ownedClassifiers.filter(SystemType).size);
+			publicSection.ownedClassifiers.filter(SystemType).head => [
+				Assert.assertEquals(3, ownedPropertyAssociations.size);
+				val boolPropType = ownedPropertyAssociations.head.property.type
+				val intPropType = ownedPropertyAssociations.tail.head.property.type
+				val realPropType = ownedPropertyAssociations.tail.tail.head.property.type
+				Assert.assertTrue(boolPropType instanceof AadlBoolean)
+				Assert.assertTrue(intPropType instanceof AadlInteger)
+				Assert.assertTrue(realPropType instanceof AadlReal)
+				Assert.assertEquals(1, ownedAnnexSubclauses.size)
+				ownedAnnexSubclauses.head as DefaultAnnexSubclause => [
+					Assert.assertTrue(parsedAnnexSubclause instanceof AgreeContractSubclause)
+					parsedAnnexSubclause as AgreeContractSubclause => [
+						Assert.assertNotNull(contract)
+						Assert.assertTrue(contract instanceof AgreeContract)
+						contract as AgreeContract => [
+							Assert.assertEquals(3, specs.filter(EqStatement).size)
+							specs.filter(EqStatement).head => [
+								Assert.assertEquals(1, lhs.size)
+								Assert.assertEquals('zb', lhs.head.name)
+								Assert.assertTrue(expr instanceof GetPropertyExpr)
+								expr as GetPropertyExpr => [
+									Assert.assertTrue(prop instanceof org.osate.aadl2.Property)
+									prop as org.osate.aadl2.Property => [
+										Assert.assertEquals(boolPropType, type)
+									]
+								]
+								Assert.assertEquals(AgreeTypeSystem.Prim.BoolTypeDef, AgreeTypeSystem.infer(expr))
+							]
+							specs.filter(EqStatement).tail.head => [
+								Assert.assertEquals(1, lhs.size)
+								Assert.assertEquals('zi', lhs.head.name)
+								Assert.assertTrue(expr instanceof GetPropertyExpr)
+								expr as GetPropertyExpr => [
+									Assert.assertTrue(prop instanceof org.osate.aadl2.Property)
+									prop as org.osate.aadl2.Property => [
+										Assert.assertEquals(intPropType, type)
+									]
+								]
+								Assert.assertEquals(AgreeTypeSystem.Prim.IntTypeDef, AgreeTypeSystem.infer(expr))
+							]
+							specs.filter(EqStatement).tail.tail.head => [
+								Assert.assertEquals(1, lhs.size)
+								Assert.assertEquals('zr', lhs.head.name)
+								Assert.assertTrue(expr instanceof GetPropertyExpr)
+								expr as GetPropertyExpr => [
+									Assert.assertTrue(prop instanceof org.osate.aadl2.Property)
+									prop as org.osate.aadl2.Property => [
+										Assert.assertEquals(realPropType, type)
 									]
 								]
 								Assert.assertEquals(AgreeTypeSystem.Prim.RealTypeDef, AgreeTypeSystem.infer(expr))

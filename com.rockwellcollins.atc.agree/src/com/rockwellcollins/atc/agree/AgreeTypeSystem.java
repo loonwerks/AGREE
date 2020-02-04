@@ -242,23 +242,14 @@ public class AgreeTypeSystem {
 	}
 
 	public static TypeDef typeDefFromClassifier(Classifier c) {
-		if (c instanceof AadlBoolean || c.getName().contains("Boolean")) {
-			return Prim.BoolTypeDef;
-		} else if (c instanceof AadlInteger || c.getName().contains("Integer") || c.getName().contains("Natural")
-				|| c.getName().contains("Unsigned")) {
-			return Prim.IntTypeDef;
-		} else if (c instanceof AadlReal || c.getName().contains("Float")) {
-			return Prim.RealTypeDef;
-		} else if (c instanceof DataType
+		if (c instanceof DataType
 				|| (c instanceof DataImplementation && ((DataImplementation) c).getAllSubcomponents().isEmpty()
 						&& ((DataImplementation) c).getType() != null)) {
 			// Includes special case for data implementations implementing extensions of primitive types
 			List<PropertyAssociation> pas = c.getAllPropertyAssociations();
-			List<Classifier> exts = (c instanceof DataImplementation ? ((DataImplementation) c).getType() : c)
-					.getSelfPlusAllExtended();
-			for (Classifier ext : exts) {
-				if (ext != null && (ext instanceof AadlInteger || ext.getName().contains("Integer")
-						|| ext.getName().contains("Natural") || ext.getName().contains("Unsigned"))) {
+			Classifier classifierType = c instanceof DataImplementation ? ((DataImplementation) c).getType() : c;
+			for (Classifier classType : classifierType.getSelfPlusAllExtended()) {
+				if (classType != null && hasIntegerDataRepresentation(classType)) {
 
 					for (PropertyAssociation choice : pas) {
 						Property p = choice.getProperty();
@@ -282,7 +273,7 @@ public class AgreeTypeSystem {
 					}
 					return Prim.IntTypeDef;
 
-				} else if (ext != null && (ext instanceof AadlReal || ext.getName().contains("Float"))) {
+				} else if (classType != null && hasFloatDataRepresentation(classType)) {
 
 					for (PropertyAssociation choice : pas) {
 						Property p = choice.getProperty();
@@ -305,6 +296,9 @@ public class AgreeTypeSystem {
 						}
 					}
 					return Prim.RealTypeDef;
+
+				} else if (classType != null && hasBooleanDataRepresentation(classType)) {
+					return Prim.BoolTypeDef;
 				}
 			}
 
@@ -476,6 +470,65 @@ public class AgreeTypeSystem {
 
 	}
 
+	public static boolean hasBooleanDataRepresentation(Classifier classifier) {
+		boolean result = false;
+
+		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
+		for (PropertyAssociation propertyAssociation : propertyAssociations) {
+			Property property = propertyAssociation.getProperty();
+			PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
+			if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
+					&& propertyExpr instanceof NamedValue) {
+				AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
+				if (abstractNamedValue instanceof EnumerationLiteral
+						&& "Boolean".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
+					result = true;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public static boolean hasIntegerDataRepresentation(Classifier classifier) {
+		boolean result = false;
+
+		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
+		for (PropertyAssociation propertyAssociation : propertyAssociations) {
+			Property property = propertyAssociation.getProperty();
+			PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
+			if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
+					&& propertyExpr instanceof NamedValue) {
+				AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
+				if (abstractNamedValue instanceof EnumerationLiteral
+						&& "Integer".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
+					result = true;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public static boolean hasFloatDataRepresentation(Classifier classifier) {
+		boolean result = false;
+
+		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
+		for (PropertyAssociation propertyAssociation : propertyAssociations) {
+			Property property = propertyAssociation.getProperty();
+			PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
+			if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
+					&& propertyExpr instanceof NamedValue) {
+				AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
+				if (abstractNamedValue instanceof EnumerationLiteral
+						&& "Float".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
+					result = true;
+				}
+			}
+		}
+
+		return result;
+	}
 
 	public static TypeDef typeDefFromType(Type t) {
 

@@ -37,6 +37,86 @@ class AgreeTypeInferenceTest extends XtextTest {
 	TestHelper<AadlPackage> testHelper
 
 	@Test
+	def void testPrimitiveTypes() {
+		val model = '''
+			package Scratch
+			public
+				with Base_Types;
+			
+				system SystemA
+					features
+						port1 : in data port Base_Types::Boolean;
+						port2 : in data port Base_Types::Integer;
+						port3 : in data port Base_Types::Float;
+					annex agree {**
+						eq zb : bool = port1;
+						eq zi : int = port2;
+						eq zr : real = port3;
+					**};
+				end SystemA;
+			
+			end Scratch;
+		'''
+
+		val testResult = issues = testHelper.testString(model)
+		val issueCollection = new FluentIssueCollection(testResult.resource, newArrayList, newArrayList)
+
+		// parseResult => [
+		testResult.resource.contents.head as AadlPackage => [
+			Assert.assertEquals(1, publicSection.ownedClassifiers.filter(SystemType).size)
+			publicSection.ownedClassifiers.filter(SystemType).head => [
+				Assert.assertEquals(3, ownedFeatures.filter(DataPort).size);
+				val port1 = ownedFeatures.filter(DataPort).head as DataPort
+				val port2 = ownedFeatures.filter(DataPort).tail.head as DataPort
+				val port3 = ownedFeatures.filter(DataPort).tail.tail.head as DataPort
+				Assert.assertEquals(1, ownedAnnexSubclauses.size)
+				ownedAnnexSubclauses.head as DefaultAnnexSubclause => [
+					Assert.assertTrue(parsedAnnexSubclause instanceof AgreeContractSubclause)
+					parsedAnnexSubclause as AgreeContractSubclause => [
+						Assert.assertNotNull(contract)
+						Assert.assertTrue(contract instanceof AgreeContract)
+						contract as AgreeContract => [
+							Assert.assertEquals(3, specs.filter(EqStatement).size)
+							specs.filter(EqStatement).head => [
+								Assert.assertEquals(1, lhs.size)
+								Assert.assertEquals('zb', lhs.head.name)
+								Assert.assertTrue(expr instanceof NamedElmExpr)
+								expr as NamedElmExpr => [
+									Assert.assertTrue(elm instanceof DataPort)
+									Assert.assertEquals(port1, elm)
+								]
+								Assert.assertEquals(AgreeTypeSystem.Prim.BoolTypeDef, AgreeTypeSystem.infer(expr))
+							]
+							specs.filter(EqStatement).tail.head => [
+								Assert.assertEquals(1, lhs.size)
+								Assert.assertEquals('zi', lhs.head.name)
+								Assert.assertTrue(expr instanceof NamedElmExpr)
+								expr as NamedElmExpr => [
+									Assert.assertTrue(elm instanceof DataPort)
+									Assert.assertEquals(port2, elm)
+								]
+								Assert.assertEquals(AgreeTypeSystem.Prim.IntTypeDef, AgreeTypeSystem.infer(expr))
+							]
+							specs.filter(EqStatement).tail.tail.head => [
+								Assert.assertEquals(1, lhs.size)
+								Assert.assertEquals('zr', lhs.head.name)
+								Assert.assertTrue(expr instanceof NamedElmExpr)
+								expr as NamedElmExpr => [
+									Assert.assertTrue(elm instanceof DataPort)
+									Assert.assertEquals(port3, elm)
+								]
+								Assert.assertEquals(AgreeTypeSystem.Prim.RealTypeDef, AgreeTypeSystem.infer(expr))
+							]
+						]
+					]
+				]
+			]
+		]
+
+		assertConstraints(issueCollection.sizeIs(0))
+	}
+
+	@Test
 	def void testExtensionOfPrimitiveTypes() {
 		val model = '''
 			package Scratch

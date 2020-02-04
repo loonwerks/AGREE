@@ -257,6 +257,10 @@ public class AgreeTypeSystem {
 			List<Classifier> exts = (c instanceof DataImplementation ? ((DataImplementation) c).getType() : c)
 					.getSelfPlusAllExtended();
 			for (Classifier ext : exts) {
+				if (ext.eIsProxy()) {
+					ext = (Classifier) org.eclipse.emf.ecore.util.EcoreUtil.resolve(ext,
+							c.eResource().getResourceSet());
+				}
 				if (ext != null && (ext instanceof AadlInteger || ext.getName().contains("Integer")
 						|| ext.getName().contains("Natural") || ext.getName().contains("Unsigned"))) {
 
@@ -305,6 +309,9 @@ public class AgreeTypeSystem {
 						}
 					}
 					return Prim.RealTypeDef;
+
+				} else if (ext != null && (ext instanceof AadlBoolean || ext.getName().contains("Boolean"))) {
+					return Prim.BoolTypeDef;
 				}
 			}
 

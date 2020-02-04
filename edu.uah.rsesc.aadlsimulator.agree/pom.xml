@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>com.rockwellcollins.atc.agree</groupId>
 		<artifactId>com.rockwellcollins.atc.agree.parent</artifactId>
-		<version>2.4.2.202002042002</version>
+		<version>2.4.2-SNAPSHOT</version>
 	</parent>
 
 	<groupId>edu.uah.rsesc.aadlsimulator</groupId>
 	<artifactId>edu.uah.rsesc.aadlsimulator.agree</artifactId>
-	<version>2.4.2.202002042002</version>
+	<version>2.4.2-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>

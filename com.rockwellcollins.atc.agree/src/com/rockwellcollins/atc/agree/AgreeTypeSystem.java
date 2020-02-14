@@ -936,44 +936,54 @@ public class AgreeTypeSystem {
 			return new EnumTypeDef(name, enumValues, enumDef);
 
 		} else if (ne instanceof NamedID) {
-
 			EObject container = ne.eContainer();
 
 			Expr arrExpr = null;
+			boolean isItemBinding = false;
 
 			if (container instanceof ForallExpr) {
 				arrExpr = ((ForallExpr) container).getArray();
+				isItemBinding = true;
 
 			} else if (container instanceof ExistsExpr) {
 				arrExpr = ((ExistsExpr) container).getArray();
+				isItemBinding = true;
 
 			} else if (container instanceof FlatmapExpr) {
 				arrExpr = ((FlatmapExpr) container).getArray();
+				isItemBinding = true;
 
 			} else if (container instanceof FoldLeftExpr) {
-				arrExpr = ((FoldLeftExpr) container).getArray();
+				FoldLeftExpr fexpr = (FoldLeftExpr) container;
+				arrExpr = fexpr.getArray();
+				isItemBinding = fexpr.getBinding().getName().equals(ne.getName());
 
 			} else if (container instanceof FoldRightExpr) {
-				arrExpr = ((FoldRightExpr) container).getArray();
+				FoldRightExpr fexpr = (FoldRightExpr) container;
+				arrExpr = fexpr.getArray();
+				isItemBinding = fexpr.getBinding().getName().equals(ne.getName());
 
 			}
 
 			if (arrExpr != null) {
-				TypeDef arrType = infer(arrExpr);
-				if (arrType instanceof ArrayTypeDef) {
-					return ((ArrayTypeDef) arrType).stemType;
+				if (isItemBinding) {
+					TypeDef arrType = infer(arrExpr);
+					if (arrType instanceof ArrayTypeDef) {
+						return ((ArrayTypeDef) arrType).stemType;
+					}
+				} else {
+					// ne must be the accumulator
+					if (container instanceof FoldLeftExpr) {
+						Expr initExpr = ((FoldLeftExpr) container).getInitial();
+						TypeDef initType = infer(initExpr);
+						return initType;
+
+					} else if (container instanceof FoldRightExpr) {
+						Expr initExpr = ((FoldRightExpr) container).getInitial();
+						TypeDef initType = infer(initExpr);
+						return initType;
+					}
 				}
-			}
-
-			if (container instanceof FoldLeftExpr) {
-				Expr initExpr = ((FoldLeftExpr) container).getInitial();
-				TypeDef initType = infer(initExpr);
-				return initType;
-
-			} else if (container instanceof FoldRightExpr) {
-				Expr initExpr = ((FoldRightExpr) container).getInitial();
-				TypeDef initType = infer(initExpr);
-				return initType;
 			}
 
 

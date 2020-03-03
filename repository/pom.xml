@@ -4,10 +4,10 @@
 	<parent>
 		<groupId>com.rockwellcollins.atc.agree</groupId>
 		<artifactId>com.rockwellcollins.atc.agree.parent</artifactId>
-		<version>2.4.2-SNAPSHOT</version>
+		<version>2.4.2</version>
 	</parent>
 	<artifactId>com.rockwellcollins.atc.agree.repository</artifactId>
-	<version>2.4.2-SNAPSHOT</version>
+	<version>2.4.2</version>
 	<packaging>eclipse-repository</packaging>
 
 	<build>

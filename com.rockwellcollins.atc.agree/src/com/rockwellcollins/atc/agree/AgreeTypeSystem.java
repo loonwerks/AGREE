@@ -476,13 +476,15 @@ public class AgreeTypeSystem {
 		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
 		for (PropertyAssociation propertyAssociation : propertyAssociations) {
 			Property property = propertyAssociation.getProperty();
-			PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
-			if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
-					&& propertyExpr instanceof NamedValue) {
-				AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
-				if (abstractNamedValue instanceof EnumerationLiteral
-						&& "Boolean".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
-					result = true;
+			if (classifier.acceptsProperty(property)) {
+				PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
+				if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
+						&& propertyExpr instanceof NamedValue) {
+					AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
+					if (abstractNamedValue instanceof EnumerationLiteral
+							&& "Boolean".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
+						result = true;
+					}
 				}
 			}
 		}
@@ -496,13 +498,15 @@ public class AgreeTypeSystem {
 		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
 		for (PropertyAssociation propertyAssociation : propertyAssociations) {
 			Property property = propertyAssociation.getProperty();
-			PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
-			if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
-					&& propertyExpr instanceof NamedValue) {
-				AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
-				if (abstractNamedValue instanceof EnumerationLiteral
-						&& "Integer".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
-					result = true;
+			if (classifier.acceptsProperty(property)) {
+				PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
+				if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
+						&& propertyExpr instanceof NamedValue) {
+					AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
+					if (abstractNamedValue instanceof EnumerationLiteral
+							&& "Integer".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
+						result = true;
+					}
 				}
 			}
 		}
@@ -516,13 +520,15 @@ public class AgreeTypeSystem {
 		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
 		for (PropertyAssociation propertyAssociation : propertyAssociations) {
 			Property property = propertyAssociation.getProperty();
-			PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
-			if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
-					&& propertyExpr instanceof NamedValue) {
-				AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
-				if (abstractNamedValue instanceof EnumerationLiteral
-						&& "Float".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
-					result = true;
+			if (classifier.acceptsProperty(property)) {
+				PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
+				if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
+						&& propertyExpr instanceof NamedValue) {
+					AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
+					if (abstractNamedValue instanceof EnumerationLiteral
+							&& "Float".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
+						result = true;
+					}
 				}
 			}
 		}

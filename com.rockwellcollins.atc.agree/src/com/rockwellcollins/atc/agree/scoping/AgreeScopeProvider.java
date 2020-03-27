@@ -159,6 +159,11 @@ public class AgreeScopeProvider extends org.osate.xtext.aadl2.properties.scoping
 
 		}
 
+		Classifier extended = ctx.getExtended();
+		if (extended != null) {
+			components.putAll(getNamedElementsFromClassifier(extended, false));
+		}
+
 		return components;
 
 	}

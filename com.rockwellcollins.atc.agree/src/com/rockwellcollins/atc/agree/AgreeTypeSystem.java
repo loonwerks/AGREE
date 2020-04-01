@@ -383,11 +383,62 @@ public class AgreeTypeSystem {
 				ComponentType ct = null;
 				if (currClsfr instanceof ComponentImplementation) {
 					EList<Subcomponent> subcomps = ((ComponentImplementation) currClsfr).getAllSubcomponents();
+
 					for (Subcomponent sub : subcomps) {
 						String fieldName = sub.getName();
 						if (sub.getClassifier() != null) {
+							boolean prop_isArray = false;
+							int prop_arraySize = 0;
+							boolean prop_isEnum = false;
+							List<String> prop_enumValues = null;
+							for (PropertyAssociation pa : sub.getOwnedPropertyAssociations()) {
+								Property p = pa.getProperty();
+								String key = p.getQualifiedName();
+								key = key == null ? p.getName() : key;
+								PropertyExpression v = pa.getOwnedValues().get(0).getOwnedValue();
 
-							if (sub.getArrayDimensions().size() == 0) {
+								if (key.equals("Data_Model::Data_Representation")) {
+									if (v instanceof NamedValue) {
+										AbstractNamedValue anv = ((NamedValue) v).getNamedValue();
+										if (anv instanceof EnumerationLiteral) {
+											EnumerationLiteral el = (EnumerationLiteral) anv;
+											prop_isArray = el.getName().equals("Array");
+											prop_isEnum = el.getName().equals("Enum");
+										}
+									}
+								} else if (key.equals("Data_Model::Dimension")) {
+									if (v instanceof ListValue) {
+										ListValue l = (ListValue) v;
+										PropertyExpression pe = l.getOwnedListElements().get(0);
+										prop_arraySize = Math
+												.toIntExact(intFromPropExp(pe).orElse((long) -1).longValue());
+
+									}
+								} else if (key.equals("Data_Model::Enumerators")) {
+									if (v instanceof ListValue) {
+										EList<PropertyExpression> peList = ((ListValue) v).getOwnedListElements();
+										String prefix = c.getQualifiedName() + "_";
+										prop_enumValues = new ArrayList<>();
+										for (PropertyExpression pe : peList) {
+											if (pe instanceof StringLiteral) {
+												String enumString = prefix + ((StringLiteral) pe).getValue();
+												prop_enumValues.add(enumString);
+											}
+										}
+									}
+
+								}
+							}
+
+							if (prop_isArray && prop_arraySize > 0) {
+								TypeDef typeDef = new ArrayTypeDef(typeDefFromClassifier(sub.getClassifier()),
+										prop_arraySize, Optional.empty());
+								fields.putIfAbsent(fieldName, typeDef);
+							} else if (prop_isEnum && prop_enumValues != null) {
+								String name = c.getQualifiedName();
+								TypeDef typeDef = new EnumTypeDef(name, prop_enumValues, c);
+								fields.putIfAbsent(fieldName, typeDef);
+							} else if (sub.getArrayDimensions().size() == 0) {
 								TypeDef typeDef = typeDefFromClassifier(sub.getClassifier());
 								fields.putIfAbsent(fieldName, typeDef);
 							} else if (sub.getArrayDimensions().size() == 1) {

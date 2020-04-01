@@ -395,7 +395,13 @@ public class AgreeTypeSystem {
 								Property p = pa.getProperty();
 								String key = p.getQualifiedName();
 								key = key == null ? p.getName() : key;
-								PropertyExpression v = pa.getOwnedValues().get(0).getOwnedValue();
+
+								PropertyExpression v = null;
+								if (!pa.getOwnedValues().isEmpty()) {
+									v = pa.getOwnedValues().get(0).getOwnedValue();
+								} else {
+									continue;
+								}
 
 								if (key.equals("Data_Model::Data_Representation")) {
 									if (v instanceof NamedValue) {

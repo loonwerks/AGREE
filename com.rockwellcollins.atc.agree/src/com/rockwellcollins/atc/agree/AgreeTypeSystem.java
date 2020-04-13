@@ -533,7 +533,7 @@ public class AgreeTypeSystem {
 		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
 		for (PropertyAssociation propertyAssociation : propertyAssociations) {
 			Property property = propertyAssociation.getProperty();
-			if (classifier.acceptsProperty(property)) {
+			try {
 				PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
 				if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
 						&& propertyExpr instanceof NamedValue) {
@@ -543,6 +543,8 @@ public class AgreeTypeSystem {
 						result = true;
 					}
 				}
+			} catch (Exception e) {
+				continue;
 			}
 		}
 
@@ -555,7 +557,7 @@ public class AgreeTypeSystem {
 		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
 		for (PropertyAssociation propertyAssociation : propertyAssociations) {
 			Property property = propertyAssociation.getProperty();
-			if (classifier.acceptsProperty(property)) {
+			try {
 				PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
 				if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
 						&& propertyExpr instanceof NamedValue) {
@@ -565,6 +567,8 @@ public class AgreeTypeSystem {
 						result = true;
 					}
 				}
+			} catch (Exception e) {
+				continue;
 			}
 		}
 
@@ -577,7 +581,7 @@ public class AgreeTypeSystem {
 		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
 		for (PropertyAssociation propertyAssociation : propertyAssociations) {
 			Property property = propertyAssociation.getProperty();
-			if (classifier.acceptsProperty(property)) {
+			try {
 				PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
 				if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
 						&& propertyExpr instanceof NamedValue) {
@@ -587,6 +591,8 @@ public class AgreeTypeSystem {
 						result = true;
 					}
 				}
+			} catch (Exception e) {
+				continue;
 			}
 		}
 

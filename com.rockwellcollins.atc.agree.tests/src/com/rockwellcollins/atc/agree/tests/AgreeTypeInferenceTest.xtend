@@ -60,6 +60,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 
 		val testResult = issues = testHelper.testString(model)
 		val issueCollection = new FluentIssueCollection(testResult.resource, newArrayList, newArrayList)
+		val ats = AgreeTypeSystem.make();
 
 		// parseResult => [
 		testResult.resource.contents.head as AadlPackage => [
@@ -85,7 +86,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 									Assert.assertTrue(elm instanceof DataPort)
 									Assert.assertEquals(port1, elm)
 								]
-								Assert.assertEquals(AgreeTypeSystem.Prim.BoolTypeDef, AgreeTypeSystem.infer(expr))
+								Assert.assertEquals(AgreeTypeSystem.Prim.BoolTypeDef, ats.infer(expr))
 							]
 							specs.filter(EqStatement).tail.head => [
 								Assert.assertEquals(1, lhs.size)
@@ -95,7 +96,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 									Assert.assertTrue(elm instanceof DataPort)
 									Assert.assertEquals(port2, elm)
 								]
-								Assert.assertEquals(AgreeTypeSystem.Prim.IntTypeDef, AgreeTypeSystem.infer(expr))
+								Assert.assertEquals(AgreeTypeSystem.Prim.IntTypeDef, ats.infer(expr))
 							]
 							specs.filter(EqStatement).tail.tail.head => [
 								Assert.assertEquals(1, lhs.size)
@@ -105,7 +106,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 									Assert.assertTrue(elm instanceof DataPort)
 									Assert.assertEquals(port3, elm)
 								]
-								Assert.assertEquals(AgreeTypeSystem.Prim.RealTypeDef, AgreeTypeSystem.infer(expr))
+								Assert.assertEquals(AgreeTypeSystem.Prim.RealTypeDef, ats.infer(expr))
 							]
 						]
 					]
@@ -149,6 +150,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 
 		val testResult = issues = testHelper.testString(model)
 		val issueCollection = new FluentIssueCollection(testResult.resource, newArrayList, newArrayList)
+		val ats = AgreeTypeSystem.make()
 
 		// parseResult => [
 		testResult.resource.contents.head as AadlPackage => [
@@ -182,7 +184,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 										Assert.assertEquals(boolDataType, dataFeatureClassifier)
 									]
 								]
-								Assert.assertEquals(AgreeTypeSystem.Prim.BoolTypeDef, AgreeTypeSystem.infer(expr))
+								Assert.assertEquals(AgreeTypeSystem.Prim.BoolTypeDef, ats.infer(expr))
 							]
 							specs.filter(EqStatement).tail.head => [
 								Assert.assertEquals(1, lhs.size)
@@ -195,7 +197,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 										Assert.assertEquals(intDataType, dataFeatureClassifier)
 									]
 								]
-								Assert.assertEquals(AgreeTypeSystem.Prim.IntTypeDef, AgreeTypeSystem.infer(expr))
+								Assert.assertEquals(AgreeTypeSystem.Prim.IntTypeDef, ats.infer(expr))
 							]
 							specs.filter(EqStatement).tail.tail.head => [
 								Assert.assertEquals(1, lhs.size)
@@ -208,7 +210,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 										Assert.assertEquals(realDataType, dataFeatureClassifier)
 									]
 								]
-								Assert.assertEquals(AgreeTypeSystem.Prim.RealTypeDef, AgreeTypeSystem.infer(expr))
+								Assert.assertEquals(AgreeTypeSystem.Prim.RealTypeDef, ats.infer(expr))
 							]
 						]
 					]
@@ -244,7 +246,8 @@ class AgreeTypeInferenceTest extends XtextTest {
 
 		val testResult = issues = testHelper.testString(model)
 		val issueCollection = new FluentIssueCollection(testResult.resource, newArrayList, newArrayList)
-
+		val ats = AgreeTypeSystem.make();
+		
 		// parseResult => [
 		testResult.resource.contents.head as AadlPackage => [
 			Assert.assertEquals(1, publicSection.ownedClassifiers.filter(SystemType).size);
@@ -274,7 +277,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 										Assert.assertEquals(boolPropType, type)
 									]
 								]
-								Assert.assertEquals(AgreeTypeSystem.Prim.BoolTypeDef, AgreeTypeSystem.infer(expr))
+								Assert.assertEquals(AgreeTypeSystem.Prim.BoolTypeDef, ats.infer(expr))
 							]
 							specs.filter(EqStatement).tail.head => [
 								Assert.assertEquals(1, lhs.size)
@@ -286,7 +289,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 										Assert.assertEquals(intPropType, type)
 									]
 								]
-								Assert.assertEquals(AgreeTypeSystem.Prim.IntTypeDef, AgreeTypeSystem.infer(expr))
+								Assert.assertEquals(AgreeTypeSystem.Prim.IntTypeDef, ats.infer(expr))
 							]
 							specs.filter(EqStatement).tail.tail.head => [
 								Assert.assertEquals(1, lhs.size)
@@ -298,7 +301,7 @@ class AgreeTypeInferenceTest extends XtextTest {
 										Assert.assertEquals(realPropType, type)
 									]
 								]
-								Assert.assertEquals(AgreeTypeSystem.Prim.RealTypeDef, AgreeTypeSystem.infer(expr))
+								Assert.assertEquals(AgreeTypeSystem.Prim.RealTypeDef, ats.infer(expr))
 							]
 						]
 					]

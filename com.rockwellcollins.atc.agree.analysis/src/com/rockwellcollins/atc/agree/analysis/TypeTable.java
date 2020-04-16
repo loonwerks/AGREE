@@ -23,13 +23,15 @@ public class TypeTable {
 		typeNameToLustreType = new HashMap<>();
 	}
 
+	private final AgreeTypeSystem ats = AgreeTypeSystem.make();
+
 
 	public Type updateLustreTypeMap(AgreeTypeSystem.TypeDef agreeType) {
-		Type lustreType = typeNameToLustreType.get(AgreeTypeSystem.nameOfTypeDef(agreeType));
+		Type lustreType = typeNameToLustreType.get(ats.nameOfTypeDef(agreeType));
 		if (lustreType == null) {
 			lustreType = getLustreType(agreeType);
 			if (lustreType != null) {
-				typeNameToLustreType.put(AgreeTypeSystem.nameOfTypeDef(agreeType), lustreType);
+				typeNameToLustreType.put(ats.nameOfTypeDef(agreeType), lustreType);
 			}
 		}
 		return lustreType;

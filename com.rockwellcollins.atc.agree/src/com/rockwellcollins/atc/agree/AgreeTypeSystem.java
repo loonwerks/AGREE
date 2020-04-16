@@ -183,14 +183,24 @@ public class AgreeTypeSystem {
 		public final Optional<NamedElement> elmOp;
 
 		public ArrayTypeDef(TypeDef stemType, int size, Optional<NamedElement> elmOp) {
-			this.name = nameOfTypeDef(stemType) + "[" + size + "]";
+			this.name = make().nameOfTypeDef(stemType) + "[" + size + "]";
 			this.size = size;
 			this.stemType = stemType;
 			this.elmOp = elmOp;
 		}
 	}
 
-	public static String nameOfTypeDef(TypeDef td) {
+	public static AgreeTypeSystem make() {
+		return new AgreeTypeSystem();
+	}
+
+	private Map<Expr, TypeDef> typeDefMem = new HashMap<Expr, TypeDef>();;
+
+	public AgreeTypeSystem() {
+
+	}
+
+	public String nameOfTypeDef(TypeDef td) {
 		if (td instanceof Prim) {
 			return ((Prim) td).name;
 		} else if (td instanceof RangeIntTypeDef) {
@@ -208,7 +218,7 @@ public class AgreeTypeSystem {
 		}
 	}
 
-	public static TypeDef typeDefFromNE(NamedElement ne) {
+	public TypeDef typeDefFromNE(NamedElement ne) {
 		if (ne instanceof Classifier) {
 			return typeDefFromClassifier((Classifier) ne);
 
@@ -241,7 +251,7 @@ public class AgreeTypeSystem {
 		}
 	}
 
-	public static TypeDef typeDefFromClassifier(Classifier c) {
+	public TypeDef typeDefFromClassifier(Classifier c) {
 		if (c instanceof DataType
 				|| (c instanceof DataImplementation && ((DataImplementation) c).getAllSubcomponents().isEmpty()
 						&& ((DataImplementation) c).getType() != null)) {
@@ -507,7 +517,7 @@ public class AgreeTypeSystem {
 
 							if (spec instanceof ConstStatement) {
 								String fieldName = ((ConstStatement) spec).getName();
-								TypeDef typeDef = AgreeTypeSystem.typeDefFromType(((ConstStatement) spec).getType());
+								TypeDef typeDef = typeDefFromType(((ConstStatement) spec).getType());
 								fields.putIfAbsent(fieldName, typeDef);
 							}
 						}
@@ -527,7 +537,7 @@ public class AgreeTypeSystem {
 
 	}
 
-	public static boolean hasBooleanDataRepresentation(Classifier classifier) {
+	public boolean hasBooleanDataRepresentation(Classifier classifier) {
 		boolean result = false;
 
 		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
@@ -551,7 +561,7 @@ public class AgreeTypeSystem {
 		return result;
 	}
 
-	public static boolean hasIntegerDataRepresentation(Classifier classifier) {
+	public boolean hasIntegerDataRepresentation(Classifier classifier) {
 		boolean result = false;
 
 		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
@@ -575,7 +585,7 @@ public class AgreeTypeSystem {
 		return result;
 	}
 
-	public static boolean hasFloatDataRepresentation(Classifier classifier) {
+	public boolean hasFloatDataRepresentation(Classifier classifier) {
 		boolean result = false;
 
 		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
@@ -599,7 +609,7 @@ public class AgreeTypeSystem {
 		return result;
 	}
 
-	public static TypeDef typeDefFromType(Type t) {
+	public TypeDef typeDefFromType(Type t) {
 
 		if (t instanceof PrimType) {
 
@@ -647,13 +657,13 @@ public class AgreeTypeSystem {
 
 	}
 
-	public static boolean typesEqual(TypeDef t1, TypeDef t2) {
+	public boolean typesEqual(TypeDef t1, TypeDef t2) {
 		String str1 = nameOfTypeDef(t1);
 		String str2 = nameOfTypeDef(t2);
 		return str1.equals(str2);
 	}
 
-	public static Optional<Double> realFromPropExp(PropertyExpression pe) {
+	public Optional<Double> realFromPropExp(PropertyExpression pe) {
 		if (pe instanceof RealLiteral) {
 			return Optional.of(((RealLiteral) pe).getValue());
 
@@ -670,7 +680,7 @@ public class AgreeTypeSystem {
 
 
 
-	public static Optional<Long> intFromPropExp(PropertyExpression pe) {
+	public Optional<Long> intFromPropExp(PropertyExpression pe) {
 		if (pe instanceof IntegerLiteral) {
 			return Optional.of(((IntegerLiteral) pe).getValue());
 
@@ -685,7 +695,7 @@ public class AgreeTypeSystem {
 		return Optional.empty();
 	}
 
-	private static TypeDef inferPropExp(PropertyExpression pe) {
+	private TypeDef inferPropExp(PropertyExpression pe) {
 		if (pe instanceof IntegerLiteral) {
 			return Prim.IntTypeDef;
 
@@ -705,7 +715,21 @@ public class AgreeTypeSystem {
 	}
 
 
-	public static TypeDef infer(Expr expr) {
+	public TypeDef infer(Expr expr) {
+		TypeDef result = typeDefMem.get(expr);
+		if (result != null) {
+			return result;
+		} else {
+			TypeDef new_result = infer_compute(expr);
+			if (new_result != Prim.ErrorTypeDef) {
+				typeDefMem.put(expr, new_result);
+			}
+			return new_result;
+		}
+
+	}
+
+	public TypeDef infer_compute(Expr expr) {
 
 		if (expr instanceof SelectionExpr) {
 
@@ -970,7 +994,7 @@ public class AgreeTypeSystem {
 
 	}
 
-	private static TypeDef toTypeFromPropertyType(PropertyType propType) {
+	private TypeDef toTypeFromPropertyType(PropertyType propType) {
 		if (propType instanceof AadlBoolean) {
 			return Prim.BoolTypeDef;
 		} else if (propType instanceof AadlString || propType instanceof EnumerationType) {
@@ -986,7 +1010,7 @@ public class AgreeTypeSystem {
 		throw new RuntimeException();
 	}
 
-	public static TypeDef inferFromNamedElement(NamedElement ne) {
+	public TypeDef inferFromNamedElement(NamedElement ne) {
 
 
 		if (ne instanceof PropertyStatement) {
@@ -1078,7 +1102,7 @@ public class AgreeTypeSystem {
 
 	}
 
-	private static TypeDef getTypeDefFromFeatureOrSubcomp(NamedElement ne) {
+	private TypeDef getTypeDefFromFeatureOrSubcomp(NamedElement ne) {
 
 		Classifier cl = null;
 		if (ne instanceof Feature) {
@@ -1152,7 +1176,7 @@ public class AgreeTypeSystem {
 		return Prim.ErrorTypeDef;
 	}
 
-	private static long getArraySize(ArrayDimension arrayDimension) {
+	private long getArraySize(ArrayDimension arrayDimension) {
 		ArraySize arraySize = arrayDimension.getSize();
 		long size = arraySize.getSize();
 		if (size == 0) {
@@ -1166,11 +1190,11 @@ public class AgreeTypeSystem {
 		return size;
 	}
 
-	public static boolean hasType(NamedElement ne) {
-		return AgreeTypeSystem.inferFromNamedElement(ne) != (Prim.ErrorTypeDef);
+	public boolean hasType(NamedElement ne) {
+		return inferFromNamedElement(ne) != (Prim.ErrorTypeDef);
 	}
 
-	public static boolean isInLinearizationBody(Expr expr) {
+	public boolean isInLinearizationBody(Expr expr) {
 		boolean result = false;
 		EObject current = expr;
 		while (current != null && current instanceof Expr) {
@@ -1183,7 +1207,7 @@ public class AgreeTypeSystem {
 		return result;
 	}
 
-	public static List<Type> typesFromArgs(List<Arg> args) {
+	public List<Type> typesFromArgs(List<Arg> args) {
 		ArrayList<Type> list = new ArrayList<>();
 		for (Arg arg : args) {
 			list.add(arg.getType());

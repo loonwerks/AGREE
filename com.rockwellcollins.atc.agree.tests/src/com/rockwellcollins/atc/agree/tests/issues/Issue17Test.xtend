@@ -168,11 +168,11 @@ class Issue17Test extends XtextTest {
 		val testFileResult = issues = testHelper.testString(
 			com.rockwellcollins.atc.agree.tests.issues.Issue17Test.deltaCharlieModel)
 		val systemScratchSys = EcoreUtil2.getAllContentsOfType(testFileResult.resource.contents.head, SystemType).head;
-
+		val ats = AgreeTypeSystem.make();
 		((systemScratchSys.ownedAnnexSubclauses.head as DefaultAnnexSubclause).
 			parsedAnnexSubclause as AgreeContractSubclause).contract as AgreeContract => [
 			specs.filter(ConstStatement).head => [
-				val declaredType = AgreeTypeSystem.typeDefFromType(type)
+				val declaredType = ats.typeDefFromType(type)
 				Assert.assertTrue(declaredType instanceof Prim)
 				declaredType as Prim => [
 					Assert.assertEquals('int', name)
@@ -186,13 +186,13 @@ class Issue17Test extends XtextTest {
 		val testFileResult = issues = testHelper.testString(
 			com.rockwellcollins.atc.agree.tests.issues.Issue17Test.deltaCharlieModel)
 		val systemScratchSys = EcoreUtil2.getAllContentsOfType(testFileResult.resource.contents.head, SystemType).head;
-
+		val ats = AgreeTypeSystem.make();
 		((systemScratchSys.ownedAnnexSubclauses.head as DefaultAnnexSubclause).
 			parsedAnnexSubclause as AgreeContractSubclause).contract as AgreeContract => [
 			specs.filter(GuaranteeStatement).head => [
 				Assert.assertTrue(expr instanceof BinaryExpr)
 				expr as BinaryExpr => [
-					val inferredType = AgreeTypeSystem.infer(right)
+					val inferredType = ats.infer(right)
 					Assert.assertTrue(inferredType instanceof Prim)
 					inferredType as Prim => [
 						Assert.assertEquals('int', name)
@@ -208,14 +208,15 @@ class Issue17Test extends XtextTest {
 			com.rockwellcollins.atc.agree.tests.issues.Issue17Test.deltaCharlieModel)
 
 		val systemScratchSys = EcoreUtil2.getAllContentsOfType(testFileResult.resource.contents.head, SystemType).head;
-
+		val ats = AgreeTypeSystem.make();
+		
 		((systemScratchSys.ownedAnnexSubclauses.head as DefaultAnnexSubclause).
 			parsedAnnexSubclause as AgreeContractSubclause).contract as AgreeContract => [
 			specs.filter(GuaranteeStatement).head => [
 				Assert.assertTrue(expr instanceof BinaryExpr)
 				expr as BinaryExpr => [
 					Assert.assertTrue(left instanceof SelectionExpr)
-					val inferredType = AgreeTypeSystem.infer(left)
+					val inferredType = ats.infer(left)
 					Assert.assertTrue(inferredType instanceof Prim)
 					inferredType as Prim => [
 						Assert.assertEquals('int', name)

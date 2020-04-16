@@ -188,6 +188,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 	// Symbol table to gather all the globalTypes
 	private static TypeTable symbolTable;
 
+	private static AgreeTypeSystem ats = AgreeTypeSystem.make();
 	// EGM: end-array-backend
 
 	private static Map<String, AgreeVar> timeOfVarMap;
@@ -757,7 +758,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 			return;
 		}
 
-		AgreeTypeSystem.TypeDef td = AgreeTypeSystem.inferFromNamedElement(dataFeature);
+		AgreeTypeSystem.TypeDef td = ats.inferFromNamedElement(dataFeature);
 		Type type = symbolTable.updateLustreTypeMap(td);
 
 		if (type == null) {
@@ -909,7 +910,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		}
 		// EGM: array-backend
 		// Type lustreType = AgreeTypeUtils.getType(dataClass, typeMap, globalTypes);
-		Type lustreType = symbolTable.updateLustreTypeMap(AgreeTypeSystem.typeDefFromNE(dataClass));
+		Type lustreType = symbolTable.updateLustreTypeMap(ats.typeDefFromNE(dataClass));
 		return lustreType;
 	}
 
@@ -1146,7 +1147,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 				// this will record them to the global types
 				// EGM: array-backend
 				// AgreeTypeUtils.getType((NamedElement) spec, typeMap, globalTypes);
-				symbolTable.updateLustreTypeMap(AgreeTypeSystem.typeDefFromNE((NamedElement) spec));
+				symbolTable.updateLustreTypeMap(ats.typeDefFromNE((NamedElement) spec));
 			}
 		}
 		return types;
@@ -1163,7 +1164,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 	}
 
 	public VarDecl agreeVarFromArg(Arg arg, ComponentInstance compInst) {
-		Type type = symbolTable.updateLustreTypeMap(AgreeTypeSystem.typeDefFromType(arg.getType()));
+		Type type = symbolTable.updateLustreTypeMap(ats.typeDefFromType(arg.getType()));
 		if (type != null) {
 			return new AgreeVar(arg.getName(), type, arg, compInst, null);
 		} else {
@@ -1452,7 +1453,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 	private List<AgreeStatement> getConstraintsFromArgs(List<Arg> args, EObject reference) {
 		List<AgreeStatement> constraints = new ArrayList<>();
 		for (Arg arg : args) {
-			List<Expr> argConstraints = getConstraintsFromTypeDef(arg.getName(), AgreeTypeSystem.typeDefFromType(arg.getType()));
+			List<Expr> argConstraints = getConstraintsFromTypeDef(arg.getName(), ats.typeDefFromType(arg.getType()));
 			if (!argConstraints.isEmpty()) {
 				constraints.add(new AgreeStatement("Type predicate on '" + arg.getName() + "'", argConstraints.stream()
 						.reduce(new BoolExpr(true), (a, b) -> new BinaryExpr(a, BinaryOp.AND, b)), reference));
@@ -1809,7 +1810,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 		// EGM: array-backend
 		// Type outType = getNamedType(AgreeTypeUtils.getTypeName(fnDef.getType(), typeMap, globalTypes));
-		Type outType = symbolTable.updateLustreTypeMap(AgreeTypeSystem.typeDefFromType(fnDef.getType()));
+		Type outType = symbolTable.updateLustreTypeMap(ats.typeDefFromType(fnDef.getType()));
 
 		if (outType != null) {
 
@@ -2167,7 +2168,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 	@Override
 	public Expr caseIndicesExpr(IndicesExpr expr) {
-		AgreeTypeSystem.TypeDef arrayTypeDef = AgreeTypeSystem.infer(expr.getArray());
+		AgreeTypeSystem.TypeDef arrayTypeDef = ats.infer(expr.getArray());
 
 		if (arrayTypeDef instanceof AgreeTypeSystem.ArrayTypeDef) {
 			int size = ((AgreeTypeSystem.ArrayTypeDef) arrayTypeDef).size;
@@ -2313,7 +2314,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		com.rockwellcollins.atc.agree.agree.Expr arrayExpr = expr.getArray();
 		Expr array = doSwitch(arrayExpr);
 
-		AgreeTypeSystem.TypeDef agreeType = AgreeTypeSystem.infer(arrayExpr);
+		AgreeTypeSystem.TypeDef agreeType = ats.infer(arrayExpr);
 		int size = 0;
 		if (agreeType instanceof AgreeTypeSystem.ArrayTypeDef) {
 			size = ((AgreeTypeSystem.ArrayTypeDef) agreeType).size;
@@ -2337,7 +2338,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		com.rockwellcollins.atc.agree.agree.Expr arrayExpr = expr.getArray();
 		Expr array = doSwitch(arrayExpr);
 
-		AgreeTypeSystem.TypeDef agreeType = AgreeTypeSystem.infer(arrayExpr);
+		AgreeTypeSystem.TypeDef agreeType = ats.infer(arrayExpr);
 		int size = 0;
 		if (agreeType instanceof AgreeTypeSystem.ArrayTypeDef) {
 			size = ((AgreeTypeSystem.ArrayTypeDef) agreeType).size;
@@ -2358,7 +2359,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 	@Override
 	public Expr caseFlatmapExpr(FlatmapExpr expr) {
-		AgreeTypeSystem.TypeDef agreeType = AgreeTypeSystem.infer(expr.getArray());
+		AgreeTypeSystem.TypeDef agreeType = ats.infer(expr.getArray());
 		int size = 0;
 		if (agreeType instanceof AgreeTypeSystem.ArrayTypeDef) {
 			size = ((AgreeTypeSystem.ArrayTypeDef) agreeType).size;
@@ -2372,7 +2373,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 			Expr arrayAccess = new ArrayAccessExpr(array, i);
 			Expr body = substitute(doSwitch(expr.getExpr()), binding.getName(), arrayAccess);
 
-			AgreeTypeSystem.TypeDef innerArrType = AgreeTypeSystem.infer(expr.getExpr());
+			AgreeTypeSystem.TypeDef innerArrType = ats.infer(expr.getExpr());
 			if (innerArrType instanceof AgreeTypeSystem.ArrayTypeDef) {
 				int innerSize = ((AgreeTypeSystem.ArrayTypeDef) innerArrType).size;
 				for (int j = 0; j < innerSize; j++) {
@@ -2388,7 +2389,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 	@Override
 	public Expr caseFoldLeftExpr(FoldLeftExpr expr) {
-		AgreeTypeSystem.TypeDef agreeType = AgreeTypeSystem.infer(expr.getArray());
+		AgreeTypeSystem.TypeDef agreeType = ats.infer(expr.getArray());
 
 		int size = 0;
 		if (agreeType instanceof AgreeTypeSystem.ArrayTypeDef) {
@@ -2410,7 +2411,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 	@Override
 	public Expr caseFoldRightExpr(FoldRightExpr expr) {
-		AgreeTypeSystem.TypeDef agreeType = AgreeTypeSystem.infer(expr.getArray());
+		AgreeTypeSystem.TypeDef agreeType = ats.infer(expr.getArray());
 
 		int size = 0;
 		if (agreeType instanceof AgreeTypeSystem.ArrayTypeDef) {

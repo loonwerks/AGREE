@@ -335,6 +335,7 @@ public abstract class VerifyHandler extends AadlHandler {
 				break;
 			}
 		}
+
 		if (mainNode == null) {
 			throw new AgreeException("Could not find main lustre node after translation");
 		}

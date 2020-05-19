@@ -463,7 +463,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		});
 	}
 
-	private IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor) {
+	protected IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor) {
 
 		Thread analysisThread = new Thread() {
 			@Override

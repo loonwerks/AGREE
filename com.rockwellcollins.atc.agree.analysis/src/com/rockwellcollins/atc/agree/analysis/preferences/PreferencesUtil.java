@@ -2,6 +2,7 @@ package com.rockwellcollins.atc.agree.analysis.preferences;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
+//import com.rockwellcollins.atc.z3.Z3Plugin;
 import com.collins.trustedsystems.z3.Z3Plugin;
 import com.rockwellcollins.atc.agree.analysis.Activator;
 

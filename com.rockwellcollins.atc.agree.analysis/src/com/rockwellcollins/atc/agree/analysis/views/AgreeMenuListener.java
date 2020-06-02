@@ -2,6 +2,7 @@ package com.rockwellcollins.atc.agree.analysis.views;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleConstants;
@@ -301,9 +303,21 @@ public class AgreeMenuListener implements IMenuListener {
 		}
 	}
 
-	private void addViewCounterexampleMenu(IMenuManager manager, AnalysisResult result) {
+	private InvalidProperty findInvalidProperty(AnalysisResult result) {
+		if (result instanceof PropertyResult) {
+			PropertyResult propResult = (PropertyResult) result;
 
-		result = transformResult(result);
+			if (propResult.getProperty() instanceof InvalidProperty) {
+				return (InvalidProperty) propResult.getProperty();
+			}
+		}
+
+		return null;
+	}
+
+	private void addViewCounterexampleMenu(IMenuManager manager, AnalysisResult original) {
+
+		AnalysisResult result = transformResult(original);
 
 		final List<Counterexample> cexs = getCounterexamples(result);
 		final Property property = getProperty(result);
@@ -326,10 +340,6 @@ public class AgreeMenuListener implements IMenuListener {
 
 				final Layout layout = tempLayout;
 				final Map<String, EObject> refMap = tempRefMap;
-
-//                MenuManager sub = new MenuManager(
-//                        "View " + cexType + "Counterexample from " + cex.getSource() + " in");
-//                manager.add(sub);
 
 				MenuManager sub = new MenuManager("View " + cexType + "Counterexample in");
 				manager.add(sub);
@@ -354,6 +364,20 @@ public class AgreeMenuListener implements IMenuListener {
 						viewCexSpreadsheet(cex, layout);
 					}
 				});
+
+				InvalidProperty invalid = findInvalidProperty(original);
+				if (invalid != null) {
+					String report = invalid.getReport();
+
+					if(report != null) {
+						sub.add(new Action("Web Browser") {
+							@Override
+							public void run() {
+								viewCexBrowser(report);
+							}
+						});
+					}
+				}
 
 				// send counterexamples to external plugins
 				EObject agreeProperty = refMap.get(result.getName());
@@ -602,6 +626,26 @@ public class AgreeMenuListener implements IMenuListener {
 		} catch (IOException e) {
 			Dialog.showError("Unable to open spreadsheet", e.getMessage());
 			e.printStackTrace();
+		}
+	}
+
+	private void viewCexBrowser(String report) {
+		String reportFile = report.substring("file://".length());
+		File f = new File(reportFile);
+
+		if (!f.exists()) {
+			System.err.println("Error: Report file does not exist on disk.");
+			return;
+		}
+
+		try {
+			IWebBrowser b = PlatformUI.getWorkbench().getBrowserSupport().createBrowser("Sally CEX Playback");
+			b.openURL(f.toURI().toURL());
+		} catch (PartInitException e) {
+			System.err.println("Error: Trouble starting Eclipse internal browser");
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			System.err.println("Error: Sally report URL was malformed.");
 		}
 	}
 }

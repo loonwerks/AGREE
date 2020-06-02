@@ -345,7 +345,6 @@ public abstract class VerifyHandler extends AadlHandler {
 		RenamingVisitor.addRenamings(lustreProgram, renaming, compInst, layout);
 		addProperties(renaming, properties, mainNode, agreeProgram);
 
-
 		for (AgreeAutomater aa : automaters) {
 			renaming = aa.rename(renaming);
 			layout = aa.transformLayout(layout);
@@ -506,7 +505,6 @@ public abstract class VerifyHandler extends AadlHandler {
 						}
 						((JKindApi) api).setWriteAdviceFile(adviceFileName);
 					}
-
 
 					try {
 						if (result instanceof ConsistencyResult) {

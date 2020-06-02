@@ -2,20 +2,20 @@
 Copyright (c) 2015, Rockwell Collins.
 Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
-including any software or models in source or binary form, as well as any drawings, specifications, 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+including any software or models in source or binary form, as well as any drawings, specifications,
 and documentation (collectively "the Data"), to deal in the Data without restriction, including
-without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, 
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
 subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or 
+The above copyright notice and this permission notice shall be included in all copies or
 substantial portions of the Data.
 
-THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
-LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
 */
 package edu.uah.rsesc.aadlsimulator.agree.sim;
@@ -28,6 +28,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+
+import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
+
+import edu.uah.rsesc.aadlsimulator.agree.SimulationProgram;
+import edu.uah.rsesc.aadlsimulator.agree.SimulationProperty;
+import edu.uah.rsesc.aadlsimulator.agree.transformation.CreateSimulationGuarantee;
 import jkind.JKindException;
 import jkind.api.JKindApi;
 import jkind.api.KindApi;
@@ -51,36 +59,30 @@ import jkind.results.Property;
 import jkind.results.Signal;
 import jkind.results.UnknownProperty;
 import jkind.results.ValidProperty;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import com.rockwellcollins.atc.agree.analysis.preferences.PreferencesUtil;
-import edu.uah.rsesc.aadlsimulator.agree.SimulationProperty;
-import edu.uah.rsesc.aadlsimulator.agree.SimulationProgram;
-import edu.uah.rsesc.aadlsimulator.agree.transformation.CreateSimulationGuarantee;
 
 public class Simulation {
-	private final SimulationProgram program; 
+	private final SimulationProgram program;
 	private final Deque<SimulationFrameResults> results; // Stack for storing results for each simulation frame.
-	
+
 	public Simulation(final SimulationProgram program) {
 		this.program = Objects.requireNonNull(program, "program must not be null");
 		this.results = new LinkedList<SimulationFrameResults>();
 	}
-	
+
 	public Simulation(Simulation sim) {
 		this.program = sim.program;
 		this.results = new LinkedList<SimulationFrameResults>(sim.results);
 	}
-	
+
 	public SimulationProgram getProgram() {
 		return program;
 	}
-	
+
 	public boolean canStepForward() {
 		final SimulationState state = getState();
 		return state == SimulationState.WAITING_FOR_COMMANDS || state == SimulationState.WARNING_PROPERTY_NOT_SATISFIED;
 	}
-	
+
 	public void stepForward(final Collection<Expr> constraints, final Set<SimulationProperty> disabledProperties) throws InterruptedException {
 		Objects.requireNonNull(constraints, "constraints must not be null");
 
@@ -89,23 +91,23 @@ public class Simulation {
 		assertions.addAll(constraints);
 		results.addFirst(executeFrame(assertions, disabledProperties));
 	}
-	
+
 	public void stepBackward() {
 		results.removeFirst();
 	}
-	
+
 	public boolean canStepBackward() {
 		return !results.isEmpty();
 	}
-	
+
 	public SimulationFrameResults getLastResults() {
 		return results.peekFirst();
 	}
-	
+
 	public SimulationState getState() {
 		return results.isEmpty() ? SimulationState.WAITING_FOR_COMMANDS : getLastResults().getState();
 	}
-	
+
 	private SimulationFrameResults executeFrame(final List<Expr> assertions, final Set<SimulationProperty> disabledProperties) throws InterruptedException {
 		assert assertions != null;
 
@@ -114,7 +116,7 @@ public class Simulation {
 		programBuilder.clearNodes();
 		final NodeBuilder nodeBuilder = new NodeBuilder(program.getLustreProgram().getMainNode());
 
-		// Add assignments for the sim assertions signal 
+		// Add assignments for the sim assertions signal
 		// Actual assertions are not used because they can result in an inconsistent Lustre program which will prevent
 		// the set of support from being generated when using yices.
 		Expr prevSimAssertionExpr = new BoolExpr(true);
@@ -126,36 +128,46 @@ public class Simulation {
 			prevSimAssertionExpr = simAssertionExpr;
 		}
 		nodeBuilder.addEquation(new Equation(new IdExpr(CreateSimulationGuarantee.SIMULATION_ASSERTIONS_ID), prevSimAssertionExpr));
-		
+
 		// Add assignments for property enablement variables
 		for(final SimulationProperty simProp : program.getSimulationProperties()) {
 			if(simProp.getEnablementVariableId() != null) {
 				nodeBuilder.addEquation(new Equation(new IdExpr(simProp.getEnablementVariableId()), new BoolExpr(disabledProperties.contains(simProp) ? false : true)));
 			}
 		}
-		
-		// Build the lustre program for the frame		
+
+		// Build the lustre program for the frame
 		programBuilder.addNode(nodeBuilder.build());
 		final Program constrainedLustreProgram = programBuilder.build();
 
 		// Prepare to execute JKind
 		final KindApi api = PreferencesUtil.getKindApi();
-		
+
 		// Enable IVC Reduction capability if using JKind
 		if(api instanceof JKindApi) {
 			final JKindApi jkindApi = (JKindApi)api;
 			jkindApi.setIvcReduction();
 		}
-		
+
 		// Execute JKind
 		final JKindResult result = new JKindResult("Simulation");
-		try {			
+
+		// Lucas: This seems to be needed. If we do not add properties to the result explicitly,
+		// it looks like the result will grab the main property name with the main node prepended.
+		// This is causing an error when retrieving the property result in the
+		// if/then/else block structure below.
+		constrainedLustreProgram.getMainNode().properties.forEach(p -> result.addProperty(p));
+		System.out.println(constrainedLustreProgram.toString());
+
+		try {
 			final IProgressMonitor currentMonitor = new NullProgressMonitor();
 			api.execute(constrainedLustreProgram, result, currentMonitor);
 
 			// Create a model state from the results.
-			final PropertyResult propertyResult = result.getPropertyResult(CreateSimulationGuarantee.SIMULATION_GUARANTEE_ID);
+			String simulationGuaranteeId = CreateSimulationGuarantee.SIMULATION_GUARANTEE_ID;
+			final PropertyResult propertyResult = result.getPropertyResult(simulationGuaranteeId);
 			final Property property = propertyResult.getProperty();
+
 			if(property == null) {
 				throw new AGREESimulatorException("Unexpected case. Unable to read property results", constrainedLustreProgram);
 			} else if(property instanceof InvalidProperty) {
@@ -164,9 +176,9 @@ public class Simulation {
 				if(counterexample.getLength() != 1) {
 					throw new AGREESimulatorException("Unexpected case. Counterexample has " + counterexample.getLength() + " steps", constrainedLustreProgram);
 				}
-				
+
 				SimulationState newState = SimulationState.WAITING_FOR_COMMANDS;
-				
+
 				// Check that all simulation properties have been satisfied. If a required property is not satisfied then the simulation property would not be false
 				// and a counterexample will not have been generated. This should only occur when a disabled property, lemma, top-level guarantee, or a non-top-level assumption is false.
 				for(final SimulationProperty simulationProp : program.getSimulationProperties()) {
@@ -184,7 +196,7 @@ public class Simulation {
 						}
 					}
 				}
-				
+
 				return new SimulationFrameResults(constrainedLustreProgram, counterexample, disabledProperties, newState);
 			} else if(property instanceof UnknownProperty) {
 				return new SimulationFrameResults(constrainedLustreProgram, assertions, disabledProperties, SimulationState.HALTED_UNABLE_TO_SATISFY_CONSTRAINTS);
@@ -197,7 +209,7 @@ public class Simulation {
 			if(ex.getCause() instanceof InterruptedException) {
 				throw (InterruptedException)ex.getCause();
 			}
-			
+
 			throw new AGREESimulatorException(constrainedLustreProgram, ex, result.getText());
 		}
 	}

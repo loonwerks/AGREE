@@ -819,7 +819,10 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 				delayed = lit.getName().equals("delayed");
 			} catch (PropertyDoesNotApplyToHolderException e) {
 				delayed = false;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+
 			Context destContext = absConnDest.getContext();
 			Context sourContext = absConnSour.getContext();
 			// only make connections to things that have annexs

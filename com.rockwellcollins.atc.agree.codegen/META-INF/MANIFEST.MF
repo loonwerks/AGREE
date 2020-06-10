@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swt,
  org.osate.aadl2.modelsupport;bundle-version="[2.0.0,5.0.0)",
  org.osate.aadl2.instantiation;bundle-version="[1.0.1,2.0.0)",
- org.osate.ui;bundle-version="[2.0.0,4.0.0)",
+ org.osate.ui;bundle-version="[2.0.0,5.0.0)",
  com.collins.trustedsystems.jkindapi;bundle-version="[4.0.0,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

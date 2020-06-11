@@ -7,3 +7,4 @@ Bundle-Vendor: ROCKWELLCOLLINS
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: com.rockwellcollins.atc.agree.doc

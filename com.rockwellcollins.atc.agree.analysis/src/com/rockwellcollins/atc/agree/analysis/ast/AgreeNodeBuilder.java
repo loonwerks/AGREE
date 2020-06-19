@@ -213,6 +213,10 @@ public class AgreeNodeBuilder {
 		guarantees.clear();
 	}
 
+	public List<AgreeStatement> getGuarantees() {
+		return guarantees;
+	}
+
 	public void addLemma(AgreeStatement statement) {
 		lemmas.add(statement);
 	}

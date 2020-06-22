@@ -25,7 +25,7 @@ public class AgreeNodeBuilder {
 	private List<AgreeNode> subNodes = new ArrayList<>();
 	private List<AgreeStatement> assertions = new ArrayList<>();
 	private List<AgreeStatement> assumptions = new ArrayList<>();
-	private List<AgreeStatement> guarantees = new ArrayList<>();
+	public List<AgreeStatement> guarantees = new ArrayList<>();
 	private List<AgreeStatement> lemmas = new ArrayList<>();
 	private List<AgreeStatement> patternProps = new ArrayList<>();
 	private Expr clockConstraint;

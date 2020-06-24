@@ -20,14 +20,9 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
 */
 
 package com.rockwellcollins.atc.tcg.writers;
-import java.util.List;
-import java.util.Map;
 
 import com.rockwellcollins.atc.tcg.suite.TestCase;
 import com.rockwellcollins.atc.tcg.suite.TestSuite;
-
-import jkind.lustre.Expr;
-import jkind.results.Counterexample;
 
 public abstract class TcgWriter {
 

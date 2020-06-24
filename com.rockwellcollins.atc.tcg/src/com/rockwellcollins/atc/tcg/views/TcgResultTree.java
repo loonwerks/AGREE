@@ -9,8 +9,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import jkind.api.ui.results.AnalysisResultColumnViewer;
-import jkind.api.ui.results.AnalysisResultLabelProvider;
-import jkind.api.ui.results.AnalysisResultColumnViewer.Column;
 
 public class TcgResultTree extends AnalysisResultColumnViewer {
 	private TreeViewer treeViewer;

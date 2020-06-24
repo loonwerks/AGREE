@@ -22,11 +22,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
 package com.rockwellcollins.atc.tcg.handlers;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-
-import jkind.api.results.AnalysisResult;
-import jkind.lustre.Type;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -39,12 +35,14 @@ import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
 
 import com.rockwellcollins.atc.agree.analysis.Activator;
-import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 import com.rockwellcollins.atc.tcg.suite.TestSuite;
 import com.rockwellcollins.atc.tcg.util.TcgUtils;
 import com.rockwellcollins.atc.tcg.views.TestSuiteLinker;
 import com.rockwellcollins.atc.tcg.views.TestSuiteView;
 import com.rockwellcollins.atc.tcg.writers.TcgXmlWriter;
+
+import jkind.api.results.AnalysisResult;
+import jkind.lustre.Type;
 
 public class SaveHandler extends NoElementHandler {
 	private IHandlerActivation terminateActivation;
@@ -55,7 +53,7 @@ public class SaveHandler extends NoElementHandler {
 
 	@Override
 	protected final IStatus runJob(IProgressMonitor monitor) {
-		handlerService = (IHandlerService) getWindow().getService(IHandlerService.class);
+		handlerService = getWindow().getService(IHandlerService.class);
 
 		try {
 			return doAnalysis(monitor);

@@ -2,20 +2,20 @@
 Copyright (c) 2015, Rockwell Collins.
 Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
-including any software or models in source or binary form, as well as any drawings, specifications, 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+including any software or models in source or binary form, as well as any drawings, specifications,
 and documentation (collectively "the Data"), to deal in the Data without restriction, including
-without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, 
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
 subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or 
+The above copyright notice and this permission notice shall be included in all copies or
 substantial portions of the Data.
 
-THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
-LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
 */
 package edu.uah.rsesc.aadlsimulator.ui.launch;
@@ -67,12 +67,12 @@ import edu.uah.rsesc.aadlsimulator.ui.handlers.StopHandler;
 public class SimulationLaunchShortcut implements ILaunchShortcut2 {
 	private final XtextSelectionHelper selectionHelper = new XtextSelectionHelper();
 	private final GraphicalEditorSelectionHelper graphicalEditorSelectionHelper = new GraphicalEditorSelectionHelper();
-	
+
 	@Override
 	public void launch(final ISelection selection, final String mode) {
 		launch(selection, null, mode);
 	}
-	
+
 	public void launch(final ISelection selection, final String engineTypeId, final String mode) {
 		try {
 			final ComponentImplementation componentImplementation = getComponentImplementation(selection);
@@ -83,7 +83,7 @@ public class SimulationLaunchShortcut implements ILaunchShortcut2 {
 			StatusManager.getManager().handle(new Status(e.getStatus().getSeverity(), FrameworkUtil.getBundle(getClass()).getSymbolicName(), e.getLocalizedMessage(), e), StatusManager.LOG | StatusManager.BLOCK);
 		}
 	}
-	
+
 	@Override
 	public void launch(final IEditorPart editor, final String mode) {
 		try {
@@ -95,10 +95,10 @@ public class SimulationLaunchShortcut implements ILaunchShortcut2 {
 			StatusManager.getManager().handle(new Status(e.getStatus().getSeverity(), FrameworkUtil.getBundle(getClass()).getSymbolicName(), e.getLocalizedMessage(), e), StatusManager.LOG | StatusManager.BLOCK);
 		}
 	}
-	
+
 	private ComponentImplementation getComponentImplementation(final ISelection selection) {
 		ComponentImplementation componentImplementation = null;
-		
+
 		// Determine a component implementation based on the current selection
 		if(selection instanceof IStructuredSelection) {
 			final Object selectedObject = ((IStructuredSelection) selection).getFirstElement();
@@ -117,17 +117,18 @@ public class SimulationLaunchShortcut implements ILaunchShortcut2 {
 				if(selectedEObject instanceof ComponentImplementation) {
 					componentImplementation = (ComponentImplementation)selectedEObject;
 				}
-			} else if(graphicalEditorSelectionHelper.isApplicable(selectedObject)) {
-				componentImplementation = graphicalEditorSelectionHelper.getComponentImplementationByApplicableObject(selectedObject);
-			}			
+			} else {
+				componentImplementation = graphicalEditorSelectionHelper
+						.getComponentImplementationByApplicableObject(selectedObject);
+			}
 		}
-		
+
 		return componentImplementation;
 	}
-	
+
 	public ILaunch launch(final ComponentImplementation componentImplementation, String engineTypeId, final String mode) throws CoreException {
 		if(engineTypeId == null) {
-			final SimulationService simulationService = Objects.requireNonNull((SimulationService)PlatformUI.getWorkbench().getService(SimulationService.class), "Unable to retrieve simulation service");
+			final SimulationService simulationService = Objects.requireNonNull(PlatformUI.getWorkbench().getService(SimulationService.class), "Unable to retrieve simulation service");
 			final EngineType engineType = simulationService.getCompatibleEngineType(componentImplementation);
 			if(engineType == null ){
 				StatusManager.getManager().handle(new Status(IStatus.ERROR, FrameworkUtil.getBundle(getClass()).getSymbolicName(), "Unable to find compatible simulation engine for " + componentImplementation.getQualifiedName()), StatusManager.BLOCK);
@@ -135,31 +136,31 @@ public class SimulationLaunchShortcut implements ILaunchShortcut2 {
 			}
 			engineTypeId = engineType.getId();
 		}
-		
+
 		// Stop the current simulation
 		new StopHandler().execute();
-		
+
 		final ILaunchConfigurationType configType = getLaunchConfigurationType();
-	
-		// Search for an existing launch configuration				
-		final List<ILaunchConfiguration> launchConfigs = getLaunchConfigurations(configType, componentImplementation, engineTypeId); 
-		ILaunchConfiguration launchConfig = launchConfigs.size() > 0 ? launchConfigs.get(0) : null; 
+
+		// Search for an existing launch configuration
+		final List<ILaunchConfiguration> launchConfigs = getLaunchConfigurations(configType, componentImplementation, engineTypeId);
+		ILaunchConfiguration launchConfig = launchConfigs.size() > 0 ? launchConfigs.get(0) : null;
 		if(launchConfig == null) {
 			final ILaunchConfigurationWorkingCopy wcLaunchConf = configType.newInstance(null, DebugPlugin.getDefault().getLaunchManager().generateLaunchConfigurationName(componentImplementation.getQualifiedName()));
 			// Set attributes, etc for the launch configuration
 			wcLaunchConf.setAttribute(SimulationLaunchConfigurationAttributes.COMPONENT_IMPLEMENTATION_NAME, componentImplementation.getQualifiedName());
 			wcLaunchConf.setAttribute(SimulationLaunchConfigurationAttributes.PROJECT_NAME, getProjectName(componentImplementation.eResource()));
 			if(engineTypeId != null) {
-				wcLaunchConf.setAttribute(SimulationLaunchConfigurationAttributes.ENGINE_TYPE_ID, engineTypeId);	
+				wcLaunchConf.setAttribute(SimulationLaunchConfigurationAttributes.ENGINE_TYPE_ID, engineTypeId);
 			}
-			
+
 			launchConfig = wcLaunchConf;
-		} 
-		
-		// Launch the launch configuration 
-		return DebugUITools.buildAndLaunch(launchConfig, mode, new NullProgressMonitor());			
+		}
+
+		// Launch the launch configuration
+		return DebugUITools.buildAndLaunch(launchConfig, mode, new NullProgressMonitor());
 	}
-	
+
 	/**
 	 * Returns the name of the project that contains the resource or null if the project name could not be determined.
 	 * @param resource
@@ -176,14 +177,14 @@ public class SimulationLaunchShortcut implements ILaunchShortcut2 {
 
 		return null;
 	}
-	
+
 	private List<ILaunchConfiguration> getLaunchConfigurations(final ILaunchConfigurationType configType, final ComponentImplementation ci, final String engineTypeId) throws CoreException {
 		Objects.requireNonNull(ci, "ci must not be null");
 		final String componentImplementationName = ci.getQualifiedName();
 		final List<ILaunchConfiguration> configs = new ArrayList<ILaunchConfiguration>();
 		String projectName = getProjectName(ci.eResource());
 		projectName = projectName == null ? "" : projectName;
-		
+
 		for(final ILaunchConfiguration launchConfiguration : DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(configType)) {
 			// Check if the launch configuration's component implementation name matches the selected component implementation
 			if(componentImplementationName.equalsIgnoreCase(launchConfiguration.getAttribute(SimulationLaunchConfigurationAttributes.COMPONENT_IMPLEMENTATION_NAME, "")) &&
@@ -192,10 +193,10 @@ public class SimulationLaunchShortcut implements ILaunchShortcut2 {
 				configs.add(launchConfiguration);
 			}
 		}
-		
+
 		return configs;
 	}
-	
+
 	private ILaunchConfigurationType getLaunchConfigurationType() {
 		final ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 		final ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(SimulationLaunchConfigurationTypeConstants.id);
@@ -211,7 +212,7 @@ public class SimulationLaunchShortcut implements ILaunchShortcut2 {
 		if(ci == null) {
 			return null;
 		}
-		
+
 		// Return launch configurations associated with the selection
 		try {
 			return getLaunchConfigurations(configType, ci, null).toArray(new ILaunchConfiguration[0]);

@@ -6,7 +6,7 @@ import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.Classifier;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.NamedElement;
-import org.osate.ge.GraphicalAnnexUtil;
+import org.osate.ge.aadl2.GraphicalAnnexUtil;
 import org.osate.ge.operations.StepResult;
 
 import com.google.common.base.Strings;

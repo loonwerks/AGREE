@@ -1,12 +1,12 @@
-package edu.uah.rsesc.agree.ge.businessObjectHandlers;
+package edu.uah.rsesc.agree.ge;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.Classifier;
-import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.NamedElement;
@@ -15,10 +15,7 @@ import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.EqStatement;
 
-import edu.uah.rsesc.agree.ge.AgreeBusinessObjectProvider;
-import edu.uah.rsesc.agree.ge.AgreeGeUtil;
-
-class AgreeBusinessObjectHandlerUtil {
+public class AgreeNamingUtil {
 	private final static SortedSet<String> reservedWords;
 	static {
 		reservedWords = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
@@ -35,30 +32,26 @@ class AgreeBusinessObjectHandlerUtil {
 		reservedWords.add("type");
 	}
 
-	public static boolean shouldContributePaletteEntries(final Object diagramBo) {
-		return diagramBo == null || diagramBo instanceof AadlPackage || diagramBo instanceof ComponentClassifier;
-	}
-
-	public static String validateName(final NamedElement ne, final String name) {
+	public static Optional<String> validateName(final NamedElement ne, final String name) {
 		// If the name hasn't changed or has only changed case
 		if (name.equalsIgnoreCase(ne.getName())) {
-			return null;
+			return Optional.empty();
 		}
 
 		if (!isValidIdentifier(name)) {
-			return "The specified name is not a valid identifier.";
+			return Optional.of("The specified name is not a valid identifier.");
 		}
 
 		final Set<String> nameSet = buildNameSet(AgreeGeUtil.getPackageOrClassifier(ne));
 		if(nameSet.contains(name)) {
-			return "The specified name conflicts with an existing model element.";
+			return Optional.of("The specified name conflicts with an existing model element.");
 		}
 
 		// The value is valid
-		return null;
+		return Optional.empty();
 	}
 
-	private static boolean isValidIdentifier(final String value) {
+	public static boolean isValidIdentifier(final String value) {
 		if (reservedWords.contains(value)) {
 			return false;
 		}

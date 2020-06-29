@@ -1,14 +1,16 @@
 package edu.uah.rsesc.agree.ge.ui.properties;
 
 import org.eclipse.jface.viewers.IFilter;
-import org.osate.ge.ui.properties.PropertySectionUtil;
+import org.osate.ge.ui.PropertySectionUtil;
 
 import com.rockwellcollins.atc.agree.agree.EnumStatement;
 
 import edu.uah.rsesc.agree.ge.businessObjectHandlers.EnumerationStatementHandler;
+import edu.uah.rsesc.agree.ge.ui.palette.CreateEnumerationPaletteCommand;
 
 public class EnumerationsPropertySection extends GenericPropertySection {
-	final EnumerationStatementHandler handler = new EnumerationStatementHandler();
+	private final EnumerationStatementHandler handler = new EnumerationStatementHandler();
+	private final CreateEnumerationPaletteCommand createCommand = new CreateEnumerationPaletteCommand();
 
 	public static class Filter implements IFilter {
 		@Override
@@ -19,8 +21,8 @@ public class EnumerationsPropertySection extends GenericPropertySection {
 
 	@Override
 	protected void onAdd() {
-		PropertySectionUtil
-				.execute(handler.buildCreateOperation(getSelectedBos().bocStream().findFirst().orElse(null)));
+		getSelectedBos().bocStream().findFirst()
+				.ifPresent(target -> createCommand.getOperation(target).ifPresent(PropertySectionUtil::execute));
 	}
 
 	@Override

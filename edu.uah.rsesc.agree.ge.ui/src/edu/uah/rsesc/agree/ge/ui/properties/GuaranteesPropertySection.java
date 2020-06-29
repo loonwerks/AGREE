@@ -1,14 +1,16 @@
 package edu.uah.rsesc.agree.ge.ui.properties;
 
 import org.eclipse.jface.viewers.IFilter;
-import org.osate.ge.ui.properties.PropertySectionUtil;
+import org.osate.ge.ui.PropertySectionUtil;
 
 import com.rockwellcollins.atc.agree.agree.GuaranteeStatement;
 
 import edu.uah.rsesc.agree.ge.businessObjectHandlers.GuaranteeStatementHandler;
+import edu.uah.rsesc.agree.ge.ui.palette.CreateGuaranteePaletteCommand;
 
 public class GuaranteesPropertySection extends GenericPropertySection {
 	final GuaranteeStatementHandler handler = new GuaranteeStatementHandler();
+	private final CreateGuaranteePaletteCommand createCommand = new CreateGuaranteePaletteCommand();
 
 	public static class Filter implements IFilter {
 		@Override
@@ -19,8 +21,8 @@ public class GuaranteesPropertySection extends GenericPropertySection {
 
 	@Override
 	protected void onAdd() {
-		PropertySectionUtil
-				.execute(handler.buildCreateOperation(getSelectedBos().bocStream().findFirst().orElse(null)));
+		getSelectedBos().bocStream().findFirst()
+				.ifPresent(target -> createCommand.getOperation(target).ifPresent(PropertySectionUtil::execute));
 	}
 
 	@Override

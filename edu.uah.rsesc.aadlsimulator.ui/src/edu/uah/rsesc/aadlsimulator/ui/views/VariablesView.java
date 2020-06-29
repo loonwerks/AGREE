@@ -28,16 +28,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeSet;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ColorDescriptor;
@@ -49,7 +49,6 @@ import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ICellEditorListener;
-import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.OwnerDrawLabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
@@ -65,8 +64,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -100,6 +97,7 @@ import org.osate.ge.GraphicalEditor;
 import org.osate.ge.services.GraphicalEditorService;
 import org.osate.ui.UiUtil;
 import org.osgi.framework.FrameworkUtil;
+
 import edu.uah.rsesc.aadlsimulator.Rational;
 import edu.uah.rsesc.aadlsimulator.SimulationEngine;
 import edu.uah.rsesc.aadlsimulator.SimulationEngineState;
@@ -122,8 +120,8 @@ import edu.uah.rsesc.aadlsimulator.xtext.inputConstraint.ElementRefExpression;
 import edu.uah.rsesc.aadlsimulator.xtext.inputConstraint.InputConstraint;
 import edu.uah.rsesc.aadlsimulator.xtext.ui.InputConstraintInjectionHelper;
 import edu.uah.rsesc.aadlsimulator.xtext.util.InputConstraintHelper;
-import edu.uah.rsesc.aadlsimulator.xtext.util.ResultType;
 import edu.uah.rsesc.aadlsimulator.xtext.util.ReferenceTypeResolver;
+import edu.uah.rsesc.aadlsimulator.xtext.util.ResultType;
 
 public class VariablesView {
 	private final static int VARIABLE_NAME_COLUMN_INDEX = 0;
@@ -248,23 +246,20 @@ public class VariablesView {
 			};
 
 			// Configure validator
-			cellEditor.setValidator(new ICellEditorValidator() {
-				@Override
-				public String isValid(final Object value) {
-					// Check if the value is valid
-					if(value == null || (value instanceof String && ((String)value).trim().length() == 0)) {
-						return null;
-					}
+			cellEditor.setValidator(value -> {
+				// Check if the value is valid
+				if(value == null || (value instanceof String && ((String)value).trim().length() == 0)) {
+					return null;
+				}
 
-					final VariableType variableType = getVariableContentProvider().getCurrentState().getEngineState().getElementType(currentElement);
-					final SimulationEngineState engineState = getVariableContentProvider().getCurrentState().getEngineState();
-					final InputConstraintHelper.Result result = inputConstraintHelper.parseAndValidate(value.toString(), refResolver, variableTypeToResultType(variableType), engineState.getNumberOfFrames());
-					if(result.isValid()) {
-						return null;
-					} else {
-						return result.getErrorMessage();
-					}
-				}				
+				final VariableType variableType = getVariableContentProvider().getCurrentState().getEngineState().getElementType(currentElement);
+				final SimulationEngineState engineState = getVariableContentProvider().getCurrentState().getEngineState();
+				final InputConstraintHelper.Result result = inputConstraintHelper.parseAndValidate(value.toString(), refResolver, variableTypeToResultType(variableType), engineState.getNumberOfFrames());
+				if(result.isValid()) {
+					return null;
+				} else {
+					return result.getErrorMessage();
+				}
 			});
 			
 			cellEditor.addListener(new ICellEditorListener() {
@@ -575,17 +570,14 @@ public class VariablesView {
 		private Object treeItemData = null;
 
 		public TreeSelectionTracker(final TreeViewer treeViewer) {
-			treeViewer.getTree().addMenuDetectListener(new MenuDetectListener() {				
-				@Override
-				public void menuDetected(final MenuDetectEvent e) {
-					final Point point = Display.getDefault().map(null, treeViewer.getTree(), new Point(e.x, e.y));  
-					final ViewerCell cell = treeViewer.getCell(point);
-					if(cell != null && cell.getItem() != null) {
-						treeItemData = cell.getItem().getData();
-						selectedColumnIndex = cell.getColumnIndex();
-					} else {
-						treeItemData = null;
-					}
+			treeViewer.getTree().addMenuDetectListener(e -> {
+				final Point point = Display.getDefault().map(null, treeViewer.getTree(), new Point(e.x, e.y));  
+				final ViewerCell cell = treeViewer.getCell(point);
+				if(cell != null && cell.getItem() != null) {
+					treeItemData = cell.getItem().getData();
+					selectedColumnIndex = cell.getColumnIndex();
+				} else {
+					treeItemData = null;
 				}
 			});
 		}
@@ -632,12 +624,7 @@ public class VariablesView {
 		}
 	}
 
-	private final SimulatorStateListener stateListener = new SimulatorStateListener() {
-		@Override
-		public void onSimulatorStateChanged(final SimulatorState simulatorState) {
-			update(simulatorState);
-		}
-	};
+	private final SimulatorStateListener stateListener = simulatorState -> update(simulatorState);
 
 	private void update(SimulatorState simulatorState) {
 		// Store the simulation engine state and store the element to constraint error map when the number of frames changes.
@@ -674,16 +661,13 @@ public class VariablesView {
 	}
 
 	// Comparator which sorts CellColorInfos based on their frame index. CellColorInfos with matching frame indices are sorted based on their hash code.
-	private final Comparator<CellColorInfo> cellColorInfoComparator = new Comparator<CellColorInfo>() {
-		@Override
-		public int compare(final CellColorInfo c1, final CellColorInfo c2) {
-			int result = Integer.valueOf(c2.getFrameIndex()).compareTo(Integer.valueOf(c1.getFrameIndex()));
-			if(result == 0) {
-				result = Integer.compare(c1.hashCode(), c2.hashCode());
-			}
-
-			return result;
+	private final Comparator<CellColorInfo> cellColorInfoComparator = (c1, c2) -> {
+		int result = Integer.valueOf(c2.getFrameIndex()).compareTo(Integer.valueOf(c1.getFrameIndex()));
+		if(result == 0) {
+			result = Integer.compare(c1.hashCode(), c2.hashCode());
 		}
+
+		return result;
 	};
 
 	final InputConstraintHelper inputConstraintHelper = InputConstraintInjectionHelper.getInstance(InputConstraintHelper.class);
@@ -713,6 +697,7 @@ public class VariablesView {
 	private SimulationEngineState currentEngineState;
 	
 	final ControlListener resizeListener = new ControlAdapter() {
+		@Override
 		public void controlResized(final ControlEvent e) {
 			if(!editingTreeViewer) {
 				startEditingTreeViewer();
@@ -766,7 +751,7 @@ public class VariablesView {
 
 		treeViewer.setInput(null);
 		treeViewer.setComparator(new ViewerComparator() {
-			@SuppressWarnings("unchecked")
+			@Override
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 				if(contentProvider.currentState == null) {
 					return 0;
@@ -1140,12 +1125,9 @@ public class VariablesView {
 
 	private void createContextMenu(final Tree tree) {
 		contextMenuMgr.setRemoveAllWhenShown(true);
-		contextMenuMgr.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(IMenuManager mgr) {
-				if (tree.getSelection().length == 1) {
-					fillContextMenu(contextMenuMgr, tree);
-				}
+		contextMenuMgr.addMenuListener(mgr -> {
+			if (tree.getSelection().length == 1) {
+				fillContextMenu(contextMenuMgr, tree);
 			}
 		});
 
@@ -1300,7 +1282,7 @@ public class VariablesView {
 		assert(io != null);	
 		
 		// Open the graphical editor
-		final GraphicalEditorService editorService = Objects.requireNonNull((GraphicalEditorService)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getService(GraphicalEditorService.class), "unable to retrieve Graphical Editor Service");
+		final GraphicalEditorService editorService = Objects.requireNonNull(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getService(GraphicalEditorService.class), "unable to retrieve Graphical Editor Service");
 		final SimulationEngine engine = simulationUiService.getCurrentState().getSimulationEngine();
 		if(engine != null && engine.getSystemInstance() != null) {			
 			final GraphicalEditor editor = editorService.openBusinessObject(engine.getSystemInstance());

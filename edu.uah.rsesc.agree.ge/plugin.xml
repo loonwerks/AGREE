@@ -50,23 +50,6 @@
       </handler>
    </extension>
    <extension
-         point="org.osate.ge.references">
-      <referenceBuilder
-            class="edu.uah.rsesc.agree.ge.AgreeReferenceHandler">
-      </referenceBuilder>
-      <referenceResolver
-            class="edu.uah.rsesc.agree.ge.AgreeReferenceHandler">
-      </referenceResolver>
-   </extension>
-   <extension
-         point="org.osate.ge.categories">
-      <category
-            id="edu.uah.rsesc.agree.ge.categories.agree"
-            name="AGREE"
-            order="250">
-      </category>
-   </extension>
-   <extension
          point="org.osate.ge.contentFilters">
       <contentFilter
             class="edu.uah.rsesc.agree.ge.filtering.AgreeFilter">

@@ -42,7 +42,7 @@ import org.osate.ge.BusinessObjectContext;
 import org.osate.ge.BusinessObjectSelection;
 import org.osate.ge.operations.Operation;
 import org.osate.ge.operations.StepResultBuilder;
-import org.osate.ge.ui.properties.PropertySectionUtil;
+import org.osate.ge.ui.PropertySectionUtil;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -324,7 +324,7 @@ public abstract class GenericPropertySection extends AbstractPropertySection {
 		final IStructuredSelection selection = listViewer.getStructuredSelection();
 		if (MessageDialog.openQuestion(null, "Confirm Delete",
 				"Are you sure you want to delete " + selection.size() + " elements?")) {
-			PropertySectionUtil.execute(Operation.create(op -> {
+			PropertySectionUtil.execute(Operation.createWithBuilder(op -> {
 				for (final Object o : selection.toArray()) {
 					op.map((tag) -> StepResultBuilder.create(o).build()).modifyPreviousResult(bo -> {
 						EcoreUtil.remove((EObject) bo);

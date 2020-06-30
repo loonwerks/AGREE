@@ -34,6 +34,7 @@ import org.eclipse.swt.custom.Bullet;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.GlyphMetrics;
+import org.eclipse.swt.widgets.Display;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.FeatureInstance;
 import org.osate.aadl2.instance.InstanceObject;
@@ -74,12 +75,17 @@ public class SimulatorTooltipContributor implements TooltipContributor {
 						if(frameIndex < engineState.getNumberOfFrames()) {
 							// Handle the root instance object as a special case because there will not be a state element for it.
 							if(io == io.getSystemInstance()) {
-								addTooltipInfo(new StyledText(ctx.getTooltip(), SWT.NONE), engineState, frameIndex,
+								final StyledText st = new StyledText(ctx.getTooltip(), SWT.NONE);
+								st.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
+								addTooltipInfo(st, engineState, frameIndex,
 										io.getName(), null, engineState.getRootElements(), io, INDENT_SIZE);
 							} else {
 								final Object stateElement = engineState.findElement(io);
 								if(stateElement != null) {
-									addStateElementsInfo(new StyledText(ctx.getTooltip(), SWT.NONE), engineState,
+									final StyledText st = new StyledText(ctx.getTooltip(), SWT.NONE);
+									st.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
+									addStateElementsInfo(st,
+											engineState,
 											frameIndex, Collections.singleton(stateElement), io, INDENT_SIZE);
 								}
 							}

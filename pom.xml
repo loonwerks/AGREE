@@ -1,9 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.rockwellcollins.atc.agree</groupId>
-	<version>2.4.0-SNAPSHOT</version>
+	<version>2.4.3-SNAPSHOT</version>
 	<artifactId>com.rockwellcollins.atc.agree.parent</artifactId>
 	<packaging>pom</packaging>
 
@@ -23,7 +21,7 @@
 		<emf-version>2.15.0</emf-version>
 		<emf-common-version>2.15.0</emf-common-version>
 		<emf-codegen-version>2.15.0</emf-codegen-version>
-		<xtext-version>2.17.0</xtext-version>
+		<xtext-version>2.19.0</xtext-version>
 		<ecore-xtext-version>1.4.0</ecore-xtext-version>
 		<ecore-xcore-version>1.8.0</ecore-xcore-version>
 		<ecore-xcore-lib-version>1.3.0</ecore-xcore-lib-version>
@@ -41,6 +39,17 @@
 		<module>com.rockwellcollins.atc.agree.ui</module>
 		<module>edu.uah.rsesc.agree.ge</module>
 		<module>edu.uah.rsesc.agree.ge.ui</module>
+		<module>edu.uah.rsesc.aadlsimulator</module>
+		<module>edu.uah.rsesc.aadlsimulator.agree</module>
+		<module>edu.uah.rsesc.aadlsimulator.agree.feature</module>
+		<module>edu.uah.rsesc.aadlsimulator.agree.ui</module>
+		<module>edu.uah.rsesc.aadlsimulator.doc</module>
+		<module>edu.uah.rsesc.aadlsimulator.feature</module>
+		<module>edu.uah.rsesc.aadlsimulator.ui</module>
+		<module>edu.uah.rsesc.aadlsimulator.xtext</module>
+		<module>edu.uah.rsesc.aadlsimulator.xtext.ui</module>
+		<module>com.rockwellcollins.atc.tcg</module>
+		<module>com.rockwellcollins.atc.tcg.feature</module>
 		<module>repository</module>
 	</modules>
 
@@ -141,7 +150,7 @@
 						<artifact>
 							<groupId>com.rockwellcollins.atc.agree</groupId>
 							<artifactId>com.rockwellcollins.atc.agree.target</artifactId>
-							<version>2.4.0-SNAPSHOT</version>
+							<version>2.4.3-SNAPSHOT</version>
 						</artifact>
 					</target>
 					<environments>
@@ -358,7 +367,7 @@
 		<repository>
 			<id>Eclipse</id>
 			<layout>p2</layout>
-			<url>${eclipse.mirror}/releases/2019-03/</url>
+			<url>${eclipse.mirror}/releases/2019-12/</url>
 		</repository>
 		<repository>
 			<id>codehaus-snapshots</id>
@@ -418,8 +427,8 @@
 	</dependencies>
 
 	<scm>
-		<connection>scm:git:git@github.com:loonwerks/agree.git</connection>
-		<developerConnection>scm:git:git@github.com:loonwerks/agree.git</developerConnection>
+		<connection>scm:git:https://github.com/loonwerks/AGREE.git</connection>
+		<developerConnection>scm:git:https://github.com/loonwerks/AGREE.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 

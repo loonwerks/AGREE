@@ -26,10 +26,6 @@ public interface WhenStatement extends PatternStatement
   /**
    * Returns the value of the '<em><b>Condition</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Condition</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Condition</em>' containment reference.
    * @see #setCondition(Expr)
@@ -52,10 +48,6 @@ public interface WhenStatement extends PatternStatement
   /**
    * Returns the value of the '<em><b>Event</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Event</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Event</em>' containment reference.
    * @see #setEvent(Expr)
@@ -78,10 +70,6 @@ public interface WhenStatement extends PatternStatement
   /**
    * Returns the value of the '<em><b>Excl</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Excl</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Excl</em>' attribute.
    * @see #setExcl(String)

@@ -31,10 +31,6 @@ public interface NodeBodyExpr extends EObject, Element
    * Returns the value of the '<em><b>Locs</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Arg}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Locs</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Locs</em>' containment reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getNodeBodyExpr_Locs()
@@ -47,10 +43,6 @@ public interface NodeBodyExpr extends EObject, Element
    * Returns the value of the '<em><b>Stmts</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.NodeStmt}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Stmts</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Stmts</em>' containment reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getNodeBodyExpr_Stmts()

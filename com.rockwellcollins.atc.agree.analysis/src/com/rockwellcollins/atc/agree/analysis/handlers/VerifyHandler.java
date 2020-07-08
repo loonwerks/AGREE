@@ -335,6 +335,7 @@ public abstract class VerifyHandler extends AadlHandler {
 				break;
 			}
 		}
+
 		if (mainNode == null) {
 			throw new AgreeException("Could not find main lustre node after translation");
 		}
@@ -343,7 +344,6 @@ public abstract class VerifyHandler extends AadlHandler {
 
 		RenamingVisitor.addRenamings(lustreProgram, renaming, compInst, layout);
 		addProperties(renaming, properties, mainNode, agreeProgram);
-
 
 		for (AgreeAutomater aa : automaters) {
 			renaming = aa.rename(renaming);
@@ -506,7 +506,6 @@ public abstract class VerifyHandler extends AadlHandler {
 						}
 						((JKindApi) api).setWriteAdviceFile(adviceFileName);
 					}
-
 
 					try {
 						if (result instanceof ConsistencyResult) {

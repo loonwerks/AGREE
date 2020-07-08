@@ -31,10 +31,6 @@ public interface MNSynchStatement extends SynchStatement
    * Returns the value of the '<em><b>Comp1</b></em>' reference list.
    * The list contents are of type {@link org.osate.aadl2.NamedElement}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Comp1</em>' reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Comp1</em>' reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getMNSynchStatement_Comp1()
@@ -47,10 +43,6 @@ public interface MNSynchStatement extends SynchStatement
    * Returns the value of the '<em><b>Comp2</b></em>' reference list.
    * The list contents are of type {@link org.osate.aadl2.NamedElement}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Comp2</em>' reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Comp2</em>' reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getMNSynchStatement_Comp2()
@@ -63,10 +55,6 @@ public interface MNSynchStatement extends SynchStatement
    * Returns the value of the '<em><b>Max</b></em>' attribute list.
    * The list contents are of type {@link java.lang.String}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Max</em>' attribute list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Max</em>' attribute list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getMNSynchStatement_Max()
@@ -79,10 +67,6 @@ public interface MNSynchStatement extends SynchStatement
    * Returns the value of the '<em><b>Min</b></em>' attribute list.
    * The list contents are of type {@link java.lang.String}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Min</em>' attribute list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Min</em>' attribute list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getMNSynchStatement_Min()

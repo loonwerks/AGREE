@@ -31,10 +31,6 @@ public interface LinearizationDef extends NamedElement, SpecStatement, Abstracti
    * Returns the value of the '<em><b>Args</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.Arg}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Args</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Args</em>' containment reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getLinearizationDef_Args()
@@ -47,10 +43,6 @@ public interface LinearizationDef extends NamedElement, SpecStatement, Abstracti
    * Returns the value of the '<em><b>Intervals</b></em>' containment reference list.
    * The list contents are of type {@link com.rockwellcollins.atc.agree.agree.LinearizationInterval}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Intervals</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Intervals</em>' containment reference list.
    * @see com.rockwellcollins.atc.agree.agree.AgreePackage#getLinearizationDef_Intervals()
@@ -62,10 +54,6 @@ public interface LinearizationDef extends NamedElement, SpecStatement, Abstracti
   /**
    * Returns the value of the '<em><b>Precision</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Precision</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Precision</em>' containment reference.
    * @see #setPrecision(Expr)
@@ -88,10 +76,6 @@ public interface LinearizationDef extends NamedElement, SpecStatement, Abstracti
   /**
    * Returns the value of the '<em><b>Expr Body</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Expr Body</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr Body</em>' containment reference.
    * @see #setExprBody(Expr)

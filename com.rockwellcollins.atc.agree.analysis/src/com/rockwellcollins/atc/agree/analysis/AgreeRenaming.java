@@ -125,7 +125,7 @@ public class AgreeRenaming extends Renaming {
 			InvalidProperty renamedInvalid = (InvalidProperty) property;
 			return new InvalidProperty(renamedInvalid.getName(), renamedInvalid.getSource(),
 					rename(renamedInvalid.getCounterexample()), renamedInvalid.getConflicts(),
-					renamedInvalid.getRuntime());
+					renamedInvalid.getRuntime(), renamedInvalid.getReport());
 		} else if (property instanceof UnknownProperty) {
 			UnknownProperty renamedUnknown = (UnknownProperty) property;
 			UnknownProperty newProp = new UnknownProperty(renamedUnknown.getName(), renamedUnknown.getTrueFor(),

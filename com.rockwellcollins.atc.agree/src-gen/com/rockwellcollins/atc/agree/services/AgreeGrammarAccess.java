@@ -549,7 +549,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_0_4() { return cColonKeyword_0_4; }
 
-		//expr=Expr | pattern=PatternStatement
+		//(expr=Expr | pattern=PatternStatement)
 		public Alternatives getAlternatives_0_5() { return cAlternatives_0_5; }
 
 		//expr=Expr
@@ -591,7 +591,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_1_4() { return cColonKeyword_1_4; }
 
-		//expr=Expr | pattern=PatternStatement
+		//(expr=Expr | pattern=PatternStatement)
 		public Alternatives getAlternatives_1_5() { return cAlternatives_1_5; }
 
 		//expr=Expr
@@ -636,7 +636,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_2_2_2() { return cColonKeyword_2_2_2; }
 
-		//expr=Expr | pattern=PatternStatement
+		//(expr=Expr | pattern=PatternStatement)
 		public Alternatives getAlternatives_2_3() { return cAlternatives_2_3; }
 
 		//expr=Expr
@@ -678,7 +678,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_3_4() { return cColonKeyword_3_4; }
 
-		//expr=Expr | pattern=PatternStatement
+		//(expr=Expr | pattern=PatternStatement)
 		public Alternatives getAlternatives_3_5() { return cAlternatives_3_5; }
 
 		//expr=Expr
@@ -811,7 +811,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({WhenHoldsStatement} 'when' condition=Expr 'holds')
 		public Group getGroup_0_0() { return cGroup_0_0; }
 
-		//{WhenHoldsStatement} 'when' condition=Expr 'holds'
+		//({WhenHoldsStatement} 'when' condition=Expr 'holds')
 		public Group getGroup_0_0_0() { return cGroup_0_0_0; }
 
 		//{WhenHoldsStatement}
@@ -872,7 +872,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({WhenOccursStatment} 'when' condition=Expr 'occurs')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{WhenOccursStatment} 'when' condition=Expr 'occurs'
+		//({WhenOccursStatment} 'when' condition=Expr 'occurs')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{WhenOccursStatment}
@@ -1029,7 +1029,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({WheneverOccursStatement} 'whenever' cause=Expr 'occurs' effect=Expr excl='exclusively'? ('occur' | 'occurs'))
 		public Group getGroup_0_0() { return cGroup_0_0; }
 
-		//{WheneverOccursStatement} 'whenever' cause=Expr 'occurs' effect=Expr excl='exclusively'? ('occur' | 'occurs')
+		//({WheneverOccursStatement} 'whenever' cause=Expr 'occurs' effect=Expr excl='exclusively'? ('occur' | 'occurs'))
 		public Group getGroup_0_0_0() { return cGroup_0_0_0; }
 
 		//{WheneverOccursStatement}
@@ -1059,7 +1059,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//'exclusively'
 		public Keyword getExclExclusivelyKeyword_0_0_0_5_0() { return cExclExclusivelyKeyword_0_0_0_5_0; }
 
-		//'occur' | 'occurs'
+		//('occur' | 'occurs')
 		public Alternatives getAlternatives_0_0_0_6() { return cAlternatives_0_0_0_6; }
 
 		//'occur'
@@ -1088,8 +1088,8 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//'occurs'))
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{WheneverBecomesTrueStatement} 'whenever' cause=Expr 'becomes' 'true' effect=Expr excl='exclusively'? ('occur' |
-		//'occurs')
+		//({WheneverBecomesTrueStatement} 'whenever' cause=Expr 'becomes' 'true' effect=Expr excl='exclusively'? ('occur' |
+		//'occurs'))
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{WheneverBecomesTrueStatement}
@@ -1122,7 +1122,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//'exclusively'
 		public Keyword getExclExclusivelyKeyword_1_0_0_6_0() { return cExclExclusivelyKeyword_1_0_0_6_0; }
 
-		//'occur' | 'occurs'
+		//('occur' | 'occurs')
 		public Alternatives getAlternatives_1_0_0_7() { return cAlternatives_1_0_0_7; }
 
 		//'occur'
@@ -1150,7 +1150,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({WheneverHoldsStatement} 'whenever' cause=Expr 'occurs' effect=Expr excl='exclusively'? 'holds')
 		public Group getGroup_2_0() { return cGroup_2_0; }
 
-		//{WheneverHoldsStatement} 'whenever' cause=Expr 'occurs' effect=Expr excl='exclusively'? 'holds'
+		//({WheneverHoldsStatement} 'whenever' cause=Expr 'occurs' effect=Expr excl='exclusively'? 'holds')
 		public Group getGroup_2_0_0() { return cGroup_2_0_0; }
 
 		//{WheneverHoldsStatement}
@@ -1202,7 +1202,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({WheneverImpliesStatement} 'whenever' cause=Expr 'occurs' lhs=Expr 'implies')
 		public Group getGroup_3_0() { return cGroup_3_0; }
 
-		//{WheneverImpliesStatement} 'whenever' cause=Expr 'occurs' lhs=Expr 'implies'
+		//({WheneverImpliesStatement} 'whenever' cause=Expr 'occurs' lhs=Expr 'implies')
 		public Group getGroup_3_0_0() { return cGroup_3_0_0; }
 
 		//{WheneverImpliesStatement}
@@ -1308,7 +1308,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({PeriodicStatement} 'condition' event=Expr 'occurs' 'each')
 		public Group getGroup_0_0() { return cGroup_0_0; }
 
-		//{PeriodicStatement} 'condition' event=Expr 'occurs' 'each'
+		//({PeriodicStatement} 'condition' event=Expr 'occurs' 'each')
 		public Group getGroup_0_0_0() { return cGroup_0_0_0; }
 
 		//{PeriodicStatement}
@@ -1356,7 +1356,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({SporadicStatement} 'condition' event=Expr 'occurs' 'sporadic')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{SporadicStatement} 'condition' event=Expr 'occurs' 'sporadic'
+		//({SporadicStatement} 'condition' event=Expr 'occurs' 'sporadic')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{SporadicStatement}
@@ -1462,7 +1462,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({ClosedTimeInterval} '[' low=Expr ',' high=Expr ']')
 		public Group getGroup_0() { return cGroup_0; }
 
-		//{ClosedTimeInterval} '[' low=Expr ',' high=Expr ']'
+		//({ClosedTimeInterval} '[' low=Expr ',' high=Expr ']')
 		public Group getGroup_0_0() { return cGroup_0_0; }
 
 		//{ClosedTimeInterval}
@@ -1492,7 +1492,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({OpenLeftTimeInterval} '(' low=Expr ',' high=Expr ']')
 		public Group getGroup_1() { return cGroup_1; }
 
-		//{OpenLeftTimeInterval} '(' low=Expr ',' high=Expr ']'
+		//({OpenLeftTimeInterval} '(' low=Expr ',' high=Expr ']')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
 		//{OpenLeftTimeInterval}
@@ -1522,7 +1522,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({OpenRightTimeInterval} '[' low=Expr ',' high=Expr ')')
 		public Group getGroup_2() { return cGroup_2; }
 
-		//{OpenRightTimeInterval} '[' low=Expr ',' high=Expr ')'
+		//({OpenRightTimeInterval} '[' low=Expr ',' high=Expr ')')
 		public Group getGroup_2_0() { return cGroup_2_0; }
 
 		//{OpenRightTimeInterval}
@@ -1552,7 +1552,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({OpenTimeInterval} '(' low=Expr ',' high=Expr ')')
 		public Group getGroup_3() { return cGroup_3; }
 
-		//{OpenTimeInterval} '(' low=Expr ',' high=Expr ')'
+		//({OpenTimeInterval} '(' low=Expr ',' high=Expr ')')
 		public Group getGroup_3_0() { return cGroup_3_0; }
 
 		//{OpenTimeInterval}
@@ -2057,7 +2057,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//'eq'
 		public Keyword getEqKeyword_0() { return cEqKeyword_0; }
 
-		//lhs+=Arg (',' lhs+=Arg)*
+		//(lhs+=Arg (',' lhs+=Arg)*)
 		public Group getGroup_1() { return cGroup_1; }
 
 		//lhs+=Arg
@@ -2117,7 +2117,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//'agree_input'
 		public Keyword getAgree_inputKeyword_0() { return cAgree_inputKeyword_0; }
 
-		//lhs+=Arg (',' lhs+=Arg)*
+		//(lhs+=Arg (',' lhs+=Arg)*)
 		public Group getGroup_1() { return cGroup_1; }
 
 		//lhs+=Arg
@@ -2797,7 +2797,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> (name=ID ':' type=Type)
 		public Group getGroup() { return cGroup; }
 
-		//name=ID ':' type=Type
+		//(name=ID ':' type=Type)
 		public Group getGroup_0() { return cGroup_0; }
 
 		//name=ID
@@ -2841,7 +2841,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({ArrayType.stem=current} '[' size=INTEGER_LIT ']')*
 		public Group getGroup_1() { return cGroup_1; }
 
-		//{ArrayType.stem=current} '[' size=INTEGER_LIT ']'
+		//({ArrayType.stem=current} '[' size=INTEGER_LIT ']')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
 		//{ArrayType.stem=current}
@@ -3028,7 +3028,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//'{'
 		public Keyword getLeftCurlyBracketKeyword_4() { return cLeftCurlyBracketKeyword_4; }
 
-		//args+=Arg (',' args+=Arg)*
+		//(args+=Arg (',' args+=Arg)*)
 		public Group getGroup_5() { return cGroup_5; }
 
 		//args+=Arg
@@ -3516,7 +3516,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({BinaryExpr.left=current} op='->')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{BinaryExpr.left=current} op='->'
+		//({BinaryExpr.left=current} op='->')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{BinaryExpr.left=current}
@@ -3564,7 +3564,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({BinaryExpr.left=current} op='=>')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{BinaryExpr.left=current} op='=>'
+		//({BinaryExpr.left=current} op='=>')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{BinaryExpr.left=current}
@@ -3612,7 +3612,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({BinaryExpr.left=current} op='<=>')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{BinaryExpr.left=current} op='<=>'
+		//({BinaryExpr.left=current} op='<=>')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{BinaryExpr.left=current}
@@ -3660,7 +3660,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({BinaryExpr.left=current} op='or')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{BinaryExpr.left=current} op='or'
+		//({BinaryExpr.left=current} op='or')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{BinaryExpr.left=current}
@@ -3708,7 +3708,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({BinaryExpr.left=current} op='and')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{BinaryExpr.left=current} op='and'
+		//({BinaryExpr.left=current} op='and')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{BinaryExpr.left=current}
@@ -3797,7 +3797,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({BinaryExpr.left=current} op=RelateOp)
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{BinaryExpr.left=current} op=RelateOp
+		//({BinaryExpr.left=current} op=RelateOp)
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{BinaryExpr.left=current}
@@ -3847,7 +3847,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({BinaryExpr.left=current} op=('+' | '-'))
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{BinaryExpr.left=current} op=('+' | '-')
+		//({BinaryExpr.left=current} op=('+' | '-'))
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{BinaryExpr.left=current}
@@ -3905,7 +3905,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({BinaryExpr.left=current} op=('*' | '/' | 'div' | 'mod'))
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{BinaryExpr.left=current} op=('*' | '/' | 'div' | 'mod')
+		//({BinaryExpr.left=current} op=('*' | '/' | 'div' | 'mod'))
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{BinaryExpr.left=current}
@@ -3966,7 +3966,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({BinaryExpr.left=current} op='^')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{BinaryExpr.left=current} op='^'
+		//({BinaryExpr.left=current} op='^')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{BinaryExpr.left=current}
@@ -4268,7 +4268,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({ArrayUpdateExpr.array=current} '[|' indices+=Expr ':=')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//{ArrayUpdateExpr.array=current} '[|' indices+=Expr ':='
+		//({ArrayUpdateExpr.array=current} '[|' indices+=Expr ':=')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//{ArrayUpdateExpr.array=current}
@@ -4346,7 +4346,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({RecordUpdateExpr.record=current} '{' key=[aadl2::NamedElement] ':=' expr=Expr '}')*
 		public Group getGroup_1() { return cGroup_1; }
 
-		//{RecordUpdateExpr.record=current} '{' key=[aadl2::NamedElement] ':=' expr=Expr '}'
+		//({RecordUpdateExpr.record=current} '{' key=[aadl2::NamedElement] ':=' expr=Expr '}')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
 		//{RecordUpdateExpr.record=current}
@@ -4402,7 +4402,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({ArraySubExpr.expr=current} '[' index=Expr ']')*
 		public Group getGroup_1() { return cGroup_1; }
 
-		//{ArraySubExpr.expr=current} '[' index=Expr ']'
+		//({ArraySubExpr.expr=current} '[' index=Expr ']')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
 		//{ArraySubExpr.expr=current}
@@ -4482,7 +4482,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({SelectionExpr.target=current} '.' field=[aadl2::NamedElement])*
 		public Group getGroup_1() { return cGroup_1; }
 
-		//{SelectionExpr.target=current} '.' field=[aadl2::NamedElement]
+		//({SelectionExpr.target=current} '.' field=[aadl2::NamedElement])
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
 		//{SelectionExpr.target=current}
@@ -4681,7 +4681,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({NamedElmExpr} elm=[aadl2::NamedElement|DCID])
 		public Group getGroup_0() { return cGroup_0; }
 
-		//{NamedElmExpr} elm=[aadl2::NamedElement|DCID]
+		//({NamedElmExpr} elm=[aadl2::NamedElement|DCID])
 		public Group getGroup_0_0() { return cGroup_0_0; }
 
 		//{NamedElmExpr}
@@ -4732,7 +4732,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({CallExpr} ref=DoubleDotRef '(')
 		public Group getGroup_3_0() { return cGroup_3_0; }
 
-		//{CallExpr} ref=DoubleDotRef '('
+		//({CallExpr} ref=DoubleDotRef '(')
 		public Group getGroup_3_0_0() { return cGroup_3_0_0; }
 
 		//{CallExpr}
@@ -4778,7 +4778,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({RecordLitExpr} recordType=DoubleDotRef '{' args+=[aadl2::NamedElement] '=')
 		public Group getGroup_4_0() { return cGroup_4_0; }
 
-		//{RecordLitExpr} recordType=DoubleDotRef '{' args+=[aadl2::NamedElement] '='
+		//({RecordLitExpr} recordType=DoubleDotRef '{' args+=[aadl2::NamedElement] '=')
 		public Group getGroup_4_0_0() { return cGroup_4_0_0; }
 
 		//{RecordLitExpr}
@@ -4844,7 +4844,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ({EnumLitExpr} 'enum' '(')
 		public Group getGroup_5_0() { return cGroup_5_0; }
 
-		//{EnumLitExpr} 'enum' '('
+		//({EnumLitExpr} 'enum' '(')
 		public Group getGroup_5_0_0() { return cGroup_5_0_0; }
 
 		//{EnumLitExpr}
@@ -5138,7 +5138,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ('[|' elems+=Expr '|]')
 		public Group getGroup_0() { return cGroup_0; }
 
-		//'[|' elems+=Expr '|]'
+		//('[|' elems+=Expr '|]')
 		public Group getGroup_0_0() { return cGroup_0_0; }
 
 		//'[|'
@@ -5159,7 +5159,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//=> ('[|' elems+=Expr ',')
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
-		//'[|' elems+=Expr ','
+		//('[|' elems+=Expr ',')
 		public Group getGroup_1_0_0() { return cGroup_1_0_0; }
 
 		//'[|'

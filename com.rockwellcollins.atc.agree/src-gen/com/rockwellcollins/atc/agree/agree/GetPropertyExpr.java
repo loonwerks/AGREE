@@ -26,10 +26,6 @@ public interface GetPropertyExpr extends Expr
   /**
    * Returns the value of the '<em><b>Component Ref</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Component Ref</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Component Ref</em>' containment reference.
    * @see #setComponentRef(ComponentRef)
@@ -52,10 +48,6 @@ public interface GetPropertyExpr extends Expr
   /**
    * Returns the value of the '<em><b>Prop</b></em>' reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Prop</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Prop</em>' reference.
    * @see #setProp(NamedElement)

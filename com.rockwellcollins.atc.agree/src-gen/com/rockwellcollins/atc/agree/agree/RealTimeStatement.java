@@ -25,10 +25,6 @@ public interface RealTimeStatement extends PatternStatement
   /**
    * Returns the value of the '<em><b>Event</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Event</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Event</em>' containment reference.
    * @see #setEvent(Expr)
@@ -51,10 +47,6 @@ public interface RealTimeStatement extends PatternStatement
   /**
    * Returns the value of the '<em><b>Jitter</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Jitter</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Jitter</em>' containment reference.
    * @see #setJitter(Expr)

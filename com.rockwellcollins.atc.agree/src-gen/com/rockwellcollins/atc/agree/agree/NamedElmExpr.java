@@ -25,10 +25,6 @@ public interface NamedElmExpr extends Expr
   /**
    * Returns the value of the '<em><b>Elm</b></em>' reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Elm</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Elm</em>' reference.
    * @see #setElm(NamedElement)

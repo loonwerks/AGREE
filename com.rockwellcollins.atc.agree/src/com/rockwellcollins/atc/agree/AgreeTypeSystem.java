@@ -242,23 +242,14 @@ public class AgreeTypeSystem {
 	}
 
 	public static TypeDef typeDefFromClassifier(Classifier c) {
-		if (c instanceof AadlBoolean || c.getName().contains("Boolean")) {
-			return Prim.BoolTypeDef;
-		} else if (c instanceof AadlInteger || c.getName().contains("Integer") || c.getName().contains("Natural")
-				|| c.getName().contains("Unsigned")) {
-			return Prim.IntTypeDef;
-		} else if (c instanceof AadlReal || c.getName().contains("Float")) {
-			return Prim.RealTypeDef;
-		} else if (c instanceof DataType
+		if (c instanceof DataType
 				|| (c instanceof DataImplementation && ((DataImplementation) c).getAllSubcomponents().isEmpty()
 						&& ((DataImplementation) c).getType() != null)) {
 			// Includes special case for data implementations implementing extensions of primitive types
 			List<PropertyAssociation> pas = c.getAllPropertyAssociations();
-			List<Classifier> exts = (c instanceof DataImplementation ? ((DataImplementation) c).getType() : c)
-					.getSelfPlusAllExtended();
-			for (Classifier ext : exts) {
-				if (ext != null && (ext instanceof AadlInteger || ext.getName().contains("Integer")
-						|| ext.getName().contains("Natural") || ext.getName().contains("Unsigned"))) {
+			Classifier classifierType = c instanceof DataImplementation ? ((DataImplementation) c).getType() : c;
+			for (Classifier classType : classifierType.getSelfPlusAllExtended()) {
+				if (classType != null && hasIntegerDataRepresentation(classType)) {
 
 					for (PropertyAssociation choice : pas) {
 						Property p = choice.getProperty();
@@ -282,7 +273,7 @@ public class AgreeTypeSystem {
 					}
 					return Prim.IntTypeDef;
 
-				} else if (ext != null && (ext instanceof AadlReal || ext.getName().contains("Float"))) {
+				} else if (classType != null && hasFloatDataRepresentation(classType)) {
 
 					for (PropertyAssociation choice : pas) {
 						Property p = choice.getProperty();
@@ -305,6 +296,9 @@ public class AgreeTypeSystem {
 						}
 					}
 					return Prim.RealTypeDef;
+
+				} else if (classType != null && hasBooleanDataRepresentation(classType)) {
+					return Prim.BoolTypeDef;
 				}
 			}
 
@@ -389,11 +383,68 @@ public class AgreeTypeSystem {
 				ComponentType ct = null;
 				if (currClsfr instanceof ComponentImplementation) {
 					EList<Subcomponent> subcomps = ((ComponentImplementation) currClsfr).getAllSubcomponents();
+
 					for (Subcomponent sub : subcomps) {
 						String fieldName = sub.getName();
 						if (sub.getClassifier() != null) {
+							boolean prop_isArray = false;
+							int prop_arraySize = 0;
+							boolean prop_isEnum = false;
+							List<String> prop_enumValues = null;
+							for (PropertyAssociation pa : sub.getOwnedPropertyAssociations()) {
+								Property p = pa.getProperty();
+								String key = p.getQualifiedName();
+								key = key == null ? p.getName() : key;
 
-							if (sub.getArrayDimensions().size() == 0) {
+								PropertyExpression v = null;
+								if (!pa.getOwnedValues().isEmpty()) {
+									v = pa.getOwnedValues().get(0).getOwnedValue();
+								} else {
+									continue;
+								}
+
+								if (key.equals("Data_Model::Data_Representation")) {
+									if (v instanceof NamedValue) {
+										AbstractNamedValue anv = ((NamedValue) v).getNamedValue();
+										if (anv instanceof EnumerationLiteral) {
+											EnumerationLiteral el = (EnumerationLiteral) anv;
+											prop_isArray = el.getName().equals("Array");
+											prop_isEnum = el.getName().equals("Enum");
+										}
+									}
+								} else if (key.equals("Data_Model::Dimension")) {
+									if (v instanceof ListValue) {
+										ListValue l = (ListValue) v;
+										PropertyExpression pe = l.getOwnedListElements().get(0);
+										prop_arraySize = Math
+												.toIntExact(intFromPropExp(pe).orElse((long) -1).longValue());
+
+									}
+								} else if (key.equals("Data_Model::Enumerators")) {
+									if (v instanceof ListValue) {
+										EList<PropertyExpression> peList = ((ListValue) v).getOwnedListElements();
+										String prefix = c.getQualifiedName() + "_";
+										prop_enumValues = new ArrayList<>();
+										for (PropertyExpression pe : peList) {
+											if (pe instanceof StringLiteral) {
+												String enumString = prefix + ((StringLiteral) pe).getValue();
+												prop_enumValues.add(enumString);
+											}
+										}
+									}
+
+								}
+							}
+
+							if (prop_isArray && prop_arraySize > 0) {
+								TypeDef typeDef = new ArrayTypeDef(typeDefFromClassifier(sub.getClassifier()),
+										prop_arraySize, Optional.empty());
+								fields.putIfAbsent(fieldName, typeDef);
+							} else if (prop_isEnum && prop_enumValues != null) {
+								String name = c.getQualifiedName();
+								TypeDef typeDef = new EnumTypeDef(name, prop_enumValues, c);
+								fields.putIfAbsent(fieldName, typeDef);
+							} else if (sub.getArrayDimensions().size() == 0) {
 								TypeDef typeDef = typeDefFromClassifier(sub.getClassifier());
 								fields.putIfAbsent(fieldName, typeDef);
 							} else if (sub.getArrayDimensions().size() == 1) {
@@ -476,6 +527,77 @@ public class AgreeTypeSystem {
 
 	}
 
+	public static boolean hasBooleanDataRepresentation(Classifier classifier) {
+		boolean result = false;
+
+		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
+		for (PropertyAssociation propertyAssociation : propertyAssociations) {
+			Property property = propertyAssociation.getProperty();
+			try {
+				PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
+				if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
+						&& propertyExpr instanceof NamedValue) {
+					AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
+					if (abstractNamedValue instanceof EnumerationLiteral
+							&& "Boolean".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
+						result = true;
+					}
+				}
+			} catch (Exception e) {
+				continue;
+			}
+		}
+
+		return result;
+	}
+
+	public static boolean hasIntegerDataRepresentation(Classifier classifier) {
+		boolean result = false;
+
+		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
+		for (PropertyAssociation propertyAssociation : propertyAssociations) {
+			Property property = propertyAssociation.getProperty();
+			try {
+				PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
+				if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
+						&& propertyExpr instanceof NamedValue) {
+					AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
+					if (abstractNamedValue instanceof EnumerationLiteral
+							&& "Integer".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
+						result = true;
+					}
+				}
+			} catch (Exception e) {
+				continue;
+			}
+		}
+
+		return result;
+	}
+
+	public static boolean hasFloatDataRepresentation(Classifier classifier) {
+		boolean result = false;
+
+		EList<PropertyAssociation> propertyAssociations = classifier.getAllPropertyAssociations();
+		for (PropertyAssociation propertyAssociation : propertyAssociations) {
+			Property property = propertyAssociation.getProperty();
+			try {
+				PropertyExpression propertyExpr = classifier.getSimplePropertyValue(property);
+				if ("Data_Model::Data_Representation".equals(property.getQualifiedName())
+						&& propertyExpr instanceof NamedValue) {
+					AbstractNamedValue abstractNamedValue = ((NamedValue) propertyExpr).getNamedValue();
+					if (abstractNamedValue instanceof EnumerationLiteral
+							&& "Float".equals(((EnumerationLiteral) abstractNamedValue).getName())) {
+						result = true;
+					}
+				}
+			} catch (Exception e) {
+				continue;
+			}
+		}
+
+		return result;
+	}
 
 	public static TypeDef typeDefFromType(Type t) {
 
@@ -883,44 +1005,54 @@ public class AgreeTypeSystem {
 			return new EnumTypeDef(name, enumValues, enumDef);
 
 		} else if (ne instanceof NamedID) {
-
 			EObject container = ne.eContainer();
 
 			Expr arrExpr = null;
+			boolean isItemBinding = false;
 
 			if (container instanceof ForallExpr) {
 				arrExpr = ((ForallExpr) container).getArray();
+				isItemBinding = true;
 
 			} else if (container instanceof ExistsExpr) {
 				arrExpr = ((ExistsExpr) container).getArray();
+				isItemBinding = true;
 
 			} else if (container instanceof FlatmapExpr) {
 				arrExpr = ((FlatmapExpr) container).getArray();
+				isItemBinding = true;
 
 			} else if (container instanceof FoldLeftExpr) {
-				arrExpr = ((FoldLeftExpr) container).getArray();
+				FoldLeftExpr fexpr = (FoldLeftExpr) container;
+				arrExpr = fexpr.getArray();
+				isItemBinding = fexpr.getBinding().getName().equals(ne.getName());
 
 			} else if (container instanceof FoldRightExpr) {
-				arrExpr = ((FoldRightExpr) container).getArray();
+				FoldRightExpr fexpr = (FoldRightExpr) container;
+				arrExpr = fexpr.getArray();
+				isItemBinding = fexpr.getBinding().getName().equals(ne.getName());
 
 			}
 
 			if (arrExpr != null) {
-				TypeDef arrType = infer(arrExpr);
-				if (arrType instanceof ArrayTypeDef) {
-					return ((ArrayTypeDef) arrType).stemType;
+				if (isItemBinding) {
+					TypeDef arrType = infer(arrExpr);
+					if (arrType instanceof ArrayTypeDef) {
+						return ((ArrayTypeDef) arrType).stemType;
+					}
+				} else {
+					// ne must be the accumulator
+					if (container instanceof FoldLeftExpr) {
+						Expr initExpr = ((FoldLeftExpr) container).getInitial();
+						TypeDef initType = infer(initExpr);
+						return initType;
+
+					} else if (container instanceof FoldRightExpr) {
+						Expr initExpr = ((FoldRightExpr) container).getInitial();
+						TypeDef initType = infer(initExpr);
+						return initType;
+					}
 				}
-			}
-
-			if (container instanceof FoldLeftExpr) {
-				Expr initExpr = ((FoldLeftExpr) container).getInitial();
-				TypeDef initType = infer(initExpr);
-				return initType;
-
-			} else if (container instanceof FoldRightExpr) {
-				Expr initExpr = ((FoldRightExpr) container).getInitial();
-				TypeDef initType = infer(initExpr);
-				return initType;
 			}
 
 

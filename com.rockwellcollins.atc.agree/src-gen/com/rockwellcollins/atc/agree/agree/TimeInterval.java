@@ -26,10 +26,6 @@ public interface TimeInterval extends EObject
   /**
    * Returns the value of the '<em><b>Low</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Low</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Low</em>' containment reference.
    * @see #setLow(Expr)
@@ -52,10 +48,6 @@ public interface TimeInterval extends EObject
   /**
    * Returns the value of the '<em><b>High</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>High</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>High</em>' containment reference.
    * @see #setHigh(Expr)

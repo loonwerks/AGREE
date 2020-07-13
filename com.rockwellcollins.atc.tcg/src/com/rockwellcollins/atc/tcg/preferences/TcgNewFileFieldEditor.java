@@ -25,9 +25,7 @@ import java.io.File;
 
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.FileDialog;
 
 public class TcgNewFileFieldEditor extends FileFieldEditor {
 

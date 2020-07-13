@@ -25,15 +25,13 @@ package com.rockwellcollins.atc.tcg.views;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.part.ViewPart;
 
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 import com.rockwellcollins.atc.tcg.suite.TestSuite;
 
-import jkind.api.results.AnalysisResult;
 import jkind.api.results.JKindResult;
-
-import org.eclipse.ui.ISaveablePart2;
 
 public class TestSuiteView extends ViewPart implements ISaveablePart2 {
 	public static final String ID = "tcg.views.testSuiteView";

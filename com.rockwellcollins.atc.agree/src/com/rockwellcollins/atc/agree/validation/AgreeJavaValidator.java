@@ -546,7 +546,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 		Expr expr = latched.getExpr();
 		Expr nestId = null;
 		if (expr instanceof NamedElmExpr) {
-			nestId = (NamedElmExpr) expr;
+			nestId = expr;
 		} else if (expr instanceof EventExpr) {
 			EventExpr eventExpr = (EventExpr) expr;
 			nestId = eventExpr.getPort();
@@ -559,7 +559,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			} else if (nestId instanceof SelectionExpr) {
 				namedEl = ((SelectionExpr) nestId).getField();
 			}
-			
+
 			if ((namedEl instanceof DataPort) && ((DataPort) namedEl).isIn()) {
 				return;
 			} else if ((namedEl instanceof EventDataPort) && ((EventDataPort) namedEl).isIn()) {
@@ -1468,7 +1468,6 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 	@Check(CheckType.FAST)
 	public void checkArrayUpdateExpr(ArrayUpdateExpr arrup) {
 
-		List<Expr> indices = arrup.getIndices();
 		List<Expr> exprs = arrup.getValueExprs();
 
 		Expr arrExpr = arrup.getArray();

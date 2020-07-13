@@ -1,6 +1,5 @@
 package com.rockwellcollins.atc.tcg.views;
 
-import java.util.EnumMap;
 import java.util.StringJoiner;
 
 import jkind.api.results.MultiStatus;

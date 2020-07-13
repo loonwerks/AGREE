@@ -26,6 +26,7 @@ import com.rockwellcollins.atc.agree.agree.util.AgreeSwitch;
 
 public class ExprCycleVisitor extends AgreeSwitch<Set<EObject>> {
 
+	@SuppressWarnings("unused")
 	private String id;
 
 	public ExprCycleVisitor(String id) {

@@ -200,10 +200,14 @@ public class MdlScriptCreator extends ScriptCreator {
 		String str = "";
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			if (stream != null) {
-				while ((str = reader.readLine()) != null) {
-					writeline(str);
+			try {
+				if (stream != null) {
+					while ((str = reader.readLine()) != null) {
+						writeline(str);
+					}
 				}
+			} finally {
+				reader.close();
 			}
 		} finally {
 			try {
@@ -231,10 +235,14 @@ public class MdlScriptCreator extends ScriptCreator {
 		String str = "";
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			if (stream != null) {
-				while ((str = reader.readLine()) != null) {
-					writeline(str);
+			try {
+				if (stream != null) {
+					while ((str = reader.readLine()) != null) {
+						writeline(str);
+					}
 				}
+			} finally {
+				reader.close();
 			}
 		} finally {
 			try {

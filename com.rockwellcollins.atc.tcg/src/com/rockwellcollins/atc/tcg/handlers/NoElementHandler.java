@@ -32,8 +32,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.xtext.ui.editor.XtextEditor;
-import org.eclipse.xtext.ui.editor.utils.EditorUtils;
 
 public abstract class NoElementHandler extends AbstractHandler {
     protected static final String TERMINATE_ID = "tcg.commands.terminate";

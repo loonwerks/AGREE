@@ -112,7 +112,7 @@ class AgreeLinkingTest extends XtextTest {
                         specs.head as NodeDef => [
                             val args = args
                             val rets = rets
-                            nodeBody as NodeBodyExpr => [
+                            nodeBody => [
                                 val locals = locs
                                 stmts.head as NodeEq => [
                                     Assert.assertEquals(locals.head, lhs.head)
@@ -191,8 +191,7 @@ class AgreeLinkingTest extends XtextTest {
                             ]
                             Assert.assertTrue(expr instanceof RecordLitExpr)
                             expr as RecordLitExpr => [
-                                Assert.assertTrue(recordType instanceof DoubleDotRef)
-                                recordType as DoubleDotRef => [
+                                recordType => [
                                     Assert.assertEquals(recordDef, elm)
                                 ]
                                 // ToDo: Do we want to bother looking at the elements?
@@ -405,8 +404,7 @@ class AgreeLinkingTest extends XtextTest {
                             ]
                             Assert.assertTrue(expr instanceof RecordLitExpr)
                             expr as RecordLitExpr => [
-                                Assert.assertTrue(recordType instanceof DoubleDotRef)
-                                recordType as DoubleDotRef => [
+                                recordType => [
                                     Assert.assertEquals(recordDef, elm)
                                 ]
                                 // ToDo: Do we want to bother looking at the elements?
@@ -1329,7 +1327,7 @@ class AgreeLinkingTest extends XtextTest {
                                     Assert.assertEquals(localCoordDef, elm)
                                 ] 
                                 expr as RecordLitExpr => [
-                                    recordType as DoubleDotRef => [
+                                    recordType => [
                                         Assert.assertEquals(localCoordDef, elm)
                                     ]
                                 ]

@@ -26,21 +26,20 @@ import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.Map;
 
-import jkind.api.results.AnalysisResult;
-import jkind.api.results.JRealizabilityResult;
-import jkind.api.results.PropertyResult;
-import jkind.api.results.ResultsUtil;
-import jkind.api.results.Status;
-import jkind.api.ui.results.AnalysisResultColumnViewer.Column;
-import jkind.api.ui.results.Spinner;
-import jkind.util.Util;
-
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 
 import com.rockwellcollins.atc.tcg.util.TcgResultsUtil;
+
+import jkind.api.results.AnalysisResult;
+import jkind.api.results.JRealizabilityResult;
+import jkind.api.results.PropertyResult;
+import jkind.api.results.Status;
+import jkind.api.ui.results.AnalysisResultColumnViewer.Column;
+import jkind.api.ui.results.Spinner;
+import jkind.util.Util;
 
 public class TestCaseGeneratorResultLabelProvider extends ColumnLabelProvider {
 	private final Column column;

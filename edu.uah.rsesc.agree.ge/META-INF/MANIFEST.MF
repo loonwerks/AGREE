@@ -12,3 +12,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: edu.uah.rsesc.agree.ge,
  edu.uah.rsesc.agree.ge.businessObjectHandlers
+Automatic-Module-Name: edu.uah.rsesc.agree.ge

@@ -274,7 +274,9 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 		for (AgreeNode subNode : node.subNodes) {
 			nodes.addAll(gatherNodes(subNode));
-			nodes.add(subNode);
+			if (nodes.stream().noneMatch(it -> it.reference.equals(subNode.reference))) {
+				nodes.add(subNode);
+			}
 		}
 		return nodes;
 	}
@@ -326,7 +328,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 					hasSubcomponents = true;
 					curInst = subInst;
 					AgreeNode subNode = getAgreeNode(subInst, false);
-					if (subNode != null) {
+					if (subNode != null && subNodes.stream().noneMatch(it -> it.reference.equals(subNode.reference))) {
 						foundSubNode = true;
 						subNodes.add(subNode);
 					}
@@ -360,14 +362,19 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 					}
 
 				}
-				aadlConnections.addAll(getConnections(((ComponentImplementation) cc).getAllConnections(),
-						compInst, subNodes, latched));
-
-				connections.addAll(filterConnections(aadlConnections, userDefinedConections));
+				for (AgreeAADLConnection connection : getConnections(((ComponentImplementation) cc).getAllConnections(),
+						compInst, subNodes, latched)) {
+					if (aadlConnections.stream().noneMatch(it -> it.reference.equals(connection.reference))) {
+						aadlConnections.add(connection);
+					}
+				}
 
 				cc = (ComponentClassifier) cc.getExtended();
 
 			}
+
+			connections.addAll(filterConnections(aadlConnections, userDefinedConections));
+
 			// make compClass the type so we can get it's other contract
 			// elements
 

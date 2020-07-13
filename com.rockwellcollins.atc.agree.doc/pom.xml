@@ -7,6 +7,5 @@
     <version>2.4.3-SNAPSHOT</version>
   </parent>
   <artifactId>com.rockwellcollins.atc.agree.doc</artifactId>
-  <version>2.4.3-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 </project>

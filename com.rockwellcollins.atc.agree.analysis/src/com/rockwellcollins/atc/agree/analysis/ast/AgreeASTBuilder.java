@@ -25,10 +25,8 @@ import org.osate.aadl2.BooleanLiteral;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.ComponentType;
-import org.osate.aadl2.ConnectedElement;
 import org.osate.aadl2.Connection;
 import org.osate.aadl2.ConnectionEnd;
-import org.osate.aadl2.Context;
 import org.osate.aadl2.DataClassifier;
 import org.osate.aadl2.DataPort;
 import org.osate.aadl2.DataSubcomponent;
@@ -49,6 +47,8 @@ import org.osate.aadl2.RealLiteral;
 import org.osate.aadl2.StringLiteral;
 import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.instance.ComponentInstance;
+import org.osate.aadl2.instance.ConnectionInstance;
+import org.osate.aadl2.instance.ConnectionInstanceEnd;
 import org.osate.aadl2.instance.FeatureCategory;
 import org.osate.aadl2.instance.FeatureInstance;
 import org.osate.aadl2.modelsupport.scoping.Aadl2GlobalScopeUtil;
@@ -317,6 +317,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 		if (compClass instanceof ComponentImplementation && (isTop || isMonolithic)) {
 
+			boolean latched = false;
 			ComponentClassifier cc = compClass;
 			while (cc != null) {
 
@@ -333,7 +334,6 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 						subNodes.add(subNode);
 					}
 				}
-				boolean latched = false;
 				if (annex != null) {
 					hasDirectAnnex = true;
 					AgreeContract contract = (AgreeContract) annex.getContract();
@@ -362,23 +362,18 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 					}
 
 				}
-				for (AgreeAADLConnection connection : getConnections(((ComponentImplementation) cc).getAllConnections(),
-						compInst, subNodes, latched)) {
-					if (aadlConnections.stream().noneMatch(it -> it.reference.equals(connection.reference))) {
-						aadlConnections.add(connection);
-					}
-				}
 
 				cc = (ComponentClassifier) cc.getExtended();
 
 			}
 
+			EList<ConnectionInstance> connectionInstances = compInst.getConnectionInstances();
+			aadlConnections.addAll(getConnectionsFromInstances(connectionInstances, compInst, subNodes, latched));
 			connections.addAll(filterConnections(aadlConnections, userDefinedConections));
 
-			// make compClass the type so we can get it's other contract
-			// elements
-
+			// make compClass the type so we can get it's other contract elements
 			compClass = ((ComponentImplementation) compClass).getType();
+
 		} else if (compClass instanceof ComponentImplementation) {
 
 			ComponentType ct = ((ComponentImplementation) compClass).getType();
@@ -808,108 +803,132 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 				reference);
 	}
 
-	private List<AgreeAADLConnection> getConnections(EList<Connection> connections, ComponentInstance compInst,
-			List<AgreeNode> subNodes, boolean latched) {
+	private List<AgreeAADLConnection> getConnectionsFromInstances(EList<ConnectionInstance> connectionInstances,
+			ComponentInstance compInst, List<AgreeNode> subnodes, boolean latched) {
+		List<AgreeAADLConnection> result = new ArrayList<>();
+		for (ConnectionInstance connectionInstance : connectionInstances) {
+			ConnectionInstanceEnd sourceEndInstance = connectionInstance.getSource();
+			ConnectionInstanceEnd destinationEndInstance = connectionInstance.getDestination();
+			ComponentInstance sourceComponentInstance = sourceEndInstance.getComponentInstance();
+			ComponentInstance destinationComponentInstance = destinationEndInstance.getComponentInstance();
 
-//		Set<AgreeVar> destinationSet = new HashSet<>();
-
-		Property commTimingProp = Aadl2GlobalScopeUtil.get(compInst, Aadl2Package.eINSTANCE.getProperty(),
-				"Communication_Properties::Timing");
-		List<AgreeAADLConnection> agreeConns = new ArrayList<>();
-		for (Connection conn : connections) {
-
-			ConnectedElement absConnDest = conn.getDestination();
-			ConnectedElement absConnSour = conn.getSource();
-			boolean delayed = false;
-			try {
-				EnumerationLiteral lit = PropertyUtils.getEnumLiteral(conn, commTimingProp);
-				delayed = lit.getName().equals("delayed");
-			} catch (PropertyDoesNotApplyToHolderException e) {
-				delayed = false;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			Context destContext = absConnDest.getContext();
-			Context sourContext = absConnSour.getContext();
-			// only make connections to things that have annexs
-			if (destContext != null && destContext instanceof Subcomponent) {
-				ComponentInstance subInst = compInst.findSubcomponentInstance((Subcomponent) destContext);
-				if (!AgreeUtils.containsTransitiveAgreeAnnex(subInst, isMonolithic)) {
+			// make connections only to subcomponents that have annexes
+			if (!compInst.equals(sourceComponentInstance)
+					&& compInst.getAllComponentInstances().contains(sourceComponentInstance)) {
+				if (!AgreeUtils.containsTransitiveAgreeAnnex(sourceComponentInstance, isMonolithic)) {
 					continue;
 				}
 			}
-			if (sourContext != null && sourContext instanceof Subcomponent) {
-				ComponentInstance subInst = compInst.findSubcomponentInstance((Subcomponent) sourContext);
-				if (!AgreeUtils.containsTransitiveAgreeAnnex(subInst, isMonolithic)) {
+			if (!compInst.equals(destinationComponentInstance)
+					&& compInst.getAllComponentInstances().contains(destinationComponentInstance)) {
+				if (!AgreeUtils.containsTransitiveAgreeAnnex(destinationComponentInstance, isMonolithic)) {
 					continue;
 				}
 			}
 
-			AgreeNode sourceNode = agreeNodeFromNamedEl(subNodes, sourContext);
-			AgreeNode destNode = agreeNodeFromNamedEl(subNodes, destContext);
+			boolean isDelayed = isDelayed(connectionInstance, compInst);
 
-			ConnectionEnd destPort = absConnDest.getConnectionEnd();
-			ConnectionEnd sourPort = absConnSour.getConnectionEnd();
+			AgreeNode sourceNode = agreeNodeFromNamedEl(subnodes, sourceComponentInstance);
+			AgreeNode destinationNode = agreeNodeFromNamedEl(subnodes, destinationComponentInstance);
 
-			if (sourPort instanceof DataSubcomponent || destPort instanceof DataSubcomponent) {
-				AgreeLogger.logWarning("unable to reason about connection '" + conn.getName()
-				+ "' because it connects to a data subcomponent");
+			ConnectionEnd sourceConnectionEnd;
+			if (sourceEndInstance instanceof FeatureInstance) {
+				sourceConnectionEnd = ((FeatureInstance) sourceEndInstance).getFeature();
+			} else {
+				AgreeLogger.logWarning("unable to reason about connection '" + connectionInstance.getQualifiedName()
+						+ "' because it connects from a " + sourceEndInstance.getClass().getName());
 				continue;
 			}
 
-			// weirdness with feature groups
-			String sourPrefix = null;
-			if (sourContext instanceof FeatureGroup) {
-				sourPrefix = sourContext.getName();
-			}
-			String destPrefix = null;
-			if (destContext instanceof FeatureGroup) {
-				destPrefix = destContext.getName();
+			ConnectionEnd destinationConnectionEnd;
+			if (destinationEndInstance instanceof FeatureInstance) {
+				destinationConnectionEnd = ((FeatureInstance) destinationEndInstance).getFeature();
+			} else {
+				AgreeLogger.logWarning("unable to reason about connection '" + connectionInstance.getQualifiedName()
+						+ "' because it connects to a " + destinationEndInstance.getClass().getName());
+				continue;
 			}
 
-			List<AgreeVar> sourVars = getAgreePortNames(sourPort, sourPrefix,
+			if (sourceConnectionEnd instanceof DataSubcomponent
+					|| destinationConnectionEnd instanceof DataSubcomponent) {
+				AgreeLogger.logWarning("unable to reason about connection '" + connectionInstance.getQualifiedName()
+						+ "' because it connects to a data subcomponent");
+				continue;
+			}
+
+			// Handle prefixing elements of feature groups
+			String sourcePrefix = null;
+			if (sourceConnectionEnd instanceof FeatureGroup) {
+				sourcePrefix = sourceConnectionEnd.getName();
+			}
+			String destinationPrefix = null;
+			if (destinationConnectionEnd instanceof FeatureGroup) {
+				destinationPrefix = destinationConnectionEnd.getName();
+			}
+
+			List<AgreeVar> sourceVars = getAgreePortNames(sourceConnectionEnd,
+					sourcePrefix,
 					sourceNode == null ? null : sourceNode.compInst);
-			List<AgreeVar> destVars = getAgreePortNames(destPort, destPrefix,
-					destNode == null ? null : destNode.compInst);
+			List<AgreeVar> destinationVars = getAgreePortNames(destinationConnectionEnd,
+					destinationPrefix,
+					destinationNode == null ? null : destinationNode.compInst);
 
-			if (sourVars.size() != destVars.size()) {
+			if (sourceVars.size() != destinationVars.size()) {
 				throw new AgreeException("The number of AGREE variables differ for connection '"
-						+ conn.getQualifiedName()
+						+ connectionInstance.getQualifiedName()
 						+ "'. Do the types of the source and destination differ? Perhaps one is an implementation and the other is a type?");
 			}
 
-			for (int i = 0; i < sourVars.size(); i++) {
-				AgreeVar sourVar = sourVars.get(i);
-				AgreeVar destVar = destVars.get(i);
+			for (int i = 0; i < sourceVars.size(); i++) {
+				AgreeVar sourceVar = sourceVars.get(i);
+				AgreeVar destinationVar = destinationVars.get(i);
 
-				if (!matches((ConnectionEnd) sourVar.reference, (ConnectionEnd) destVar.reference)) {
-					AgreeLogger.logWarning(
-							"Connection '" + conn.getName() + "' has ports '" + sourVar.id.replace(dotChar, ".")
-							+ "' and '" + destVar.id.replace(dotChar, ".") + "' of differing type");
+				if (!matches((ConnectionEnd) sourceVar.reference, (ConnectionEnd) destinationVar.reference)) {
+					AgreeLogger.logWarning("Connection '" + connectionInstance.getQualifiedName() + "' has ports '"
+							+ sourceVar.id.replace(dotChar, ".") + "' and '" + destinationVar.id.replace(dotChar, ".")
+							+ "' of differing type");
 					continue;
 				}
 
-				if (!sourVar.type.equals(destVar.type)) {
+				if (!sourceVar.type.equals(destinationVar.type)) {
 					throw new AgreeException("Type mismatch during connection generation");
 				}
 
 				ConnectionType connType;
 
-				if (sourVar.id.endsWith(eventSuffix)) {
+				if (sourceVar.id.endsWith(eventSuffix)) {
 					connType = ConnectionType.EVENT;
 				} else {
 					connType = ConnectionType.DATA;
 				}
 
-				AgreeAADLConnection agreeConnection = new AgreeAADLConnection(sourceNode, destNode, sourVar, destVar,
-						connType, latched, delayed, conn);
+				// TODO: connection instances may span multiple connections transiting multiple layers of hierarchy.
+				// Handle this stepwise by making an AGREE AADL connection for each step?
+				AgreeAADLConnection agreeConnection = new AgreeAADLConnection(sourceNode, destinationNode, sourceVar,
+						destinationVar, connType, latched, isDelayed,
+						connectionInstance.getConnectionReferences().get(0).getConnection());
 
-				agreeConns.add(agreeConnection);
+				result.add(agreeConnection);
 			}
 
 		}
-		return agreeConns;
+
+		return result;
+	}
+
+	private boolean isDelayed(NamedElement namedElement, ComponentInstance compInst) {
+		Property commTimingProp = Aadl2GlobalScopeUtil.get(compInst, Aadl2Package.eINSTANCE.getProperty(),
+				"Communication_Properties::Timing");
+		boolean delayed = false;
+		try {
+			EnumerationLiteral lit = PropertyUtils.getEnumLiteral(namedElement, commTimingProp);
+			delayed = lit.getName().equals("delayed");
+		} catch (PropertyDoesNotApplyToHolderException e) {
+			delayed = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return delayed;
 	}
 
 	private Type getConnectionEndType(ConnectionEnd port) {

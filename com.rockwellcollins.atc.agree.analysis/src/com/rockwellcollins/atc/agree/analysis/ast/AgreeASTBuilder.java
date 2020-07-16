@@ -904,6 +904,14 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 				// TODO: connection instances may span multiple connections transiting multiple layers of hierarchy.
 				// Handle this stepwise by making an AGREE AADL connection for each step?
+				if (connectionInstance.getConnectionReferences().size() != 1) {
+					throw new AgreeException(
+							"Connection instances must reference exactly one connection.  Found connection instance"
+									+ connectionInstance.getFullName() + " in "
+									+ connectionInstance.getContainingClassifier().getQualifiedName() + " refers to "
+									+ connectionInstance.getConnectionReferences().size() + " connections."
+									+ " Perhaps it connects across multiple layers of hierarchy?");
+				}
 				AgreeAADLConnection agreeConnection = new AgreeAADLConnection(sourceNode, destinationNode, sourceVar,
 						destinationVar, connType, latched, isDelayed,
 						connectionInstance.getConnectionReferences().get(0).getConnection());

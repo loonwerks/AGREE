@@ -109,7 +109,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		}
 	}
 
-	private ComponentImplementation getComponentImplementation(Element root, EphemeralImplementationUtil implUtil) {
+	protected ComponentImplementation getComponentImplementation(Element root, EphemeralImplementationUtil implUtil) {
 		Classifier classifier = getOutermostClassifier(root);
 		if (isRealizability()) {
 			if (!(classifier instanceof ComponentType)) {
@@ -222,7 +222,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		}
 	}
 
-	private void wrapVerificationResult(ComponentInstance si, CompositeAnalysisResult wrapper) {
+	protected void wrapVerificationResult(ComponentInstance si, CompositeAnalysisResult wrapper) {
 		AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, isMonolithic());
 
 		// generate different lustre depending on which model checker we are
@@ -260,7 +260,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		return sw.toString();
 	}
 
-	private AnalysisResult buildAnalysisResult(String name, ComponentInstance ci) {
+	protected AnalysisResult buildAnalysisResult(String name, ComponentInstance ci) {
 		CompositeAnalysisResult result = new CompositeAnalysisResult("Verification for " + name);
 
 		if (containsAGREEAnnex(ci)) {
@@ -283,7 +283,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		return null;
 	}
 
-	private boolean containsAGREEAnnex(ComponentInstance ci) {
+	protected boolean containsAGREEAnnex(ComponentInstance ci) {
 		ComponentClassifier compClass = ci.getComponentClassifier();
 		if (compClass instanceof ComponentImplementation) {
 			compClass = ((ComponentImplementation) compClass).getType();
@@ -382,7 +382,7 @@ public abstract class VerifyHandler extends AadlHandler {
 
 	}
 
-	private void addProperties(AgreeRenaming renaming, List<String> properties, Node mainNode,
+	protected void addProperties(AgreeRenaming renaming, List<String> properties, Node mainNode,
 			AgreeProgram agreeProgram) {
 
 		// there is a special case in the AgreeRenaming which handles this
@@ -403,7 +403,8 @@ public abstract class VerifyHandler extends AadlHandler {
 
 	}
 
-	void addKind2Properties(AgreeNode agreeNode, List<String> properties, AgreeRenaming renaming, String prefix,
+	protected void addKind2Properties(AgreeNode agreeNode, List<String> properties, AgreeRenaming renaming,
+			String prefix,
 			String userPropPrefix) {
 		int i = 0;
 
@@ -423,7 +424,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		}
 	}
 
-	private AgreeSubclause getContract(ComponentImplementation ci) {
+	protected AgreeSubclause getContract(ComponentImplementation ci) {
 		ComponentType ct = ci.getOwnedRealization().getImplemented();
 		for (AnnexSubclause annex : ct.getOwnedAnnexSubclauses()) {
 			if (annex instanceof AgreeSubclause) {
@@ -462,7 +463,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		});
 	}
 
-	private IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor) {
+	protected IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor) {
 
 		Thread analysisThread = new Thread() {
 			@Override
@@ -587,7 +588,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		});
 	}
 
-	protected void disableRerunHandler() {
+	private void disableRerunHandler() {
 		if (rerunActivation != null) {
 			getWindow().getShell().getDisplay().syncExec(() -> {
 				IHandlerService handlerService = getHandlerService();

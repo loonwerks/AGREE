@@ -150,7 +150,7 @@
 						<artifact>
 							<groupId>com.rockwellcollins.atc.agree</groupId>
 							<artifactId>com.rockwellcollins.atc.agree.target</artifactId>
-							<version>2.4.3-SNAPSHOT</version>
+							<version>${project.parent.version}</version>
 						</artifact>
 					</target>
 					<environments>

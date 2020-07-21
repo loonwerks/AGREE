@@ -38,3 +38,4 @@ Export-Package: com.rockwellcollins.atc.agree,
  com.rockwellcollins.atc.agree.serializer,
  com.rockwellcollins.atc.agree.parser.antlr.lexer
 Automatic-Module-Name: com.rockwellcollins.atc.agree
+Bundle-Activator: com.rockwellcollins.atc.agree.Activator

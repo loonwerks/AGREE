@@ -8,6 +8,23 @@
        uri = "http://www.rockwellcollins.com/atc/agree/Agree" 
        class = "com.rockwellcollins.atc.agree.agree.AgreePackage"
        genModel = "model/generated/Agree.genmodel" /> 
-	
   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.rockwellcollins.atc.agree.Agree"
+            class="com.rockwellcollins.atc.agree.preferences.AgreePreferencePage"
+            id="com.rockwellcollins.atc.agree.preferences.AgreePreferencePage"
+            name="Validation">
+            <keywordReference id="com.rockwellcollins.atc.agree.ui.keyword_Agree"/>
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.rockwellcollins.atc.agree.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
 </plugin>

@@ -147,6 +147,10 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 
 	@Override
 	protected boolean isResponsible(Map<Object, Object> context, EObject eObject) {
+		if (!com.rockwellcollins.atc.agree.Activator.getDefault().getPreferenceStore()
+				.getBoolean(com.rockwellcollins.atc.agree.preferences.PreferenceConstants.PREF_VALIDATION_ENABLED)) {
+			return false;
+		}
 		return (eObject.eClass().getEPackage() == AgreePackage.eINSTANCE) || eObject instanceof AadlPackage;
 	}
 

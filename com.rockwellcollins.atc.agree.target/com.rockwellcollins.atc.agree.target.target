@@ -63,7 +63,7 @@
 		<unit id="org.osate.ge.feature.feature.group" version="0.0.0"/>
 		<unit id="org.osate.plugins.feature.feature.group" version="0.0.0"/>
 		<unit id="org.osate.utils.feature.feature.group" version="0.0.0"/>
-		<repository location="https://osate-build.sei.cmu.edu/download/osate/stable/2.7.0/updates/"/>
+		<repository location="https://osate-build.sei.cmu.edu/download/osate/stable/2.7.1/updates/"/>
 	</location>
 </locations>
 </target>

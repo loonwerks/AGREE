@@ -122,6 +122,7 @@
 						<configuration>
 							<excludes>
 								<feature id="com.collins.trustedsystems.z3.feature" />
+								<feature id="com.collins.trustedsystems.jkindapi.feature" />
 							</excludes>
 						</configuration>
 					</execution>

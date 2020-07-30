@@ -49,6 +49,7 @@ import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.ConnectionInstance;
 import org.osate.aadl2.instance.ConnectionInstanceEnd;
+import org.osate.aadl2.instance.ConnectionReference;
 import org.osate.aadl2.instance.FeatureCategory;
 import org.osate.aadl2.instance.FeatureInstance;
 import org.osate.aadl2.modelsupport.scoping.Aadl2GlobalScopeUtil;
@@ -367,7 +368,9 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 			}
 
-			EList<ConnectionInstance> connectionInstances = compInst.getConnectionInstances();
+			EList<ConnectionInstance> connectionInstances = compInst.getAllEnclosingConnectionInstances();
+			List<ConnectionInstance> foo = new ArrayList<>();
+			compInst.getAllComponentInstances().forEach(ci -> ci.allEnclosingConnectionInstances().forEach(foo::add));
 			aadlConnections.addAll(getConnectionsFromInstances(connectionInstances, compInst, subNodes, latched));
 			connections.addAll(filterConnections(aadlConnections, userDefinedConections));
 
@@ -807,116 +810,122 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 			ComponentInstance compInst, List<AgreeNode> subnodes, boolean latched) {
 		List<AgreeAADLConnection> result = new ArrayList<>();
 		for (ConnectionInstance connectionInstance : connectionInstances) {
-			ConnectionInstanceEnd sourceEndInstance = connectionInstance.getSource();
-			ConnectionInstanceEnd destinationEndInstance = connectionInstance.getDestination();
-			ComponentInstance sourceComponentInstance = sourceEndInstance.getComponentInstance();
-			ComponentInstance destinationComponentInstance = destinationEndInstance.getComponentInstance();
-
-			// make connections only to subcomponents that have annexes
-			if (!compInst.equals(sourceComponentInstance)
-					&& compInst.getAllComponentInstances().contains(sourceComponentInstance)) {
-				if (!AgreeUtils.containsTransitiveAgreeAnnex(sourceComponentInstance, isMonolithic)) {
-					continue;
-				}
-			}
-			if (!compInst.equals(destinationComponentInstance)
-					&& compInst.getAllComponentInstances().contains(destinationComponentInstance)) {
-				if (!AgreeUtils.containsTransitiveAgreeAnnex(destinationComponentInstance, isMonolithic)) {
-					continue;
-				}
-			}
 
 			boolean isDelayed = isDelayed(connectionInstance, compInst);
 
-			AgreeNode sourceNode = agreeNodeFromNamedEl(subnodes, sourceComponentInstance);
-			AgreeNode destinationNode = agreeNodeFromNamedEl(subnodes, destinationComponentInstance);
+			for (ConnectionReference connectionReference : connectionInstance.getConnectionReferences()) {
 
-			ConnectionEnd sourceConnectionEnd;
-			if (sourceEndInstance instanceof FeatureInstance) {
-				sourceConnectionEnd = ((FeatureInstance) sourceEndInstance).getFeature();
-			} else {
-				AgreeLogger.logWarning("unable to reason about connection '" + connectionInstance.getQualifiedName()
-						+ "' because it connects from a " + sourceEndInstance.getClass().getName());
-				continue;
-			}
+				ConnectionInstanceEnd sourceEndInstance = connectionReference.getSource();
+				ConnectionInstanceEnd destinationEndInstance = connectionReference.getDestination();
 
-			ConnectionEnd destinationConnectionEnd;
-			if (destinationEndInstance instanceof FeatureInstance) {
-				destinationConnectionEnd = ((FeatureInstance) destinationEndInstance).getFeature();
-			} else {
-				AgreeLogger.logWarning("unable to reason about connection '" + connectionInstance.getQualifiedName()
-						+ "' because it connects to a " + destinationEndInstance.getClass().getName());
-				continue;
-			}
+				ComponentInstance sourceComponentInstance = sourceEndInstance.getComponentInstance();
+				ComponentInstance destinationComponentInstance = destinationEndInstance.getComponentInstance();
 
-			if (sourceConnectionEnd instanceof DataSubcomponent
-					|| destinationConnectionEnd instanceof DataSubcomponent) {
-				AgreeLogger.logWarning("unable to reason about connection '" + connectionInstance.getQualifiedName()
-						+ "' because it connects to a data subcomponent");
-				continue;
-			}
-
-			// Handle prefixing elements of feature groups
-			String sourcePrefix = null;
-			if (sourceConnectionEnd instanceof FeatureGroup) {
-				sourcePrefix = sourceConnectionEnd.getName();
-			}
-			String destinationPrefix = null;
-			if (destinationConnectionEnd instanceof FeatureGroup) {
-				destinationPrefix = destinationConnectionEnd.getName();
-			}
-
-			List<AgreeVar> sourceVars = getAgreePortNames(sourceConnectionEnd,
-					sourcePrefix,
-					sourceNode == null ? null : sourceNode.compInst);
-			List<AgreeVar> destinationVars = getAgreePortNames(destinationConnectionEnd,
-					destinationPrefix,
-					destinationNode == null ? null : destinationNode.compInst);
-
-			if (sourceVars.size() != destinationVars.size()) {
-				throw new AgreeException("The number of AGREE variables differ for connection '"
-						+ connectionInstance.getQualifiedName()
-						+ "'. Do the types of the source and destination differ? Perhaps one is an implementation and the other is a type?");
-			}
-
-			for (int i = 0; i < sourceVars.size(); i++) {
-				AgreeVar sourceVar = sourceVars.get(i);
-				AgreeVar destinationVar = destinationVars.get(i);
-
-				if (!matches((ConnectionEnd) sourceVar.reference, (ConnectionEnd) destinationVar.reference)) {
-					AgreeLogger.logWarning("Connection '" + connectionInstance.getQualifiedName() + "' has ports '"
-							+ sourceVar.id.replace(dotChar, ".") + "' and '" + destinationVar.id.replace(dotChar, ".")
-							+ "' of differing type");
+				if (!compInst.equals(sourceComponentInstance)
+						&& !compInst.getComponentInstances().contains(sourceComponentInstance)) {
+					// This connection reference connects to component instances not germane to this level of hierarchy
+					continue;
+				}
+				if (!compInst.equals(destinationComponentInstance)
+						&& !compInst.getComponentInstances().contains(destinationComponentInstance)) {
+					// This connection reference connects to component instances not germane to this level of hierarchy
 					continue;
 				}
 
-				if (!sourceVar.type.equals(destinationVar.type)) {
-					throw new AgreeException("Type mismatch during connection generation");
+				// make connections only to subcomponents that have annexes
+				if (!compInst.equals(sourceComponentInstance)
+						&& compInst.getAllComponentInstances().contains(sourceComponentInstance)) {
+					if (!AgreeUtils.containsTransitiveAgreeAnnex(sourceComponentInstance, isMonolithic)) {
+						continue;
+					}
+				}
+				if (!compInst.equals(destinationComponentInstance)
+						&& compInst.getAllComponentInstances().contains(destinationComponentInstance)) {
+					if (!AgreeUtils.containsTransitiveAgreeAnnex(destinationComponentInstance, isMonolithic)) {
+						continue;
+					}
 				}
 
-				ConnectionType connType;
+				AgreeNode sourceNode = agreeNodeFromNamedEl(subnodes, sourceComponentInstance);
+				AgreeNode destinationNode = agreeNodeFromNamedEl(subnodes, destinationComponentInstance);
 
-				if (sourceVar.id.endsWith(eventSuffix)) {
-					connType = ConnectionType.EVENT;
+				ConnectionEnd sourceConnectionEnd;
+				if (sourceEndInstance instanceof FeatureInstance) {
+					sourceConnectionEnd = ((FeatureInstance) sourceEndInstance).getFeature();
 				} else {
-					connType = ConnectionType.DATA;
+					AgreeLogger.logWarning("unable to reason about connection '" + connectionInstance.getQualifiedName()
+							+ "' because it connects from a " + sourceEndInstance.getClass().getName());
+					continue;
 				}
 
-				// TODO: connection instances may span multiple connections transiting multiple layers of hierarchy.
-				// Handle this stepwise by making an AGREE AADL connection for each step?
-				if (connectionInstance.getConnectionReferences().size() != 1) {
-					throw new AgreeException(
-							"Connection instances must reference exactly one connection.  Found connection instance"
-									+ connectionInstance.getFullName() + " in "
-									+ connectionInstance.getContainingClassifier().getQualifiedName() + " refers to "
-									+ connectionInstance.getConnectionReferences().size() + " connections."
-									+ " Perhaps it connects across multiple layers of hierarchy?");
+				ConnectionEnd destinationConnectionEnd;
+				if (destinationEndInstance instanceof FeatureInstance) {
+					destinationConnectionEnd = ((FeatureInstance) destinationEndInstance).getFeature();
+				} else {
+					AgreeLogger.logWarning("unable to reason about connection '" + connectionInstance.getQualifiedName()
+							+ "' because it connects to a " + destinationEndInstance.getClass().getName());
+					continue;
 				}
-				AgreeAADLConnection agreeConnection = new AgreeAADLConnection(sourceNode, destinationNode, sourceVar,
-						destinationVar, connType, latched, isDelayed,
-						connectionInstance.getConnectionReferences().get(0).getConnection());
 
-				result.add(agreeConnection);
+				// TODO: Paranoia? Is this redundant with the previous lines?
+				if (sourceConnectionEnd instanceof DataSubcomponent
+						|| destinationConnectionEnd instanceof DataSubcomponent) {
+					AgreeLogger.logWarning("unable to reason about connection '" + connectionInstance.getQualifiedName()
+							+ "' because it connects to a data subcomponent");
+					continue;
+				}
+
+				// Handle prefixing elements of feature groups
+				String sourcePrefix = null;
+				if (sourceConnectionEnd instanceof FeatureGroup) {
+					sourcePrefix = sourceConnectionEnd.getName();
+				}
+				String destinationPrefix = null;
+				if (destinationConnectionEnd instanceof FeatureGroup) {
+					destinationPrefix = destinationConnectionEnd.getName();
+				}
+
+				List<AgreeVar> sourceVars = getAgreePortNames(sourceConnectionEnd, sourcePrefix,
+						sourceNode == null ? null : sourceNode.compInst);
+				List<AgreeVar> destinationVars = getAgreePortNames(destinationConnectionEnd, destinationPrefix,
+						destinationNode == null ? null : destinationNode.compInst);
+
+				if (sourceVars.size() != destinationVars.size()) {
+					throw new AgreeException("The number of AGREE variables differ for connection '"
+							+ connectionInstance.getQualifiedName()
+							+ "'. Do the types of the source and destination differ? Perhaps one is an implementation and the other is a type?");
+				}
+
+				for (int i = 0; i < sourceVars.size(); i++) {
+					AgreeVar sourceVar = sourceVars.get(i);
+					AgreeVar destinationVar = destinationVars.get(i);
+
+					if (!matches((ConnectionEnd) sourceVar.reference, (ConnectionEnd) destinationVar.reference)) {
+						AgreeLogger.logWarning("Connection '" + connectionInstance.getQualifiedName() + "' has ports '"
+								+ sourceVar.id.replace(dotChar, ".") + "' and '"
+								+ destinationVar.id.replace(dotChar, ".") + "' of differing type");
+						continue;
+					}
+
+					if (!sourceVar.type.equals(destinationVar.type)) {
+						throw new AgreeException("Type mismatch during connection generation");
+					}
+
+					ConnectionType connType;
+
+					if (sourceVar.id.endsWith(eventSuffix)) {
+						connType = ConnectionType.EVENT;
+					} else {
+						connType = ConnectionType.DATA;
+					}
+
+					AgreeAADLConnection agreeConnection = new AgreeAADLConnection(sourceNode, destinationNode,
+							sourceVar, destinationVar, connType, latched, isDelayed,
+							connectionInstance.getConnectionReferences().get(0).getConnection());
+
+					result.add(agreeConnection);
+				}
+
 			}
 
 		}

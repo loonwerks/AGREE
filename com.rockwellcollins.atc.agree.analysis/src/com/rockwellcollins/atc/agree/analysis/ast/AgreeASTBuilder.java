@@ -458,10 +458,6 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		}
 		gatherOutputsInputsAndTypes(outputs, inputs, compInst.getFeatureInstances(), assumptions, guarantees);
 
-		// verify that every variable that is reasoned about is
-		// in a component containing an annex
-		assertReferencedSubcomponentHasAnnex(compInst, inputs, outputs, subNodes, assertions, lemmas);
-
 		AgreeNodeBuilder builder = new AgreeNodeBuilder(id);
 		builder.addInput(inputs);
 		builder.addOutput(outputs);
@@ -550,50 +546,6 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 			}
 		}
 		return result;
-	}
-
-	private void assertReferencedSubcomponentHasAnnex(ComponentInstance compInst, List<AgreeVar> inputs,
-			List<AgreeVar> outputs, List<AgreeNode> subNodes, List<AgreeStatement> assertions,
-			List<AgreeStatement> lemmas) {
-		Set<String> allExprIds = new HashSet<>();
-		for (AgreeStatement statement : assertions) {
-			allExprIds.addAll(gatherStatementIds(statement));
-		}
-		for (AgreeStatement statement : lemmas) {
-			allExprIds.addAll(gatherStatementIds(statement));
-		}
-		for (String idStr : allExprIds) {
-			if (idStr.contains(dotChar) && !(idStr.endsWith(AgreePatternTranslator.FALL_SUFFIX)
-					|| idStr.endsWith(AgreePatternTranslator.RISE_SUFFIX)
-					|| idStr.endsWith(AgreePatternTranslator.TIME_SUFFIX))) {
-				String prefix = idStr.substring(0, idStr.indexOf(dotChar));
-				boolean found = false;
-				for (AgreeVar var : inputs) {
-					if (var.id.startsWith(prefix + dotChar)) {
-						found = true;
-						break;
-					}
-				}
-				for (AgreeVar var : outputs) {
-					if (var.id.startsWith(prefix + dotChar)) {
-						found = true;
-						break;
-					}
-				}
-				for (AgreeNode subNode : subNodes) {
-					if (subNode.id.equals(prefix)) {
-						found = true;
-						break;
-					}
-				}
-				if (!found) {
-					throw new AgreeException(
-							"Variable '" + idStr.replace(dotChar, ".") + "' appears in an assertion, lemma "
-									+ "or equation statement in component '" + compInst.getInstanceObjectPath()
-									+ "' but subcomponent '" + prefix + "' does " + "not contain an AGREE annex");
-				}
-			}
-		}
 	}
 
 	private Set<String> gatherStatementIds(AgreeStatement statement) {

@@ -12,6 +12,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeProgram;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
+import jkind.lustre.EnumType;
 import jkind.lustre.Location;
 import jkind.lustre.Node;
 import jkind.lustre.RecordType;
@@ -57,6 +58,8 @@ public class AgreeASTPrettyprinter extends PrettyPrintVisitor implements AgreeAS
 				String name = "dummy";
 				if (type instanceof RecordType) {
 					name = ((RecordType) type).id;
+				} else if (type instanceof EnumType) {
+					name = ((EnumType) type).id;
 				}
 				TypeDef typeDef = new TypeDef(Location.NULL, name, type);
 				typeDef.accept(this);

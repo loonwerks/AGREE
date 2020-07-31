@@ -83,7 +83,7 @@ class Issue30Test extends XtextTest {
 				features 
 					env_temp : in data port Integer;
 					temp_sensor_high : out data port Boolean;
-					pressure_sensor_high : out data port Boolean;
+					temp_read : out data port Integer;
 			
 				annex agree {**
 					assume "Temp bounded":
@@ -99,6 +99,7 @@ class Issue30Test extends XtextTest {
 				connections
 					temp_out : port env_temp -> sensors.env_temp;
 					temp_indicator : port sensors.temp_high -> temp_sensor_high;
+					temp_sensor_read : port sensors.temp_read -> temp_read;
 			
 				annex agree{**
 					lemma "The sensor only reports high when temp is actually high." :

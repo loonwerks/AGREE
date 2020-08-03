@@ -40,6 +40,7 @@ import org.osate.aadl2.FeatureGroupType;
 import org.osate.aadl2.IntegerLiteral;
 import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.NamedValue;
+import org.osate.aadl2.PortConnection;
 import org.osate.aadl2.Property;
 import org.osate.aadl2.PropertyConstant;
 import org.osate.aadl2.PropertyExpression;
@@ -514,7 +515,9 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 					break;
 				}
 			}
-			conns.add(replacementConn);
+			if (!conns.contains(replacementConn)) {
+				conns.add(replacementConn);
+			}
 		}
 
 		// throw errors for non-override connections with multiple fanin
@@ -524,8 +527,12 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 			if (conn instanceof AgreeAADLConnection) {
 				AgreeAADLConnection aadlConn = (AgreeAADLConnection) conn;
 				if (!destinations.add(aadlConn.destinationVarName)) {
-					String message = "Multiple connections to feature '" + aadlConn.destinationVarName + "'. Remove "
-							+ "the additional AADL connections or override them with a connection statement "
+					String message = "Multiple connections to feature '"
+							+ (aadlConn.reference instanceof PortConnection
+									? ((PortConnection) aadlConn.reference).getDestination().getConnectionEnd()
+											.getQualifiedName()
+									: aadlConn.destinationVarName)
+							+ "'. Remove the additional AADL connections or override them with a connection statement "
 							+ "in the AGREE annex.";
 					throw new AgreeException(message);
 				}

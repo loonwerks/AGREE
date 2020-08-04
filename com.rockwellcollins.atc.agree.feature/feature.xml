@@ -2,7 +2,7 @@
 <feature
       id="com.rockwellcollins.atc.agree.feature"
       label="Agree"
-      version="2.5.1.qualifier"
+      version="2.5.1"
       provider-name="Collins Aerospace">
 
    <copyright>

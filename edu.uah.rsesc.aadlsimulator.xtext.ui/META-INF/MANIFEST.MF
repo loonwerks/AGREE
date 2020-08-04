@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AADL Simulator Xtext UI
 Bundle-Vendor: The University of Alabama in Huntsville
-Bundle-Version: 2.5.1.qualifier
+Bundle-Version: 2.5.1
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator.xtext.ui;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: edu.uah.rsesc.aadlsimulator.xtext;visibility:=reexport,

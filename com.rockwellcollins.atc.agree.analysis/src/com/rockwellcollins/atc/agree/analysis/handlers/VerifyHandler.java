@@ -128,8 +128,16 @@ public abstract class VerifyHandler extends AadlHandler {
 			AnalysisErrorReporterManager errorManager = new AnalysisErrorReporterManager(
 					QueuingAnalysisErrorReporter.factory);
 			final InstantiateModel instantiateModel = new InstantiateModel(new NullProgressMonitor(), errorManager);
-			SystemInstance result = instantiateModel.createSystemInstance(
-					(ComponentImplementation) resourceSet.getEObject(EcoreUtil.getURI(ci), true), aadlResource);
+
+			// This strange little dance is necessary in the case of realizability analysis where the
+			// component implementation is ephemeral making its resource a NoCacheDerivedStateAwareResource
+			// which is not correctly fetched from the OSATE resource set.
+			URI compImplUri = EcoreUtil.getURI(ci);
+			ComponentImplementation compImpl = (ComponentImplementation) (resourceSet.getEObject(compImplUri,
+					true) != null ? (ComponentImplementation) resourceSet.getEObject(compImplUri, true)
+							: ci.eResource().getResourceSet().getEObject(compImplUri, true));
+
+			SystemInstance result = instantiateModel.createSystemInstance(compImpl, aadlResource);
 			QueuingAnalysisErrorReporter errorReporter = (QueuingAnalysisErrorReporter) errorManager
 					.getReporter(result.eResource());
 			StringBuilder stringBuilder = new StringBuilder();

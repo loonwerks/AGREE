@@ -110,12 +110,12 @@ public abstract class AbstractAgreeRuntimeModule extends org.eclipse.xtext.servi
 
 	// contributed by org.eclipse.xtext.generator.validation.JavaValidatorFragment
 	@org.eclipse.xtext.service.SingletonBinding(eager = true)
-//	public Class<? extends com.rockwellcollins.atc.agree.validation.AgreeJavaValidator> bindAgreeJavaValidator() {
-//		return com.rockwellcollins.atc.agree.validation.AgreeJavaValidator.class;
-//	}
-	public Class<? extends com.rockwellcollins.atc.agree.validation.AbstractAgreeJavaValidator> bindAgreeJavaValidator() {
-		return com.rockwellcollins.atc.agree.validation.AgreeNullValidator.class;
+	public Class<? extends com.rockwellcollins.atc.agree.validation.AgreeJavaValidator> bindAgreeJavaValidator() {
+		return com.rockwellcollins.atc.agree.validation.AgreeJavaValidator.class;
 	}
+//	public Class<? extends com.rockwellcollins.atc.agree.validation.AbstractAgreeJavaValidator> bindAgreeJavaValidator() {
+//		return com.rockwellcollins.atc.agree.validation.AgreeNullValidator.class;
+//	}
 
 	// contributed by org.eclipse.xtext.generator.scoping.AbstractScopingFragment
 	@Override

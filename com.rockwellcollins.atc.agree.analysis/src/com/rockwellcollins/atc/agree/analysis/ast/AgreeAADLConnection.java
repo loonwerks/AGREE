@@ -47,10 +47,11 @@ public class AgreeAADLConnection implements AgreeConnection {
 	public boolean equals(Object other) {
 		if (other instanceof AgreeAADLConnection) {
 			AgreeAADLConnection otherAgreeAADLConnection = (AgreeAADLConnection) other;
-			return ((sourceNode == null && otherAgreeAADLConnection.sourceNode == null)
-					|| sourceNode.equals(otherAgreeAADLConnection.sourceNode))
-					&& ((destinationNode == null && otherAgreeAADLConnection.destinationNode == null)
-							|| destinationNode.equals(otherAgreeAADLConnection.destinationNode))
+			return ((sourceNode == null) ? (otherAgreeAADLConnection.sourceNode == null)
+					: sourceNode.equals(otherAgreeAADLConnection.sourceNode))
+					&& ((destinationNode == null) ? (otherAgreeAADLConnection.destinationNode == null)
+							: destinationNode.equals(
+									otherAgreeAADLConnection.destinationNode))
 					&& sourceVarName.equals(otherAgreeAADLConnection.sourceVarName)
 					&& destinationVarName.equals(otherAgreeAADLConnection.destinationVarName)
 					&& type.equals(otherAgreeAADLConnection.type) && latched == otherAgreeAADLConnection.latched

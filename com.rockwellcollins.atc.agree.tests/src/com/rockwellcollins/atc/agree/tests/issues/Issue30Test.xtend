@@ -21,6 +21,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder
 import com.rockwellcollins.atc.agree.tests.AgreeUiInjectorProvider
 import com.rockwellcollins.atc.agree.tests.testsupport.TestHelper
 import com.rockwellcollins.atc.agree.analysis.AgreeException
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeAADLConnection
 
 @RunWith(XtextRunner)
 @InjectWith(AgreeUiInjectorProvider)
@@ -225,6 +226,10 @@ class Issue30Test extends XtextTest {
 		val instanceWithErrors = instantiateWithErrorMessages(topLevelImpl)
 		val errors = instanceWithErrors.value
 		Assert.assertTrue(errors.empty)
+		val agreeProgram = new AgreeASTBuilder().getAgreeProgram(instanceWithErrors.key, false)
+		agreeProgram.topNode.connections.filter(AgreeAADLConnection).forEach(conn | 
+			topLevelImpl.ownedConnections.contains(conn.reference)
+		)
 	}
 
 	static val issue30TestFanOutModel = '''
@@ -331,7 +336,10 @@ class Issue30Test extends XtextTest {
 		val componentInstance = instanceWithErrors.key
 		val errors = instanceWithErrors.value
 		Assert.assertTrue(errors.empty)
-		new AgreeASTBuilder().getAgreeProgram(componentInstance, false)
+		val agreeProgram = new AgreeASTBuilder().getAgreeProgram(componentInstance, false)
+		agreeProgram.topNode.connections.filter(AgreeAADLConnection).forEach(conn | 
+			topLevelImpl.ownedConnections.contains(conn.reference)
+		)
 	}
 
 	static val issue30TestFanInModel = '''

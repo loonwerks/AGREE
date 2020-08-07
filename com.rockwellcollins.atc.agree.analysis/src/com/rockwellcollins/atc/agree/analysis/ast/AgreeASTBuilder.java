@@ -880,7 +880,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 					AgreeAADLConnection agreeConnection = new AgreeAADLConnection(sourceNode, destinationNode,
 							sourceVar, destinationVar, connType, latched, isDelayed,
-							connectionInstance.getConnectionReferences().get(0).getConnection());
+							connectionReference.getConnection());
 
 					result.add(agreeConnection);
 				}

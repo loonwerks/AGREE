@@ -7,6 +7,7 @@ Created on May 16, 2019
 
 import os
 import re
+import sys
 
 from github3 import GitHub
 from pprint import pformat
@@ -20,14 +21,15 @@ REPOSITORY_REPO = 'AGREE'
 
 PRODUCT_ASSET_PATTERN = re.compile(r'com.rockwellcollins.atc.agree.repository-\d+\.\d+\.\d+(-(\d{12}))?-.*')
 
-def manage_daily_builds():
+def manage_daily_builds(sname):
+    print('Managing builds matching %s' % (sname))
     # obtain git handle
     gh = GitHub(GITHUB_API, token=AUTH_TOKEN)
     repository = gh.repository(REPOSITORY_OWNER, REPOSITORY_REPO)
     # get list of releases
     releases = repository.releases()
     # extract keys and sort by build date
-    release_keys = {x.id : x.created_at for x in releases if "Nightly development build" in x.name} 
+    release_keys = {x.id : x.created_at for x in releases if sname in x.name} 
     sorted_keys = sorted(release_keys.items(), reverse=True, key=lambda x: x[1])
     print('%s' % (pformat(sorted_keys)))
     # filter to obtain the keys to delete
@@ -63,4 +65,4 @@ def manage_daily_builds():
                         asset.delete()
 
 if __name__ == '__main__':
-    manage_daily_builds()
+    manage_daily_builds(sys.argv[1])

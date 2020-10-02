@@ -434,7 +434,8 @@ class Issue30Test extends XtextTest {
 		val instanceWithErrors = instantiateWithErrorMessages(topLevelImpl)
 		val componentInstance = instanceWithErrors.key
 		val errors = instanceWithErrors.value
-		Assert.assertTrue(errors.empty)
+		// OSATE should generate an error message telling of the multiple ports fanning in
+		Assert.assertTrue(errors.exists[message.contains("More than one connection instance ends at data port TopLevel_impl_Instance.temp_sensor_high")])
 		try {
 			new AgreeASTBuilder().getAgreeProgram(componentInstance.componentInstances.head, false)
 		} catch (AgreeException e) {

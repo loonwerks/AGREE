@@ -54,7 +54,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import plugin="org.eclipse.core.expressions" version="3.4.401" match="greaterOrEqual"/>
       <import plugin="org.osate.aadl2" version="2.0.0"/>
       <import plugin="org.osate.ui" version="2.0.0"/>
-      <import plugin="org.osate.xtext.aadl2.properties" version="1.1.0" match="compatible"/>
       <import plugin="com.rockwellcollins.atc.agree" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="com.rockwellcollins.atc.agree.ui" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.osate.ge" version="1.0.1" match="compatible"/>
@@ -86,9 +85,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import plugin="org.eclipse.swt"/>
       <import plugin="com.collins.trustedsystems.jkindapi" version="4.0.0" match="compatible"/>
       <import plugin="org.eclipse.ui.views.properties.tabbed"/>
-      <import plugin="org.osate.aadl2.edit" version="2.0.0"/>
       <import feature="org.osate.core.feature" version="2.7.0" match="greaterOrEqual"/>
       <import feature="org.osate.ge.feature" version="2.7.0" match="greaterOrEqual"/>
+      <import plugin="org.osate.xtext.aadl2.properties" version="2.0.0" match="compatible"/>
+      <import plugin="org.osate.aadl2" version="4.0.0" match="compatible"/>
+      <import plugin="org.osate.aadl2.edit" version="4.0.0" match="compatible"/>
    </requires>
 
    <plugin

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AADL Simulator UI
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator.ui;singleton:=true
-Bundle-Version: 2.4.3.qualifier
+Bundle-Version: 2.5.3.qualifier
 Bundle-Vendor: The University of Alabama in Huntsville
 Bundle-Classpath: .,
  lib/jogamp-fat.jar,
@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.ecore,
  org.eclipse.emf.ecore.xmi,
  org.osate.aadl2.modelsupport;bundle-version="[2.0.0,5.0.0)",
- org.osate.aadl2;bundle-version="[2.0.0,4.0.0)",
+ org.osate.aadl2;bundle-version="[4.0.0,5.0.0)",
  edu.uah.rsesc.aadlsimulator,
  org.eclipse.core.expressions,
  org.eclipse.ui.workbench,

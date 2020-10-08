@@ -2,7 +2,7 @@
 <feature
       id="com.rockwellcollins.atc.tcg.feature"
       label="Test Case Generator"
-      version="2.4.3.qualifier"
+      version="2.5.3.qualifier"
       provider-name="ROCKWELLCOLLINS">
 
    <description url="http://www.example.com/description">
@@ -30,15 +30,16 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
    </license>
 
    <requires>
-      <import plugin="org.osate.aadl2.modelsupport" version="2.0.0" match="compatible"/>
+      <import plugin="org.osate.aadl2.modelsupport" version="2.0.0"/>
       <import plugin="org.eclipse.ui.console" version="3.5.300" match="greaterOrEqual"/>
-      <import plugin="org.osate.aadl2" version="2.0.0" match="compatible"/>
-      <import plugin="org.osate.ui" version="2.0.0" match="compatible"/>
+      <import plugin="org.osate.ui" version="2.0.0"/>
       <import plugin="org.osate.aadl2.instantiation" version="1.0.1" match="compatible"/>
-      <import plugin="org.osate.annexsupport" version="1.0.1" match="compatible"/>
+      <import plugin="org.osate.annexsupport" version="1.0.1"/>
       <import plugin="com.rockwellcollins.atc.agree" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="com.rockwellcollins.atc.agree.analysis" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.osate.ge" version="1.0.1" match="compatible"/>
+      <import plugin="com.collins.trustedsystems.jkindapi" version="4.0.0" match="compatible"/>
+      <import plugin="org.osate.aadl2" version="4.0.0" match="compatible"/>
    </requires>
 
    <plugin

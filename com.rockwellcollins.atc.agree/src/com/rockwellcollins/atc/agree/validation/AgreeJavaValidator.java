@@ -559,7 +559,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			} else if (nestId instanceof SelectionExpr) {
 				namedEl = ((SelectionExpr) nestId).getField();
 			}
-			
+
 			if ((namedEl instanceof DataPort) && ((DataPort) namedEl).isIn()) {
 				return;
 			} else if ((namedEl instanceof EventDataPort) && ((EventDataPort) namedEl).isIn()) {

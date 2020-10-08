@@ -66,9 +66,9 @@ class AgreeTypeInferenceTest extends XtextTest {
 			Assert.assertEquals(1, publicSection.ownedClassifiers.filter(SystemType).size)
 			publicSection.ownedClassifiers.filter(SystemType).head => [
 				Assert.assertEquals(3, ownedFeatures.filter(DataPort).size);
-				val port1 = ownedFeatures.filter(DataPort).head as DataPort
-				val port2 = ownedFeatures.filter(DataPort).tail.head as DataPort
-				val port3 = ownedFeatures.filter(DataPort).tail.tail.head as DataPort
+				val port1 = ownedFeatures.filter(DataPort).head
+				val port2 = ownedFeatures.filter(DataPort).tail.head
+				val port3 = ownedFeatures.filter(DataPort).tail.tail.head
 				Assert.assertEquals(1, ownedAnnexSubclauses.size)
 				ownedAnnexSubclauses.head as DefaultAnnexSubclause => [
 					Assert.assertTrue(parsedAnnexSubclause instanceof AgreeContractSubclause)
@@ -160,9 +160,9 @@ class AgreeTypeInferenceTest extends XtextTest {
 			Assert.assertEquals(1, publicSection.ownedClassifiers.filter(SystemType).size)
 			publicSection.ownedClassifiers.filter(SystemType).head => [
 				Assert.assertEquals(3, ownedFeatures.filter(DataPort).size);
-				val port1 = ownedFeatures.filter(DataPort).head as DataPort
-				val port2 = ownedFeatures.filter(DataPort).tail.head as DataPort
-				val port3 = ownedFeatures.filter(DataPort).tail.tail.head as DataPort
+				val port1 = ownedFeatures.filter(DataPort).head
+				val port2 = ownedFeatures.filter(DataPort).tail.head
+				val port3 = ownedFeatures.filter(DataPort).tail.tail.head
 				Assert.assertEquals(1, ownedAnnexSubclauses.size)
 				ownedAnnexSubclauses.head as DefaultAnnexSubclause => [
 					Assert.assertTrue(parsedAnnexSubclause instanceof AgreeContractSubclause)

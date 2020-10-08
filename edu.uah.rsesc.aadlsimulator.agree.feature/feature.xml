@@ -2,7 +2,7 @@
 <feature
       id="edu.uah.rsesc.aadlsimulator.agree.feature"
       label="AADL Simulator - AGREE Simulation Engine"
-      version="2.4.3.qualifier">
+      version="2.5.3.qualifier">
 
    <copyright>
       Copyright (c) 2018, Rockwell Collins.
@@ -28,7 +28,6 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="com.rockwellcollins.atc.agree"/>
-      <import plugin="org.osate.aadl2"/>
       <import plugin="com.rockwellcollins.atc.agree.analysis"/>
       <import plugin="edu.uah.rsesc.aadlsimulator"/>
       <import plugin="edu.uah.rsesc.aadlsimulator.ui"/>
@@ -36,6 +35,20 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
       <import plugin="org.eclipse.jface"/>
       <import plugin="org.eclipse.equinox.registry"/>
       <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.osate.aadl2" version="4.0.0" match="compatible"/>
+      <import plugin="org.osate.annexsupport" version="1.0.1"/>
+      <import plugin="edu.uah.rsesc.aadlsimulator.xtext"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.osate.workspace" version="4.0.0" match="compatible"/>
+      <import plugin="org.osate.aadl2.modelsupport" version="2.0.0"/>
+      <import plugin="com.collins.trustedsystems.jkindapi" version="4.0.0" match="compatible"/>
+      <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="org.eclipse.e4.core.contexts"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="com.rockwellcollins.atc.tcg"/>
+      <import plugin="org.eclipse.xtext.ui"/>
    </requires>
 
    <plugin

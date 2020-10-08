@@ -1,5 +1,5 @@
 sudo: false
-dist: xenial
+dist: bionic
 services:
 - xvfb
 language: java
@@ -12,6 +12,7 @@ cache:
 addons:
   apt:
     packages:
+    - pandoc
     - python3
     - python3-pip
 
@@ -20,9 +21,13 @@ env:
   - DISPLAY=:99.0
   - secure: m6iZc/uFRBN1OTPbalMh6c3BxVApQDWVM6yk7J3WPuJgLzs3GlxsXAsTBN+mnB6PxzVhPXCE19O/pr/L3h/fA+kHXwAyd771f77bbCZQgGw5fHaJw/m+oUMqNBd+EBtsAruGqM1dJoNZnb3vaJeBh8r+MX+pr0slrPIoD6tC20LmyIrX9iT1LPvJ9+L4OMNxtkPJQmBoOHtLKeF9CUN3Kjh23GvMYh0iXCRF5Yy2rXOXzQOr9tmsRA3NpDUNYn5CCbad7oPpmJ8gUWhI0cHKDexx2WtHGmy3mulQmhIrKihF/a12x8Re/ufET7bl0DyaXXUx8FEhR806a6AFmGWqYuT2sh95dYp0qR+/2t5QswqSZ6BWiFE9T7OcjpY9WY5KRjQTMZEzW0q4nhYBaerPH60BDTO68O/Dp3/iEy48yNg5cRUFWO7hJpodQBFglgjkoDTnL5R8rPyCl5+PvxnED244/rpknt2LranRB8BtLjTkfO0JW++6i3giByCBSnWmY0XB86wM3VCjI9/QgCHTVqPZ7CI7xfxB4RBIKPL+6/Bn+LAsJ1sdtcknuwG8lGaeyvfFaz11/mvBkrkQ7j5ipkTt8x1b9PzBkma7FGu7P6Huj4uOKphMDImo/tFJzKZCRYInUIkPysZAGCGrZdSuSdc+zwY5vd/HD6dhpcN1W5g=
 
+branches:
+  except:
+  - master-support-osate-2.9.0
+
 before_install:
 - pip3 install --user --upgrade setuptools
-- pip3 install --user GitPython github3.py
+- pip3 install --user boto3 GitPython github3.py mako pandocfilters
 - "./git-setup.sh"
 
 install: /bin/true
@@ -31,10 +36,11 @@ script:
 - mvn clean verify
 
 before_deploy:
+- rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git
 - export RELEASE_PKG_FILE=$(ls repository/target/com.rockwellcollins.atc.agree.repository-*.zip)
 - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 - export SNAPSHOT_NUMBER=$(ls repository/target/repository/plugins/com.rockwellcollins.atc.agree_*.jar
-  | grep -o "[0-9]\\{12\\}")
+  | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}")
 - echo "deploying snapshot number $SNAPSHOT_NUMBER"
 
 deploy:
@@ -42,7 +48,7 @@ deploy:
   api-key: "$GH_TOKEN"
   file:
   - "${RELEASE_PKG_FILE}"
-  name: Nightly development build ($SNAPSHOT_NUMBER)
+  name: Continuous Integration Build ($SNAPSHOT_NUMBER)
   body: Automated AGREE integration build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built
     by Travis CI on $(date +'%F %T %Z').
   prerelease: true
@@ -51,9 +57,16 @@ deploy:
   target_commitish: "$TRAVIS_COMMIT"
   on:
     branch: master
-    condition: "$TRAVIS_EVENT_TYPE =~ ^(api|cron)$"
 - provider: script
-  script: python3 .travis/manage_daily_builds.py
+  script: python3 .travis/manage_daily_builds.py "Continuous Integration Build"
   on:
     branch: master
-    condition: "$TRAVIS_EVENT_TYPE =~ ^(api|cron)$"
+- provider: script
+  script: python3 s3-tools/s3tools/DeployToP2CompositeRepository.py --path repository/target/repository --prefix p2/snapshots/agree --child-name agree_$SNAPSHOT_NUMBER --logging DEBUG
+  skip_cleanup: true
+  on:
+    branch: master
+- provider: script
+  script: python3 s3-tools/s3tools/ManageSnapshots.py --prefix p2/snapshots/agree --logging=DEBUG
+  on:
+    branch: master

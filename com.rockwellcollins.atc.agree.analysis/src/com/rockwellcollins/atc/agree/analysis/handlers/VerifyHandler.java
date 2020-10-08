@@ -13,11 +13,18 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
@@ -35,6 +42,10 @@ import org.osate.aadl2.Element;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.SystemInstance;
 import org.osate.aadl2.instantiation.InstantiateModel;
+import org.osate.aadl2.modelsupport.errorreporting.AnalysisErrorReporterManager;
+import org.osate.aadl2.modelsupport.errorreporting.QueuingAnalysisErrorReporter;
+import org.osate.aadl2.modelsupport.errorreporting.QueuingAnalysisErrorReporter.Message;
+import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
 import org.osate.annexsupport.AnnexUtil;
 import org.osate.ui.dialogs.Dialog;
@@ -102,14 +113,49 @@ public abstract class VerifyHandler extends AadlHandler {
 
 	protected SystemInstance getSysInstance(ComponentImplementation ci, EphemeralImplementationUtil implUtil) {
 		try {
-			return InstantiateModel.buildInstanceModelFile(ci);
+			// add it to a resource; otherwise we cannot attach error messages to
+			// the instance file
+			URI instanceURI = InstantiateModel.getInstanceModelURI(ci);
+			IFile file = OsateResourceUtil.toIFile(instanceURI);
+			if (file != null && file.isAccessible()) {
+				file.deleteMarkers(null, true, IResource.DEPTH_INFINITE);
+			}
+			ResourceSet resourceSet = new ResourceSetImpl();
+			Resource aadlResource = resourceSet.createResource(instanceURI);
+			aadlResource.save(null);
+			aadlResource.unload();
+
+			AnalysisErrorReporterManager errorManager = new AnalysisErrorReporterManager(
+					QueuingAnalysisErrorReporter.factory);
+			final InstantiateModel instantiateModel = new InstantiateModel(new NullProgressMonitor(), errorManager);
+
+			// This strange little dance is necessary in the case of realizability analysis where the
+			// component implementation is ephemeral making its resource a NoCacheDerivedStateAwareResource
+			// which is not correctly fetched from the OSATE resource set.
+			URI compImplUri = EcoreUtil.getURI(ci);
+			ComponentImplementation compImpl = (ComponentImplementation) (resourceSet.getEObject(compImplUri,
+					true) != null ? (ComponentImplementation) resourceSet.getEObject(compImplUri, true)
+							: ci.eResource().getResourceSet().getEObject(compImplUri, true));
+
+			SystemInstance result = instantiateModel.createSystemInstance(compImpl, aadlResource);
+			QueuingAnalysisErrorReporter errorReporter = (QueuingAnalysisErrorReporter) errorManager
+					.getReporter(result.eResource());
+			StringBuilder stringBuilder = new StringBuilder();
+			List<Message> instantiationMarkers = errorReporter.getErrors();
+			if (!instantiationMarkers.isEmpty()) {
+				instantiationMarkers.stream().forEach(marker -> {
+					stringBuilder.append(marker.message);
+				});
+				throw new AgreeException(stringBuilder.toString());
+			}
+			return result;
 		} catch (Exception e) {
 			Dialog.showError("Model Instantiate", "Error while re-instantiating the model: " + e.getMessage());
 			throw new AgreeException("Error Instantiating model");
 		}
 	}
 
-	private ComponentImplementation getComponentImplementation(Element root, EphemeralImplementationUtil implUtil) {
+	protected ComponentImplementation getComponentImplementation(Element root, EphemeralImplementationUtil implUtil) {
 		Classifier classifier = getOutermostClassifier(root);
 		if (isRealizability()) {
 			if (!(classifier instanceof ComponentType)) {
@@ -222,7 +268,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		}
 	}
 
-	private void wrapVerificationResult(ComponentInstance si, CompositeAnalysisResult wrapper) {
+	protected void wrapVerificationResult(ComponentInstance si, CompositeAnalysisResult wrapper) {
 		AgreeProgram agreeProgram = new AgreeASTBuilder().getAgreeProgram(si, isMonolithic());
 
 		// generate different lustre depending on which model checker we are
@@ -260,7 +306,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		return sw.toString();
 	}
 
-	private AnalysisResult buildAnalysisResult(String name, ComponentInstance ci) {
+	protected AnalysisResult buildAnalysisResult(String name, ComponentInstance ci) {
 		CompositeAnalysisResult result = new CompositeAnalysisResult("Verification for " + name);
 
 		if (containsAGREEAnnex(ci)) {
@@ -283,7 +329,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		return null;
 	}
 
-	private boolean containsAGREEAnnex(ComponentInstance ci) {
+	protected boolean containsAGREEAnnex(ComponentInstance ci) {
 		ComponentClassifier compClass = ci.getComponentClassifier();
 		if (compClass instanceof ComponentImplementation) {
 			compClass = ((ComponentImplementation) compClass).getType();
@@ -382,7 +428,7 @@ public abstract class VerifyHandler extends AadlHandler {
 
 	}
 
-	private void addProperties(AgreeRenaming renaming, List<String> properties, Node mainNode,
+	protected void addProperties(AgreeRenaming renaming, List<String> properties, Node mainNode,
 			AgreeProgram agreeProgram) {
 
 		// there is a special case in the AgreeRenaming which handles this
@@ -403,7 +449,8 @@ public abstract class VerifyHandler extends AadlHandler {
 
 	}
 
-	void addKind2Properties(AgreeNode agreeNode, List<String> properties, AgreeRenaming renaming, String prefix,
+	protected void addKind2Properties(AgreeNode agreeNode, List<String> properties, AgreeRenaming renaming,
+			String prefix,
 			String userPropPrefix) {
 		int i = 0;
 
@@ -423,7 +470,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		}
 	}
 
-	private AgreeSubclause getContract(ComponentImplementation ci) {
+	protected AgreeSubclause getContract(ComponentImplementation ci) {
 		ComponentType ct = ci.getOwnedRealization().getImplemented();
 		for (AnnexSubclause annex : ct.getOwnedAnnexSubclauses()) {
 			if (annex instanceof AgreeSubclause) {
@@ -462,7 +509,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		});
 	}
 
-	private IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor) {
+	protected IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor) {
 
 		Thread analysisThread = new Thread() {
 			@Override
@@ -587,7 +634,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		});
 	}
 
-	protected void disableRerunHandler() {
+	private void disableRerunHandler() {
 		if (rerunActivation != null) {
 			getWindow().getShell().getDisplay().syncExec(() -> {
 				IHandlerService handlerService = getHandlerService();

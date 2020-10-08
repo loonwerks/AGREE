@@ -3,7 +3,7 @@ Automatic-Module-Name: com.rockwellcollins.atc.agree.tests
 Bundle-ManifestVersion: 2
 Bundle-Name: AGREE Language Tests
 Bundle-Vendor: Collins Aerospace
-Bundle-Version: 2.4.3.qualifier
+Bundle-Version: 2.5.3.qualifier
 Bundle-SymbolicName: com.rockwellcollins.atc.agree.tests;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.google.guava,
@@ -13,11 +13,11 @@ Require-Bundle: com.google.guava,
  org.eclipse.xtext.testing,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
  com.itemis.xtext.testing;bundle-version="0.2.0",
- org.osate.aadl2;bundle-version="[2.0.0,4.0.0)",
+ org.osate.aadl2;bundle-version="[4.0.0,5.0.0)",
  org.osate.aadl2.instantiation;bundle-version="[1.0.1,2.0.0)",
- org.osate.xtext.aadl2;bundle-version="[2.0.0,5.0.0)",
- org.osate.xtext.aadl2.ui;bundle-version="[2.0.0,5.0.0)",
- org.osate.pluginsupport;bundle-version="[2.0.0,5.0.0)",
+ org.osate.xtext.aadl2;bundle-version="[5.0.0,6.0.0)",
+ org.osate.xtext.aadl2.ui;bundle-version="[5.0.0,6.0.0)",
+ org.osate.pluginsupport;bundle-version="[5.0.0,6.0.0)",
  com.rockwellcollins.atc.agree,
  com.rockwellcollins.atc.agree.analysis;bundle-version="[2.4.0,3.0.0)",
  com.rockwellcollins.atc.agree.ui;bundle-version="2.4.0",

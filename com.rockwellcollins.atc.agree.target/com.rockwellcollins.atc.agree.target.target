@@ -19,8 +19,7 @@
       <unit id="org.eclipse.sirius.runtime.ide.ui.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.uml2.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.zest.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.xtend" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/releases/2020-03"/>
+      <repository location="http://download.eclipse.org/releases/2020-06"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.birt.chart.engine.extension" version="0.0.0"/>
@@ -80,7 +79,7 @@
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.elk.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.elk.algorithms.feature.feature.group" version="0.0.0"/>
-      <repository location="http://osate-build.sei.cmu.edu/p2/elk-nightly/"/>
+      <repository location="http://download.eclipse.org/elk/updates/releases/0.7.0/"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.ease.feature.feature.group" version="0.0.0"/>
@@ -104,7 +103,7 @@
 		<unit id="org.osate.ge.feature.feature.group" version="0.0.0"/>
 		<unit id="org.osate.plugins.feature.feature.group" version="0.0.0"/>
 		<unit id="org.osate.utils.feature.feature.group" version="0.0.0"/>
-		<repository location="https://osate-build.sei.cmu.edu/download/osate/stable/2.8.0/updates/"/>
+		<repository location="https://osate-build.sei.cmu.edu/download/osate/testing/updates/"/>
 	</location>
 </locations>
 </target>

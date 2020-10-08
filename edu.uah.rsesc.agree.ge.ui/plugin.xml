@@ -176,4 +176,7 @@
             priority="1">
       </tooltipContributor>
    </extension>
+   <extension point="org.osate.ge.paletteContributors">
+      <contributor class="edu.uah.rsesc.agree.ge.ui.palette.AgreePaletteContributor" />
+   </extension>
 </plugin>

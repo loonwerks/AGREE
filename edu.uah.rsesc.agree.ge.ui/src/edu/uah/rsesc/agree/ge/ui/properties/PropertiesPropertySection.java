@@ -1,14 +1,16 @@
 package edu.uah.rsesc.agree.ge.ui.properties;
 
 import org.eclipse.jface.viewers.IFilter;
-import org.osate.ge.ui.properties.PropertySectionUtil;
+import org.osate.ge.ui.PropertySectionUtil;
 
 import com.rockwellcollins.atc.agree.agree.PropertyStatement;
 
 import edu.uah.rsesc.agree.ge.businessObjectHandlers.PropertyStatementHandler;
+import edu.uah.rsesc.agree.ge.ui.palette.CreatePropertyPaletteCommand;
 
 public class PropertiesPropertySection extends GenericPropertySection {
 	final PropertyStatementHandler handler = new PropertyStatementHandler();
+	private final CreatePropertyPaletteCommand createCommand = new CreatePropertyPaletteCommand();
 
 	public static class Filter implements IFilter {
 		@Override
@@ -19,8 +21,8 @@ public class PropertiesPropertySection extends GenericPropertySection {
 
 	@Override
 	protected void onAdd() {
-		PropertySectionUtil
-				.execute(handler.buildCreateOperation(getSelectedBos().bocStream().findFirst().orElse(null)));
+		getSelectedBos().bocStream().findFirst()
+				.ifPresent(target -> createCommand.getOperation(target).ifPresent(PropertySectionUtil::execute));
 	}
 
 	@Override

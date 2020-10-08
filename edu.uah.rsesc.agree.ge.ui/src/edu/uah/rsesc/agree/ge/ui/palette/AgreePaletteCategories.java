@@ -1,5 +1,5 @@
-package edu.uah.rsesc.agree.ge;
+package edu.uah.rsesc.agree.ge.ui.palette;
 
-public class AgreeCategories {
+public class AgreePaletteCategories {
 	public static final String AGREE = "edu.uah.rsesc.agree.ge.categories.agree";
 }

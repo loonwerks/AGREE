@@ -2,8 +2,6 @@ package edu.uah.rsesc.agree.ge;
 
 import java.util.stream.Stream;
 
-import javax.inject.Named;
-
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentClassifier;
@@ -12,9 +10,8 @@ import org.osate.aadl2.ComponentType;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.Subcomponent;
 import org.osate.annexsupport.AnnexUtil;
-import org.osate.ge.BusinessObjectContext;
-import org.osate.ge.di.Activate;
-import org.osate.ge.di.Names;
+import org.osate.ge.BusinessObjectProvider;
+import org.osate.ge.BusinessObjectProviderContext;
 
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.AgreeContractLibrary;
@@ -33,10 +30,10 @@ import com.rockwellcollins.atc.agree.agree.PropertyStatement;
 import com.rockwellcollins.atc.agree.agree.RecordDef;
 import com.rockwellcollins.atc.agree.agree.SpecStatement;
 
-public class AgreeBusinessObjectProvider {
-	@Activate
-	public Stream<?> getBusinessObjects(final @Named(Names.BUSINESS_OBJECT_CONTEXT) BusinessObjectContext boc) {
-		final Object bo = boc.getBusinessObject();
+public class AgreeBusinessObjectProvider implements BusinessObjectProvider {
+	@Override
+	public Stream<?> getChildBusinessObjects(final BusinessObjectProviderContext ctx) {
+		final Object bo = ctx.getBusinessObjectContext().getBusinessObject();
 
 		if (bo instanceof AadlPackage) {
 			return getAllSpecStatements((AadlPackage) bo).filter(AgreeBusinessObjectProvider::isSupported);
@@ -49,7 +46,7 @@ public class AgreeBusinessObjectProvider {
 			}
 		}
 
-		return null;
+		return Stream.empty();
 	}
 
 	private static boolean isSupported(final SpecStatement bo) {

@@ -1,14 +1,16 @@
 package edu.uah.rsesc.agree.ge.ui.properties;
 
 import org.eclipse.jface.viewers.IFilter;
-import org.osate.ge.ui.properties.PropertySectionUtil;
+import org.osate.ge.ui.PropertySectionUtil;
 
 import com.rockwellcollins.atc.agree.agree.AssumeStatement;
 
 import edu.uah.rsesc.agree.ge.businessObjectHandlers.AssumeStatementHandler;
+import edu.uah.rsesc.agree.ge.ui.palette.CreateAssumptionPaletteCommand;
 
 public class AssumptionsPropertySection extends GenericPropertySection {
-	final AssumeStatementHandler handler = new AssumeStatementHandler();
+	private final AssumeStatementHandler handler = new AssumeStatementHandler();
+	private final CreateAssumptionPaletteCommand createCommand = new CreateAssumptionPaletteCommand();
 
 	public static class Filter implements IFilter {
 		@Override
@@ -19,8 +21,8 @@ public class AssumptionsPropertySection extends GenericPropertySection {
 
 	@Override
 	protected void onAdd() {
-		PropertySectionUtil
-				.execute(handler.buildCreateOperation(getSelectedBos().bocStream().findFirst().orElse(null)));
+		getSelectedBos().bocStream().findFirst()
+				.ifPresent(target -> createCommand.getOperation(target).ifPresent(PropertySectionUtil::execute));
 	}
 
 	@Override

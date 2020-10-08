@@ -362,7 +362,7 @@
 		<repository>
 			<id>Eclipse</id>
 			<layout>p2</layout>
-			<url>${eclipse.mirror}/releases/2020-03/</url>
+			<url>${eclipse.mirror}/releases/2020-06/</url>
 		</repository>
 		<repository>
 			<id>codehaus-snapshots</id>

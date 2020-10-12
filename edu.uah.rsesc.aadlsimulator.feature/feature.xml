@@ -494,6 +494,7 @@ A.7) The JOGL source tree _may_ contain code from Oculus VR, Inc.
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.osate.aadl2" version="4.0.0" match="compatible"/>
       <import plugin="org.osate.aadl2.instantiation" version="1.0.1" match="compatible"/>
       <import plugin="org.eclipse.e4.core.contexts"/>
       <import plugin="org.eclipse.e4.core.di" version="1.4.0" match="greaterOrEqual"/>
@@ -517,7 +518,6 @@ A.7) The JOGL source tree _may_ contain code from Oculus VR, Inc.
       <import plugin="org.eclipse.e4.ui.workbench"/>
       <import plugin="org.eclipse.e4.ui.model.workbench"/>
       <import plugin="org.eclipse.emf.common"/>
-      <import plugin="org.osate.ge" version="1.0.1" match="compatible"/>
       <import plugin="javax.annotation"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.osgi.services"/>
@@ -532,8 +532,9 @@ A.7) The JOGL source tree _may_ contain code from Oculus VR, Inc.
       <import plugin="org.eclipse.ui.editors" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.ide" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.xtext.ui.shared"/>
-      <import plugin="org.osate.xtext.aadl2.properties" version="2.0.0" match="compatible"/>
-      <import plugin="org.osate.aadl2" version="4.0.0" match="compatible"/>
+      <import plugin="org.osate.xtext.aadl2.properties" version="3.0.0"/>
+      <import plugin="org.osate.xtext.aadl2.properties" version="2.0.0"/>
+      <import plugin="org.osate.ge" version="2.0.0" match="compatible"/>
    </requires>
 
    <plugin

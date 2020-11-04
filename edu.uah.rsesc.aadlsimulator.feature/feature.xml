@@ -564,4 +564,10 @@ A.7) The JOGL source tree _may_ contain code from Oculus VR, Inc.
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="edu.uah.rsesc.aadlsimulator.doc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
 </feature>

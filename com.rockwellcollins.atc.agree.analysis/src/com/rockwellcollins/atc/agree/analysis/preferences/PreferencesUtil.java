@@ -60,6 +60,9 @@ public class PreferencesUtil {
 			int depth = prefs.getInt(PreferenceConstants.PREF_CONSIST_DEPTH) + 1;
 			((JKindApi) api).setN(depth);
 			((JKindApi) api).setPdrMax(0);
+			if (prefs.getBoolean(PreferenceConstants.PREF_SUPPORT)) {
+				((JKindApi) api).setIvcReduction();
+			}
 		}
 		return api;
 	}

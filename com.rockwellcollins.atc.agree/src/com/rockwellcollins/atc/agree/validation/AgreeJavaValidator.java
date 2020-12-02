@@ -343,14 +343,34 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			+ "' but the right hand side is of type '" + nameOfTypeDef(rhsType) + "'");
 		}
 
-		AgreeContract contract = EcoreUtil2.getContainerOfType(assign, AgreeContract.class);
-		if (contract != null) {
-			for (SpecStatement spec : contract.getSpecs()) {
-				if (spec instanceof AssignStatement && spec != assign) {
-					NamedElement otherEl = ((AssignStatement) spec).getId();
-					if (otherEl.equals(namedEl)) {
-						error(spec, "Mulitiple assignments to variable '" + namedEl.getName() + "'");
-						error(assign, "Mulitiple assignments to variable '" + namedEl.getName() + "'");
+		for (EObject container : EcoreUtil2.getAllContainers(assign)) {
+			if (container instanceof Classifier) {
+				for (AnnexSubclause annexSubclause : AnnexUtil
+						.getAllAnnexSubclauses(
+						(Classifier) container, AgreePackage.eINSTANCE.getAgreeContractSubclause())) {
+					for (AgreeContract contract : EcoreUtil2.getAllContentsOfType(annexSubclause,
+							AgreeContract.class)) {
+						if (contract != null) {
+							for (SpecStatement spec : contract.getSpecs()) {
+								if (spec instanceof AssignStatement && spec != assign) {
+									NamedElement otherEl = ((AssignStatement) spec).getId();
+									if (otherEl.equals(namedEl)) {
+										error(spec, "Mulitiple assignments to variable '" + namedEl.getName() + "'");
+										error(assign, "Mulitiple assignments to variable '" + namedEl.getName() + "'");
+									}
+								} else if (spec instanceof EqStatement) {
+									EqStatement eqStmt = (EqStatement) spec;
+									for (NamedElement otherEl : eqStmt.getLhs()) {
+										if (eqStmt.getExpr() != null && otherEl.equals(namedEl)) {
+											error(spec,
+													"Mulitiple assignments to variable '" + namedEl.getName() + "'");
+											error(assign,
+													"Mulitiple assignments to variable '" + namedEl.getName() + "'");
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}

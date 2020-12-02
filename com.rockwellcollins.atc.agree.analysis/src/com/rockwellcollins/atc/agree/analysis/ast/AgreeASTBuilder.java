@@ -2350,7 +2350,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 			throw new AgreeException("ERROR: caseExistsExpr - '" + agreeType.getClass() + "' not handled");
 		}
 		NamedID binding = expr.getBinding();
-		Expr final_expr = new BoolExpr(true);
+		Expr final_expr = new BoolExpr(false);
 
 		for (int i = 0; i < size; ++i) {
 			Expr arrayAccess = new ArrayAccessExpr(array, i);

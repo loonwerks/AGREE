@@ -7,6 +7,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.osate.aadl2.Element;
 
 public class RerunHandler extends AbstractHandler {
+
+	public static final String RERUN_ID = "com.rockwellcollins.atc.agree.analysis.commands.rerunAgree";
+
 	private final URI uri;
 	private final VerifyHandler verifyHandler;
 

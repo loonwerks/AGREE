@@ -2,7 +2,7 @@
 <feature
       id="com.rockwellcollins.atc.tcg.feature"
       label="Test Case Generator"
-      version="2.5.3.qualifier"
+      version="2.6.0"
       provider-name="ROCKWELLCOLLINS">
 
    <description url="http://www.example.com/description">

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.rockwellcollins.atc.agree.feature"
-      label="Agree"
-      version="2.5.3.qualifier"
+      label="AGREE Annex for OSATE2"
+      version="2.6.1.qualifier"
       provider-name="Collins Aerospace">
 
    <copyright>

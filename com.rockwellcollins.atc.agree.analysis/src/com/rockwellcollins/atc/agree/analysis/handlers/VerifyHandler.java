@@ -27,8 +27,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.util.Pair;
@@ -87,15 +87,12 @@ import jkind.api.results.JKindResult;
 import jkind.api.results.JRealizabilityResult;
 import jkind.lustre.Node;
 import jkind.lustre.Program;
+
 public abstract class VerifyHandler extends AadlHandler {
 	protected AgreeResultsLinker linker = new AgreeResultsLinker();
 	protected Queue<JKindResult> queue = new ArrayDeque<>();
 	protected AtomicReference<IProgressMonitor> monitorRef = new AtomicReference<>();
 
-	private static final String RERUN_ID = "com.rockwellcollins.atc.agree.analysis.commands.rerunAgree";
-	private IHandlerActivation rerunActivation;
-	private IHandlerActivation terminateActivation;
-	private IHandlerActivation terminateAllActivation;
 	private IHandlerService handlerService;
 	private Map<String, String> rerunAdviceMap = new HashMap<>();
 	private int adviceCount = 0;
@@ -184,9 +181,9 @@ public abstract class VerifyHandler extends AadlHandler {
 				ComponentImplementation ci = cis.get(0);
 				Shell shell = getWindow().getShell();
 				String message = "User selected " + ct.getFullName() + ".\nRunning analysis on " + ci.getFullName()
-				+ " instead.";
+						+ " instead.";
 				shell.getDisplay()
-				.asyncExec(() -> MessageDialog.openInformation(shell, "Analysis information", message));
+						.asyncExec(() -> MessageDialog.openInformation(shell, "Analysis information", message));
 				return ci;
 			} else {
 				throw new AgreeException(
@@ -251,8 +248,7 @@ public abstract class VerifyHandler extends AadlHandler {
 						AnalysisType.Realizability));
 				result = wrapper;
 			} else {
-				CompositeAnalysisResult wrapperTop = new CompositeAnalysisResult(
-						"Verification for " + ci.getName());
+				CompositeAnalysisResult wrapperTop = new CompositeAnalysisResult("Verification for " + ci.getName());
 				wrapVerificationResult(si, wrapperTop);
 				wrapper.addChild(wrapperTop);
 				result = wrapper;
@@ -422,7 +418,6 @@ public abstract class VerifyHandler extends AadlHandler {
 		linker.setLog(result, AgreeLogger.getLog());
 		linker.setRenaming(result, renaming);
 
-
 		// System.out.println(program);
 		return result;
 
@@ -450,8 +445,7 @@ public abstract class VerifyHandler extends AadlHandler {
 	}
 
 	protected void addKind2Properties(AgreeNode agreeNode, List<String> properties, AgreeRenaming renaming,
-			String prefix,
-			String userPropPrefix) {
+			String prefix, String userPropPrefix) {
 		int i = 0;
 
 		String propPrefix = (userPropPrefix.equals("")) ? "" : userPropPrefix + ": ";
@@ -488,8 +482,7 @@ public abstract class VerifyHandler extends AadlHandler {
 		 */
 		getWindow().getShell().getDisplay().asyncExec(() -> {
 			try {
-				AgreeResultsView page = (AgreeResultsView) getWindow().getActivePage()
-						.showView(AgreeResultsView.ID);
+				AgreeResultsView page = (AgreeResultsView) getWindow().getActivePage().showView(AgreeResultsView.ID);
 				page.setInput(result, linker);
 			} catch (PartInitException e) {
 				e.printStackTrace();
@@ -500,13 +493,27 @@ public abstract class VerifyHandler extends AadlHandler {
 	protected void clearView() {
 		getWindow().getShell().getDisplay().syncExec(() -> {
 			try {
-				AgreeResultsView page = (AgreeResultsView) getWindow().getActivePage()
-						.showView(AgreeResultsView.ID);
+				AgreeResultsView page = (AgreeResultsView) getWindow().getActivePage().showView(AgreeResultsView.ID);
 				page.setInput(new CompositeAnalysisResult("empty"), null);
 			} catch (PartInitException e) {
 				e.printStackTrace();
 			}
 		});
+	}
+
+	protected AgreeResultsView findView() {
+		AgreeResultsView result = null;
+		IViewPart part = getWindow().getActivePage().findView(AgreeResultsView.ID);
+		if (part instanceof AgreeResultsView) {
+			result = (AgreeResultsView) part;
+		} else {
+			try {
+				result = (AgreeResultsView) getWindow().getActivePage().showView(AgreeResultsView.ID);
+			} catch (PartInitException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 
 	protected IStatus doAnalysis(final Element root, final IProgressMonitor globalMonitor) {
@@ -529,53 +536,52 @@ public abstract class VerifyHandler extends AadlHandler {
 					}
 				}
 
-				activateTerminateHandlers(globalMonitor);
-				KindApi api = PreferencesUtil.getKindApi();
-				KindApi consistApi = PreferencesUtil.getConsistencyApi();
-				JRealizabilityApi realApi = PreferencesUtil.getJRealizabilityApi();
+				try {
+					activateTerminateHandlers(globalMonitor);
+					KindApi api = PreferencesUtil.getKindApi();
+					KindApi consistApi = PreferencesUtil.getConsistencyApi();
+					JRealizabilityApi realApi = PreferencesUtil.getJRealizabilityApi();
 
-				while (!queue.isEmpty() && !globalMonitor.isCanceled()) {
-					JKindResult result = queue.peek();
-					NullProgressMonitor subMonitor = new NullProgressMonitor();
-					monitorRef.set(subMonitor);
+					while (!queue.isEmpty() && !globalMonitor.isCanceled()) {
+						JKindResult result = queue.peek();
+						NullProgressMonitor subMonitor = new NullProgressMonitor();
+						monitorRef.set(subMonitor);
 
-					Program program = linker.getProgram(result);
+						Program program = linker.getProgram(result);
 
-					if (api instanceof JKindApi) {
-						String resultName = result.getName();
-						String adviceFileName = rerunAdviceMap.get(resultName);
-						if (adviceFileName == null) {
-							adviceFileName = "agree_advice" + adviceCount++;
-							rerunAdviceMap.put(resultName, adviceFileName);
-						} else {
-							((JKindApi) api).setReadAdviceFile(adviceFileName);
+						if (api instanceof JKindApi) {
+							String resultName = result.getName();
+							String adviceFileName = rerunAdviceMap.get(resultName);
+							if (adviceFileName == null) {
+								adviceFileName = "agree_advice" + adviceCount++;
+								rerunAdviceMap.put(resultName, adviceFileName);
+							} else {
+								((JKindApi) api).setReadAdviceFile(adviceFileName);
+							}
+							((JKindApi) api).setWriteAdviceFile(adviceFileName);
 						}
-						((JKindApi) api).setWriteAdviceFile(adviceFileName);
-					}
 
-					try {
-						if (result instanceof ConsistencyResult) {
-							consistApi.execute(program, result, subMonitor);
-						} else if (result instanceof JRealizabilityResult) {
-							realApi.execute(program, (JRealizabilityResult) result, subMonitor);
-						} else {
-							api.execute(program, result, subMonitor);
-						}
-					} catch (JKindException e) {
+						try {
+							if (result instanceof ConsistencyResult) {
+								consistApi.execute(program, result, subMonitor);
+							} else if (result instanceof JRealizabilityResult) {
+								realApi.execute(program, (JRealizabilityResult) result, subMonitor);
+							} else {
+								api.execute(program, result, subMonitor);
+							}
+						} catch (JKindException e) {
 
-						System.out.println("******** JKindException Text ********");
-						e.printStackTrace(System.out);
-
+							System.out.println("******** JKindException Text ********");
+							e.printStackTrace(System.out);
 
 //						System.out.println("******** JKind Output ********");
 //						System.out.println(result.getText());
 //						System.out.println("******** Agree Lustre ********");
 //						System.out.println(program);
 
-
-						String errStr = e.getMessage();
-						int l = Math.min(errStr.length(), 300);
-						System.out.println(e.getMessage().substring(0, l));
+							String errStr = e.getMessage();
+							int l = Math.min(errStr.length(), 300);
+							System.out.println(e.getMessage().substring(0, l));
 
 //=======
 //						System.out.println("******** JKind Output ********");
@@ -586,23 +592,24 @@ public abstract class VerifyHandler extends AadlHandler {
 //
 //						System.out.println(e.getMessage());
 //>>>>>>> origin/develop
-						break;
+							break;
+						}
+
+						// Print to property analysis log, if necessary
+						if (Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.PREF_PROP_LOG)) {
+							AgreeFileUtil.printLog(result, startTime, modelHash);
+						}
+
+						queue.remove();
 					}
 
-					// Print to property analysis log, if necessary
-					if (Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.PREF_PROP_LOG)) {
-						AgreeFileUtil.printLog(result, startTime, modelHash);
+					while (!queue.isEmpty()) {
+						queue.remove().cancel();
 					}
-
-					queue.remove();
+				} finally {
+					deactivateTerminateHandlers();
+					enableRerunHandler(root);
 				}
-
-				while (!queue.isEmpty()) {
-					queue.remove().cancel();
-				}
-
-				deactivateTerminateHandlers();
-				enableRerunHandler(root);
 
 			}
 		};
@@ -612,40 +619,38 @@ public abstract class VerifyHandler extends AadlHandler {
 
 	private void activateTerminateHandlers(final IProgressMonitor globalMonitor) {
 		getWindow().getShell().getDisplay().syncExec(() -> {
-			terminateActivation = handlerService.activateHandler(TERMINATE_ID, new TerminateHandler(monitorRef));
-			terminateAllActivation = handlerService.activateHandler(TERMINATE_ALL_ID,
-					new TerminateHandler(monitorRef, globalMonitor));
+			AgreeResultsView agreeResultsView = findView();
+			if (agreeResultsView != null) {
+				agreeResultsView.activateTerminateHandlers(globalMonitor, monitorRef);
+			}
 		});
 	}
 
 	private void deactivateTerminateHandlers() {
 		getWindow().getShell().getDisplay().syncExec(() -> {
-			handlerService.deactivateHandler(terminateActivation);
-			handlerService.deactivateHandler(terminateAllActivation);
+			AgreeResultsView agreeResultsView = findView();
+			if (agreeResultsView != null) {
+				agreeResultsView.deactivateTerminateHandlers();
+			}
 		});
 	}
 
 	private void enableRerunHandler(final Element root) {
-
 		getWindow().getShell().getDisplay().syncExec(() -> {
-			IHandlerService handlerService = getHandlerService();
-			rerunActivation = handlerService.activateHandler(RERUN_ID,
-					new RerunHandler(root, VerifyHandler.this));
+			AgreeResultsView agreeResultsView = findView();
+			if (agreeResultsView != null) {
+				agreeResultsView.enableRerunHandler(root, this);
+			}
 		});
 	}
 
 	private void disableRerunHandler() {
-		if (rerunActivation != null) {
-			getWindow().getShell().getDisplay().syncExec(() -> {
-				IHandlerService handlerService = getHandlerService();
-				handlerService.deactivateHandler(rerunActivation);
-				rerunActivation = null;
-			});
-		}
-	}
-
-	private IHandlerService getHandlerService() {
-		return getWindow().getService(IHandlerService.class);
+		getWindow().getShell().getDisplay().syncExec(() -> {
+			AgreeResultsView agreeResultsView = findView();
+			if (agreeResultsView != null) {
+				agreeResultsView.disableRerunHandler();
+			}
+		});
 	}
 
 	public void setCalledFromRerun() {

@@ -2,7 +2,7 @@
 <feature
       id="edu.uah.rsesc.aadlsimulator.feature"
       label="AADL Simulator"
-      version="2.5.3.qualifier"
+      version="2.6.1.qualifier"
       provider-name="The University of Alabama in Huntsville">
 
    <copyright>
@@ -564,5 +564,11 @@ A.7) The JOGL source tree _may_ contain code from Oculus VR, Inc.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="edu.uah.rsesc.aadlsimulator.doc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>

@@ -1,8 +1,20 @@
 package com.rockwellcollins.atc.agree.analysis.views;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.IHandlerActivation;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
+import org.osate.aadl2.Element;
+
+import com.rockwellcollins.atc.agree.analysis.handlers.AadlHandler;
+import com.rockwellcollins.atc.agree.analysis.handlers.RerunHandler;
+import com.rockwellcollins.atc.agree.analysis.handlers.TerminateHandler;
+import com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler;
 
 import jkind.api.results.AnalysisResult;
 import jkind.api.ui.results.AnalysisResultTree;
@@ -12,6 +24,10 @@ public class AgreeResultsView extends ViewPart {
 
 	private AnalysisResultTree tree;
 	private AgreeMenuListener menuListener;
+
+	private IHandlerActivation rerunActivation;
+	private IHandlerActivation terminateActivation;
+	private IHandlerActivation terminateAllActivation;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -34,4 +50,48 @@ public class AgreeResultsView extends ViewPart {
 		tree.setInput(result);
 		menuListener.setLinker(linker);
 	}
+
+	public void activateTerminateHandlers(
+			final IProgressMonitor globalMonitor,
+			AtomicReference<IProgressMonitor> monitorRef) {
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getDisplay().syncExec(() -> {
+			IHandlerService handlerService = getHandlerService();
+			terminateActivation = handlerService.activateHandler(AadlHandler.TERMINATE_ID,
+					new TerminateHandler(monitorRef));
+			terminateAllActivation = handlerService
+					.activateHandler(AadlHandler.TERMINATE_ALL_ID,
+					new TerminateHandler(monitorRef, globalMonitor));
+		});
+	}
+
+	public void deactivateTerminateHandlers() {
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getDisplay().syncExec(() -> {
+			IHandlerService handlerService = getHandlerService();
+			handlerService.deactivateHandler(terminateActivation);
+			handlerService.deactivateHandler(terminateAllActivation);
+		});
+	}
+
+	public void enableRerunHandler(final Element root, VerifyHandler verifyHandler) {
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getDisplay().syncExec(() -> {
+			IHandlerService handlerService = getHandlerService();
+			rerunActivation = handlerService.activateHandler(RerunHandler.RERUN_ID,
+					new RerunHandler(root, verifyHandler));
+		});
+	}
+
+	public void disableRerunHandler() {
+		if (rerunActivation != null) {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getDisplay().syncExec(() -> {
+				IHandlerService handlerService = getHandlerService();
+				handlerService.deactivateHandler(rerunActivation);
+				rerunActivation = null;
+			});
+		}
+	}
+
+	private IHandlerService getHandlerService() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getService(IHandlerService.class);
+	}
+
 }

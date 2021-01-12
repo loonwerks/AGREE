@@ -59,9 +59,10 @@ public class PreferencesUtil {
 			IPreferenceStore prefs = getPreferenceStore();
 			int depth = prefs.getInt(PreferenceConstants.PREF_CONSIST_DEPTH) + 1;
 			((JKindApi) api).setN(depth);
-			((JKindApi) api).disableInvariantGeneration();
-			// ((JKindApi) api).disableKInduction();
 			((JKindApi) api).setPdrMax(0);
+			if (prefs.getBoolean(PreferenceConstants.PREF_SUPPORT)) {
+				((JKindApi) api).setIvcReduction();
+			}
 		}
 		return api;
 	}

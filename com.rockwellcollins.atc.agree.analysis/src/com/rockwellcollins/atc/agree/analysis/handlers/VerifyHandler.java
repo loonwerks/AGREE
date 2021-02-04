@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -224,14 +223,6 @@ public abstract class VerifyHandler extends AadlHandler {
 
 			AnalysisResult result;
 			CompositeAnalysisResult wrapper = new CompositeAnalysisResult("");
-
-			ComponentType sysType = AgreeUtils.getInstanceType(si);
-			EList<AnnexSubclause> annexSubClauses = AnnexUtil.getAllAnnexSubclauses(sysType,
-					AgreePackage.eINSTANCE.getAgreeContractSubclause());
-
-			if (annexSubClauses.size() == 0) {
-				throw new AgreeException("There is not an AGREE annex in the '" + sysType.getName() + "' system type.");
-			}
 
 			if (isRecursive()) {
 				if (AgreeUtils.usingKind2()) {

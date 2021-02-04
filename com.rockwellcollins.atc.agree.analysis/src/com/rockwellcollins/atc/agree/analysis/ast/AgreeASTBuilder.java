@@ -2165,7 +2165,8 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 	@Override
 	public Expr caseArraySubExpr(ArraySubExpr expr) {
-		Expr index = doSwitch(expr.getIndex());
+		// Note: AADL/AGREE arrays are indexed starting at 1, JKind arrays are indexed starting at zero
+		Expr index = new BinaryExpr(doSwitch(expr.getIndex()), BinaryOp.MINUS, new IntExpr(1));
 		Expr array = doSwitch(expr.getExpr());
 		return new ArrayAccessExpr(array, index);
 	}

@@ -2,6 +2,7 @@ package com.rockwellcollins.atc.agree.analysis.views;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -341,27 +344,29 @@ public class AgreeMenuListener implements IMenuListener {
 				final Layout layout = tempLayout;
 				final Map<String, EObject> refMap = tempRefMap;
 
+				final Counterexample translatedCex = translateCounterexample(cex);
+
 				MenuManager sub = new MenuManager("View " + cexType + "Counterexample in");
 				manager.add(sub);
 
 				sub.add(new Action("Console") {
 					@Override
 					public void run() {
-						viewCexConsole(cex, layout, refMap);
+						viewCexConsole(translatedCex, layout, refMap);
 					}
 				});
 
 				sub.add(new Action("Eclipse") {
 					@Override
 					public void run() {
-						viewCexEclipse(cex, layout, refMap);
+						viewCexEclipse(translatedCex, layout, refMap);
 					}
 				});
 
 				sub.add(new Action("Spreadsheet") {
 					@Override
 					public void run() {
-						viewCexSpreadsheet(cex, layout);
+						viewCexSpreadsheet(translatedCex, layout);
 					}
 				});
 
@@ -393,6 +398,28 @@ public class AgreeMenuListener implements IMenuListener {
 				}
 			}
 		}
+	}
+
+	private String translateArrayIndex(String original) {
+		Pattern pattern = Pattern.compile("\\[(\\d+)\\]");
+		Matcher matcher = pattern.matcher(original);
+		StringBuffer sb = new StringBuffer();
+		while (matcher.find()) {
+			matcher.appendReplacement(sb, "[" + new BigInteger(matcher.group(1)).add(BigInteger.ONE).toString() + "]");
+		}
+		matcher.appendTail(sb);
+		return sb.toString();
+	}
+
+	private Counterexample translateCounterexample(Counterexample original) {
+		Counterexample result = new Counterexample(original.getLength());
+
+		original.getSignals().stream().forEach(signal -> result
+				.addSignal(signal.rename(translateArrayIndex(signal.getName()))));
+
+		original.getFunctionTables().stream().forEach(functionTable -> result.addFunctionTable(functionTable));
+
+		return result;
 	}
 
 	// calls other agreeautomators to transform results as they see fit

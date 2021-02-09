@@ -2243,7 +2243,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 
 					!(id instanceof Arg) && !(id instanceof ConstStatement) && !(id instanceof NodeDef)
 					&& !(id instanceof FnDef) && !(id instanceof DataSubcomponent) && !(id instanceof DoubleDotRef)
-					&& !(id instanceof DataImplementation) && !(id instanceof RecordDef)) {
+					&& !(id instanceof DataImplementation) && !(id instanceof RecordDef) && !(id instanceof NamedID)) {
 				error(dotId, "Only arguments, constants, and node calls allowed within a node");
 			}
 		}

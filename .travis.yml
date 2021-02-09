@@ -26,6 +26,8 @@ branches:
   - master-support-osate-2.9.0
 
 before_install:
+- pip3 install --user --upgrade pip
+- pip3 install --user testresources
 - pip3 install --user --upgrade setuptools
 - pip3 install --user boto3 GitPython github3.py mako pandocfilters
 - "./git-setup.sh"

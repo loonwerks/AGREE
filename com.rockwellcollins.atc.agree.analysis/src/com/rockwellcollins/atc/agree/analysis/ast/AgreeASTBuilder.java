@@ -283,6 +283,15 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		return nodes;
 	}
 
+	private Set<ComponentType> getEffectiveComponentTypes(ComponentType compType) {
+		Set<ComponentType> result = new HashSet<>();
+		do {
+			result.add(compType);
+			compType = compType.getExtended();
+		} while (compType != null);
+		return result;
+	}
+
 	private AgreeNode getAgreeNode(ComponentInstance compInst, boolean isTop) {
 		List<AgreeVar> inputs = new ArrayList<>();
 		List<AgreeVar> outputs = new ArrayList<>();
@@ -315,72 +324,77 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		boolean hasSubcomponents = false;
 		ComponentClassifier compClass = compInst.getComponentClassifier();
 
+		Set<ComponentType> effectiveTypes = new HashSet<>();
 		Map<String, jkind.lustre.Expr> portRewriteMap = new HashMap<>();
 
-		if (compClass instanceof ComponentImplementation && (isTop || isMonolithic)) {
+		if (compClass instanceof ComponentImplementation) {
 
 			boolean latched = false;
-			ComponentClassifier cc = compClass;
-			while (cc != null) {
+			ComponentImplementation cc = (ComponentImplementation) compClass;
+			effectiveTypes.addAll(getEffectiveComponentTypes(cc.getType()));
 
+			if (isTop || isMonolithic) {
+				while (cc != null) {
 
-				AgreeContractSubclause annex = getAgreeAnnex(cc);
+					AgreeContractSubclause annex = getAgreeAnnex(cc);
 
-
-				for (ComponentInstance subInst : compInst.getComponentInstances()) {
-					hasSubcomponents = true;
-					curInst = subInst;
-					AgreeNode subNode = getAgreeNode(subInst, false);
-					if (subNode != null && subNodes.stream().noneMatch(it -> it.reference.equals(subNode.reference))) {
-						foundSubNode = true;
-						subNodes.add(subNode);
-					}
-				}
-				if (annex != null) {
-					hasDirectAnnex = true;
-					AgreeContract contract = (AgreeContract) annex.getContract();
-
-					curInst = compInst;
-					assertions.addAll(getAssertionStatements(contract.getSpecs()));
-					getEquationStatements(contract.getSpecs(), portRewriteMap).addAllTo(locals, assertions, guarantees);
-					assertions.addAll(getPropertyStatements(contract.getSpecs()));
-					assertions.addAll(getAssignmentStatements(contract.getSpecs()));
-					userDefinedConections.addAll(getConnectionStatements(contract.getSpecs()));
-
-					lemmas.addAll(getLemmaStatements(contract.getSpecs()));
-					addLustreNodes(contract.getSpecs());
-					gatherLustreTypes(contract.getSpecs());
-					// the clock constraints contain other nodes that we add
-					clockConstraint = getClockConstraint(contract.getSpecs(), subNodes);
-					timing = getTimingModel(contract.getSpecs());
-
-					outputs.addAll(getEquationVars(contract.getSpecs(), compInst));
-
-					for (SpecStatement spec : contract.getSpecs()) {
-						if (spec instanceof LatchedStatement) {
-							latched = true;
-							break;
+					for (ComponentInstance subInst : compInst.getComponentInstances()) {
+						hasSubcomponents = true;
+						curInst = subInst;
+						AgreeNode subNode = getAgreeNode(subInst, false);
+						if (subNode != null
+								&& subNodes.stream().noneMatch(it -> it.reference.equals(subNode.reference))) {
+							foundSubNode = true;
+							subNodes.add(subNode);
 						}
 					}
 
+					if (annex != null) {
+						hasDirectAnnex = true;
+						AgreeContract contract = (AgreeContract) annex.getContract();
+
+						curInst = compInst;
+						assertions.addAll(getAssertionStatements(contract.getSpecs()));
+						getEquationStatements(contract.getSpecs(), portRewriteMap).addAllTo(locals, assertions,
+								guarantees);
+						assertions.addAll(getPropertyStatements(contract.getSpecs()));
+						assertions.addAll(getAssignmentStatements(contract.getSpecs()));
+						userDefinedConections.addAll(getConnectionStatements(contract.getSpecs()));
+
+						lemmas.addAll(getLemmaStatements(contract.getSpecs()));
+						addLustreNodes(contract.getSpecs());
+						gatherLustreTypes(contract.getSpecs());
+						// the clock constraints contain other nodes that we add
+						clockConstraint = getClockConstraint(contract.getSpecs(), subNodes);
+						timing = getTimingModel(contract.getSpecs());
+
+						outputs.addAll(getEquationVars(contract.getSpecs(), compInst));
+
+						for (SpecStatement spec : contract.getSpecs()) {
+							if (spec instanceof LatchedStatement) {
+								latched = true;
+								break;
+							}
+						}
+
+					}
+
+					// Find extended effective types
+					effectiveTypes.addAll(getEffectiveComponentTypes(cc.getType()));
+
+					cc = cc.getExtended();
+
 				}
 
-				cc = (ComponentClassifier) cc.getExtended();
-
+				EList<ConnectionInstance> connectionInstances = compInst.getAllEnclosingConnectionInstances();
+				List<ConnectionInstance> foo = new ArrayList<>();
+				compInst.getAllComponentInstances()
+						.forEach(ci -> ci.allEnclosingConnectionInstances().forEach(foo::add));
+				aadlConnections.addAll(getConnectionsFromInstances(connectionInstances, compInst, subNodes, latched));
+				connections.addAll(filterConnections(aadlConnections, userDefinedConections));
 			}
 
-			EList<ConnectionInstance> connectionInstances = compInst.getAllEnclosingConnectionInstances();
-			List<ConnectionInstance> foo = new ArrayList<>();
-			compInst.getAllComponentInstances().forEach(ci -> ci.allEnclosingConnectionInstances().forEach(foo::add));
-			aadlConnections.addAll(getConnectionsFromInstances(connectionInstances, compInst, subNodes, latched));
-			connections.addAll(filterConnections(aadlConnections, userDefinedConections));
-
-			// make compClass the type so we can get it's other contract elements
-			compClass = ((ComponentImplementation) compClass).getType();
-
-		} else if (compClass instanceof ComponentImplementation) {
-
-			ComponentType ct = ((ComponentImplementation) compClass).getType();
+			ComponentType compType = ((ComponentImplementation) compClass).getType();
 
 			AgreeContractSubclause compImpAnnex = getAgreeAnnex(compClass);
 			if (compImpAnnex != null) {
@@ -390,11 +404,9 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 						Subcomponent sub = ((ComponentImplementation) compClass).getOwnedSubcomponents().get(0);
 
-						ct = sub.getComponentType();
-
+						ComponentType ct = sub.getComponentType();
 
 						for (Connection conn : ((ComponentImplementation) compClass).getAllConnections()) {
-
 
 							NamedElement sourceNe = conn.getSource().getConnectionEnd();
 							NamedElement destNe = conn.getDestination().getConnectionEnd();
@@ -411,27 +423,33 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 							}
 
-
 						}
+
+						effectiveTypes.addAll(getEffectiveComponentTypes(ct));
 
 					}
 				}
 
 			}
 
+			// make compClass the type so we can get it's other contract elements
+			compClass = compType;
 
-
-			compClass = ct;
+		} else if (compClass instanceof ComponentType) {
+			effectiveTypes.addAll(getEffectiveComponentTypes((ComponentType) compClass));
+		} else {
+			throw new AgreeException("Internal error: attempt to run AGREE analysis on instance "
+					+ compInst.getFullName() + " not instance of ComponentImplementation or ComponentType.");
 		}
+
 		curInst = compInst;
 
 		if (timing == null) {
 			timing = TimingModel.SYNC;
 		}
 
-
-		while (compClass != null) {
-			AgreeContractSubclause annex = getAgreeAnnex(compClass);
+		for (ComponentType compType : effectiveTypes) {
+			AgreeContractSubclause annex = getAgreeAnnex(compType);
 			if (annex != null) {
 				hasDirectAnnex = true;
 				AgreeContract contract = (AgreeContract) annex.getContract();
@@ -440,7 +458,8 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 					assumptions.addAll(getAssumptionStatements(contract.getSpecs(), portRewriteMap));
 					guarantees.addAll(getGuaranteeStatements(contract.getSpecs(), portRewriteMap));
 				}
-				// we count eqstatements with expressions as assertions
+
+				// Count eq statements with expressions as assertions
 				getEquationStatements(contract.getSpecs(), portRewriteMap).addAllTo(locals, assertions, guarantees);
 				assertions.addAll(getPropertyStatements(contract.getSpecs()));
 				outputs.addAll(getEquationVars(contract.getSpecs(), compInst));
@@ -450,8 +469,6 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 				addLustreNodes(contract.getSpecs());
 				gatherLustreTypes(contract.getSpecs());
 			}
-
-			compClass = (ComponentClassifier) compClass.getExtended();
 
 		}
 

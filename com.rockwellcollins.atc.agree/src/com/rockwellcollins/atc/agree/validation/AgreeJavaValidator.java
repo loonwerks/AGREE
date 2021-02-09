@@ -854,10 +854,13 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 					Set<String> usedChildInPorts = new HashSet<>();
 					Set<String> usedChildOutPorts = new HashSet<>();
 
+					EList<Classifier> ctPlusAllExtended = ct.getSelfPlusAllExtended();
+					EList<Classifier> subCtPlusAllExtended = subCt.getSelfPlusAllExtended();
+
 					for (Connection conn : ((ComponentImplementation) comp).getAllConnections()) {
 						{
 							NamedElement sourceNe = conn.getSource().getConnectionEnd();
-							if (sourceNe.getContainingClassifier() == subCt) {
+							if (subCtPlusAllExtended.contains(sourceNe.getContainingClassifier())) {
 
 								if (usedChildOutPorts.contains(sourceNe.getName())) {
 									error(lcst,
@@ -868,7 +871,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 								usedChildOutPorts.add(sourceNe.getName());
 							}
 
-							if (sourceNe.getContainingClassifier() == ct) {
+							if (ctPlusAllExtended.contains(sourceNe.getContainingClassifier())) {
 								if (usedParentInPorts.contains(sourceNe.getName())) {
 									error(lcst,
 											"'lift contract;' statement is not allowed in component implementation whith more than one connection out of same input "
@@ -883,7 +886,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 
 						{
 							NamedElement destNe = conn.getDestination().getConnectionEnd();
-							if (destNe.getContainingClassifier() == subCt) {
+							if (subCtPlusAllExtended.contains(destNe.getContainingClassifier())) {
 
 								if (usedChildInPorts.contains(destNe.getName())) {
 									error(lcst,
@@ -894,7 +897,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 								usedChildInPorts.add(destNe.getName());
 							}
 
-							if (destNe.getContainingClassifier() == ct) {
+							if (ctPlusAllExtended.contains(destNe.getContainingClassifier())) {
 
 								if (usedParentOutPorts.contains(destNe.getName())) {
 									error(lcst,
@@ -2240,7 +2243,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 
 					!(id instanceof Arg) && !(id instanceof ConstStatement) && !(id instanceof NodeDef)
 					&& !(id instanceof FnDef) && !(id instanceof DataSubcomponent) && !(id instanceof DoubleDotRef)
-					&& !(id instanceof DataImplementation) && !(id instanceof RecordDef)) {
+					&& !(id instanceof DataImplementation) && !(id instanceof RecordDef) && !(id instanceof NamedID)) {
 				error(dotId, "Only arguments, constants, and node calls allowed within a node");
 			}
 		}

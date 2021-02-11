@@ -344,7 +344,7 @@ public class AgreeMenuListener implements IMenuListener {
 				final Layout layout = tempLayout;
 				final Map<String, EObject> refMap = tempRefMap;
 
-				final Counterexample translatedCex = translateCounterexample(cex);
+				final Counterexample translatedCex = translateCounterexampleArrayIndices(cex);
 
 				MenuManager sub = new MenuManager("View " + cexType + "Counterexample in");
 				manager.add(sub);
@@ -400,7 +400,7 @@ public class AgreeMenuListener implements IMenuListener {
 		}
 	}
 
-	private String translateArrayIndex(String original) {
+	private static String translateArrayIndex(String original) {
 		Pattern pattern = Pattern.compile("\\[(\\d+)\\]");
 		Matcher matcher = pattern.matcher(original);
 		StringBuffer sb = new StringBuffer();
@@ -411,7 +411,7 @@ public class AgreeMenuListener implements IMenuListener {
 		return sb.toString();
 	}
 
-	private Counterexample translateCounterexample(Counterexample original) {
+	public static Counterexample translateCounterexampleArrayIndices(Counterexample original) {
 		Counterexample result = new Counterexample(original.getLength());
 
 		original.getSignals().stream().forEach(signal -> result

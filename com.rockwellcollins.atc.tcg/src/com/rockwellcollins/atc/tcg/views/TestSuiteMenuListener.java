@@ -51,6 +51,7 @@ import org.osate.ui.dialogs.Dialog;
 
 import com.rockwellcollins.atc.agree.agree.AgreeSubclause;
 import com.rockwellcollins.atc.agree.analysis.AgreeUtils;
+import com.rockwellcollins.atc.agree.analysis.views.AgreeMenuListener;
 import com.rockwellcollins.atc.agree.analysis.views.AgreePatternListener;
 import com.rockwellcollins.atc.agree.analysis.views.AgreeResultsLinker;
 import com.rockwellcollins.atc.tcg.extensions.ExtensionRegistry;
@@ -149,27 +150,29 @@ public class TestSuiteMenuListener implements IMenuListener {
 			final Layout layout = linker.getLayout(result);
 			final Map<String, EObject> refMap = ((TcgRenaming)linker.getRenaming(result)).getTcgRefMap();
 
+			final Counterexample translatedCex = AgreeMenuListener.translateCounterexampleArrayIndices(cex);
+
 			MenuManager sub = new MenuManager("View " + cexType + "Test Case in");
 			manager.add(sub);
 
 			sub.add(new Action("Console") {
 				@Override
 				public void run() {
-					viewCexConsole(cex, layout, refMap);
+					viewCexConsole(translatedCex, layout, refMap);
 				}
 			});
 
 			sub.add(new Action("Eclipse") {
 				@Override
 				public void run() {
-					viewCexEclipse(cex, layout, refMap);
+					viewCexEclipse(translatedCex, layout, refMap);
 				}
 			});
 
 			sub.add(new Action("Spreadsheet") {
 				@Override
 				public void run() {
-					viewCexSpreadsheet(cex, layout);
+					viewCexSpreadsheet(translatedCex, layout);
 				}
 			});
 
@@ -181,7 +184,7 @@ public class TestSuiteMenuListener implements IMenuListener {
 				sub.add(new Action(ex.getDisplayText()) {
 					@Override
 					public void run() {
-						ex.receiveCex(compImpl, property, cex, refMap);
+						ex.receiveCex(compImpl, property, translatedCex, refMap);
 					}
 				});
 			}
@@ -195,9 +198,6 @@ public class TestSuiteMenuListener implements IMenuListener {
 			manager.add(createWriteConsoleAction("View Lustre", "Lustre", program));
 		}
 	}
-
-
-
 
 	private IAction createHyperlinkAction(String text, final EObject eObject) {
 		return new Action(text) {

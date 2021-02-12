@@ -1,21 +1,21 @@
 /*
-Copyright (c) 2015, Rockwell Collins.
+Copyright (c) 2015-2021, Collins Aerospace.
 Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
-including any software or models in source or binary form, as well as any drawings, specifications, 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+including any software or models in source or binary form, as well as any drawings, specifications,
 and documentation (collectively "the Data"), to deal in the Data without restriction, including
-without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, 
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
 subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or 
+The above copyright notice and this permission notice shall be included in all copies or
 substantial portions of the Data.
 
-THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
-LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
 */
 package edu.uah.rsesc.aadlsimulator.agree.engine;
@@ -26,9 +26,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 
+import org.eclipse.emf.ecore.EObject;
+import org.osate.aadl2.instance.ComponentInstance;
+import org.osate.aadl2.instance.FeatureInstance;
+
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
+import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode.TimingModel;
+
+import edu.uah.rsesc.aadlsimulator.agree.SimulationProgram;
+import edu.uah.rsesc.aadlsimulator.agree.SimulationProgramType;
+import edu.uah.rsesc.aadlsimulator.agree.SimulationVariable;
 import jkind.lustre.ArrayAccessExpr;
 import jkind.lustre.ArrayType;
 import jkind.lustre.Expr;
@@ -38,16 +49,6 @@ import jkind.lustre.RecordAccessExpr;
 import jkind.lustre.RecordType;
 import jkind.lustre.Type;
 import jkind.lustre.TypeDef;
-import org.eclipse.emf.ecore.EObject;
-import org.osate.aadl2.instance.ComponentInstance;
-import org.osate.aadl2.instance.FeatureInstance;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode;
-import com.rockwellcollins.atc.agree.analysis.ast.AgreeNode.TimingModel;
-
-import edu.uah.rsesc.aadlsimulator.agree.SimulationProgram;
-import edu.uah.rsesc.aadlsimulator.agree.SimulationProgramType;
-import edu.uah.rsesc.aadlsimulator.agree.SimulationVariable;
 
 class AGREESimulationStateElementFactory {
 	/**
@@ -57,40 +58,40 @@ class AGREESimulationStateElementFactory {
 	 */
 	public static List<AGREESimulationStateElement> createStateElements(final SimulationProgram program) {
 		Objects.requireNonNull(program, "program must not be null");
-		
+
 		// Build a component instance to simulation variable collection map
 		final Map<ComponentInstance, Collection<SimulationVariable>> componentInstanceToVariablesMap = new HashMap<ComponentInstance, Collection<SimulationVariable>>();
 		for(final SimulationVariable var : program.getVariables()) {
 			if(!componentInstanceToVariablesMap.containsKey(var.getComponentInstance())) {
 				componentInstanceToVariablesMap.put(var.getComponentInstance(), new ArrayList<SimulationVariable>());
 			}
-			
+
 			componentInstanceToVariablesMap.get(var.getComponentInstance()).add(var);
 		}
-		
+
 		// Build a type id to type map
 		final Map<String, jkind.lustre.Type> typeIdToTypeMap = new HashMap<String, jkind.lustre.Type>();
 		for(final TypeDef typeDef : program.getLustreProgram().types) {
 			typeIdToTypeMap.put(typeDef.id, typeDef.type);
 		}
-		
+
 		return Collections.unmodifiableList(createVariableStateElements(null, program.getType(), program.getComponentInstance(), null, componentInstanceToVariablesMap, typeIdToTypeMap, program.getComponentInstanceToAgreeNodeMap(), true));
 	}
 
 	private static List<AGREESimulationStateElement> createVariableStateElements(final AGREESimulationStateElement parent, final SimulationProgramType programType, final ComponentInstance componentInstance, final TimingModel parentTimingModel,
-			final Map<ComponentInstance, Collection<SimulationVariable>> componentInstanceToVariablesMap, 
+			final Map<ComponentInstance, Collection<SimulationVariable>> componentInstanceToVariablesMap,
 			final Map<String, jkind.lustre.Type> typeIdToTypeMap, final Map<ComponentInstance, AgreeNode> componentInstanceToAgreeNodeMap,
 			boolean includeSubcomponents) {
 		assert componentInstance != null;
 		assert componentInstanceToVariablesMap != null;
 		assert typeIdToTypeMap != null;
-		
+
 		final List<AGREESimulationStateElement> elements = new ArrayList<AGREESimulationStateElement>();
 
 		// Get the timing model for the component instance
 		final AgreeNode agreeNode = componentInstanceToAgreeNodeMap.get(componentInstance);
 		final TimingModel timingModel = agreeNode == null ? null : agreeNode.timing;
-		
+
 		// Create elements for subcomponents
 		if(includeSubcomponents) {
 			for(final ComponentInstance child : componentInstance.getComponentInstances()) {
@@ -109,8 +110,8 @@ class AGREESimulationStateElementFactory {
 				boolean hidden = (var.getLustreId().contains("___") || var.getLustreId().startsWith("_")) && (!isClock || !showClockVariables);
 				addChildElementsForVariable(elements, parent, var.getName(), var.getType(), new IdExpr(var.getLustreId()), typeIdToTypeMap, var.getFeatureInstance(), var.getDeclarativeReference(), hidden);
 			}
-		}		
-		
+		}
+
 		return elements;
 	}
 
@@ -119,26 +120,26 @@ class AGREESimulationStateElementFactory {
 		assert variableName != null;
 		assert variableType != null;
 		assert lustreExpr != null;
-		
+
 		variableType = resolveType(variableType, typeIdToTypeMap);
 		if(variableType == NamedType.INT || variableType == NamedType.REAL || variableType == NamedType.BOOL) {
 			elements.add(new AGREESimulationStateElement(parent, variableName, lustreTypeToSimType(variableType), lustreExpr, featureInstance, declReference, hidden));
 		} else if(variableType instanceof RecordType) {
 			final AGREESimulationStateElement newElement = new AGREESimulationStateElement(parent, variableName, edu.uah.rsesc.aadlsimulator.VariableType.NONE, null, featureInstance, declReference, hidden);
-			
+
 			final RecordType recordType = (RecordType)variableType;
 			final List<AGREESimulationStateElement> recordElements = new ArrayList<AGREESimulationStateElement>();
 			for(final Entry<String, jkind.lustre.Type> field : recordType.fields.entrySet()) {
 				addChildElementsForVariable(recordElements, newElement, field.getKey(), field.getValue(), new RecordAccessExpr(lustreExpr, field.getKey()), typeIdToTypeMap, null, null, hidden);
 			}
-			
+
 			newElement.setChildren(recordElements);
 			elements.add(newElement);
 		} else if(variableType instanceof ArrayType) {
 			final ArrayType arrayType = (ArrayType)variableType;
 			final Type elementType = arrayType.base;
 			for(int i = 0; i < arrayType.size; i++) {
-				final String indexStr = "[" + i + "]";				
+				final String indexStr = "[" + (i + 1) + "]"; // Offset array origin since AGREE/AADL arrays are one based and JKind arrays are 0 based
 				addChildElementsForVariable(elements, parent, variableName + indexStr, elementType, new ArrayAccessExpr(lustreExpr, i), typeIdToTypeMap, featureInstance, declReference, hidden);
 			}
 		} else {
@@ -157,7 +158,7 @@ class AGREESimulationStateElementFactory {
 			return edu.uah.rsesc.aadlsimulator.VariableType.NONE;
 		}
 	}
-	
+
 	/**
 	 * Attempts to resolve a specified named type with a RecordType if applicable.
 	 * @param typeIdToTypeMap
@@ -171,10 +172,10 @@ class AGREESimulationStateElementFactory {
 			if(newType == null) {
 				break;
 			}
-			
+
 			type = newType;
 		}
-		
+
 		return type;
 	}
 }

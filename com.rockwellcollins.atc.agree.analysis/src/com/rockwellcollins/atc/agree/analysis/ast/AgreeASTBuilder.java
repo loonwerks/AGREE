@@ -454,7 +454,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 				hasDirectAnnex = true;
 				AgreeContract contract = (AgreeContract) annex.getContract();
 				// this makes files for monolithic verification a bit smaller
-				if (isTop || !hasSubcomponents) {
+				if (!isMonolithic || isTop || !hasSubcomponents) {
 					assumptions.addAll(getAssumptionStatements(contract.getSpecs(), portRewriteMap));
 					guarantees.addAll(getGuaranteeStatements(contract.getSpecs(), portRewriteMap));
 				}

@@ -2196,7 +2196,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 			int size = ((AgreeTypeSystem.ArrayTypeDef) arrayTypeDef).size;
 			List<Expr> elems = new ArrayList<>();
 			for (int i = 0; i < size; i++) {
-				elems.add(new IntExpr(i));
+				elems.add(new IntExpr(i + 1));
 			}
 
 			return new ArrayExpr(elems);

@@ -1836,58 +1836,6 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 		}
 	}
 
-//	=======
-//	protected AgreeType getAgreeType(Type type) {
-//		String typeName = null;
-//		if (type instanceof PrimType) {
-//			typeName = ((PrimType) type).getString();
-//			return new AgreeType(typeName);
-//		} else {
-//			RecordType recType = (RecordType) type;
-//			DoubleDotRef recId = recType.getRecord();
-//			return getNamedElmAsType(recId.getElm());
-//		}
-//	}
-//
-//	private AgreeType getNamedElmAsType(NamedElement recEl) {
-//		String typeName = "";
-//		EObject aadlPack = recEl.eContainer();
-//
-//		while (!(aadlPack instanceof AadlPackage)) {
-//			aadlPack = aadlPack.eContainer();
-//		}
-//
-//		String packName = ((AadlPackage) aadlPack).getName();
-//
-//		if (recEl instanceof RecordDefExpr) {
-//			EObject component = recEl.eContainer();
-//			while (!(component instanceof ComponentClassifier) && !(component instanceof AadlPackage)) {
-//				component = component.eContainer();
-//			}
-//
-//			if (component == aadlPack) {
-//				typeName = recEl.getName();
-//			} else {
-//				typeName = ((ComponentClassifier) component).getName() + "." + recEl.getName();
-//			}
-//
-//		} else if (recEl instanceof DataImplementation) {
-//			AgreeType nativeType = getNativeType((DataImplementation) recEl);
-//			if (nativeType != null) {
-//				return nativeType;
-//			}
-//			typeName = recEl.getName();
-//		} else if (recEl instanceof DataType) {
-//			return getAgreeType((ComponentClassifier) recEl);
-//		} else if (recEl instanceof EnumStatement) {
-//			typeName = recEl.getFullName();
-//		}
-//		typeName = packName + "::" + typeName;
-//
-//		return new AgreeType(typeName);
-//	}
-//
-//	>>>>>>> origin/develop
 	public boolean isPossibleConstant(Expr e) {
 		if (e instanceof PrevExpr || e instanceof PreExpr) {
 			return false;

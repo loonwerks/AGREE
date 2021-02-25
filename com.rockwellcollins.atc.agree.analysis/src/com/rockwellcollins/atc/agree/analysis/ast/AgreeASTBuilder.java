@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.common.util.EList;
@@ -155,10 +154,8 @@ import jkind.lustre.BinaryExpr;
 import jkind.lustre.BinaryOp;
 import jkind.lustre.BoolExpr;
 import jkind.lustre.CastExpr;
-import jkind.lustre.CondactExpr;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
-import jkind.lustre.FunctionCallExpr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.IfThenElseExpr;
 import jkind.lustre.IntExpr;
@@ -167,13 +164,13 @@ import jkind.lustre.Node;
 import jkind.lustre.NodeCallExpr;
 import jkind.lustre.RealExpr;
 import jkind.lustre.RecordAccessExpr;
-import jkind.lustre.RecordExpr;
 import jkind.lustre.TupleExpr;
 import jkind.lustre.Type;
 import jkind.lustre.UnaryExpr;
 import jkind.lustre.UnaryOp;
 import jkind.lustre.VarDecl;
 import jkind.lustre.builders.NodeBuilder;
+import jkind.translation.SubstitutionVisitor;
 
 
 public class AgreeASTBuilder extends AgreeSwitch<Expr> {
@@ -1269,7 +1266,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 				EList<Arg> lhs = eq.getLhs();
 				if (eq.getExpr() != null) {
 
-					Expr expr = substitute(doSwitch(eq.getExpr()), rewriteMap);
+					Expr expr = doSwitch(eq.getExpr()).accept(new SubstitutionVisitor(rewriteMap));
 
 					if (lhs.size() != 1) {
 						List<Expr> ids = new ArrayList<>();
@@ -1511,12 +1508,13 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 				AssumeStatement assumption = (AssumeStatement) spec;
 				String str = assumption.getStr();
 				if (assumption.getExpr() != null) {
-					assumptions.add(new AgreeStatement(str, substitute(doSwitch(assumption.getExpr()), rewriteMap), assumption));
+					assumptions.add(new AgreeStatement(str,
+							doSwitch(assumption.getExpr()).accept(new SubstitutionVisitor(rewriteMap)), assumption));
 				} else {
 					PatternStatement pattern = assumption.getPattern();
 
 					AgreeStatement patAssumption = new AgreePatternBuilder(str, assumption, this).doSwitch(pattern);
-					patAssumption.expr = substitute(patAssumption.expr, rewriteMap);
+					patAssumption.expr = patAssumption.expr.accept(new SubstitutionVisitor(rewriteMap));
 					assumptions.add(patAssumption);
 				}
 			}
@@ -1533,11 +1531,13 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 				String str = guarantee.getStr();
 				if (guarantee.getExpr() != null) {
 					guarantees.add(
-							new AgreeStatement(str, substitute(doSwitch(guarantee.getExpr()), rewriteMap), guarantee));
+							new AgreeStatement(str,
+									doSwitch(guarantee.getExpr()).accept(new SubstitutionVisitor(rewriteMap)),
+									guarantee));
 				} else {
 					PatternStatement pattern = guarantee.getPattern();
 					AgreeStatement patStatement = new AgreePatternBuilder(str, guarantee, this).doSwitch(pattern);
-					patStatement.expr = substitute(patStatement.expr, rewriteMap);
+					patStatement.expr = patStatement.expr.accept(new SubstitutionVisitor(rewriteMap));
 					guarantees.add(patStatement);
 				}
 			}
@@ -2203,133 +2203,6 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		throw new RuntimeException("Error caseIndicesExpr");
 	}
 
-	private Expr substitute(Expr context, Map<String, Expr> rewriteMap) {
-		Expr acc = context;
-		for (Entry<String, Expr> entry : rewriteMap.entrySet()) {
-			String name = entry.getKey();
-			Expr newExpr = entry.getValue();
-			acc = substitute(acc, name, newExpr);
-		}
-
-		return acc;
-
-	}
-
-	private Expr substitute(Expr context, String name, Expr newExpr) {
-
-		if (context instanceof IdExpr) {
-			if (((IdExpr) context).id.equals(name)) {
-				return newExpr;
-			} else {
-				return context;
-			}
-		} else if (context instanceof ArrayAccessExpr) {
-
-			Expr arrayExpr = substitute(((ArrayAccessExpr) context).array, name, newExpr);
-			Expr indexExpr = substitute(((ArrayAccessExpr) context).index, name, newExpr);
-			return new ArrayAccessExpr(arrayExpr, indexExpr);
-
-		} else if (context instanceof ArrayExpr) {
-			List<Expr> elems = new ArrayList<>();
-			for (Expr raw : ((ArrayExpr) context).elements) {
-				Expr elem = substitute(raw, name, newExpr);
-				elems.add(elem);
-			}
-			return new ArrayExpr(elems);
-
-		} else if (context instanceof jkind.lustre.ArrayUpdateExpr) {
-			Expr arrayExpr = substitute(((jkind.lustre.ArrayUpdateExpr) context).array, name, newExpr);
-			Expr indexExpr = substitute(((jkind.lustre.ArrayUpdateExpr) context).index, name, newExpr);
-			Expr valExpr = substitute(((jkind.lustre.ArrayUpdateExpr) context).value, name, newExpr);
-			return new jkind.lustre.ArrayUpdateExpr(arrayExpr, indexExpr, valExpr);
-
-		} else if (context instanceof BinaryExpr) {
-			Expr left = substitute(((BinaryExpr) context).left, name, newExpr);
-			Expr right = substitute(((BinaryExpr) context).right, name, newExpr);
-			return new BinaryExpr(left, ((BinaryExpr) context).op, right);
-
-		} else if (context instanceof BoolExpr) {
-			return context;
-		} else if (context instanceof CastExpr) {
-			Expr expr = substitute(((CastExpr) context).expr, name, newExpr);
-			return new CastExpr(((CastExpr) context).type, expr);
-		} else if (context instanceof CondactExpr) {
-			Expr clock = substitute(((CondactExpr) context).clock, name, newExpr);
-			Expr call = substitute(((CondactExpr) context).call, name, newExpr);
-			List<Expr> args = new ArrayList<>();
-			for (Expr raw : ((CondactExpr) context).args) {
-				Expr arg = substitute(raw, name, newExpr);
-				args.add(arg);
-			}
-			return new CondactExpr(clock, (NodeCallExpr) call, args);
-
-
-		} else if (context instanceof FunctionCallExpr) {
-			List<Expr> args = new ArrayList<>();
-			for (Expr raw : ((FunctionCallExpr) context).args) {
-				Expr arg = substitute(raw, name, newExpr);
-				args.add(arg);
-			}
-			return new FunctionCallExpr(((FunctionCallExpr) context).function, args);
-
-		} else if (context instanceof IfThenElseExpr) {
-			Expr cond = substitute(((IfThenElseExpr) context).cond, name, newExpr);
-			Expr thenExpr = substitute(((IfThenElseExpr) context).thenExpr, name, newExpr);
-			Expr elseExpr = substitute(((IfThenElseExpr) context).elseExpr, name, newExpr);
-			return new IfThenElseExpr(cond, thenExpr, elseExpr);
-
-		} else if (context instanceof IntExpr) {
-			return context;
-
-		} else if (context instanceof NodeCallExpr) {
-			List<Expr> args = new ArrayList<>();
-			for (Expr raw : ((NodeCallExpr) context).args) {
-				Expr arg = substitute(raw, name, newExpr);
-				args.add(arg);
-			}
-			return new FunctionCallExpr(((NodeCallExpr) context).node, args);
-
-		} else if (context instanceof RealExpr) {
-			return context;
-
-		} else if (context instanceof RecordAccessExpr) {
-			Expr rec = substitute(((RecordAccessExpr) context).record, name, newExpr);
-			return new RecordAccessExpr(rec, ((RecordAccessExpr) context).field);
-
-		} else if (context instanceof RecordExpr) {
-
-			Map<String, Expr> fields = new TreeMap<>();
-			for (Entry<String, Expr> raw : ((RecordExpr) context).fields.entrySet()) {
-				String key = raw.getKey();
-				Expr fieldExpr = substitute(raw.getValue(), name, newExpr);
-				fields.put(key, fieldExpr);
-			}
-
-			return new RecordExpr(((RecordExpr) context).id, fields);
-
-		} else if (context instanceof jkind.lustre.RecordUpdateExpr) {
-
-			Expr rec = substitute(((jkind.lustre.RecordUpdateExpr) context).record, name, newExpr);
-			Expr valueExpr = substitute(((jkind.lustre.RecordUpdateExpr) context).value, name, newExpr);
-			return new jkind.lustre.RecordUpdateExpr(rec, ((jkind.lustre.RecordUpdateExpr) context).field, valueExpr);
-
-		} else if (context instanceof TupleExpr) {
-
-			List<Expr> elems = new ArrayList<>();
-			for (Expr raw : ((TupleExpr) context).elements) {
-				Expr elem = substitute(raw, name, newExpr);
-				elems.add(elem);
-			}
-			return new TupleExpr(elems);
-
-		} else if (context instanceof UnaryExpr) {
-			Expr expr = substitute(((UnaryExpr) context).expr, name, newExpr);
-			return new UnaryExpr(((UnaryExpr) context).op, expr);
-		}
-
-		throw new RuntimeException("Error: substitute - " + context);
-	}
-
 	@Override
 	public Expr caseForallExpr(ForallExpr expr) {
 		com.rockwellcollins.atc.agree.agree.Expr arrayExpr = expr.getArray();
@@ -2347,7 +2220,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 		for (int i = 0; i < size; ++i) {
 			Expr arrayAccess = new ArrayAccessExpr(array, i);
-			Expr body = substitute(doSwitch(expr.getExpr()), binding.getName(), arrayAccess);
+			Expr body = doSwitch(expr.getExpr()).accept(new SubstitutionVisitor(binding.getName(), arrayAccess));
 			final_expr = LustreExprFactory.makeANDExpr(final_expr, body);
 		}
 
@@ -2371,7 +2244,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 		for (int i = 0; i < size; ++i) {
 			Expr arrayAccess = new ArrayAccessExpr(array, i);
-			Expr body = substitute(doSwitch(expr.getExpr()), binding.getName(), arrayAccess);
+			Expr body = doSwitch(expr.getExpr()).accept(new SubstitutionVisitor(binding.getName(), arrayAccess));
 			final_expr = LustreExprFactory.makeORExpr(final_expr, body);
 		}
 
@@ -2392,7 +2265,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		List<Expr> elems = new ArrayList<>();
 		for (int i = 0; i < size; ++i) {
 			Expr arrayAccess = new ArrayAccessExpr(array, i);
-			Expr body = substitute(doSwitch(expr.getExpr()), binding.getName(), arrayAccess);
+			Expr body = doSwitch(expr.getExpr()).accept(new SubstitutionVisitor(binding.getName(), arrayAccess));
 
 			AgreeTypeSystem.TypeDef innerArrType = AgreeTypeSystem.infer(expr.getExpr());
 			if (innerArrType instanceof AgreeTypeSystem.ArrayTypeDef) {
@@ -2424,8 +2297,8 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		NamedID accBinding = expr.getAccumulator();
 		for (int i = 0; i < size; i++) {
 			Expr arrayAccess = new ArrayAccessExpr(array, i);
-			accExpr = substitute(substitute(doSwitch(expr.getExpr()), binding.getName(), arrayAccess),
-					accBinding.getName(), accExpr);
+			accExpr = doSwitch(expr.getExpr()).accept(new SubstitutionVisitor(binding.getName(), arrayAccess))
+					.accept(new SubstitutionVisitor(accBinding.getName(), accExpr));
 		}
 		return accExpr;
 	}
@@ -2446,8 +2319,8 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		NamedID accBinding = expr.getAccumulator();
 		for (int i = size - 1; i >= 0; i--) {
 			Expr arrayAccess = new ArrayAccessExpr(array, i);
-			accExpr = substitute(substitute(doSwitch(expr.getExpr()), binding.getName(), arrayAccess),
-					accBinding.getName(), accExpr);
+			accExpr = doSwitch(expr.getExpr()).accept(new SubstitutionVisitor(binding.getName(), arrayAccess))
+					.accept(new SubstitutionVisitor(accBinding.getName(), accExpr));
 		}
 		return accExpr;
 	}

@@ -99,6 +99,7 @@ public class AgreeMenuListener implements IMenuListener {
 	}
 
 	private void addLinkedMenus(IMenuManager manager, AnalysisResult result) {
+		addOpenOutputMenu(manager, result);
 		addOpenComponentMenu(manager, result);
 		addOpenContractMenu(manager, result);
 		addViewLogMenu(manager, result);
@@ -108,6 +109,16 @@ public class AgreeMenuListener implements IMenuListener {
 		addViewSupportMenu(manager, result);
 		addTraceabilityDocMenu(manager, result);
 		addTraceabilityMatrixMenu(manager, result);
+	}
+
+	private void addOpenOutputMenu(IMenuManager manager, AnalysisResult result) {
+		if (!(result instanceof JKindResult)) {
+			result = result.getParent();
+		}
+		if (result instanceof JKindResult) {
+			manager.add(createWriteConsoleAction("View Analysis Output", "Analysis Output",
+					((JKindResult) result).getText()));
+		}
 	}
 
 	private void addTraceabilityDocMenu(IMenuManager manager, AnalysisResult result) {

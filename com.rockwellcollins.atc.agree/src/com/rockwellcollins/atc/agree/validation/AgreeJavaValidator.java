@@ -5,6 +5,7 @@ package com.rockwellcollins.atc.agree.validation;
 
 import static com.rockwellcollins.atc.agree.AgreeTypeSystem.nameOfTypeDef;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -81,12 +82,18 @@ import com.rockwellcollins.atc.agree.agree.EnumLitExpr;
 import com.rockwellcollins.atc.agree.agree.EnumStatement;
 import com.rockwellcollins.atc.agree.agree.EqStatement;
 import com.rockwellcollins.atc.agree.agree.EventExpr;
+import com.rockwellcollins.atc.agree.agree.ExistsExpr;
 import com.rockwellcollins.atc.agree.agree.Expr;
+import com.rockwellcollins.atc.agree.agree.FlatmapExpr;
 import com.rockwellcollins.atc.agree.agree.FloorCast;
 import com.rockwellcollins.atc.agree.agree.FnDef;
+import com.rockwellcollins.atc.agree.agree.FoldLeftExpr;
+import com.rockwellcollins.atc.agree.agree.FoldRightExpr;
+import com.rockwellcollins.atc.agree.agree.ForallExpr;
 import com.rockwellcollins.atc.agree.agree.GetPropertyExpr;
 import com.rockwellcollins.atc.agree.agree.GuaranteeStatement;
 import com.rockwellcollins.atc.agree.agree.IfThenElseExpr;
+import com.rockwellcollins.atc.agree.agree.IndicesExpr;
 import com.rockwellcollins.atc.agree.agree.InitialStatement;
 import com.rockwellcollins.atc.agree.agree.InputStatement;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
@@ -121,6 +128,7 @@ import com.rockwellcollins.atc.agree.agree.SelectionExpr;
 import com.rockwellcollins.atc.agree.agree.SpecStatement;
 import com.rockwellcollins.atc.agree.agree.SporadicStatement;
 import com.rockwellcollins.atc.agree.agree.SynchStatement;
+import com.rockwellcollins.atc.agree.agree.TagExpr;
 import com.rockwellcollins.atc.agree.agree.ThisRef;
 import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
 import com.rockwellcollins.atc.agree.agree.TimeInterval;
@@ -1077,7 +1085,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 		}
 
 		if (jitter != null) {
-			if (!(jitter instanceof RealLitExpr || isConst(jitter))) {
+			if (!(jitter instanceof RealLitExpr || isTimingConst(jitter))) {
 				error(jitter, "The specified jitter must be a real literal");
 			} else {
 				Double val = getRealConstVal(jitter);
@@ -1087,7 +1095,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			}
 		}
 
-		if (!(period instanceof RealLitExpr || isConst(period))) {
+		if (!(period instanceof RealLitExpr || isTimingConst(period))) {
 			error(period, "The specified period must be a real literal");
 		} else {
 			Double val = getRealConstVal(period);
@@ -1126,7 +1134,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 		}
 
 		if (jitter != null) {
-			if (!(jitter instanceof RealLitExpr || isConst(jitter))) {
+			if (!(jitter instanceof RealLitExpr || isTimingConst(jitter))) {
 				error(jitter, "The specified jitter must be a real literal");
 			} else {
 				Double val = getRealConstVal(jitter);
@@ -1136,7 +1144,7 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			}
 		}
 
-		if (!(iat instanceof RealLitExpr || isConst(iat))) {
+		if (!(iat instanceof RealLitExpr || isTimingConst(iat))) {
 			error(iat, "The specified interarrival time must be a real literal");
 		} else {
 			Double val = getRealConstVal(iat);
@@ -1299,17 +1307,26 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 		Expr lower = interval.getLow();
 		Expr higher = interval.getHigh();
 
-		if (!(lower instanceof RealLitExpr || isConst(lower))) {
+		if (!(lower instanceof RealLitExpr || isTimingConst(lower))) {
 			error(lower, "Lower interval must be a real valued literal");
 		}
 
-		if (!(higher instanceof RealLitExpr || isConst(higher))) {
+		if (!(higher instanceof RealLitExpr || isTimingConst(higher))) {
 			error(higher, "higher interval must be a real valued literal");
 		}
 
 	}
 
-	protected boolean isConst(Expr expr) {
+	/**
+	 * Is a given expression a usable timing constant
+	 *
+	 * Determine whether the given expression is a constant that may be a
+	 * statically evaluated such that can be used to set the timing model
+	 *
+	 * @param expr
+	 * @return true if acceptable timing constant, false otherwise
+	 */
+	protected boolean isTimingConst(Expr expr) {
 		if (expr instanceof SelectionExpr) {
 			SelectionExpr id = (SelectionExpr) expr;
 			NamedElement finalId = id.getField();
@@ -1506,27 +1523,15 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			}
 
 		} else {
-
 			error(arrExpr, "expression must evaluate to an array");
 		}
 	}
 
-
-
 	@Check(CheckType.FAST)
 	public void checkArraySubExpr(ArraySubExpr asub) {
-
 		Expr arrExp = asub.getExpr();
 		checkTypeExists(arrExp);
 		TypeDef arrType = AgreeTypeSystem.infer(arrExp);
-
-		if (arrType instanceof ArrayTypeDef) {
-
-		} else {
-
-			error(arrExp, "expression must evaluate to an array");
-		}
-
 
 		Expr index = asub.getIndex();
 		checkTypeExists(index);
@@ -1535,13 +1540,69 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			error(index, "index must be an int");
 		}
 
+		if (arrType instanceof ArrayTypeDef) {
+			ArrayTypeDef arrayTypeDef = (ArrayTypeDef) arrType;
+			int arraySize = arrayTypeDef.size;
+			BigInteger indexValue = evaluateIndexExpr(index);
+			if (indexValue != null) {
+				if (!(indexValue.compareTo(BigInteger.ONE) >= 0
+						&& indexValue.compareTo(BigInteger.valueOf(arraySize)) <= 0)) {
+					error(index, "Index value " + indexValue + " is out of array bounds [1 .. " + arraySize + "]");
+				}
+			} else {
+				warning(index, "Could not statically compute array index value");
+			}
+		} else {
+			error(arrExp, "expression must evaluate to an array");
+		}
 	}
 
+	// TODO: This is really minimal -- need to create a proper AGREE static expression evaluation infrastructure
+	private BigInteger evaluateIndexExpr(Expr expr) {
+		BigInteger result = null;
+		if (expr instanceof IntLitExpr) {
+			return new BigInteger(((IntLitExpr) expr).getVal());
+		} else if (expr instanceof UnaryExpr) {
+			UnaryExpr unaryExpr = (UnaryExpr) expr;
+			BigInteger val = evaluateIndexExpr(unaryExpr.getExpr());
+			if ("-".equals(unaryExpr.getOp()) && val != null) {
+				return val.negate();
+			}
+		} else if (expr instanceof BinaryExpr) {
+			BinaryExpr binaryExpr = (BinaryExpr) expr;
+			BigInteger leftVal = evaluateIndexExpr(binaryExpr.getLeft());
+			BigInteger rightVal = evaluateIndexExpr(binaryExpr.getRight());
+			if (leftVal != null && rightVal != null) {
+				if ("+".equals(binaryExpr.getOp())) {
+					return leftVal.add(rightVal);
+				} else if ("-".equals(binaryExpr.getOp())) {
+					return leftVal.subtract(rightVal);
+				} else if ("*".equals(binaryExpr.getOp())) {
+					return leftVal.multiply(rightVal);
+				} else if ("/".equals(binaryExpr.getOp()) || "div".equals(binaryExpr.getOp())) {
+					return leftVal.divide(rightVal);
+				} else if ("mod".equals(binaryExpr.getOp())) {
+					return leftVal.mod(rightVal);
+				}
+			}
+		} else if (expr instanceof NamedElmExpr) {
+			return evaluateIndexNamedElement(((NamedElmExpr) expr).getElm());
+		} else if (expr instanceof SelectionExpr) {
+			return evaluateIndexNamedElement(((SelectionExpr) expr).getField());
+		}
+		return result;
+	}
+
+	private BigInteger evaluateIndexNamedElement(NamedElement namedElement) {
+		BigInteger result = null;
+		if (namedElement instanceof ConstStatement) {
+			return evaluateIndexExpr(((ConstStatement) namedElement).getExpr());
+		}
+		return result;
+	}
 
 	@Check(CheckType.FAST)
 	public void checkRecordLitExpr(RecordLitExpr recExpr) {
-
-
 		DoubleDotRef recType = recExpr.getRecordType();
 //			=======
 //					DoubleDotRef recType = recExpr.getRecord();
@@ -1549,7 +1610,6 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 		List<NamedElement> defArgs = getArgNames(recType);
 		EList<NamedElement> exprArgs = recExpr.getArgs();
 		EList<Expr> argExprs = recExpr.getArgExpr();
-
 
 		NamedElement finalId = recExpr.getRecordType().getElm();
 		if (!(finalId instanceof DataImplementation) && !(finalId instanceof RecordDef)) {
@@ -1829,96 +1889,35 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 		} while (!prevClosure.equals(constClosure));
 
 		for (Expr e : EcoreUtil2.getAllContentsOfType(constStat.getExpr(), Expr.class)) {
-			if (!isPossibleConstant(e)) {
+			if (!exprIsConstant(e)) {
 				error(e, "Non-constant expression in constant declaration");
 				return;
 			}
 		}
 	}
 
-//	=======
-//	protected AgreeType getAgreeType(Type type) {
-//		String typeName = null;
-//		if (type instanceof PrimType) {
-//			typeName = ((PrimType) type).getString();
-//			return new AgreeType(typeName);
-//		} else {
-//			RecordType recType = (RecordType) type;
-//			DoubleDotRef recId = recType.getRecord();
-//			return getNamedElmAsType(recId.getElm());
-//		}
-//	}
-//
-//	private AgreeType getNamedElmAsType(NamedElement recEl) {
-//		String typeName = "";
-//		EObject aadlPack = recEl.eContainer();
-//
-//		while (!(aadlPack instanceof AadlPackage)) {
-//			aadlPack = aadlPack.eContainer();
-//		}
-//
-//		String packName = ((AadlPackage) aadlPack).getName();
-//
-//		if (recEl instanceof RecordDefExpr) {
-//			EObject component = recEl.eContainer();
-//			while (!(component instanceof ComponentClassifier) && !(component instanceof AadlPackage)) {
-//				component = component.eContainer();
-//			}
-//
-//			if (component == aadlPack) {
-//				typeName = recEl.getName();
-//			} else {
-//				typeName = ((ComponentClassifier) component).getName() + "." + recEl.getName();
-//			}
-//
-//		} else if (recEl instanceof DataImplementation) {
-//			AgreeType nativeType = getNativeType((DataImplementation) recEl);
-//			if (nativeType != null) {
-//				return nativeType;
-//			}
-//			typeName = recEl.getName();
-//		} else if (recEl instanceof DataType) {
-//			return getAgreeType((ComponentClassifier) recEl);
-//		} else if (recEl instanceof EnumStatement) {
-//			typeName = recEl.getFullName();
-//		}
-//		typeName = packName + "::" + typeName;
-//
-//		return new AgreeType(typeName);
-//	}
-//
-//	>>>>>>> origin/develop
+	/**
+	 * Attempt check whether an AGREE expression is constant
+	 *
+	 * @deprecated use {@link #exprIsConstant(Expr e)} instead.
+	 */
+	@Deprecated
 	public boolean isPossibleConstant(Expr e) {
-		if (e instanceof PrevExpr || e instanceof PreExpr) {
-			return false;
+		return exprIsConstant(e);
+	}
+
+	/**
+	 * In the context of a check whether an AGREE expression is constant, determine whether a NamedElement is constant
+	 *
+	 * @param namedElement
+	 * @return true if the given NamedElement is semantically constant over analysis, false otherwise.
+	 */
+	private static boolean namedElementIsConstant(NamedElement namedElement) {
+		if (namedElement instanceof DataImplementation || namedElement instanceof DataSubcomponent
+				|| namedElement instanceof ConstStatement || namedElement instanceof NamedID) {
+			return true;
 		}
-
-		if (e instanceof BinaryExpr) {
-			if (((BinaryExpr) e).getOp().equals("->")) {
-				return false;
-			}
-		}
-
-		if (e instanceof NamedElmExpr) {
-			if (EcoreUtil2.getContainerOfType(e, GetPropertyExpr.class) != null) {
-				return true;
-			}
-
-			NamedElement base = ((NamedElmExpr) e).getElm();
-
-			if (base instanceof DataImplementation || base instanceof ConstStatement || base instanceof RecordLitExpr
-					|| base instanceof DataSubcomponent) {
-				return true;
-			}
-
-			if (base instanceof DataType && e.eContainer() instanceof EnumLitExpr) {
-				return true;
-			}
-
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	@Check(CheckType.FAST)
@@ -2784,6 +2783,86 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			return exprIsConst(unExpr.getExpr());
 		}
 		return false;
+	}
+
+	/**
+	 * Check whether an AGREE expression is constant
+	 *
+	 * @param expr AGREE expression to check
+	 * @return true if the given Expr is semantically constant over analysis, false otherwise.
+	 */
+	public static boolean exprIsConstant(Expr expr) {
+		if (expr instanceof NamedElmExpr) {
+			NamedElement base = ((NamedElmExpr) expr).getElm();
+			return namedElementIsConstant(base);
+		} else if (expr instanceof SelectionExpr) {
+			SelectionExpr selectionExpr = (SelectionExpr) expr;
+			return exprIsConstant(selectionExpr.getTarget()) && namedElementIsConstant(selectionExpr.getField());
+		} else if (expr instanceof PrevExpr || expr instanceof TagExpr) {
+			return false;
+		} else if (expr instanceof PreExpr) {
+			return exprIsConstant(((PreExpr) expr).getExpr());
+		} else if (expr instanceof BinaryExpr) {
+			BinaryExpr binExpr = (BinaryExpr) expr;
+			if (binExpr.getOp().equals("->")) {
+				return false;
+			} else {
+				return exprIsConstant(binExpr.getLeft()) && exprIsConstant(binExpr.getRight());
+			}
+		} else if (expr instanceof UnaryExpr) {
+			return exprIsConstant(((UnaryExpr) expr).getExpr());
+		} else if (expr instanceof RealLitExpr || expr instanceof IntLitExpr || expr instanceof BoolLitExpr
+				|| expr instanceof EnumLitExpr || expr instanceof IndicesExpr) {
+			return true;
+		} else if (expr instanceof IfThenElseExpr) {
+			IfThenElseExpr iteExpr = (IfThenElseExpr) expr;
+			return exprIsConstant(iteExpr.getA()) && exprIsConstant(iteExpr.getB()) && exprIsConstant(iteExpr.getC());
+		} else if (expr instanceof ForallExpr) {
+			ForallExpr forAllExpr = (ForallExpr) expr;
+			return exprIsConstant(forAllExpr.getArray()) && exprIsConstant(forAllExpr.getExpr());
+		} else if (expr instanceof ExistsExpr) {
+			ExistsExpr existsExpr = (ExistsExpr) expr;
+			return exprIsConstant(existsExpr.getArray()) && exprIsConstant(existsExpr.getExpr());
+		} else if (expr instanceof FlatmapExpr) {
+			FlatmapExpr flatmapExpr = (FlatmapExpr) expr;
+			return exprIsConstant(flatmapExpr.getArray()) && exprIsConstant(flatmapExpr.getExpr());
+		} else if (expr instanceof FoldLeftExpr) {
+			FoldLeftExpr foldLeftExpr = (FoldLeftExpr) expr;
+			return exprIsConstant(foldLeftExpr.getArray()) && exprIsConstant(foldLeftExpr.getInitial())
+					&& exprIsConstant(foldLeftExpr.getExpr());
+		} else if (expr instanceof FoldRightExpr) {
+			FoldRightExpr foldRightExpr = (FoldRightExpr) expr;
+			return exprIsConstant(foldRightExpr.getArray()) && exprIsConstant(foldRightExpr.getInitial())
+					&& exprIsConstant(foldRightExpr.getExpr());
+		} else if (expr instanceof ArrayLiteralExpr) {
+			return ((ArrayLiteralExpr) expr).getElems().stream().allMatch(elem -> exprIsConstant(elem));
+		} else if (expr instanceof RecordLitExpr) {
+			return ((RecordLitExpr) expr).getArgExpr().stream().allMatch(field -> exprIsConstant(field));
+		} else if (expr instanceof CallExpr) {
+			CallExpr callExpr = (CallExpr) expr;
+			if (((((CallExpr) expr).getRef()).getElm()) instanceof FnDef) {
+				return callExpr.getArgs().stream().allMatch(arg -> exprIsConstant(arg));
+			} else {
+				return false;
+			}
+		} else if (expr instanceof RecordUpdateExpr) {
+			RecordUpdateExpr recordUpdateExpr = (RecordUpdateExpr) expr;
+			return exprIsConstant(recordUpdateExpr.getRecord()) && exprIsConstant(recordUpdateExpr.getExpr());
+		} else if (expr instanceof ArrayUpdateExpr) {
+			ArrayUpdateExpr arrayUpdateExpr = (ArrayUpdateExpr) expr;
+			return exprIsConstant(arrayUpdateExpr.getArray())
+					&& arrayUpdateExpr.getIndices().stream().allMatch(index -> exprIsConstant(index))
+					&& arrayUpdateExpr.getValueExprs().stream().allMatch(value -> exprIsConstant(value));
+		} else if (expr instanceof ArraySubExpr) {
+			ArraySubExpr arraySubExpr = (ArraySubExpr) expr;
+			return exprIsConstant(arraySubExpr.getExpr()) && exprIsConstant(arraySubExpr.getIndex());
+		} else if (expr instanceof FloorCast) {
+			return exprIsConstant(((FloorCast) expr).getExpr());
+		} else if (expr instanceof RealCast) {
+			return exprIsConstant(((RealCast) expr).getExpr());
+		} else {
+			return false;
+		}
 	}
 
 //																=======

@@ -428,6 +428,15 @@ public interface AgreeFactory extends EFactory
   LemmaStatement createLemmaStatement();
 
   /**
+   * Returns a new object of class '<em>Reachable Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Reachable Statement</em>'.
+   * @generated
+   */
+  ReachableStatement createReachableStatement();
+
+  /**
    * Returns a new object of class '<em>Always Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

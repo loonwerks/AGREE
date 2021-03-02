@@ -45,6 +45,7 @@ public class AgreeParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getNamedSpecStatementAccess().getAlternatives_1_5(), "rule__NamedSpecStatement__Alternatives_1_5");
 					put(grammarAccess.getNamedSpecStatementAccess().getAlternatives_2_3(), "rule__NamedSpecStatement__Alternatives_2_3");
 					put(grammarAccess.getNamedSpecStatementAccess().getAlternatives_3_5(), "rule__NamedSpecStatement__Alternatives_3_5");
+					put(grammarAccess.getNamedSpecStatementAccess().getAlternatives_4_5(), "rule__NamedSpecStatement__Alternatives_4_5");
 					put(grammarAccess.getPatternStatementAccess().getAlternatives(), "rule__PatternStatement__Alternatives");
 					put(grammarAccess.getWhenStatementAccess().getAlternatives(), "rule__WhenStatement__Alternatives");
 					put(grammarAccess.getWheneverStatementAccess().getAlternatives(), "rule__WheneverStatement__Alternatives");
@@ -96,6 +97,7 @@ public class AgreeParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getNamedSpecStatementAccess().getGroup_2(), "rule__NamedSpecStatement__Group_2__0");
 					put(grammarAccess.getNamedSpecStatementAccess().getGroup_2_2(), "rule__NamedSpecStatement__Group_2_2__0");
 					put(grammarAccess.getNamedSpecStatementAccess().getGroup_3(), "rule__NamedSpecStatement__Group_3__0");
+					put(grammarAccess.getNamedSpecStatementAccess().getGroup_4(), "rule__NamedSpecStatement__Group_4__0");
 					put(grammarAccess.getPatternStatementAccess().getGroup_1(), "rule__PatternStatement__Group_1__0");
 					put(grammarAccess.getWhenStatementAccess().getGroup_0(), "rule__WhenStatement__Group_0__0");
 					put(grammarAccess.getWhenStatementAccess().getGroup_0_0(), "rule__WhenStatement__Group_0_0__0");
@@ -363,6 +365,10 @@ public class AgreeParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getNamedSpecStatementAccess().getStrAssignment_3_3(), "rule__NamedSpecStatement__StrAssignment_3_3");
 					put(grammarAccess.getNamedSpecStatementAccess().getExprAssignment_3_5_0(), "rule__NamedSpecStatement__ExprAssignment_3_5_0");
 					put(grammarAccess.getNamedSpecStatementAccess().getPatternAssignment_3_5_1(), "rule__NamedSpecStatement__PatternAssignment_3_5_1");
+					put(grammarAccess.getNamedSpecStatementAccess().getNameAssignment_4_2(), "rule__NamedSpecStatement__NameAssignment_4_2");
+					put(grammarAccess.getNamedSpecStatementAccess().getStrAssignment_4_3(), "rule__NamedSpecStatement__StrAssignment_4_3");
+					put(grammarAccess.getNamedSpecStatementAccess().getExprAssignment_4_5_0(), "rule__NamedSpecStatement__ExprAssignment_4_5_0");
+					put(grammarAccess.getNamedSpecStatementAccess().getPatternAssignment_4_5_1(), "rule__NamedSpecStatement__PatternAssignment_4_5_1");
 					put(grammarAccess.getPatternStatementAccess().getExprAssignment_1_2(), "rule__PatternStatement__ExprAssignment_1_2");
 					put(grammarAccess.getWhenStatementAccess().getConditionAssignment_0_0_0_2(), "rule__WhenStatement__ConditionAssignment_0_0_0_2");
 					put(grammarAccess.getWhenStatementAccess().getConditionIntervalAssignment_0_2(), "rule__WhenStatement__ConditionIntervalAssignment_0_2");

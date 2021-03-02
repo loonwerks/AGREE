@@ -395,6 +395,17 @@
 			<url>https://raw.githubusercontent.com/loonwerks/z3-plugin/master/com.collins.trustedsystems.z3.updates/target/repository</url>
 			<layout>p2</layout>
 		</repository>
+		<repository>
+			<id>fmw-snapshots</id>
+			<url>https://raw.githubusercontent.com/loonwerks/formal-methods-workbench-updates/master/snapshots/</url>
+			<layout>p2</layout>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>

@@ -226,14 +226,15 @@ public class LustreAstBuilder {
 			properties.add(patternVarName);
 		}
 
-		int i = 0;
-		for (AgreeStatement guarantee : flatNode.lemmas) {
-			String guarName = guarSuffix + i++;
-			locals.add(new AgreeVar(guarName, NamedType.BOOL, guarantee.reference, flatNode.compInst, null));
-			equations.add(new Equation(new IdExpr(guarName), guarantee.expr));
-			properties.add(guarName);
+		int lemmaCount = 0;
+		for (AgreeStatement lemma : flatNode.lemmas) {
+			String lemmaName = lemmaSuffix + lemmaCount++;
+			locals.add(new AgreeVar(lemmaName, NamedType.BOOL, lemma.reference, flatNode.compInst, null));
+			equations.add(new Equation(new IdExpr(lemmaName), lemma.expr));
+			properties.add(lemmaName);
 		}
 
+		int i = 0;
 		for (AgreeStatement guarantee : flatNode.guarantees) {
 			String guarName = guarSuffix + i++;
 			locals.add(new AgreeVar(guarName, NamedType.BOOL, guarantee.reference, flatNode.compInst, null));
@@ -531,6 +532,7 @@ public class LustreAstBuilder {
 		List<Equation> equations = new ArrayList<>();
 		List<Expr> assertions = new ArrayList<>();
 		List<String> ivcs = agreeNode.getivcElements();
+		List<String> properties = new ArrayList<>();
 
 		// add assumption history variable
 		IdExpr assumHist = new IdExpr(assumeHistSufix);
@@ -548,6 +550,7 @@ public class LustreAstBuilder {
 		for (AgreeStatement statement : agreeNode.lemmas) {
 			String inputName = lemmaSuffix + j++;
 			inputs.add(new AgreeVar(inputName, NamedType.BOOL, statement.reference, agreeNode.compInst, null));
+			properties.add(inputName);
 			IdExpr lemmaId = new IdExpr(inputName);
 			assertions.add(new BinaryExpr(lemmaId, BinaryOp.EQUAL, statement.expr));
 		}
@@ -568,9 +571,6 @@ public class LustreAstBuilder {
 				}
 			}
 			guarConjExpr = LustreExprFactory.makeANDExpr(guarId, guarConjExpr);
-		}
-		for (AgreeStatement statement : agreeNode.lemmas) {
-			guarConjExpr = LustreExprFactory.makeANDExpr(statement.expr, guarConjExpr);
 		}
 
 		// assert that if the assumptions have held historically, then the
@@ -619,6 +619,7 @@ public class LustreAstBuilder {
 		builder.addOutputs(outputs);
 		builder.addLocals(locals);
 		builder.addEquations(equations);
+		builder.addProperties(properties);
 		builder.addIvcs(ivcs);
 
 		return builder.build();

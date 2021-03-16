@@ -303,6 +303,26 @@ unlike guarantees, lemmas are not made visible when trying to prove
 properties at the next level of abstraction. Subcomponent lemmas are not
 used to prove other subcomponent guarantees or system guarantees.
 
+### Advanced Topic: Reachable Statements{#sec:reachable_statements}
+
+Reachable statements may be used to check for vacuity of a guarantee or lemma
+statement.  The typical use is where a guarantee statement is written in the
+form of an implication.  The reachable statement may be used to check that the
+antecedent (the left hand side) of the guarantee statement is reachable in at
+least one possible combination of inputs to the model.
+
+Like lemma statments, reachable statements do not affect the compositional
+contract analysis, but may assist the model checker when performing
+verification.  That is, reachable statements  are not used to prove other
+subcomponent guarantees or system guarantees.
+
+An example would be:
+
+~~~
+reachable "drug flow might not be stopped" :
+    (not drug_flow_stopped);
+~~~
+
 ### Advanced Topic: Linearization Definitions{#sec:linearization_definitions}
 
 The linearization definition provides the declaration of a linear

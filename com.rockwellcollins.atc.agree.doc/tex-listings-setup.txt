@@ -23,3 +23,5 @@
     linewidth=\textwidth,
     basewidth=0.5em,
 }
+
+\def\passthrough#1{#1}

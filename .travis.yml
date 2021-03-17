@@ -13,12 +13,14 @@ addons:
   apt:
     packages:
     - curl
+    - lmodern
     - python
     - python-pip
     - python3
     - python3-pip
     - texlive-xetex
     - texlive-luatex
+    - texlive-fonts-recommended
     - wget
 
 env:

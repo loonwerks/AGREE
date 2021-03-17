@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 dist: bionic
 services:
 - xvfb
@@ -12,9 +12,12 @@ cache:
 addons:
   apt:
     packages:
-    - pandoc
+    - curl
     - python3
     - python3-pip
+    - texlive-xetex
+    - texlive-luatex
+    - wget
 
 env:
   global:
@@ -30,12 +33,16 @@ before_install:
 - pip3 install --user testresources
 - pip3 install --user --upgrade setuptools
 - pip3 install --user boto3 GitPython github3.py mako pandocfilters
+- wget https://github.com/jgm/pandoc/releases/download/2.12/pandoc-2.12-1-amd64.deb
+- sudo dpkg -i pandoc-2.12-1-amd64.deb
+- wget -O - https://github.com/lierdakil/pandoc-crossref/releases/download/v0.3.10.0/pandoc-crossref-Linux.tar.xz | sudo tar -C /bin -xJ
+- ls -la /bin/pandoc*
 - "./git-setup.sh"
 
 install: /bin/true
 
 script:
-- mvn clean verify
+- mvn -Dmaven.agree.docs.build=true clean verify
 
 before_deploy:
 - rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git
@@ -50,6 +57,8 @@ deploy:
   api-key: "$GH_TOKEN"
   file:
   - "${RELEASE_PKG_FILE}"
+  - "com.rockwellcollins.atc.agree.doc/src-gen/AGREE Users Guide.docx"
+  - "com.rockwellcollins.atc.agree.doc/src-gen/AGREE Users Guide.pdf"
   name: Continuous Integration Build ($SNAPSHOT_NUMBER)
   body: Automated AGREE integration build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built
     by Travis CI on $(date +'%F %T %Z').

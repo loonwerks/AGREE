@@ -64,10 +64,14 @@ is used.  Building the documentation output requires
 LaTeX distribution.  An Apache ANT build script provided in the AGREE
 distribution can be used to automate the documentation build provided
 the required build tools have been installed.  Since installation of
-the LaTeX distribution is intensive, documentation is not presently
-automatically built as a portion of the Travis-CI build process.
-Accordingly, pre-built generated documentation artifacts (HTML, PDF,
-and DOCX) are maintained in this repository.
+the LaTeX distribution and Pandoc are intensive, documentation build may
+is enabled by specification of the system property maven.agree.docs.build
+on the command line.  For example
+
+`mvn -Dmaven.agree.docs.build=true clean verify`
+
+Pre-built generated documentation artifacts (HTML, PDF, and DOCX) are
+maintained in this repository such that this build step may be skipped.
 
 ### Building in Tycho-Maven
 

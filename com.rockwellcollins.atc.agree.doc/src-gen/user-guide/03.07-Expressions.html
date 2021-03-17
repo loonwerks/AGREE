@@ -1,17 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="pandoc">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>AGREE User Guide</title>
-  <style type="text/css">code{white-space: pre;}</style>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
 </head>
 <body>
-<header>
+<header id="title-block-header">
 <h1 class="title">AGREE User Guide</h1>
 </header>
 <h2 id="sec:expressions">Expressions</h2>
@@ -78,7 +215,7 @@ ID | QID | NestedDotID | Literal | pre | this | ()</p>
 <h3 id="sec:node-call-expressions">Node Call Expressions</h3>
 <p>A node call expression is an ID of a defined node followed by parenthesis. If the node is defined in an AADL Package, then the ID should be the AADL Package name followed by a dot (.) and then the node name.</p>
 <h3 id="sec:linearization-call-expressions">Linearization Call Expressions</h3>
-<p>A Linearization Call Expression is an ID of a defined linearization expression followed by parenthesis. If the linearization expression is defined in an AADL Package, then the ID should be the AADL Package name followed by a dot (.) and then the ID for the expression. For the example linearization expression provided in <a href="03.06-Statements.html#sec:linearization_definitions">Linearization Definitions</a>, its ID &quot;sq&quot; can be used in other expressions like a non-recursive, pure function call. The following lemma statement provides one such example.</p>
+<p>A Linearization Call Expression is an ID of a defined linearization expression followed by parenthesis. If the linearization expression is defined in an AADL Package, then the ID should be the AADL Package name followed by a dot (.) and then the ID for the expression. For the example linearization expression provided in <a href="03.06-Statements.html#sec:linearization_definitions">Linearization Definitions</a>, its ID “sq” can be used in other expressions like a non-recursive, pure function call. The following lemma statement provides one such example.</p>
 <pre><code>eq y : real;
 
 lemma &quot;sq() range positive&quot; : sq(y) &lt;= -0.10;</code></pre>
@@ -147,7 +284,7 @@ lemma &quot;sq() range positive&quot; : sq(y) &lt;= -0.10;</code></pre>
 </table>
 <p>The arrow (<code>-&gt;</code>) operator is the stream initialization operator. Given an expression <code>x -&gt; y</code>, in the initial instant in time, the value is equal to <code>x</code>. In all subsequent instants, it is equal to <code>y</code>. So, suppose we have:</p>
 <pre><code>eq x : bool = (false -&gt; a);</code></pre>
-<p>Then, in the first instant in time, <code>x</code> will be assigned &quot;false&quot; and in every other instant in time, it will be assigned &quot;a&quot;.</p>
+<p>Then, in the first instant in time, <code>x</code> will be assigned “false” and in every other instant in time, it will be assigned “a”.</p>
 <p><strong>Note: A common mistake is to mis-type <code>-&gt;</code> for <code>=&gt;</code> (and vice-versa). This will often cause your model to return incorrect results. Please check for this error.</strong></p>
 <p>The <code>=&gt;</code> operator is the implication operator: if you write:</p>
 <pre><code>a =&gt; b</code></pre>
@@ -163,7 +300,7 @@ lemma &quot;sq() range positive&quot; : sq(y) &lt;= -0.10;</code></pre>
 <p>A floor expression takes an expression of type <em>real</em> as an argument and returns an <em>int</em> equal to the floor of the number.</p>
 <p>A real expression takes an expression of type <em>int</em> as argument and returns a <em>real</em> equal to its value.</p>
 <h3 id="sec:get-property-expressions">Get Property Expressions</h3>
-<p>A get property expression allows a user to reason about values of AADL properties in the model. The first argument is the relative path to an AADL component in the instance model or 'this' if the property exists in the component in which get property statement lives. The second argument is the name of the AADL property.</p>
+<p>A get property expression allows a user to reason about values of AADL properties in the model. The first argument is the relative path to an AADL component in the instance model or ‘this’ if the property exists in the component in which get property statement lives. The second argument is the name of the AADL property.</p>
 <h3 id="sec:unary-minus-and-not-expressions">Unary Minus and Not Expressions</h3>
 <p>An Unary Minus expression is used to negate integer or real valued expressions.</p>
 <p>A Not Expression is used to negate boolean valued expressions.</p>

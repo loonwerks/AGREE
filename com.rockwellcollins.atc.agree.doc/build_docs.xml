@@ -64,7 +64,7 @@
 
 		<exec executable="pandoc" dir="${user_guide.dir}">
 			<arg value="-o"/>
-			<arg value="../../../../../documentation/agree/AGREE Users Guide.pdf"/>
+			<arg value="${user_guide_output.dir}/../AGREE Users Guide.pdf"/>
 			<arg value="--toc"/>
 			<arg value="--number-sections"/>
 			<arg value="-s"/>
@@ -77,7 +77,8 @@
 			<arg value="--listings"/>
 			<arg value="-H"/>
 			<arg value="../../tex-listings-setup.txt"/>
-			<arg value="--latex-engine=xelatex"/>
+			<arg value="--pdf-engine"/>
+			<arg value="xelatex"/>
 			<arg value="-V"/>
 			<arg value="lof"/>
 			<arg value="-V"/>
@@ -97,11 +98,11 @@
 
 		<exec executable="pandoc" dir="${user_guide.dir}">
 			<arg value="-o"/>
-			<arg value="../../../../../documentation/agree/AGREE Users Guide.docx"/>
+			<arg value="${user_guide_output.dir}/../AGREE Users Guide.docx"/>
 			<arg value="--toc"/>
 			<arg value="--number-sections"/>
 			<arg value="-s"/>
-			<arg value="--reference-docx=${user_guide.dir}${file.separator}agree_user_guide.dotx"/>
+			<arg value="--reference-doc=${user_guide.dir}${file.separator}agree_user_guide.dotx"/>
 			<arg value="--filter"/>
 			<arg value="pandoc-crossref"/>
 			<arg value="-f"/>

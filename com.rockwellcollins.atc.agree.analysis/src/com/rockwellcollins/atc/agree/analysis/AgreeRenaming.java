@@ -1,7 +1,9 @@
 package com.rockwellcollins.atc.agree.analysis;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -38,6 +40,7 @@ public class AgreeRenaming extends Renaming {
 	private Map<String, String> supportRenames = new HashMap<>();
 	private Map<String, String> supportRefStrings = new HashMap<>();
 	private Map<String, EObject> refMap;
+	private Set<String> invertedProperties = new HashSet<>();
 
 	public AgreeRenaming() {
 		refMap = new HashMap<>();
@@ -93,6 +96,18 @@ public class AgreeRenaming extends Renaming {
 
 	public Map<String, EObject> getRefMap() {
 		return refMap;
+	}
+
+	public void addInvertedProperty(String propertyName) {
+		invertedProperties.add(propertyName);
+	}
+
+	public boolean propertyIsInverted(String propertyName) {
+		return invertedProperties.contains(propertyName);
+	}
+
+	public Set<String> getInvertedProperties() {
+		return invertedProperties;
 	}
 
 	public String forceRename(String original) {

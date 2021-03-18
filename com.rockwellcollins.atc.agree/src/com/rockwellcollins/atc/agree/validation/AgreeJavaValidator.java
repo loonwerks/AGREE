@@ -119,6 +119,7 @@ import com.rockwellcollins.atc.agree.agree.PreExpr;
 import com.rockwellcollins.atc.agree.agree.PrevExpr;
 import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.PropertyStatement;
+import com.rockwellcollins.atc.agree.agree.ReachableStatement;
 import com.rockwellcollins.atc.agree.agree.RealCast;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordDef;
@@ -1061,6 +1062,19 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			if (!AgreeTypeSystem.typesEqual(AgreeTypeSystem.Prim.BoolTypeDef, exprType)) {
 				error(guar, "Expression for guarantee statement is of type '" + nameOfTypeDef(exprType)
 				+ "' but must be of type 'bool'");
+			}
+		}
+	}
+
+	@Check(CheckType.FAST)
+	public void checkReachable(ReachableStatement reachableStmt) {
+		// the expression could be null if a pattern is used
+		Expr expr = reachableStmt.getExpr();
+		if (expr != null) {
+			TypeDef exprType = AgreeTypeSystem.infer(expr);
+			if (!AgreeTypeSystem.typesEqual(AgreeTypeSystem.Prim.BoolTypeDef, exprType)) {
+				error(reachableStmt, "Expression for reachable statement is of type '" + nameOfTypeDef(exprType)
+						+ "' but must be of type 'bool'");
 			}
 		}
 	}

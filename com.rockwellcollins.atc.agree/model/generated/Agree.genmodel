@@ -137,6 +137,7 @@
     <genClasses ecoreClass="Agree.ecore#//GuaranteeStatement"/>
     <genClasses ecoreClass="Agree.ecore#//AssertStatement"/>
     <genClasses ecoreClass="Agree.ecore#//LemmaStatement"/>
+    <genClasses ecoreClass="Agree.ecore#//ReachableStatement"/>
     <genClasses ecoreClass="Agree.ecore#//AlwaysStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agree.ecore#//AlwaysStatement/expr"/>
     </genClasses>

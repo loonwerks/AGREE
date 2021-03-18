@@ -306,6 +306,11 @@ public class AgreeAdapterFactory extends AdapterFactoryImpl
         return createLemmaStatementAdapter();
       }
       @Override
+      public Adapter caseReachableStatement(ReachableStatement object)
+      {
+        return createReachableStatementAdapter();
+      }
+      @Override
       public Adapter caseAlwaysStatement(AlwaysStatement object)
       {
         return createAlwaysStatementAdapter();
@@ -1293,6 +1298,21 @@ public class AgreeAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createLemmaStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.rockwellcollins.atc.agree.agree.ReachableStatement <em>Reachable Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.rockwellcollins.atc.agree.agree.ReachableStatement
+   * @generated
+   */
+  public Adapter createReachableStatementAdapter()
   {
     return null;
   }

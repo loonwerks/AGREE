@@ -160,6 +160,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="GuaranteeStatement" eSuperTypes="#//NamedSpecStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="AssertStatement" eSuperTypes="#//NamedSpecStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="LemmaStatement" eSuperTypes="#//NamedSpecStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReachableStatement" eSuperTypes="#//NamedSpecStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="AlwaysStatement" eSuperTypes="#//PatternStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
   </eClassifiers>

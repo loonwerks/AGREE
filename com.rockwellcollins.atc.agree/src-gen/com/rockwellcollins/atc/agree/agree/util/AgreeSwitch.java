@@ -497,6 +497,17 @@ public class AgreeSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case AgreePackage.REACHABLE_STATEMENT:
+      {
+        ReachableStatement reachableStatement = (ReachableStatement)theEObject;
+        T result = caseReachableStatement(reachableStatement);
+        if (result == null) result = caseNamedSpecStatement(reachableStatement);
+        if (result == null) result = caseNamedElement(reachableStatement);
+        if (result == null) result = caseSpecStatement(reachableStatement);
+        if (result == null) result = caseElement(reachableStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case AgreePackage.ALWAYS_STATEMENT:
       {
         AlwaysStatement alwaysStatement = (AlwaysStatement)theEObject;
@@ -1701,6 +1712,22 @@ public class AgreeSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseLemmaStatement(LemmaStatement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Reachable Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Reachable Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseReachableStatement(ReachableStatement object)
   {
     return null;
   }

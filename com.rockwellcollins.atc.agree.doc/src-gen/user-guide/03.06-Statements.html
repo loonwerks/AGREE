@@ -1,17 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="pandoc">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>AGREE User Guide</title>
-  <style type="text/css">code{white-space: pre;}</style>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
 </head>
 <body>
-<header>
+<header id="title-block-header">
 <h1 class="title">AGREE User Guide</h1>
 </header>
 <h2 id="sec:statements">Statements</h2>
@@ -19,16 +156,16 @@
 <h3 id="sec:assume_statements">Assume Statements</h3>
 <p>Assume statements specify constraints about a component that are assumed to be true. An example of an assume statement is:</p>
 <pre><code>assume &quot;System input domain&quot; : Input &lt; 10;</code></pre>
-<p>The string &quot;System input domain&quot; is used to identify the assumption when performing verification. The expression <code>Input &lt; 10</code> expresses the condition that is assumed to hold. When verifying a component implementation, the component’s assumptions are assumed to be true. However, the assumptions of the component implementation’s subcomponents must be proved to hold based on the assumptions of the component and the guarantees of other subcomponents.</p>
+<p>The string “System input domain” is used to identify the assumption when performing verification. The expression <code>Input &lt; 10</code> expresses the condition that is assumed to hold. When verifying a component implementation, the component’s assumptions are assumed to be true. However, the assumptions of the component implementation’s subcomponents must be proved to hold based on the assumptions of the component and the guarantees of other subcomponents.</p>
 <h3 id="sec:guarantee_statements">Guarantee Statements</h3>
 <p>Guarantee statements specify constraints that the component maintains as long as the assumptions have always held. An example of a guarantee statement is:</p>
 <pre><code>guarantee &quot;System output range&quot; : Output &lt; 50;</code></pre>
-<p>The string &quot;System output range&quot; is used to identify the guarantee when performing verification. The expression <code>Output &lt; 50</code> expresses the condition that is guaranteed to hold.</p>
+<p>The string “System output range” is used to identify the guarantee when performing verification. The expression <code>Output &lt; 50</code> expresses the condition that is guaranteed to hold.</p>
 <p>When verifying a component implementation, guarantee statements are proven by the component assumptions and the guarantees present in subcomponent contracts.</p>
 <h3 id="sec:equation_statements">Equation Statements</h3>
 <p>Equation statements can be used to create local variable declarations within the body of an AGREE subclause. An example of an equation statement is:</p>
 <pre><code>eq ctr : int = prev(ctr + 1, 0);</code></pre>
-<p>In this example, we create a variable that counts up from zero. Variables defined with equation statements can be thought of as ''intermediate'' variables or variables that are not meant to be visible in the architectural model (unlike component outputs or inputs). Equation statements can define variables explicitly by setting the equation equal to an expression immediately after it is defined. Equation statements can also define variables implicitly by not setting them equal to anything, but constraining them with assumption, assertion, or guarantee statements. Equation statements can define more than one variable at once by writing them in a comma delimited list. One might do this to constrain a list of variables to the results of a node statement that has multiple return values or to more cleanly list a set of implicitly defined variables.</p>
+<p>In this example, we create a variable that counts up from zero. Variables defined with equation statements can be thought of as ‘’intermediate’’ variables or variables that are not meant to be visible in the architectural model (unlike component outputs or inputs). Equation statements can define variables explicitly by setting the equation equal to an expression immediately after it is defined. Equation statements can also define variables implicitly by not setting them equal to anything, but constraining them with assumption, assertion, or guarantee statements. Equation statements can define more than one variable at once by writing them in a comma delimited list. One might do this to constrain a list of variables to the results of a node statement that has multiple return values or to more cleanly list a set of implicitly defined variables.</p>
 <h3 id="sec:property_statements">Property Statements</h3>
 <p>Property statements allow specification of named Boolean expressions. An example property statement is:</p>
 <pre><code>property not_system_start_implies_mode_0 =
@@ -39,7 +176,7 @@ not(OP_CMD_IN.System_Start) &gt; (GPCA_SW_OUT.Current_System_Mode = 0);</code></
 <pre><code>const ADS_MAX_PITCH_DELTA: real = 1.0 ;</code></pre>
 <p>Identifiers defined by constant statements are used just like equation variables.</p>
 <h3 id="sec:node_definitions">Node Definitions</h3>
-<p>Node statements are used to define stateful ''functions'' that might be used frequently in a component type or implementation. Nodes can have multiple return values. If this is the cause, they must be referenced by an equation statement that has multiple arguments. Nodes can also be defined in an AADL Package. If so, they can be referenced in any expression anywhere in the model. This way one can make a library of certain types of nodes that are useful for different tasks.</p>
+<p>Node statements are used to define stateful ‘’functions’’ that might be used frequently in a component type or implementation. Nodes can have multiple return values. If this is the cause, they must be referenced by an equation statement that has multiple arguments. Nodes can also be defined in an AADL Package. If so, they can be referenced in any expression anywhere in the model. This way one can make a library of certain types of nodes that are useful for different tasks.</p>
 <p>Node definitions in AGREE allow specification of <em>stateful</em> definitions; that is, definitions that can maintain internal state. An example node for maintaining a generalized counter would be:</p>
 <pre><code>node Counter(init: int, incr: int, reset: bool)  
 returns (count: int);  
@@ -74,7 +211,7 @@ let
     s3,c3 = ADD1(a3, b3, c2);
     carry_out = c3;
 tel;</code></pre>
-<p>The ADD1 node takes two single bit inputs and a carry input bit and computes an output and a carry bit. We can use this to create a four-bit adder <code>ADD4</code> by &quot;stringing together&quot; four of the one-bit adders. Note that all local variables (defined with <strong>var</strong>) and all output variables (defined in the <strong>returns</strong> section) must be assigned exactly one time within the <strong>let</strong> block.</p>
+<p>The ADD1 node takes two single bit inputs and a carry input bit and computes an output and a carry bit. We can use this to create a four-bit adder <code>ADD4</code> by “stringing together” four of the one-bit adders. Note that all local variables (defined with <strong>var</strong>) and all output variables (defined in the <strong>returns</strong> section) must be assigned exactly one time within the <strong>let</strong> block.</p>
 <p><strong>Note</strong>: Nodes cannot be recursive or mutually recursive.</p>
 <h3 id="sec:record_definitions">Record Definitions</h3>
 <p>Record definitions are used to define record types. Like a struct type in C programming language, a record is a collection of fields, each of its own data type. An example record definition is as follows:</p>
@@ -118,7 +255,7 @@ TimeInterval:
 <li><p>timefall(id) – returns the last value of the variable time in which id transitioned to false. If id has never been false then the function returns the value -1.0.</p></li>
 </ol>
 <h3 id="sec:assert_statements">Advanced Topic: Assert statements</h3>
-<p>Assert statements allow definition of axioms within the model. Axioms are &quot;facts&quot; about the behavior of the system or the environment that are added to the model to support proofs. An example assertion is of the form:</p>
+<p>Assert statements allow definition of axioms within the model. Axioms are “facts” about the behavior of the system or the environment that are added to the model to support proofs. An example assertion is of the form:</p>
 <pre><code>assert (FGS_L.LSO.Valid and FGS_R.LSO.Valid) &gt; FGS_L.LSO.Leader = FGS_R.LSO.Leader;</code></pre>
 <p>Assertions are sometimes used for <em>architectural</em> <em>patterns</em> whose correctness is established in a separate phase of analysis. The assertion above is from a pattern called <em>leader selection</em> that ensures that one of a set of redundant components is the leader.</p>
 <p>Assert statements make unchecked statements about how the component behaves. These are also used to reference variables from a subcomponent in the component contract. For the purpose of analysis assertions are treated just like the system assumptions. However, AGREE never verifies that the assertions actually hold. That is to say, the assertions of a subcomponent are never proven to hold like subcomponent assumptions. Assert statements can refer to equations or features defined in the component type. They are often used to refer to subcomponent variables in contracts higher up in the model hierarchy.</p>
@@ -130,9 +267,9 @@ TimeInterval:
     (not drug_flow_stopped) =&gt; spo2_never_below_thresh;</code></pre>
 <p>From the perspective of proof, lemmas behave the same as guarantees; they must be proven by AGREE. These are used to help the model checker learn facts to improve its ability to prove other properties. However, unlike guarantees, lemmas are not made visible when trying to prove properties at the next level of abstraction. Subcomponent lemmas are not used to prove other subcomponent guarantees or system guarantees.</p>
 <h3 id="sec:linearization_definitions">Advanced Topic: Linearization Definitions</h3>
-<p>The linearization definition provides the declaration of a linear approximation of a non-linear expression over segment(s) of its input domain, resulting in a new expression that bounds the non-linear expression with piecewise linear segment(s). The non-linear expression supports a small core of mathematical functions found on a calculator (i.e., '+', '-', '*', '/', '^') and a collection of transcendental mathematical functions. <strong>Note</strong>: The non-linear expression can contain references to only the input variable (no other AGREE identifiers). Figure <a href="#fig:linearization_definition">1</a> demonstrates a linear approximation bounding the output values within the upper and lower bounds.</p>
+<p>The linearization definition provides the declaration of a linear approximation of a non-linear expression over segment(s) of its input domain, resulting in a new expression that bounds the non-linear expression with piecewise linear segment(s). The non-linear expression supports a small core of mathematical functions found on a calculator (i.e., ‘+’, ‘-’, ‘*’, ‘/’, ‘^’) and a collection of transcendental mathematical functions. <strong>Note</strong>: The non-linear expression can contain references to only the input variable (no other AGREE identifiers). Figure <a href="#fig:linearization_definition">1</a> demonstrates a linear approximation bounding the output values within the upper and lower bounds.</p>
 <figure>
-<img src="../../media/image13.png" alt="Figure 1: Bound Non-linear Expression with Piecewise Linear Segments" id="fig:linearization_definition" class="class" style="width:90.0%" /><figcaption>Figure 1: Bound Non-linear Expression with Piecewise Linear Segments</figcaption>
+<img src="../../media/image13.png" id="fig:linearization_definition" class="class" style="width:90.0%" alt="Figure 1: Bound Non-linear Expression with Piecewise Linear Segments" /><figcaption aria-hidden="true">Figure 1: Bound Non-linear Expression with Piecewise Linear Segments</figcaption>
 </figure>
 <p>The following linearization definition example provides the linear approximation for the square operation with a real type input over input interval between -1.0 and 1.0, and input precision of 0.01.</p>
 <pre><code>linearization sq (y : real) over [-1.0 .. 1.0] within 0.01 : y^2.0;</code></pre>

@@ -4,3 +4,18 @@ ant - ant is included with Eclipse.
 pandoc - https://pandoc.org/
 pandoc-crossref - https://github.com/lierdakil/pandoc-crossref
 latex distribution
+
+Pandoc can be installed by downloading from its Github releases page and
+installing via the following:
+
+wget https://github.com/jgm/pandoc/releases/download/2.12/pandoc-2.12-1-amd64.deb
+sudo dpkg -i pandoc-2.12-1-amd64.deb 
+
+Pandoc-crossref is required too and its version must match that for Pandoc.
+The version of pandoc-crossref matching Pandoc 2.12 is v0.3.10.0.
+
+mkdir -p $HOME/bin
+pushd $HOME/bin
+wget -O - https://github.com/lierdakil/pandoc-crossref/releases/download/v0.3.10.0/pandoc-crossref-Linux.tar.xz | tar -xJ
+popd
+export PATH=$PATH:$HOME/bin

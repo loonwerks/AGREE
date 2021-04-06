@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2021, Collins Aerospace.
+ * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+ * including any software or models in source or binary form, as well as any drawings, specifications,
+ * and documentation (collectively "the Data"), to deal in the Data without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Data.
+ *
+ * THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
+ */
 package edu.uah.rsesc.aadlsimulator.ui.dialogs;
 
 import java.util.ArrayList;
@@ -8,6 +28,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
@@ -15,9 +36,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.layout.RowLayoutFactory;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -38,6 +59,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
+
 import edu.uah.rsesc.aadlsimulator.xtext.InputConstraintStandaloneSetup;
 import edu.uah.rsesc.aadlsimulator.xtext.TestReferenceTypeResolver;
 import edu.uah.rsesc.aadlsimulator.xtext.inputConstraint.BinaryExpression;
@@ -64,11 +86,11 @@ import edu.uah.rsesc.aadlsimulator.xtext.util.ResultType;
 public class InputConstraintDialog {
 	public static class Result {
 		private final InputConstraint inputConstraint;
-		
+
 		public Result(final InputConstraint inputConstraint) {
 			this.inputConstraint = inputConstraint;
 		}
-		
+
 		/**
 		 * A null return value indicates an empty constraint.
 		 * @return
@@ -77,17 +99,17 @@ public class InputConstraintDialog {
 			return inputConstraint;
 		}
 	}
-	
+
 	private class InnerDialog extends Dialog {
 		private Composite container;
 		private Composite constraintContainer;
 		private Label validationMessageLabel;
-		
+
 		InnerDialog(final Shell parentShell) {
 			super(parentShell);
 			setShellStyle(getShellStyle() | SWT.RESIZE);
 		}
-		
+
 		@Override
 		protected void configureShell(final Shell newShell) {
 			super.configureShell(newShell);
@@ -95,38 +117,38 @@ public class InputConstraintDialog {
 			newShell.setMinimumSize(250, 140);
 			newShell.setSize(500, 500);
 		}
-		
+
 		@Override
 	  	protected Control createDialogArea(final Composite parent) {
 		    final Composite area = (Composite)super.createDialogArea(parent);
 		    container = new Composite(area, SWT.NONE);
 		    container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		    container.setLayout(RowLayoutFactory.swtDefaults().type(SWT.VERTICAL).wrap(true).create());
-		    
+
 		    constraintContainer = new Composite(container, SWT.NONE);
 		    constraintContainer.setLayout(RowLayoutFactory.swtDefaults().wrap(true).type(SWT.HORIZONTAL).create());
-			    
+
 			validationMessageLabel = new Label(container, SWT.WRAP);
-			
-		    container.addControlListener(new ControlAdapter() {				
+
+		    container.addControlListener(new ControlAdapter() {
 				@Override
 				public void controlResized(ControlEvent e) {
 					constraintContainer.setLayoutData(new RowData(container.getSize().x, SWT.DEFAULT));
 					validationMessageLabel.setLayoutData(new RowData(container.getSize().x, SWT.DEFAULT));
 				}
 			});
-		    
-		    refreshContraint();		    
-		    
+
+		    refreshContraint();
+
 		    return area;
 		}
-		
+
 		public void refreshContraint() {
 			// Clear existing widgets
 			for(final Widget w : constraintContainer.getChildren()) {
 				w.dispose();
 			}
-			
+
 			final InputConstraint ic = inputConstraintReference.get();
 
 		    // Use a different prefix depending on whether the input constraint is assigning to a specific value or if it is constraining to be in a set/interval
@@ -140,14 +162,14 @@ public class InputConstraintDialog {
 		    newLabel(constraintContainer, constrainedVariableName + expressionPrefix);
 		    createConstraintWidgets(constraintContainer, null, inputConstraintReference);
 		    constraintContainer.layout();
-	
+
 		    // Validate
 		    String validationMessage = null;
 	    	final InputConstraintHelper.Result validationResult = model.validate(ic, expectedType, numberOfPreviousSteps);
 	    	if(validationResult.getErrorMessage() != null) {
 	    		validationMessage = validationResult.getErrorMessage();
 	    	}
-	    	
+
 	    	// Disable button if constraint validation failed
 	    	final Button okBtn = getButton(IDialogConstants.OK_ID);
 	    	if(okBtn != null) {
@@ -155,7 +177,7 @@ public class InputConstraintDialog {
 	    	}
 
 		    validationMessageLabel.setText(validationMessage == null ? "" : validationMessage);
-		    
+
 		    container.layout();
 		}
 	};
@@ -166,25 +188,25 @@ public class InputConstraintDialog {
 		Object get();
 		void set(final Object ic);
 	}
-	
+
 	// Reference used for the top level constraint. Reference changes the object which is stored internally.
 	private static class RootConstraintReference implements Reference {
 		private InputConstraint value;
-		
+
 		public RootConstraintReference(final InputConstraint value) {
 			this.value = value;
 		}
-		
+
 		@Override
 		public Reference getParent() {
 			return null;
 		}
-		
+
 		@Override
 		public EClassifier getEType() {
 			return null;
 		}
-		
+
 		@Override
 		public InputConstraint get() {
 			return value;
@@ -198,14 +220,14 @@ public class InputConstraintDialog {
 			this.value = (InputConstraint)value;
 		}
 	}
-	
+
 	private static class ListMemberReference implements Reference {
-		private final Reference parent; 
+		private final Reference parent;
 		private final EClassifier eType;
 		@SuppressWarnings("rawtypes")
 		private final List owner;
 		private int idx;
-		
+
 		// An index of -1 indicates that the reference is for a new element.
 		public ListMemberReference(final Reference parent, final EClassifier eType, @SuppressWarnings("rawtypes") final List owner, final int idx) {
 			this.parent = Objects.requireNonNull(parent, "parent must not be null");
@@ -213,12 +235,12 @@ public class InputConstraintDialog {
 			this.owner = Objects.requireNonNull(owner, "owner must not be null");
 			this.idx = idx;
 		}
-		
+
 		@Override
 		public Reference getParent() {
 			return parent;
 		}
-		
+
 		@Override
 		public EClassifier getEType() {
 			return eType;
@@ -237,7 +259,7 @@ public class InputConstraintDialog {
 				if(idx != -1) {
 					owner.remove(idx);
 				}
-			} else {			
+			} else {
 				// Add if the element isn't in the list
 				if(idx == -1) {
 					owner.add(newValue);
@@ -245,56 +267,56 @@ public class InputConstraintDialog {
 					owner.set(idx, newValue);
 				}
 			}
-		}		
+		}
 	}
-	
+
 	private static class StructuralFeatureReference implements Reference {
 		private final Reference parent;
 		private final EObject owner;
 		private final EStructuralFeature feature;
-		
+
 		public StructuralFeatureReference(final Reference parent, final EObject owner, final EStructuralFeature feature) {
 			this.parent = Objects.requireNonNull(parent, "parent must not be null");
 			this.owner = Objects.requireNonNull(owner, "owner must not be null");
 			this.feature = Objects.requireNonNull(feature, "feature must not be null");
 		}
-		
+
 		public EStructuralFeature getEStructuralFeature() {
 			return feature;
 		}
-		
+
 		@Override
 		public Reference getParent() {
 			return parent;
 		}
-		
+
 		@Override
 		public EClassifier getEType() {
 			return feature.getEType();
 		}
-		
+
 		@Override
 		public Object get() {
 			return owner.eGet(feature);
 		}
-		
+
 		@Override
 		public void set(final Object value) {
 			owner.eSet(feature, value);
 		}
 	}
-	
+
 	// Provides required information and capabilities to the dialog
 	public interface Model {
 		String unparse(InputConstraint ic);
 		InputConstraintHelper.Result parseAndValidate(final String str, final ResultType expectedType, final int numberOfPreviousSteps);
 		InputConstraintHelper.Result validate(final InputConstraint ic, final ResultType expectedType, final int numberOfPreviousSteps);
-		ResultType getElementReferenceType(final ElementRefExpression reference);		
+		ResultType getElementReferenceType(final ElementRefExpression reference);
 		ResultType getConstReferenceType(final ConstRefExpression reference);
 		Stream<ElementRefExpression> getVariables();
 		Stream<ConstRefExpression> getConstants();
-	}	
-	
+	}
+
 	private static InputConstraintPackage icp = InputConstraintPackage.eINSTANCE;
 	private final Model model;
 	private final RootConstraintReference inputConstraintReference;
@@ -302,24 +324,24 @@ public class InputConstraintDialog {
 	private final int numberOfPreviousSteps;
 	private final String constrainedVariableName;
 	private final InnerDialog dlg;
-		
+
 	protected InputConstraintDialog(final Shell parentShell,
 			final Model model,
 			final String constrainedVariableName,
 			final InputConstraint initialInputConstraint,
-			final ResultType expectedType, 
+			final ResultType expectedType,
 			final int numberOfPreviousSteps) {
 		this.model = Objects.requireNonNull(model, "model must not be null");
 		this.constrainedVariableName = Objects.requireNonNull(constrainedVariableName, "constrainedVariableName must not be null");
 		this.expectedType = Objects.requireNonNull(expectedType, "expectedType must not be null");
 		this.numberOfPreviousSteps = numberOfPreviousSteps;
 		this.dlg = new InnerDialog(parentShell);
-		
+
 		// If one was specified, make a copy of the initial input constraint
 		this.inputConstraintReference = new RootConstraintReference(initialInputConstraint == null ? null : EcoreUtil.copy(initialInputConstraint));
 	}
-	
-	private void createConstraintWidgets(final Composite container, 
+
+	private void createConstraintWidgets(final Composite container,
 			final Object parentValue,
 			final Reference ref) {
 		final Object value = ref.get();
@@ -331,7 +353,7 @@ public class InputConstraintDialog {
 			} else {
 				newLink(container, ref, "interval");
 			}
-			
+
 			newLink(container, new StructuralFeatureReference(ref, ie, icp.getIntervalExpression_LeftClosed()), ie.isLeftClosed() ? "[" : "(");
 			createConstraintWidgets(container, value, new StructuralFeatureReference(ref, ie, icp.getIntervalExpression_Left()));
 			newLabel(container, ",");
@@ -344,21 +366,21 @@ public class InputConstraintDialog {
 			} else {
 				newLink(container, ref, "set");
 			}
-			
-			newLabel(container, "{");			
-			
+
+			newLabel(container, "{");
+
 			final int numberOfMembers = se.getMembers().size();
 			for(int i = 0; i < numberOfMembers; i++) {
 				createConstraintWidgets(container, value, new ListMemberReference(ref, icp.getSetExpression_Members().getEType(), se.getMembers(), i));
 				newLabel(container, ",");
 			}
-			
+
 			newLink(container, new ListMemberReference(ref, icp.getSetExpression_Members().getEType(), se.getMembers(), -1), "<add>");
 
 			newLabel(container, "}");
 		} else if(value instanceof BinaryExpression) {
 			final BinaryExpression be = (BinaryExpression)value;
-			
+
 			boolean showParentheses = parentValue instanceof NegativeExpression;
 			if(!showParentheses && parentValue instanceof BinaryExpression) {
 				final BinaryExpression parentBe = (BinaryExpression)parentValue;
@@ -366,24 +388,24 @@ public class InputConstraintDialog {
 				final boolean isParentAddOrSubstract = parentBe.getOp() == Operator.ADDITION || parentBe.getOp() == Operator.SUBTRACTION;
 				if(isAddOrSubstract && !isParentAddOrSubstract) {
 					showParentheses = true;
-				}					
+				}
 			}
 
 			if(showParentheses) {
 				newLabel(container, "(");
 			}
-			
+
 			createConstraintWidgets(container, value, new StructuralFeatureReference(ref, be, icp.getBinaryExpression_Left()));
 			newLink(container, new StructuralFeatureReference(ref, be, icp.getBinaryExpression_Op()), be.getOp().toString());
 			createConstraintWidgets(container, value, new StructuralFeatureReference(ref, be, icp.getBinaryExpression_Right()));
-			
+
 			if(showParentheses) {
 				newLabel(container, ")");
 			}
 		} else if(value instanceof NegativeExpression) {
 			final NegativeExpression ne = (NegativeExpression)value;
-			newLabel(container, "-");	
-			createConstraintWidgets(container, value, new StructuralFeatureReference(ref, ne, icp.getNegativeExpression_Value()));			
+			newLabel(container, "-");
+			createConstraintWidgets(container, value, new StructuralFeatureReference(ref, ne, icp.getNegativeExpression_Value()));
 		} else if(value instanceof PreExpression) {
 			newLink(container, ref, "previous value of");
 			createConstraintWidgets(container, value, new StructuralFeatureReference(ref, (PreExpression)value, icp.getPreExpression_Ref()));
@@ -417,14 +439,14 @@ public class InputConstraintDialog {
 		} else {
 			throw new RuntimeException("Unexpected value: " + value);
 		}
-	}	
-	
+	}
+
 	private static void newLabel(final Composite container, final String txt) {
 		final Label newLabel = new Label(container, SWT.NONE);
 		newLabel.setText(txt);
 	}
-	
-	private void newLink(final Composite container, 
+
+	private void newLink(final Composite container,
 			final Reference originalRef,
 			final String txt) {
 		// Determine Text for the Node
@@ -432,7 +454,7 @@ public class InputConstraintDialog {
 		newLink.setText("<a>" + txt + "</a>");
 		newLink.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(final SelectionEvent e) {	
+			public void widgetSelected(final SelectionEvent e) {
 				final Menu menu = new Menu(newLink);
 				// Dispose of the old menu if it exists
 				if(newLink.getMenu() != null) {
@@ -440,13 +462,13 @@ public class InputConstraintDialog {
 				}
 				newLink.setMenu(menu);
 				menu.setVisible(true);
-				
+
 				// Edit the negative expression itself rather than actual value
 				Reference ref = originalRef;
 				if((ref.getParent() != null && ref.getParent().get() instanceof NegativeExpression)) {
 					ref = ref.getParent();
 				}
-					
+
 				// Populate menu
 				if(ref instanceof RootConstraintReference) {
 					addEditExpressionMenuItem(menu, ref);
@@ -457,22 +479,22 @@ public class InputConstraintDialog {
 					final EClassifier type = ref.getEType();
 					if(ref instanceof ListMemberReference && ref.get() != null) {
 						addRemoveMenuItem(menu, ref);
-					} 
-					
+					}
+
 					if(ref instanceof StructuralFeatureReference && ((StructuralFeatureReference)ref).getEStructuralFeature() == icp.getIntervalExpression_LeftClosed()) {
 					    addBooleanMenuItem(menu, ref, "( - Exclusive", false);
 						addBooleanMenuItem(menu, ref, "[ - Inclusive", true);
 					} else if(ref instanceof StructuralFeatureReference && ((StructuralFeatureReference)ref).getEStructuralFeature() == icp.getIntervalExpression_RightClosed()) {
 						addBooleanMenuItem(menu, ref, ") - Exclusive", false);
 						addBooleanMenuItem(menu, ref, "] - Inclusive", true);
-					} else if(type == icp.getScalarExpression()) {	
+					} else if(type == icp.getScalarExpression()) {
 						addEditExpressionMenuItem(menu, ref);
 
 						final EStructuralFeature sf = ref instanceof StructuralFeatureReference ? ((StructuralFeatureReference)ref).getEStructuralFeature() : null;
 						final boolean showBoolean = sf != icp.getIntervalExpression_Left() &&
-								sf != icp.getIntervalExpression_Right();						
+								sf != icp.getIntervalExpression_Right();
 						addScalarExpressionsMenuItems(menu, showBoolean, ref);
-					} else if(type == icp.getElementRefExpression()) {			
+					} else if(type == icp.getElementRefExpression()) {
 						addElementReferenceMenuItems(menu, ref);
 					} else if(type == icp.getOperator()) {
 						final Reference parent = ref.getParent();
@@ -489,16 +511,16 @@ public class InputConstraintDialog {
 			}
 		});
 	}
-	
-	private void addReferenceMenuItems(final Menu menu, 
+
+	private void addReferenceMenuItems(final Menu menu,
 			final Reference ref) {
 		final MenuItem constantsMenuItem = new MenuItem(menu, SWT.CASCADE);
 		constantsMenuItem.setText("Constants");
-		
+
 		final Menu constantsMenu = new Menu(menu);
 		constantsMenuItem.setMenu(constantsMenu);
-	    		
-		final Map<String, List<ConstRefExpression>> pkgToConstants = new HashMap<>();						
+
+		final Map<String, List<ConstRefExpression>> pkgToConstants = new HashMap<>();
 		Iterable<ConstRefExpression> constIteratable = () -> model.getConstants().iterator();
 		for(final ConstRefExpression constExpression : constIteratable) {
 			final String pkgName = String.join("::", constExpression.getPackageSegments().toArray(new String[0])).toLowerCase();
@@ -507,19 +529,19 @@ public class InputConstraintDialog {
 				pkgConstants = new ArrayList<>();
 				pkgToConstants.put(pkgName, pkgConstants);
 			}
-			
+
 			pkgConstants.add(constExpression);
-		}	
-		
+		}
+
 		final SelectionListener constMenuItemSelectionListener = new SelectionAdapter() {
 	    	@Override
 			public void widgetSelected(final SelectionEvent e) {
 	    		final ConstRefExpression constExpr = (ConstRefExpression)e.widget.getData();
 	    		ref.set(constExpr);
-	    		dlg.refreshContraint();					    		
+	    		dlg.refreshContraint();
 	    	}
 		};
-		
+
 		final MenuListener constMenuListener = new MenuListener() {
 			@Override
 			public void menuHidden(final MenuEvent e) {
@@ -541,9 +563,9 @@ public class InputConstraintDialog {
 						constMenuItem.addSelectionListener(constMenuItemSelectionListener);
 					}
 				}
-			}							
+			}
 		};
-		
+
 		for(final String pkgName : pkgToConstants.keySet().stream().sorted().collect(Collectors.toList())) {
 			final Menu pkgMenu = new Menu(constantsMenu);
 			final MenuItem pkgMenuItem = new MenuItem(constantsMenu, SWT.CASCADE);
@@ -552,28 +574,28 @@ public class InputConstraintDialog {
 			pkgMenu.addMenuListener(constMenuListener);
 			pkgMenu.setData(pkgName);
 		}
-		
+
 		addElementReferenceMenuItems(menu, ref);
 	}
 
-	private void addElementReferenceMenuItems(final Menu menu, 
+	private void addElementReferenceMenuItems(final Menu menu,
 			final Reference ref) {
 		// Variables
 		final MenuItem variablesMenuItem = new MenuItem(menu, SWT.CASCADE);
 		variablesMenuItem.setText("Variables");
-		
+
 		final Menu variablesMenu = new Menu(menu);
 		variablesMenuItem.setMenu(variablesMenu);
-		
+
 		final SelectionListener variableMenuItemSelectionListener = new SelectionAdapter() {
 	    	@Override
 			public void widgetSelected(final SelectionEvent e) {
 	    		final ElementRefExpression variable = (ElementRefExpression)e.widget.getData();
 	    		ref.set(variable);
-	    		dlg.refreshContraint();					    		
+	    		dlg.refreshContraint();
 	    	}
 		};
-		
+
 		// Create menu items
 		// Sort variables to ensure menu items are created in a order that ensures the parent menu item exists.
 		final Map<String, MenuItem> idToMenuItemMap = new HashMap<>();
@@ -581,7 +603,7 @@ public class InputConstraintDialog {
 			final List<String> ids = variable.getIds();
 			final String variableId = String.join(".", ids);
 			final String parentId = String.join(".", ids.subList(0, ids.size()-1));
-					
+
 			final Menu parentMenu;
 			if(parentId.length() == 0) {
 				parentMenu = variablesMenu;
@@ -590,27 +612,27 @@ public class InputConstraintDialog {
 				if(parentMenuItem.getMenu() == null) {
 					final Menu newMenu = new Menu(parentMenuItem.getParent());
 					parentMenuItem.setMenu(newMenu);
-					
+
 					// Create menu item for the variable itself. Unable to select menu items which have children.
 					final MenuItem selfMenuItem = new MenuItem(newMenu, SWT.NONE);
 					selfMenuItem.setText("<self>");
 					selfMenuItem.setData(parentMenuItem.getData());
 					selfMenuItem.addSelectionListener(variableMenuItemSelectionListener);
 				}
-				
+
 				parentMenu = parentMenuItem.getMenu();
 			}
-			
+
 			// Create a menu item for the variable
 			final MenuItem variableMenuItem = new MenuItem(parentMenu, SWT.CASCADE);
 			variableMenuItem.setText(ids.get(ids.size()-1));
 			variableMenuItem.setData(variable);
 			variableMenuItem.addSelectionListener(variableMenuItemSelectionListener);
 			idToMenuItemMap.put(variableId, variableMenuItem);
-			
+
 		}
 	}
-	
+
 	private static int compareElementRef(final ElementRefExpression v1, final ElementRefExpression v2) {
 		final int s1 = v1.getIds().size();
 		final int s2 = v2.getIds().size();
@@ -620,17 +642,17 @@ public class InputConstraintDialog {
 			return Integer.compare(v1.getIds().size(), v2.getIds().size());
 		}
 	}
-	
-	private void addScalarExpressionsMenuItems(final Menu menu, 
+
+	private void addScalarExpressionsMenuItems(final Menu menu,
 			boolean showBoolean,
 			final Reference ref) {
 		if(ref.get() instanceof ScalarExpression && !(ref.get() instanceof BooleanLiteral)) {
 			addNegateMenuItem(menu, ref);
 		}
-		
+
 		addTextExpressionMenuItem(menu, ref, "Integer...", ResultType.INTEGER, "0");
 		addTextExpressionMenuItem(menu, ref, "Real...", ResultType.REAL, "0.0");
-		
+
 		if(showBoolean) {
 			final Menu booleanMenu = new Menu(menu);
 			final MenuItem booleanMenuItem = new MenuItem(menu, SWT.CASCADE);
@@ -639,14 +661,14 @@ public class InputConstraintDialog {
 			addBooleanLiteralMenuItem(booleanMenu, ref, true);
 			addBooleanLiteralMenuItem(booleanMenu, ref, false);
 		}
-		
+
 		addReferenceMenuItems(menu, ref);
 		addNewEClassMenuItem(menu, ref, "Random Integer", icp.getRandomIntegerExpression());
 		addNewEClassMenuItem(menu, ref, "Random Real", icp.getRandomRealExpression());
-		addNewEClassMenuItem(menu, ref, "Random Element", icp.getRandomElementExpression());						
+		addNewEClassMenuItem(menu, ref, "Random Element", icp.getRandomElementExpression());
 		addPreviousValueMenuItem(menu, ref);
 	}
-	
+
 	private void addRemoveMenuItem(final Menu menu, final Reference ref) {
 		final MenuItem menuItem = new MenuItem(menu, SWT.NONE);
 	    menuItem.setText("Remove");
@@ -654,16 +676,16 @@ public class InputConstraintDialog {
 	    	@Override
 			public void widgetSelected(final SelectionEvent e) {
 	    		ref.set(null);
-	    		dlg.refreshContraint();					    		
+	    		dlg.refreshContraint();
 	    	}
 	    });
 	}
-	
+
 	private void addNegateMenuItem(final Menu menu, final Reference ref) {
 		final MenuItem menuItem = new MenuItem(menu, SWT.CHECK);
 		menuItem.setSelection(ref.get() instanceof NegativeExpression);
 	    menuItem.setText("Negate");
-	    
+
 	    menuItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -675,16 +697,16 @@ public class InputConstraintDialog {
 	    		} else {
     				ref.set(((NegativeExpression)ref.get()).getValue());
 	    		}
-	    		
+
 	    		dlg.refreshContraint();
 	    	}
 	    });
 	}
-	
+
 	private void addPreviousValueMenuItem(final Menu menu, final Reference ref) {
 		final MenuItem menuItem = new MenuItem(menu, SWT.CHECK);
 		menuItem.setSelection(ref.get() instanceof PreExpression);
-	    menuItem.setText("Previous Value");	    
+	    menuItem.setText("Previous Value");
 	    menuItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -699,12 +721,12 @@ public class InputConstraintDialog {
 	    		} else {
     				ref.set(((PreExpression)ref.get()).getRef());
 	    		}
-	    		
+
 	    		dlg.refreshContraint();
 	    	}
 	    });
-	}	
-	
+	}
+
 	private void addBooleanMenuItem(final Menu menu, final Reference ref, final String label, final boolean newValue) {
 		final MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
 		menuItem.setSelection(ref.get() == Boolean.valueOf(newValue));
@@ -719,7 +741,7 @@ public class InputConstraintDialog {
 	    	}
 	    });
 	}
-	
+
 	private void addBooleanLiteralMenuItem(final Menu menu, final Reference ref, final boolean newValue) {
 		final MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
 		menuItem.setSelection(ref.get() instanceof BooleanLiteral && ((BooleanLiteral)ref.get()).isValue() == newValue);
@@ -730,17 +752,17 @@ public class InputConstraintDialog {
 	    		if(((MenuItem)e.widget).getSelection()) {
 		    		final BooleanLiteral lit = InputConstraintFactory.eINSTANCE.createBooleanLiteral();
 		    		lit.setValue(newValue);
-		    		
+
 		    		// Remove parent negation for boolean literals
 					final Reference refToEdit = (ref.getParent() != null && ref.getParent().get() instanceof NegativeExpression) ? ref.getParent() : ref;
-					
+
 		    		refToEdit.set(lit);
-		    		dlg.refreshContraint();					    		
+		    		dlg.refreshContraint();
 	    		}
 	    	}
 	    });
 	}
-	
+
 	private void addOperatorMenuItem(final Menu menu, final Reference ref, final Operator newValue) {
 		final MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
 		menuItem.setSelection(ref.get() == newValue);
@@ -750,12 +772,12 @@ public class InputConstraintDialog {
 			public void widgetSelected(final SelectionEvent e) {
 	    		if(((MenuItem)e.widget).getSelection()) {
 		    		ref.set(newValue);
-		    		dlg.refreshContraint();					    		
+		    		dlg.refreshContraint();
     			}
 	    	}
 	    });
 	}
-	
+
 	private void addNewEClassMenuItem(final Menu menu, final Reference ref, final String label, final EClass eClass) {
 		final MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
 		final boolean isInstanceOfEClass = eClass.isInstance(ref.get());
@@ -766,10 +788,10 @@ public class InputConstraintDialog {
 	    	@Override
 			public void widgetSelected(final SelectionEvent e) {
 	    		if(((MenuItem)e.widget).getSelection()) {
-	    			final Object oldValue = ref.get();	 
-	    			
+	    			final Object oldValue = ref.get();
+
 	    			// Store interval from current expression in case it is needed to initialize new object
-	    			final IntervalExpression oldInterval;	    			
+	    			final IntervalExpression oldInterval;
 	    			if(oldValue instanceof RandomIntegerExpression) {
 	    				oldInterval = ((RandomIntegerExpression) oldValue).getInterval();
 	    			} else if(oldValue instanceof RandomRealExpression) {
@@ -784,14 +806,14 @@ public class InputConstraintDialog {
 	    			if(eClass == icp.getIntervalExpression() && oldInterval != null) {
 	    				newValue = oldInterval;
 	    			} else {
-	    				newValue = InputConstraintFactory.eINSTANCE.create(eClass); 
+	    				newValue = InputConstraintFactory.eINSTANCE.create(eClass);
 	    			}
 
 		    		ref.set(newValue);
-	
+
 		    		// Perform initialization on the new object
 		    		if(newValue instanceof RandomIntegerExpression || newValue instanceof RandomRealExpression) {
-		    			final IntervalExpression newInterval = oldInterval == null ? InputConstraintFactory.eINSTANCE.createIntervalExpression() : oldInterval;		    			
+		    			final IntervalExpression newInterval = oldInterval == null ? InputConstraintFactory.eINSTANCE.createIntervalExpression() : oldInterval;
 		    			if(newValue instanceof RandomIntegerExpression) {
 		    				((RandomIntegerExpression)newValue).setInterval(newInterval);
 		    			} else if(newValue instanceof RandomRealExpression) {
@@ -801,9 +823,9 @@ public class InputConstraintDialog {
 		    			((RandomElementExpression)newValue).setSet(InputConstraintFactory.eINSTANCE.createSetExpression());
 		    		} else if(newValue instanceof PreExpression && oldValue instanceof ElementRefExpression) {
 	    				((PreExpression)newValue).setRef((ElementRefExpression)oldValue);
-	    			} 
-	
-		    		dlg.refreshContraint();					    		
+	    			}
+
+		    		dlg.refreshContraint();
 	    		}
 	    	}
 	    });
@@ -812,7 +834,7 @@ public class InputConstraintDialog {
 	private void addEditExpressionMenuItem(final Menu menu, final Reference ref) {
 		addTextExpressionMenuItem(menu, ref, "Edit...", null, "");
 	}
-	
+
 	/**
 	 * Returns null if unparse fails.
 	 * @param ic
@@ -826,10 +848,10 @@ public class InputConstraintDialog {
 			// Ignore any unparse errors
 			ex.printStackTrace();
 		}
-		
+
 		return exprTxt;
 	}
-	
+
 	/**
 	 * This function will bubble up to edit the parent if the parent is a binary or negative expression
 	 * @param menu
@@ -840,52 +862,47 @@ public class InputConstraintDialog {
 	 */
 	private void addTextExpressionMenuItem(final Menu menu, Reference ref, final String label, final ResultType expectedType, final String defaultExpressionTxt) {
 		// If the value is part of a binary expression, prompt the user to edit the entire containing binary expression.
-		while(ref.getParent() != null && 
+		while(ref.getParent() != null &&
 				(ref.getParent().get() instanceof BinaryExpression ||
 				ref.getParent().get() instanceof NegativeExpression)) {
 			ref = ref.getParent();
-		}		
+		}
 
-		final Reference refToEdit = ref;		
+		final Reference refToEdit = ref;
 	    final MenuItem menuItem = new MenuItem(menu, SWT.NONE);
 	    menuItem.setText(label);
-	    		
+
 	    // Disable the menu item if unable to unparse
 	    final InputConstraint ic = (InputConstraint)refToEdit.get();
 	    final String exprTxt = unparse(ic);
-		menuItem.setEnabled(exprTxt != null);	
+		menuItem.setEnabled(exprTxt != null);
 		if(menuItem.isEnabled()) {
 		    menuItem.addSelectionListener(new SelectionAdapter() {
 		    	@Override
 				public void widgetSelected(final SelectionEvent e) {
-		    		final InputDialog txtExpressionDlg = new InputDialog(dlg.getShell(), "Edit Expression", "Edit Expression", exprTxt, new IInputValidator() {
-		    			@Override
-		    			public String isValid(final String value) {
-		    				return getParseAndValidateResult(value, expectedType).getErrorMessage();
-		    			}
-		    		});
-		    		
-		    		if(txtExpressionDlg.open() == Dialog.OK) {
+		    		final InputDialog txtExpressionDlg = new InputDialog(dlg.getShell(), "Edit Expression", "Edit Expression", exprTxt, value -> getParseAndValidateResult(value, expectedType).getErrorMessage());
+
+		    		if(txtExpressionDlg.open() == Window.OK) {
 		    			refToEdit.set(getParseAndValidateResult(txtExpressionDlg.getValue(), expectedType).getInputConstraint());
 		    			dlg.refreshContraint();
-		    		}		
+		    		}
 		    	}
 		    });
 		}
 	}
-	
+
 	private InputConstraintHelper.Result getParseAndValidateResult(final String str, final ResultType expectedType) {
 		return model.parseAndValidate(str, expectedType, numberOfPreviousSteps);
 	}
-	
+
 	/**
 	 * A null return value indicates that the dialog was canceled.
 	 * @return
 	 */
 	private Result open() {
-		return dlg.open() == Dialog.OK ? new Result(inputConstraintReference.get()) : null;
+		return dlg.open() == Window.OK ? new Result(inputConstraintReference.get()) : null;
 	}
-	
+
 	/**
 	 * A null return value indicates that the dialog was canceled.
 	 * @param parentShell
@@ -894,38 +911,38 @@ public class InputConstraintDialog {
 	 */
 	public static Result show(final Shell parentShell,
 			final Model model,
-			final String constrainedVariableName, 
+			final String constrainedVariableName,
 			final InputConstraint ic,
-			final ResultType expectedType, 
+			final ResultType expectedType,
 			final int numberOfPreviousSteps) {
 		final InputConstraintDialog dlg = new InputConstraintDialog(parentShell, model, constrainedVariableName, ic, expectedType, numberOfPreviousSteps);
 		return dlg.open();
 	}
-			
+
 	public static void main(final String[] args) {
 		new Display();
 
 		final com.google.inject.Injector injector = new InputConstraintStandaloneSetup().createInjectorAndDoEMFRegistration();
 		final InputConstraintHelper icHelper = injector.getInstance(InputConstraintHelper.class);
 		final TestReferenceTypeResolver resolver = new TestReferenceTypeResolver();
-		
+
 		// Create model to provide information to the dialog.
-		final Model model = new Model() {			
+		final Model model = new Model() {
 			@Override
 			public String unparse(final InputConstraint ic) {
 				return icHelper.unparse(ic);
 			}
-			
+
 			@Override
 			public InputConstraintHelper.Result parseAndValidate(final String str, final ResultType expectedType, final int numberOfPreviousSteps) {
 				return icHelper.parseAndValidate(str, resolver, expectedType, numberOfPreviousSteps);
 			}
-			
-			@Override 
+
+			@Override
 			public InputConstraintHelper.Result validate(final InputConstraint ic, final ResultType expectedType, final int numberOfPreviousSteps) {
 				return icHelper.validate(ic, resolver,  expectedType, numberOfPreviousSteps);
 			}
-			
+
 			@Override
 			public Stream<ElementRefExpression> getVariables() {
 				final Stream.Builder<ElementRefExpression> builder = Stream.builder();
@@ -937,18 +954,18 @@ public class InputConstraintDialog {
 				builder.add(createElementRefExpression("a2"));
 				return builder.build();
 			}
-			
+
 			private ElementRefExpression createElementRefExpression(String ... ids) {
 				final ElementRefExpression result = InputConstraintFactory.eINSTANCE.createElementRefExpression();
 				result.getIds().addAll(Arrays.asList(ids));
 				return result;
 			}
-			
+
 			@Override
 			public ResultType getElementReferenceType(final ElementRefExpression reference) {
 				return resolver.getElementReferenceType(reference);
 			}
-			
+
 			@Override
 			public Stream<ConstRefExpression> getConstants() {
 				final Stream.Builder<ConstRefExpression> builder = Stream.builder();
@@ -960,20 +977,20 @@ public class InputConstraintDialog {
 				builder.add(createConstRefExpression("C3D", "my_pkg", "inner_pkg", "inner_inner_pkg"));
 				return builder.build();
 			}
-			
+
 			private ConstRefExpression createConstRefExpression(final String constantName, final String ... packageSegments) {
 				final ConstRefExpression result = InputConstraintFactory.eINSTANCE.createConstRefExpression();
 				result.setConstantName(constantName);
 				result.getPackageSegments().addAll(Arrays.asList(packageSegments));
 				return result;
 			}
-			
+
 			@Override
 			public ResultType getConstReferenceType(final ConstRefExpression reference) {
 				return resolver.getConstReferenceType(reference);
 			}
 		};
-		
+
 		// Show the dialog
 		final InputConstraint initialConstraint = icHelper.parse("5 + 5").getInputConstraint();
 		final Result result = InputConstraintDialog.show(null, model, "z", initialConstraint, ResultType.INTEGER, 1);

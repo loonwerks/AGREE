@@ -11,8 +11,8 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.eclipse.xtext.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
- org.eclipse.xtext.xbase.lib,
- org.antlr.runtime,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
  org.eclipse.xtext.common.types,
  org.eclipse.xtend.lib,
  org.eclipse.emf.mwe.utils;bundle-version="[1.5.0,2.0.0)"
@@ -32,4 +32,3 @@ Export-Package: edu.uah.rsesc.aadlsimulator.xtext,
  edu.uah.rsesc.aadlsimulator.xtext.ide.contentassist.antlr,
  edu.uah.rsesc.aadlsimulator.xtext.ide.contentassist.antlr.internal
 Automatic-Module-Name: edu.uah.rsesc.aadlsimulator.xtext
-

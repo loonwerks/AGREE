@@ -39,6 +39,8 @@ import org.eclipse.xtext.ui.editor.contentassist.antlr.internal.Lexer;
 
 Linearization : ('L'|'l')('I'|'i')('N'|'n')('E'|'e')('A'|'a')('R'|'r')('I'|'i')('Z'|'z')('A'|'a')('T'|'t')('I'|'i')('O'|'o')('N'|'n');
 
+Uninterpreted : ('U'|'u')('N'|'n')('I'|'i')('N'|'n')('T'|'t')('E'|'e')('R'|'r')('P'|'p')('R'|'r')('E'|'e')('T'|'t')('E'|'e')('D'|'d');
+
 Get_Property : ('G'|'g')('E'|'e')('T'|'t')'_'('P'|'p')('R'|'r')('O'|'o')('P'|'p')('E'|'e')('R'|'r')('T'|'t')('Y'|'y');
 
 Asynchronous : ('A'|'a')('S'|'s')('Y'|'y')('N'|'n')('C'|'c')('H'|'h')('R'|'r')('O'|'o')('N'|'n')('O'|'o')('U'|'u')('S'|'s');

@@ -72,6 +72,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agree.ecore#//LibraryFnDef/args"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agree.ecore#//LibraryFnDef/type"/>
     </genClasses>
+    <genClasses ecoreClass="Agree.ecore#//UninterpretedFnDef">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agree.ecore#//UninterpretedFnDef/args"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agree.ecore#//UninterpretedFnDef/type"/>
+    </genClasses>
     <genClasses ecoreClass="Agree.ecore#//LinearizationDef">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agree.ecore#//LinearizationDef/args"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agree.ecore#//LinearizationDef/intervals"/>

@@ -75,6 +75,7 @@ import com.rockwellcollins.atc.agree.agree.SpecStatement;
 import com.rockwellcollins.atc.agree.agree.SynchStatement;
 import com.rockwellcollins.atc.agree.agree.TagExpr;
 import com.rockwellcollins.atc.agree.agree.ThisRef;
+import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 public class AgreeLinkingService extends PropertiesLinkingService {
 	public AgreeLinkingService() {
 		super();
@@ -199,7 +200,10 @@ public class AgreeLinkingService extends PropertiesLinkingService {
 							if (((LibraryFnDef) spec).getName().equals(statementName)) {
 								return (spec);
 							}
-
+						} else if (spec instanceof UninterpretedFnDef) {
+							if (((UninterpretedFnDef) spec).getName().equals(statementName)) {
+								return (spec);
+							}
 						} else if (spec instanceof NodeDef) {
 							if (((NodeDef) spec).getName().equals(statementName)) {
 								return (spec);

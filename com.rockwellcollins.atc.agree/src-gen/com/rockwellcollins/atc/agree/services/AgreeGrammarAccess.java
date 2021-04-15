@@ -51,8 +51,9 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cNodeDefParserRuleCall_6 = (RuleCall)cAlternatives.eContents().get(6);
 		private final RuleCall cLinearizationDefParserRuleCall_7 = (RuleCall)cAlternatives.eContents().get(7);
 		private final RuleCall cLibraryFnDefParserRuleCall_8 = (RuleCall)cAlternatives.eContents().get(8);
-		private final RuleCall cRecordDefParserRuleCall_9 = (RuleCall)cAlternatives.eContents().get(9);
-		private final RuleCall cNamedIDParserRuleCall_10 = (RuleCall)cAlternatives.eContents().get(10);
+		private final RuleCall cUninterpretedFnDefParserRuleCall_9 = (RuleCall)cAlternatives.eContents().get(9);
+		private final RuleCall cRecordDefParserRuleCall_10 = (RuleCall)cAlternatives.eContents().get(10);
+		private final RuleCall cNamedIDParserRuleCall_11 = (RuleCall)cAlternatives.eContents().get(11);
 		
 		//NamedElement aadl2::NamedElement:
 		//	Arg
@@ -64,12 +65,13 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//	| NodeDef
 		//	| LinearizationDef
 		//	| LibraryFnDef
+		//	| UninterpretedFnDef
 		//	| RecordDef
 		//	| NamedID;
 		@Override public ParserRule getRule() { return rule; }
 
 		//Arg | NamedSpecStatement | FnDef | PropertyStatement | ConstStatement | EnumStatement | NodeDef | LinearizationDef |
-		//LibraryFnDef | RecordDef | NamedID
+		//LibraryFnDef | UninterpretedFnDef | RecordDef | NamedID
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//Arg
@@ -99,11 +101,14 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//LibraryFnDef
 		public RuleCall getLibraryFnDefParserRuleCall_8() { return cLibraryFnDefParserRuleCall_8; }
 
+		//UninterpretedFnDef
+		public RuleCall getUninterpretedFnDefParserRuleCall_9() { return cUninterpretedFnDefParserRuleCall_9; }
+
 		//RecordDef
-		public RuleCall getRecordDefParserRuleCall_9() { return cRecordDefParserRuleCall_9; }
+		public RuleCall getRecordDefParserRuleCall_10() { return cRecordDefParserRuleCall_10; }
 
 		//NamedID
-		public RuleCall getNamedIDParserRuleCall_10() { return cNamedIDParserRuleCall_10; }
+		public RuleCall getNamedIDParserRuleCall_11() { return cNamedIDParserRuleCall_11; }
 	}
 
 	public class ElementElements extends AbstractParserRuleElementFinder {
@@ -304,9 +309,10 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cLinearizationDefParserRuleCall_12 = (RuleCall)cAlternatives.eContents().get(12);
 		private final RuleCall cFnDefParserRuleCall_13 = (RuleCall)cAlternatives.eContents().get(13);
 		private final RuleCall cLibraryFnDefParserRuleCall_14 = (RuleCall)cAlternatives.eContents().get(14);
-		private final RuleCall cNodeDefParserRuleCall_15 = (RuleCall)cAlternatives.eContents().get(15);
-		private final RuleCall cRecordDefParserRuleCall_16 = (RuleCall)cAlternatives.eContents().get(16);
-		private final RuleCall cInputStatementParserRuleCall_17 = (RuleCall)cAlternatives.eContents().get(17);
+		private final RuleCall cUninterpretedFnDefParserRuleCall_15 = (RuleCall)cAlternatives.eContents().get(15);
+		private final RuleCall cNodeDefParserRuleCall_16 = (RuleCall)cAlternatives.eContents().get(16);
+		private final RuleCall cRecordDefParserRuleCall_17 = (RuleCall)cAlternatives.eContents().get(17);
+		private final RuleCall cInputStatementParserRuleCall_18 = (RuleCall)cAlternatives.eContents().get(18);
 		
 		//SpecStatement:
 		//	NamedSpecStatement
@@ -324,6 +330,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//	| LinearizationDef
 		//	| FnDef
 		//	| LibraryFnDef
+		//	| UninterpretedFnDef
 		//	| NodeDef
 		//	| RecordDef
 		//	| InputStatement;
@@ -332,8 +339,8 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//NamedSpecStatement | {InitialStatement} 'initially' ':' expr=Expr ';' | {ParamStatement} 'parameter' expr=Expr ':'
 		//type=Type ';' | {LiftContractStatement} 'lift' 'contract' ';' | {ConnectionStatement} 'connection'
 		//conn=[aadl2::NamedElement] ':' expr=Expr ';' | SynchStatement | OrderStatement | PropertyStatement | ConstStatement |
-		//EnumStatement | EqStatement | AssignStatement | LinearizationDef | FnDef | LibraryFnDef | NodeDef | RecordDef |
-		//InputStatement
+		//EnumStatement | EqStatement | AssignStatement | LinearizationDef | FnDef | LibraryFnDef | UninterpretedFnDef | NodeDef
+		//| RecordDef | InputStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//NamedSpecStatement
@@ -462,14 +469,17 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//LibraryFnDef
 		public RuleCall getLibraryFnDefParserRuleCall_14() { return cLibraryFnDefParserRuleCall_14; }
 
+		//UninterpretedFnDef
+		public RuleCall getUninterpretedFnDefParserRuleCall_15() { return cUninterpretedFnDefParserRuleCall_15; }
+
 		//NodeDef
-		public RuleCall getNodeDefParserRuleCall_15() { return cNodeDefParserRuleCall_15; }
+		public RuleCall getNodeDefParserRuleCall_16() { return cNodeDefParserRuleCall_16; }
 
 		//RecordDef
-		public RuleCall getRecordDefParserRuleCall_16() { return cRecordDefParserRuleCall_16; }
+		public RuleCall getRecordDefParserRuleCall_17() { return cRecordDefParserRuleCall_17; }
 
 		//InputStatement
-		public RuleCall getInputStatementParserRuleCall_17() { return cInputStatementParserRuleCall_17; }
+		public RuleCall getInputStatementParserRuleCall_18() { return cInputStatementParserRuleCall_18; }
 	}
 
 	public class NamedSpecStatementElements extends AbstractParserRuleElementFinder {
@@ -1932,17 +1942,19 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final RuleCall cLinearizationDefParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final RuleCall cLibraryFnDefParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
-		private final RuleCall cFnDefParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
-		private final RuleCall cNodeDefParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
+		private final RuleCall cUninterpretedFnDefParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
+		private final RuleCall cFnDefParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
+		private final RuleCall cNodeDefParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		
 		//Abstraction:
 		//	LinearizationDef
 		//	| LibraryFnDef
+		//	| UninterpretedFnDef
 		//	| FnDef
 		//	| NodeDef;
 		@Override public ParserRule getRule() { return rule; }
 
-		//LinearizationDef | LibraryFnDef | FnDef | NodeDef
+		//LinearizationDef | LibraryFnDef | UninterpretedFnDef | FnDef | NodeDef
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//LinearizationDef
@@ -1951,11 +1963,14 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		//LibraryFnDef
 		public RuleCall getLibraryFnDefParserRuleCall_1() { return cLibraryFnDefParserRuleCall_1; }
 
+		//UninterpretedFnDef
+		public RuleCall getUninterpretedFnDefParserRuleCall_2() { return cUninterpretedFnDefParserRuleCall_2; }
+
 		//FnDef
-		public RuleCall getFnDefParserRuleCall_2() { return cFnDefParserRuleCall_2; }
+		public RuleCall getFnDefParserRuleCall_3() { return cFnDefParserRuleCall_3; }
 
 		//NodeDef
-		public RuleCall getNodeDefParserRuleCall_3() { return cNodeDefParserRuleCall_3; }
+		public RuleCall getNodeDefParserRuleCall_4() { return cNodeDefParserRuleCall_4; }
 	}
 
 	public class PropertyStatementElements extends AbstractParserRuleElementFinder {
@@ -2319,6 +2334,78 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 
 		//'external'
 		public Keyword getExternalKeyword_0() { return cExternalKeyword_0; }
+
+		//name=ID
+		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
+
+		//ID
+		public RuleCall getNameIDTerminalRuleCall_1_0() { return cNameIDTerminalRuleCall_1_0; }
+
+		//'('
+		public Keyword getLeftParenthesisKeyword_2() { return cLeftParenthesisKeyword_2; }
+
+		//args+=Arg
+		public Assignment getArgsAssignment_3() { return cArgsAssignment_3; }
+
+		//Arg
+		public RuleCall getArgsArgParserRuleCall_3_0() { return cArgsArgParserRuleCall_3_0; }
+
+		//(',' args+=Arg)*
+		public Group getGroup_4() { return cGroup_4; }
+
+		//','
+		public Keyword getCommaKeyword_4_0() { return cCommaKeyword_4_0; }
+
+		//args+=Arg
+		public Assignment getArgsAssignment_4_1() { return cArgsAssignment_4_1; }
+
+		//Arg
+		public RuleCall getArgsArgParserRuleCall_4_1_0() { return cArgsArgParserRuleCall_4_1_0; }
+
+		//')'
+		public Keyword getRightParenthesisKeyword_5() { return cRightParenthesisKeyword_5; }
+
+		//':'
+		public Keyword getColonKeyword_6() { return cColonKeyword_6; }
+
+		//type=Type
+		public Assignment getTypeAssignment_7() { return cTypeAssignment_7; }
+
+		//Type
+		public RuleCall getTypeTypeParserRuleCall_7_0() { return cTypeTypeParserRuleCall_7_0; }
+
+		//';'
+		public Keyword getSemicolonKeyword_8() { return cSemicolonKeyword_8; }
+	}
+
+	public class UninterpretedFnDefElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.rockwellcollins.atc.agree.Agree.UninterpretedFnDef");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cUninterpretedKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cArgsAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cArgsArgParserRuleCall_3_0 = (RuleCall)cArgsAssignment_3.eContents().get(0);
+		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
+		private final Keyword cCommaKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
+		private final Assignment cArgsAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cArgsArgParserRuleCall_4_1_0 = (RuleCall)cArgsAssignment_4_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final Keyword cColonKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		private final Assignment cTypeAssignment_7 = (Assignment)cGroup.eContents().get(7);
+		private final RuleCall cTypeTypeParserRuleCall_7_0 = (RuleCall)cTypeAssignment_7.eContents().get(0);
+		private final Keyword cSemicolonKeyword_8 = (Keyword)cGroup.eContents().get(8);
+		
+		//UninterpretedFnDef:
+		//	'uninterpreted' name=ID '(' args+=Arg (',' args+=Arg)* ')' ':' type=Type ';';
+		@Override public ParserRule getRule() { return rule; }
+
+		//'uninterpreted' name=ID '(' args+=Arg (',' args+=Arg)* ')' ':' type=Type ';'
+		public Group getGroup() { return cGroup; }
+
+		//'uninterpreted'
+		public Keyword getUninterpretedKeyword_0() { return cUninterpretedKeyword_0; }
 
 		//name=ID
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
@@ -5411,6 +5498,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 	private final AssignStatementElements pAssignStatement;
 	private final FnDefElements pFnDef;
 	private final LibraryFnDefElements pLibraryFnDef;
+	private final UninterpretedFnDefElements pUninterpretedFnDef;
 	private final LinearizationDefElements pLinearizationDef;
 	private final LinearizationIntervalElements pLinearizationInterval;
 	private final NodeDefElements pNodeDef;
@@ -5490,6 +5578,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 		this.pAssignStatement = new AssignStatementElements();
 		this.pFnDef = new FnDefElements();
 		this.pLibraryFnDef = new LibraryFnDefElements();
+		this.pUninterpretedFnDef = new UninterpretedFnDefElements();
 		this.pLinearizationDef = new LinearizationDefElements();
 		this.pLinearizationInterval = new LinearizationIntervalElements();
 		this.pNodeDef = new NodeDefElements();
@@ -5573,6 +5662,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 	//	| NodeDef
 	//	| LinearizationDef
 	//	| LibraryFnDef
+	//	| UninterpretedFnDef
 	//	| RecordDef
 	//	| NamedID;
 	public NamedElementElements getNamedElementAccess() {
@@ -5667,6 +5757,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 	//	| LinearizationDef
 	//	| FnDef
 	//	| LibraryFnDef
+	//	| UninterpretedFnDef
 	//	| NodeDef
 	//	| RecordDef
 	//	| InputStatement;
@@ -5797,6 +5888,7 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 	//Abstraction:
 	//	LinearizationDef
 	//	| LibraryFnDef
+	//	| UninterpretedFnDef
 	//	| FnDef
 	//	| NodeDef;
 	public AbstractionElements getAbstractionAccess() {
@@ -5876,6 +5968,16 @@ public class AgreeGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getLibraryFnDefRule() {
 		return getLibraryFnDefAccess().getRule();
+	}
+
+	//UninterpretedFnDef:
+	//	'uninterpreted' name=ID '(' args+=Arg (',' args+=Arg)* ')' ':' type=Type ';';
+	public UninterpretedFnDefElements getUninterpretedFnDefAccess() {
+		return pUninterpretedFnDef;
+	}
+	
+	public ParserRule getUninterpretedFnDefRule() {
+		return getUninterpretedFnDefAccess().getRule();
 	}
 
 	//LinearizationDef:

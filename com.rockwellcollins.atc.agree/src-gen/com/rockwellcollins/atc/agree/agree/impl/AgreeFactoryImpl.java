@@ -104,6 +104,7 @@ public class AgreeFactoryImpl extends EFactoryImpl implements AgreeFactory
       case AgreePackage.ASSIGN_STATEMENT: return createAssignStatement();
       case AgreePackage.FN_DEF: return createFnDef();
       case AgreePackage.LIBRARY_FN_DEF: return createLibraryFnDef();
+      case AgreePackage.UNINTERPRETED_FN_DEF: return createUninterpretedFnDef();
       case AgreePackage.LINEARIZATION_DEF: return createLinearizationDef();
       case AgreePackage.LINEARIZATION_INTERVAL: return createLinearizationInterval();
       case AgreePackage.NODE_DEF: return createNodeDef();
@@ -426,6 +427,18 @@ public class AgreeFactoryImpl extends EFactoryImpl implements AgreeFactory
   {
     LibraryFnDefImpl libraryFnDef = new LibraryFnDefImpl();
     return libraryFnDef;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public UninterpretedFnDef createUninterpretedFnDef()
+  {
+    UninterpretedFnDefImpl uninterpretedFnDef = new UninterpretedFnDefImpl();
+    return uninterpretedFnDef;
   }
 
   /**

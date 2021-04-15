@@ -103,6 +103,7 @@ import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
 import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
+import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 import com.rockwellcollins.atc.agree.agree.WhenHoldsStatement;
 import com.rockwellcollins.atc.agree.agree.WhenOccursStatment;
 import com.rockwellcollins.atc.agree.agree.WheneverBecomesTrueStatement;
@@ -484,6 +485,9 @@ public abstract class AbstractAgreeSemanticSequencer extends PropertiesSemanticS
 				return; 
 			case AgreePackage.UNARY_EXPR:
 				sequence_UnaryExpr(context, (UnaryExpr) semanticObject); 
+				return; 
+			case AgreePackage.UNINTERPRETED_FN_DEF:
+				sequence_UninterpretedFnDef(context, (UninterpretedFnDef) semanticObject); 
 				return; 
 			case AgreePackage.WHEN_HOLDS_STATEMENT:
 				sequence_WhenStatement(context, (WhenHoldsStatement) semanticObject); 
@@ -3184,6 +3188,23 @@ public abstract class AbstractAgreeSemanticSequencer extends PropertiesSemanticS
 	 *     ((op='-' | op='not') expr=UnaryExpr)
 	 */
 	protected void sequence_UnaryExpr(ISerializationContext context, UnaryExpr semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     NamedElement returns UninterpretedFnDef
+	 *     Element returns UninterpretedFnDef
+	 *     SpecStatement returns UninterpretedFnDef
+	 *     NamedAbstraction returns UninterpretedFnDef
+	 *     Abstraction returns UninterpretedFnDef
+	 *     UninterpretedFnDef returns UninterpretedFnDef
+	 *
+	 * Constraint:
+	 *     (name=ID args+=Arg args+=Arg* type=Type)
+	 */
+	protected void sequence_UninterpretedFnDef(ISerializationContext context, UninterpretedFnDef semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

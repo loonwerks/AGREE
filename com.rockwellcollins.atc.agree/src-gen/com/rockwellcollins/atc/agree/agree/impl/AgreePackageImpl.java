@@ -115,6 +115,7 @@ import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 import com.rockwellcollins.atc.agree.agree.Type;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
+import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 import com.rockwellcollins.atc.agree.agree.WhenHoldsStatement;
 import com.rockwellcollins.atc.agree.agree.WhenOccursStatment;
 import com.rockwellcollins.atc.agree.agree.WhenStatement;
@@ -281,6 +282,13 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
    * @generated
    */
   private EClass libraryFnDefEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass uninterpretedFnDefEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1450,6 +1458,39 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
   public EReference getLibraryFnDef_Type()
   {
     return (EReference)libraryFnDefEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getUninterpretedFnDef()
+  {
+    return uninterpretedFnDefEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getUninterpretedFnDef_Args()
+  {
+    return (EReference)uninterpretedFnDefEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getUninterpretedFnDef_Type()
+  {
+    return (EReference)uninterpretedFnDefEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -3676,6 +3717,10 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
     createEReference(libraryFnDefEClass, LIBRARY_FN_DEF__ARGS);
     createEReference(libraryFnDefEClass, LIBRARY_FN_DEF__TYPE);
 
+    uninterpretedFnDefEClass = createEClass(UNINTERPRETED_FN_DEF);
+    createEReference(uninterpretedFnDefEClass, UNINTERPRETED_FN_DEF__ARGS);
+    createEReference(uninterpretedFnDefEClass, UNINTERPRETED_FN_DEF__TYPE);
+
     linearizationDefEClass = createEClass(LINEARIZATION_DEF);
     createEReference(linearizationDefEClass, LINEARIZATION_DEF__ARGS);
     createEReference(linearizationDefEClass, LINEARIZATION_DEF__INTERVALS);
@@ -4009,6 +4054,9 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
     libraryFnDefEClass.getESuperTypes().add(theAadl2Package.getNamedElement());
     libraryFnDefEClass.getESuperTypes().add(this.getSpecStatement());
     libraryFnDefEClass.getESuperTypes().add(this.getAbstraction());
+    uninterpretedFnDefEClass.getESuperTypes().add(theAadl2Package.getNamedElement());
+    uninterpretedFnDefEClass.getESuperTypes().add(this.getSpecStatement());
+    uninterpretedFnDefEClass.getESuperTypes().add(this.getAbstraction());
     linearizationDefEClass.getESuperTypes().add(theAadl2Package.getNamedElement());
     linearizationDefEClass.getESuperTypes().add(this.getSpecStatement());
     linearizationDefEClass.getESuperTypes().add(this.getAbstraction());
@@ -4165,6 +4213,10 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
     initEClass(libraryFnDefEClass, LibraryFnDef.class, "LibraryFnDef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getLibraryFnDef_Args(), this.getArg(), null, "args", null, 0, -1, LibraryFnDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLibraryFnDef_Type(), this.getType(), null, "type", null, 0, 1, LibraryFnDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(uninterpretedFnDefEClass, UninterpretedFnDef.class, "UninterpretedFnDef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getUninterpretedFnDef_Args(), this.getArg(), null, "args", null, 0, -1, UninterpretedFnDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getUninterpretedFnDef_Type(), this.getType(), null, "type", null, 0, 1, UninterpretedFnDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(linearizationDefEClass, LinearizationDef.class, "LinearizationDef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getLinearizationDef_Args(), this.getArg(), null, "args", null, 0, -1, LinearizationDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -201,6 +201,11 @@ public class AgreeAdapterFactory extends AdapterFactoryImpl
         return createLibraryFnDefAdapter();
       }
       @Override
+      public Adapter caseUninterpretedFnDef(UninterpretedFnDef object)
+      {
+        return createUninterpretedFnDefAdapter();
+      }
+      @Override
       public Adapter caseLinearizationDef(LinearizationDef object)
       {
         return createLinearizationDefAdapter();
@@ -938,6 +943,21 @@ public class AgreeAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createLibraryFnDefAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.rockwellcollins.atc.agree.agree.UninterpretedFnDef <em>Uninterpreted Fn Def</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.rockwellcollins.atc.agree.agree.UninterpretedFnDef
+   * @generated
+   */
+  public Adapter createUninterpretedFnDefAdapter()
   {
     return null;
   }

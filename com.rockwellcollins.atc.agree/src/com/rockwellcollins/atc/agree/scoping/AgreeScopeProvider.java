@@ -93,6 +93,7 @@ import com.rockwellcollins.atc.agree.agree.ThisRef;
 import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
 import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
+import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 
 /**
  * This class contains custom scoping description.
@@ -325,6 +326,10 @@ public class AgreeScopeProvider extends org.osate.xtext.aadl2.properties.scoping
 
 
 	IScope scope_NamedElement(LibraryFnDef ctx, EReference ref) {
+		return Scopes.scopeFor(ctx.getArgs(), getScope(ctx.eContainer(), ref));
+	}
+
+	IScope scope_NamedElement(UninterpretedFnDef ctx, EReference ref) {
 		return Scopes.scopeFor(ctx.getArgs(), getScope(ctx.eContainer(), ref));
 	}
 

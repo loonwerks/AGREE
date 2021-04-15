@@ -223,6 +223,15 @@ public interface AgreeFactory extends EFactory
   LibraryFnDef createLibraryFnDef();
 
   /**
+   * Returns a new object of class '<em>Uninterpreted Fn Def</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Uninterpreted Fn Def</em>'.
+   * @generated
+   */
+  UninterpretedFnDef createUninterpretedFnDef();
+
+  /**
    * Returns a new object of class '<em>Linearization Def</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

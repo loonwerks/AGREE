@@ -181,6 +181,8 @@ public class AgreeParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getFnDefAccess().getGroup_4(), "rule__FnDef__Group_4__0");
 					put(grammarAccess.getLibraryFnDefAccess().getGroup(), "rule__LibraryFnDef__Group__0");
 					put(grammarAccess.getLibraryFnDefAccess().getGroup_4(), "rule__LibraryFnDef__Group_4__0");
+					put(grammarAccess.getUninterpretedFnDefAccess().getGroup(), "rule__UninterpretedFnDef__Group__0");
+					put(grammarAccess.getUninterpretedFnDefAccess().getGroup_4(), "rule__UninterpretedFnDef__Group_4__0");
 					put(grammarAccess.getLinearizationDefAccess().getGroup(), "rule__LinearizationDef__Group__0");
 					put(grammarAccess.getLinearizationDefAccess().getGroup_4(), "rule__LinearizationDef__Group_4__0");
 					put(grammarAccess.getLinearizationDefAccess().getGroup_9(), "rule__LinearizationDef__Group_9__0");
@@ -458,6 +460,10 @@ public class AgreeParser extends AbstractPartialContentAssistParser {
 					put(grammarAccess.getLibraryFnDefAccess().getArgsAssignment_3(), "rule__LibraryFnDef__ArgsAssignment_3");
 					put(grammarAccess.getLibraryFnDefAccess().getArgsAssignment_4_1(), "rule__LibraryFnDef__ArgsAssignment_4_1");
 					put(grammarAccess.getLibraryFnDefAccess().getTypeAssignment_7(), "rule__LibraryFnDef__TypeAssignment_7");
+					put(grammarAccess.getUninterpretedFnDefAccess().getNameAssignment_1(), "rule__UninterpretedFnDef__NameAssignment_1");
+					put(grammarAccess.getUninterpretedFnDefAccess().getArgsAssignment_3(), "rule__UninterpretedFnDef__ArgsAssignment_3");
+					put(grammarAccess.getUninterpretedFnDefAccess().getArgsAssignment_4_1(), "rule__UninterpretedFnDef__ArgsAssignment_4_1");
+					put(grammarAccess.getUninterpretedFnDefAccess().getTypeAssignment_7(), "rule__UninterpretedFnDef__TypeAssignment_7");
 					put(grammarAccess.getLinearizationDefAccess().getNameAssignment_1(), "rule__LinearizationDef__NameAssignment_1");
 					put(grammarAccess.getLinearizationDefAccess().getArgsAssignment_3(), "rule__LinearizationDef__ArgsAssignment_3");
 					put(grammarAccess.getLinearizationDefAccess().getArgsAssignment_4_1(), "rule__LinearizationDef__ArgsAssignment_4_1");

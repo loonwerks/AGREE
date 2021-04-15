@@ -153,6 +153,7 @@ import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 import com.rockwellcollins.atc.agree.agree.Type;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
+import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 import com.rockwellcollins.atc.agree.agree.WhenHoldsStatement;
 import com.rockwellcollins.atc.agree.agree.WhenOccursStatment;
 import com.rockwellcollins.atc.agree.agree.WheneverBecomesTrueStatement;
@@ -2074,6 +2075,9 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			} else if (namedEl instanceof FnDef) {
 				FnDef fnDef = (FnDef) namedEl;
 				agreeRhsTypes.add(AgreeTypeSystem.typeDefFromType(fnDef.getType()));
+			} else if (namedEl instanceof UninterpretedFnDef) {
+				UninterpretedFnDef uninterpretedFnDef = (UninterpretedFnDef) namedEl;
+				agreeRhsTypes.add(AgreeTypeSystem.typeDefFromType(uninterpretedFnDef.getType()));
 			} else {
 				return; // parse error
 			}
@@ -2258,7 +2262,8 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			if (restrictedElm &&
 
 					!(id instanceof Arg) && !(id instanceof ConstStatement) && !(id instanceof NodeDef)
-					&& !(id instanceof FnDef) && !(id instanceof DataSubcomponent) && !(id instanceof DoubleDotRef)
+					&& !(id instanceof FnDef) && !(id instanceof UninterpretedFnDef)
+					&& !(id instanceof DataSubcomponent) && !(id instanceof DoubleDotRef)
 					&& !(id instanceof DataImplementation) && !(id instanceof RecordDef) && !(id instanceof NamedID)) {
 				error(dotId, "Only arguments, constants, and node calls allowed within a node");
 			}
@@ -2479,6 +2484,10 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			LibraryFnDef nativeDef = (LibraryFnDef) callDef;
 			inDefTypes = typeDefsFromArgs(nativeDef.getArgs());
 			callName = nativeDef.getName();
+		} else if (callDef instanceof UninterpretedFnDef) {
+			UninterpretedFnDef nativeDef = (UninterpretedFnDef) callDef;
+			inDefTypes = typeDefsFromArgs(nativeDef.getArgs());
+			callName = nativeDef.getName();
 		} else {
 			error(call, "Node, function or linearization definition name expected.");
 			return;
@@ -2547,6 +2556,11 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			+ "' but its expression is of type '" + nameOfTypeDef(exprType) + "'");
 		}
 
+	}
+
+	@Check(CheckType.FAST)
+	public void checkUninterpretedFn(UninterpretedFnDef fnDef) {
+		warning(fnDef, "AGREE verification does not currently support evaluation of uninterpreted functions");
 	}
 
 	@Check(CheckType.FAST)
@@ -2857,7 +2871,8 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 			return ((RecordLitExpr) expr).getArgExpr().stream().allMatch(field -> exprIsConstant(field));
 		} else if (expr instanceof CallExpr) {
 			CallExpr callExpr = (CallExpr) expr;
-			if (((((CallExpr) expr).getRef()).getElm()) instanceof FnDef) {
+			if (callExpr.getRef().getElm() instanceof FnDef
+					|| callExpr.getRef().getElm() instanceof UninterpretedFnDef) {
 				return callExpr.getArgs().stream().allMatch(arg -> exprIsConstant(arg));
 			} else {
 				return false;

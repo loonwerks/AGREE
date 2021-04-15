@@ -120,6 +120,7 @@ import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 import com.rockwellcollins.atc.agree.agree.Type;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
+import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 
 public class AgreeTypeSystem {
 
@@ -979,6 +980,9 @@ public class AgreeTypeSystem {
 					return Prim.RealTypeDef;
 				} else if (namedEl instanceof LibraryFnDef) {
 					LibraryFnDef fnDef = (LibraryFnDef) namedEl;
+					return typeDefFromType(fnDef.getType());
+				} else if (namedEl instanceof UninterpretedFnDef) {
+					UninterpretedFnDef fnDef = (UninterpretedFnDef) namedEl;
 					return typeDefFromType(fnDef.getType());
 				}
 

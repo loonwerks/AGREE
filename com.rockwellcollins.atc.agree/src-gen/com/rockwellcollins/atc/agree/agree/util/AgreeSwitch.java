@@ -279,6 +279,17 @@ public class AgreeSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case AgreePackage.UNINTERPRETED_FN_DEF:
+      {
+        UninterpretedFnDef uninterpretedFnDef = (UninterpretedFnDef)theEObject;
+        T result = caseUninterpretedFnDef(uninterpretedFnDef);
+        if (result == null) result = caseSpecStatement(uninterpretedFnDef);
+        if (result == null) result = caseAbstraction(uninterpretedFnDef);
+        if (result == null) result = caseNamedElement(uninterpretedFnDef);
+        if (result == null) result = caseElement(uninterpretedFnDef);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case AgreePackage.LINEARIZATION_DEF:
       {
         LinearizationDef linearizationDef = (LinearizationDef)theEObject;
@@ -1321,6 +1332,22 @@ public class AgreeSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseLibraryFnDef(LibraryFnDef object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Uninterpreted Fn Def</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Uninterpreted Fn Def</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseUninterpretedFnDef(UninterpretedFnDef object)
   {
     return null;
   }

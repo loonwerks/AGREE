@@ -143,7 +143,6 @@ import com.rockwellcollins.atc.agree.agree.TimeExpr;
 import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
 import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
-import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 import com.rockwellcollins.atc.agree.agree.util.AgreeSwitch;
 import com.rockwellcollins.atc.agree.analysis.Activator;
 import com.rockwellcollins.atc.agree.analysis.AgreeCalendarUtils;
@@ -1190,7 +1189,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 	private List<Node> addLustreNodes(EList<SpecStatement> specs) {
 		List<Node> nodes = new ArrayList<>();
 		for (SpecStatement spec : specs) {
-			if (spec instanceof NodeDef || spec instanceof FnDef || spec instanceof UninterpretedFnDef) {
+			if (spec instanceof NodeDef || spec instanceof FnDef) {
 				doSwitch(spec);
 			}
 		}
@@ -1657,32 +1656,6 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 			builder.addInputs(inputs);
 			builder.addOutputs(outputs);
 			builder.addEquations(eqs);
-
-			Node node = builder.build();
-			addToNodeList(node);
-		}
-
-		return null;
-	}
-
-	@Override
-	public Expr caseUninterpretedFnDef(UninterpretedFnDef fnDef) {
-		String nodeName = AgreeUtils.getNodeName(fnDef).replace("::", "__");
-
-		for (Node node : globalNodes) {
-			if (node.id.equals(nodeName)) {
-				return null;
-			}
-		}
-		List<VarDecl> inputs = agreeVarsFromArgs(fnDef.getArgs(), null);
-		Type outType = symbolTable.updateLustreTypeMap(AgreeTypeSystem.typeDefFromType(fnDef.getType()));
-		if (outType != null) {
-			VarDecl outVar = new VarDecl("_outvar", outType);
-			List<VarDecl> outputs = Collections.singletonList(outVar);
-
-			NodeBuilder builder = new NodeBuilder(nodeName);
-			builder.addInputs(inputs);
-			builder.addOutputs(outputs);
 
 			Node node = builder.build();
 			addToNodeList(node);

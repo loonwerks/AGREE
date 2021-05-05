@@ -267,8 +267,8 @@ public class AgreeTypeSystem {
 				|| (c instanceof DataImplementation && ((DataImplementation) c).getAllSubcomponents().isEmpty()
 						&& ((DataImplementation) c).getType() != null)) {
 			// Includes special case for data implementations implementing extensions of primitive types
-			List<PropertyAssociation> pas = c.getAllPropertyAssociations();
 			Classifier classifierType = c instanceof DataImplementation ? ((DataImplementation) c).getType() : c;
+			List<PropertyAssociation> pas = classifierType.getAllPropertyAssociations();
 			for (Classifier classType : classifierType.getSelfPlusAllExtended()) {
 				if (classType != null && hasIntegerDataRepresentation(classType)) {
 

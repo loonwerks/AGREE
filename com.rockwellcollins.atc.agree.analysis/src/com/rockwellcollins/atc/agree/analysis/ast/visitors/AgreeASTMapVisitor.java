@@ -57,6 +57,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
 import jkind.lustre.Expr;
+import jkind.lustre.Function;
 import jkind.lustre.IdExpr;
 import jkind.lustre.Node;
 import jkind.lustre.Type;
@@ -90,6 +91,11 @@ implements AgreeASTVisitor<AgreeASTElement> {
 			globalLustreNodes.add(this.visit(node));
 		}
 
+		List<Function> uninterpretedFunctions = new ArrayList<>();
+		for (Function function : e.uninterpretedFunctions) {
+			uninterpretedFunctions.add(this.visit(function));
+		}
+
 		List<jkind.lustre.Type> globalTypes = new ArrayList<>();
 		for (Type ty : e.globalTypes) {
 			globalTypes.add(ty.accept(lustreTypeMapVisitor));
@@ -97,7 +103,7 @@ implements AgreeASTVisitor<AgreeASTElement> {
 
 		AgreeNode topNode = this.visit(e.topNode);
 
-		return new AgreeProgram(agreeNodes, globalLustreNodes, globalTypes, topNode);
+		return new AgreeProgram(agreeNodes, globalLustreNodes, uninterpretedFunctions, globalTypes, topNode);
 	};
 
 	@Override

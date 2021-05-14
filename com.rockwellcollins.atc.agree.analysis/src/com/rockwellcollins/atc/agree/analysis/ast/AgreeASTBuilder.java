@@ -143,6 +143,7 @@ import com.rockwellcollins.atc.agree.agree.TimeExpr;
 import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
 import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
+import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 import com.rockwellcollins.atc.agree.agree.util.AgreeSwitch;
 import com.rockwellcollins.atc.agree.analysis.Activator;
 import com.rockwellcollins.atc.agree.analysis.AgreeCalendarUtils;
@@ -176,6 +177,8 @@ import jkind.lustre.BoolExpr;
 import jkind.lustre.CastExpr;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
+import jkind.lustre.Function;
+import jkind.lustre.FunctionCallExpr;
 import jkind.lustre.IdExpr;
 import jkind.lustre.IfThenElseExpr;
 import jkind.lustre.IntExpr;
@@ -201,6 +204,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 	public static final String unspecifiedAadlPropertyPrefix = "_unspec_property_";
 
 	public static List<Node> globalNodes;
+	public static List<Function> uninterpretedFunc;
 
 	// EGM: array-backend
 
@@ -241,6 +245,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 		this.isMonolithic = isMonolithic;
 		globalNodes = new ArrayList<>();
+		uninterpretedFunc = new ArrayList<>();
 		renamings = new HashMap<>();
 		refMap = new HashMap<>();
 
@@ -257,8 +262,8 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		// have to convert the types. The reason we use Record types in the
 		// first place rather than the more general types is so we can check set
 		// containment easily
-		AgreeProgram program = new AgreeProgram(agreeNodes, new ArrayList<>(globalNodes), lustreTypes,
-				topNode);
+		AgreeProgram program = new AgreeProgram(agreeNodes, new ArrayList<>(globalNodes),
+				new ArrayList<>(uninterpretedFunc), lustreTypes, topNode);
 
 		// if there are any patterns in the AgreeProgram we need to inline them
 		program = AgreePatternTranslator.translate(program);
@@ -1597,15 +1602,29 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		return new BoolExpr(expr.getVal().getValue());
 	}
 
+	/*
+	 * CallExpr could be a node call, a regular function call, or an uninterpreted function call.
+	 * The former two cases will return a NodeCallExpr, the third case will return a FunctionCallExpr.
+	 */
 	@Override
 	public Expr caseCallExpr(CallExpr expr) {
 		NamedElement namedEl = expr.getRef().getElm();
 		String fnName = AgreeUtils.getNodeName(namedEl);
+
 		boolean found = false;
 		for (Node node : globalNodes) {
 			if (node.id.equals(fnName)) {
 				found = true;
 				break;
+			}
+		}
+
+		if (!found) {
+			for (Function function : uninterpretedFunc) {
+				if (function.id.equals(fnName)) {
+					found = true;
+					break;
+				}
 			}
 		}
 
@@ -1619,9 +1638,13 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		}
 
 		List<Expr> argResults = new ArrayList<>();
-
 		for (com.rockwellcollins.atc.agree.agree.Expr argExpr : expr.getArgs()) {
 			argResults.add(doSwitch(argExpr));
+		}
+
+		if (functionNameExists(fnName)) {
+			FunctionCallExpr functionCall = new FunctionCallExpr(fnName.replace("::", "__"), argResults);
+			return functionCall;
 		}
 
 		NodeCallExpr nodeCall = new NodeCallExpr(fnName.replace("::", "__"), argResults);
@@ -1659,6 +1682,29 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 
 			Node node = builder.build();
 			addToNodeList(node);
+		}
+
+		return null;
+	}
+
+	@Override
+	public Expr caseUninterpretedFnDef(UninterpretedFnDef uFnDef) {
+		String functionName = AgreeUtils.getNodeName(uFnDef).replace("::", "__");
+
+		for (Function function : uninterpretedFunc) {
+			if (function.id.equals(functionName)) {
+				return null;
+			}
+		}
+		List<VarDecl> inputs = agreeVarsFromArgs(uFnDef.getArgs(), null);
+		Type outType = symbolTable.updateLustreTypeMap(AgreeTypeSystem.typeDefFromType(uFnDef.getType()));
+
+		if (outType != null) {
+			VarDecl outVar = new VarDecl("_outvar", outType);
+			List<VarDecl> outputs = Collections.singletonList(outVar);
+
+			Function function = new Function(functionName, inputs, outputs);
+			addToFunctionList(function);
 		}
 
 		return null;
@@ -2219,6 +2265,16 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		globalNodes.add(node);
 	}
 
+	private static void addToFunctionList(Function function) {
+		for (Function inList : uninterpretedFunc) {
+			if (inList.id.equals(function.id)) {
+				throw new AgreeException(
+						"AGREE AST generator tried adding multiple functions of name '" + function.id + "'");
+			}
+		}
+		uninterpretedFunc.add(function);
+	}
+
 	private static boolean nodeNameExists(String name) {
 		for (Node inList : globalNodes) {
 			if (inList.id.equals(name)) {
@@ -2228,4 +2284,12 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 		return false;
 	}
 
+	private static boolean functionNameExists(String name) {
+		for (Function inList : uninterpretedFunc) {
+			if (inList.id.equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

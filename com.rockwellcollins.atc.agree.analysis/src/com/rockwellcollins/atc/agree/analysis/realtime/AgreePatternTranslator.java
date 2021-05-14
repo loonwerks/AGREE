@@ -90,7 +90,8 @@ public class AgreePatternTranslator {
 		List<AgreeNode> agreeNodes = gatherNodes(topNode);
 		patternLustreNodes.addAll(program.globalLustreNodes);
 
-		return new AgreeProgram(agreeNodes, patternLustreNodes, program.globalTypes, topNode, containsRealTimePatterns);
+		return new AgreeProgram(agreeNodes, patternLustreNodes, program.uninterpretedFunctions, program.globalTypes,
+				topNode, containsRealTimePatterns);
 	}
 
 	private AgreeNode translateNode(AgreeNode node, boolean isTopNode) {

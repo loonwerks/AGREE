@@ -2559,11 +2559,6 @@ public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
 	}
 
 	@Check(CheckType.FAST)
-	public void checkUninterpretedFn(UninterpretedFnDef fnDef) {
-		warning(fnDef, "AGREE verification does not currently support evaluation of uninterpreted functions");
-	}
-
-	@Check(CheckType.FAST)
 	public void checkAbstraction(Abstraction callDef) {
 
 		// don't check recursive calls of functions that have

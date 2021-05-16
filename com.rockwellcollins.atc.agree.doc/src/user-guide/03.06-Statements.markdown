@@ -370,3 +370,32 @@ expression:
 >  tan, and
 >  tanh.
 
+### Advanced Topic: Uninterpreted Functions{#sec:uninterpreted_functions}
+
+AGREE supports the specification of uninterpreted functions (UF).  A UF does not define the meaning of the function, instead it allows the underlying SMT solver to define the mapping. The only fundamental constraint is that each element in the *domain* maps to a single element in the *range*. That is, 
+
+~~~
+if x = y then f(x) = f(y).
+~~~
+
+An example of a UF definition is:
+
+~~~
+uninterpreted sincos(x: real) : real;
+~~~
+
+The definition is similar to a regular function except that there is no function body. Once a UF is defined, it can be called the same way as a regular function. The grammar for UF that we support is shown below:
+
+~~~
+UninterpretedFnDef:
+	'uninterpreted' name=ID '(' args+=Arg (',' args+=Arg)* ')' 
+             ':' type=Type ';';
+~~~
+
+A UF could have multiple inputs, but can only have one output. AGREE support UF with record type inputs and output. If a UF with multiple outputs is desired, a record type output could be used. Note that AGREE does not support UF with no inputs.
+ 
+If a property fails in AGREE verification, in addition to the counterexample, AGREE will also generate uninterpreted function tables. The tables show how the functions were “interpreted” by the underlying SMT solver. The values in the table should match the values used in the counterexample. Currently AGREE supports display of UF in console and spreadsheet view, but not Eclipse view. @fig:uf_console and @fig:uf_eclipse show a UF in console and spreadsheet view, respectively.
+
+![Display of an Uninterpreted Function in Console View Segments](../../media/image32.png){#fig:uf_console .class width=90%}
+
+![Display of an Uninterpreted Function in Spreadsheet View Segments](../../media/image33.png){#fig:uf_eclipse .class width=90%}

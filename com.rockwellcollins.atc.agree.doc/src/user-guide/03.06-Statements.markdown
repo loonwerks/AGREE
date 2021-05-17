@@ -378,13 +378,7 @@ AGREE supports the specification of uninterpreted functions (UF).  A UF does not
 if x = y then f(x) = f(y).
 ~~~
 
-An example of a UF definition is:
-
-~~~
-uninterpreted sincos(x: real) : real;
-~~~
-
-The definition is similar to a regular function except that there is no function body. Once a UF is defined, it can be called the same way as a regular function. The grammar for UF that we support is shown below:
+The grammar for UF that AGREE supports is shown below:
 
 ~~~
 UninterpretedFnDef:
@@ -392,7 +386,13 @@ UninterpretedFnDef:
              ':' type=Type ';';
 ~~~
 
-A UF could have multiple inputs, but can only have one output. AGREE support UF with record type inputs and output. If a UF with multiple outputs is desired, a record type output could be used. Note that AGREE does not support UF with no inputs.
+An example of a UF definition is:
+
+~~~
+uninterpreted sincos(x: real) : real;
+~~~
+
+The definition is similar to a regular function except that there is no function body. Once a UF is defined, it can be called the same way as a regular function. A UF could have multiple inputs, but can only have one output. AGREE support UF with record type inputs and output. If a UF with multiple outputs is desired, a record type output could be used. Note that AGREE does not support UF with no inputs.
  
 If a property fails in AGREE verification, in addition to the counterexample, AGREE will also generate uninterpreted function tables. The tables show how the functions were “interpreted” by the underlying SMT solver. The values in the table should match the values used in the counterexample. Currently AGREE supports display of UF in console and spreadsheet view, but not Eclipse view. @fig:uf_console and @fig:uf_eclipse show a UF in console and spreadsheet view, respectively.
 

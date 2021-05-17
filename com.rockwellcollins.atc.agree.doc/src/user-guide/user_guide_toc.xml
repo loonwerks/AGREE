@@ -60,6 +60,8 @@
 			</topic>
 			<topic label="Advanced Topic: Linearization Definitions" href="src-gen/user-guide/03.06-Statements.html#advanced-topic-linearization-definitions">
 			</topic>
+			<topic label="Advanced Topic: Uninterpreted Functions" href="src-gen/user-guide/03.06-Statements.html#advanced-topic-uninterpreted-functions">
+			</topic>
 		</topic>
 		<topic label="Expressions" href="src-gen/user-guide/03.07-Expressions.html#expressions">
 			<topic label="ID Expressions" href="src-gen/user-guide/03.07-Expressions.html#id-expressions">

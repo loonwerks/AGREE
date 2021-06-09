@@ -40,7 +40,6 @@
 		<tycho.testArgLine />
 		<eclipse.mirror>http://download.eclipse.org</eclipse.mirror>
 		<xtext-version>2.20.0</xtext-version>
-		<xtext-testing.repo.url>https://dl.bintray.com/itemis/generic/xtext-testing/updates/0.2/</xtext-testing.repo.url>
 	</properties>
 
 	<modules>
@@ -400,11 +399,6 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>
-		<repository>
-			<id>xtext-testing</id>
-			<url>${xtext-testing.repo.url}</url>
-			<layout>p2</layout>
 		</repository>
 		<repository>
 			<id>jkind-plugin</id>

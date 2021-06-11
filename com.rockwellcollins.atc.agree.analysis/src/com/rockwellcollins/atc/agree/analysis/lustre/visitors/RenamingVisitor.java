@@ -54,6 +54,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeInlineLatchedConnections;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 
+import jkind.lustre.Function;
 import jkind.lustre.Node;
 import jkind.lustre.Program;
 import jkind.lustre.VarDecl;
@@ -67,6 +68,7 @@ public class RenamingVisitor extends AstIterVisitor {
 	private final Program program;
 	private boolean isMainNode;
 	private String nodeName;
+	private boolean isFunction = false;
 
 	public static void addRenamings(Program program, AgreeRenaming renaming, ComponentInstance rootInstance,
 			AgreeLayout layout) {
@@ -107,7 +109,22 @@ public class RenamingVisitor extends AstIterVisitor {
 	}
 
 	@Override
+	public Void visit(Function function) {
+		isFunction = true;
+		String functionName = function.id.replace("__", ".");
+		renaming.addUninterpretedFnIONames(functionName);
+		visitVarDecls(function.inputs);
+		visitVarDecls(function.outputs);
+		isFunction = false;
+		return null;
+	}
+
+	@Override
 	public Void visit(VarDecl e) {
+		if (isFunction) {
+			renaming.addUninterpretedFnIONames(e.id);
+			return null;
+		}
 		if (e instanceof AgreeVar) {
 			AgreeVar var = (AgreeVar) e;
 			String category = getCategory(rootInstance, var);
@@ -141,8 +158,6 @@ public class RenamingVisitor extends AstIterVisitor {
 		}
 		return null;
 	}
-
-
 
 	private String argToString(Arg arg) {
 		String result = arg.getName() + " : ";

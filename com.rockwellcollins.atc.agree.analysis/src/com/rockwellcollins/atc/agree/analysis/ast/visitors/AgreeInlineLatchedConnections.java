@@ -54,7 +54,8 @@ public class AgreeInlineLatchedConnections extends ExprMapVisitor implements Agr
 	@Override
 	public AgreeProgram visit(AgreeProgram program) {
 		AgreeNode topNode = (AgreeNode) program.topNode.accept(this);
-		return new AgreeProgram(nodes, program.globalLustreNodes, program.globalTypes, topNode);
+		return new AgreeProgram(nodes, program.globalLustreNodes, program.uninterpretedFunctions, program.globalTypes,
+				topNode);
 	}
 
 	@Override

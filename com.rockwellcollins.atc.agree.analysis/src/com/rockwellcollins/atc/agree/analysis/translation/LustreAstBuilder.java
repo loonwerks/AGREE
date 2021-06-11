@@ -62,6 +62,7 @@ import jkind.lustre.BinaryOp;
 import jkind.lustre.BoolExpr;
 import jkind.lustre.Equation;
 import jkind.lustre.Expr;
+import jkind.lustre.Function;
 import jkind.lustre.IdExpr;
 import jkind.lustre.IntExpr;
 import jkind.lustre.NamedType;
@@ -78,6 +79,7 @@ import jkind.lustre.builders.ProgramBuilder;
 public class LustreAstBuilder {
 
 	protected static List<Node> nodes;
+	protected static List<Function> uninterpretedFcns;
 	protected static final String guarSuffix = "__GUARANTEE";
 	public static final String assumeSuffix = "__ASSUME";
 	protected static final String lemmaSuffix = "__LEMMA";
@@ -183,7 +185,11 @@ public class LustreAstBuilder {
 		nodes.add(main);
 		nodes.addAll(agreeProgram.globalLustreNodes);
 
-		Program program = new ProgramBuilder().addTypes(types).addNodes(nodes).setMain(main.id).build();
+		List<Function> uFunctions = new ArrayList<>();
+		uFunctions.addAll(agreeProgram.uninterpretedFunctions);
+
+		Program program = new ProgramBuilder().addTypes(types).addFunctions(uFunctions).addNodes(nodes)
+				.setMain(main.id).build();
 
 		return program;
 
@@ -192,6 +198,7 @@ public class LustreAstBuilder {
 	public static Program getAssumeGuaranteeLustreProgram(AgreeProgram agreeProgram) {
 
 		nodes = new ArrayList<>();
+		uninterpretedFcns = new ArrayList<>();
 
 		AgreeNode flatNode = flattenAgreeNode(agreeProgram, agreeProgram.topNode, "_TOP__");
 		List<Expr> assertions = new ArrayList<>();
@@ -295,7 +302,11 @@ public class LustreAstBuilder {
 		nodes.addAll(AgreeRealtimeCalendarBuilder.getRealTimeNodes());
 		List<TypeDef> types = AgreeUtils.getLustreTypes(agreeProgram);
 
-		Program program = new ProgramBuilder().addTypes(types).addNodes(nodes).setMain(main.id).build();
+		uninterpretedFcns.addAll(agreeProgram.uninterpretedFunctions);
+
+		Program program = new ProgramBuilder().addTypes(types).addFunctions(uninterpretedFcns).addNodes(nodes)
+				.setMain(main.id)
+				.build();
 
 		return program;
 
@@ -307,6 +318,7 @@ public class LustreAstBuilder {
 		List<TypeDef> types = AgreeUtils.getLustreTypes(agreeProgram);
 
 		nodes = new ArrayList<>();
+		uninterpretedFcns = new ArrayList<>();
 
 		Node topConsist = getConsistencyLustreNode(agreeProgram.topNode, false);
 		// we don't want node lemmas to show up in the consistency check
@@ -317,7 +329,10 @@ public class LustreAstBuilder {
 		nodes.add(getHistNode());
 		nodes.addAll(AgreeRealtimeCalendarBuilder.getRealTimeNodes());
 
-		Program topConsistProg = new ProgramBuilder().addTypes(types).addNodes(nodes).setMain(topConsist.id).build();
+		uninterpretedFcns.addAll(agreeProgram.uninterpretedFunctions);
+
+		Program topConsistProg = new ProgramBuilder().addTypes(types).addFunctions(uninterpretedFcns).addNodes(nodes)
+				.setMain(topConsist.id).build();
 //		String topComponentName = agreeProgram.topNode.id.replace("_Instance", "");
 //		programs.add(Tuples.create(topComponentName + " consistent", topConsistProg));
 		programs.add(Tuples.create("This component consistent", topConsistProg));
@@ -333,7 +348,9 @@ public class LustreAstBuilder {
 			nodes.add(getHistNode());
 			nodes.addAll(AgreeRealtimeCalendarBuilder.getRealTimeNodes());
 
-			Program subConsistProg = new ProgramBuilder().addTypes(types).addNodes(nodes).setMain(subConsistNode.id)
+			Program subConsistProg = new ProgramBuilder().addTypes(types).addFunctions(uninterpretedFcns)
+					.addNodes(nodes)
+					.setMain(subConsistNode.id)
 					.build();
 
 			programs.add(Tuples.create(subNode.id + " consistent", subConsistProg));
@@ -352,7 +369,8 @@ public class LustreAstBuilder {
 		nodes.add(getHistNode());
 		nodes.addAll(AgreeRealtimeCalendarBuilder.getRealTimeNodes());
 
-		Program topCompositConsistProg = new ProgramBuilder().addTypes(types).addNodes(nodes)
+		Program topCompositConsistProg = new ProgramBuilder().addTypes(types).addFunctions(uninterpretedFcns)
+				.addNodes(nodes)
 				.setMain(topCompositionConsist.id).build();
 
 		programs.add(Tuples.create("Component composition consistent", topCompositConsistProg));

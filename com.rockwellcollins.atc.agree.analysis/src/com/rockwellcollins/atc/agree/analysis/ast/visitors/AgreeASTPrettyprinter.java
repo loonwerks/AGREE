@@ -33,6 +33,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeStatement;
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 
 import jkind.lustre.EnumType;
+import jkind.lustre.Function;
 import jkind.lustre.Location;
 import jkind.lustre.Node;
 import jkind.lustre.RecordType;
@@ -90,6 +91,18 @@ public class AgreeASTPrettyprinter extends PrettyPrintVisitor implements AgreeAS
 
 		if (!program.globalLustreNodes.isEmpty()) {
 			Iterator<Node> iterator = program.globalLustreNodes.iterator();
+			while (iterator.hasNext()) {
+				iterator.next().accept(this);
+				newline();
+				if (iterator.hasNext()) {
+					newline();
+				}
+			}
+			newline();
+		}
+
+		if (!program.uninterpretedFunctions.isEmpty()) {
+			Iterator<Function> iterator = program.uninterpretedFunctions.iterator();
 			while (iterator.hasNext()) {
 				iterator.next().accept(this);
 				newline();

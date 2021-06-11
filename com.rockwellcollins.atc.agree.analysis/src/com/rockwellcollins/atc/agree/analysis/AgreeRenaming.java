@@ -21,7 +21,9 @@
 package com.rockwellcollins.atc.agree.analysis;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -58,6 +60,7 @@ public class AgreeRenaming extends Renaming {
 	private Map<String, String> supportRenames = new HashMap<>();
 	private Map<String, String> supportRefStrings = new HashMap<>();
 	private Map<String, EObject> refMap;
+	private Set<String> uninterpretedFnIONames = new HashSet<>();
 
 	public AgreeRenaming() {
 		refMap = new HashMap<>();
@@ -83,6 +86,10 @@ public class AgreeRenaming extends Renaming {
 
 	public void addSupportRefString(String from, String refStr) {
 		supportRefStrings.put(renameIVC(from), refStr);
+	}
+
+	public void addUninterpretedFnIONames(String name) {
+		uninterpretedFnIONames.add(name);
 	}
 
 	@Override
@@ -186,12 +193,28 @@ public class AgreeRenaming extends Renaming {
 				return newName;
 			} else if (original.endsWith(LustreAstBuilder.assumeHistSufix)) {
 				return newName;
+			} else if (matchUninterpretedFnIONames(newName)) {
+				return newName;
 			}
 			return null;
 		}
 
 		return newName;
 
+	}
+
+	private boolean matchUninterpretedFnIONames(String name) {
+		for (String uFnIOName : uninterpretedFnIONames) {
+			if (name.equals(uFnIOName)) {
+				return true;
+			}
+			// handle record type I/O
+			String uFnIOString = uFnIOName + ".";
+			if (name.startsWith(uFnIOString)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private EObject findBestReference(String refStr) {

@@ -622,6 +622,11 @@ public class AgreeMenuListener implements IMenuListener {
 					}
 					out.println();
 				}
+				printHLine(out, cex.getLength());
+				// print uninterpreted functions using Jkind CounterexampleFormatter
+				AgreeUninterpretedFunctionFormatter uFcnFormatter = new AgreeUninterpretedFunctionFormatter(cex);
+				out.println(uFcnFormatter.functions());
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

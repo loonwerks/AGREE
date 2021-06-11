@@ -24,29 +24,33 @@ import java.util.List;
 
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTVisitor;
 
+import jkind.lustre.Function;
 import jkind.lustre.Node;
 import jkind.lustre.Type;
 
 public class AgreeProgram implements AgreeASTElement {
 	public final List<AgreeNode> agreeNodes;
 	public final List<Node> globalLustreNodes;
+	public final List<Function> uninterpretedFunctions;
 	public final List<Type> globalTypes;
 	public final AgreeNode topNode;
 	public boolean containsRealTimePatterns;
 
-	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Type> globalTypes,
-			AgreeNode topNode) {
+	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Function> uninterpretedFunctions,
+			List<Type> globalTypes, AgreeNode topNode) {
 		this.agreeNodes = jkind.util.Util.safeList(agreeNodes);
 		this.globalLustreNodes = jkind.util.Util.safeList(globalLustreNodes);
+		this.uninterpretedFunctions = jkind.util.Util.safeList(uninterpretedFunctions);
 		this.globalTypes = jkind.util.Util.safeList(globalTypes);
 		this.topNode = topNode;
 		containsRealTimePatterns = false;
 	}
 
-	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Type> globalTypes,
-			AgreeNode topNode, boolean containsRealTimePatterns) {
+	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Function> uninterpretedFunctions,
+			List<Type> globalTypes, AgreeNode topNode, boolean containsRealTimePatterns) {
 		this.agreeNodes = jkind.util.Util.safeList(agreeNodes);
 		this.globalLustreNodes = jkind.util.Util.safeList(globalLustreNodes);
+		this.uninterpretedFunctions = jkind.util.Util.safeList(uninterpretedFunctions);
 		this.globalTypes = jkind.util.Util.safeList(globalTypes);
 		this.topNode = topNode;
 		this.containsRealTimePatterns = containsRealTimePatterns;

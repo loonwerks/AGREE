@@ -78,7 +78,8 @@ public class AgreeMakeClockedLustreNodes extends ExprMapVisitor {
 			nodeList.add(visitor.getClockedNode(node.id));
 		}
 
-		return new AgreeProgram(program.agreeNodes, nodeList, program.globalTypes, program.topNode);
+		return new AgreeProgram(program.agreeNodes, nodeList, program.uninterpretedFunctions, program.globalTypes,
+				program.topNode);
 	}
 
 	private AgreeMakeClockedLustreNodes(AgreeProgram program) {

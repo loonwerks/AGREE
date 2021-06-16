@@ -151,6 +151,10 @@
 <header id="title-block-header">
 <h1 class="title">AGREE User Guide</h1>
 </header>
+<p>Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this data, including any software or models in source or binary form, as well as any drawings, specifications, and documentation (collectively “the Data”), to deal in the Data without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Data.</p>
+<p>THE DATA IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA. )</p>
 <h2 id="sec:statements">Statements</h2>
 <p>In this section, we present the various types of AGREE statements and their uses. <strong>Note:</strong> <strong>Assume Statements (<a href="#sec:assume_statements">Assume Statements</a>) and Guarantee Statements (<a href="#sec:guarantee_statements">Guarantee Statements</a>) exclusively live in <em>component type</em>s; while Assert Statements (<a href="#sec:assert_statements">Assert Statements</a>) and Lemma Statements (<a href="#sec:lemma_statements">Lemma Statements</a>) exclusively live in <em>component implementation</em>s.</strong></p>
 <h3 id="sec:assume_statements">Assume Statements</h3>
@@ -278,5 +282,22 @@ TimeInterval:
 <blockquote>
 <p>abs, acos, asin, atan, cbrt, cos, cosh, exp, expml, log, log10, log1p, signum, sin, sinh, sqrt, tan, and tanh.</p>
 </blockquote>
+<h3 id="sec:uninterpreted_functions">Advanced Topic: Uninterpreted Functions</h3>
+<p>AGREE supports the specification of uninterpreted functions (UF). A UF does not define the meaning of the function, instead it allows the underlying SMT solver to define the mapping. The only fundamental constraint is that each element in the <em>domain</em> maps to a single element in the <em>range</em>. That is,</p>
+<pre><code>if x = y then f(x) = f(y).</code></pre>
+<p>The grammar for UF that AGREE supports is shown below:</p>
+<pre><code>UninterpretedFnDef:
+    &#39;uninterpreted&#39; name=ID &#39;(&#39; args+=Arg (&#39;,&#39; args+=Arg)* &#39;)&#39; 
+             &#39;:&#39; type=Type &#39;;&#39;;</code></pre>
+<p>An example of a UF definition is:</p>
+<pre><code>uninterpreted sincos(x: real) : real;</code></pre>
+<p>The definition is similar to a regular function except that there is no function body. Once a UF is defined, it can be called the same way as a regular function. A UF could have multiple inputs, but can only have one output. AGREE support UF with record type inputs and output. If a UF with multiple outputs is desired, a record type output could be used. Note that AGREE does not support UF with no inputs.</p>
+<p>If a property fails in AGREE verification, in addition to the counterexample, AGREE will also generate uninterpreted function tables. The tables show how the functions were “interpreted” by the underlying SMT solver. The values in the table should match the values used in the counterexample. Currently AGREE supports display of UF in console and spreadsheet view, but not Eclipse view. Figure <a href="#fig:uf_console">2</a> and Figure <a href="#fig:uf_eclipse">3</a> show a UF in console and spreadsheet view, respectively.</p>
+<figure>
+<img src="../../media/image32.png" id="fig:uf_console" class="class" style="width:90.0%" alt="Figure 2: Display of an Uninterpreted Function in Console View Segments" /><figcaption aria-hidden="true">Figure 2: Display of an Uninterpreted Function in Console View Segments</figcaption>
+</figure>
+<figure>
+<img src="../../media/image33.png" id="fig:uf_eclipse" class="class" style="width:90.0%" alt="Figure 3: Display of an Uninterpreted Function in Spreadsheet View Segments" /><figcaption aria-hidden="true">Figure 3: Display of an Uninterpreted Function in Spreadsheet View Segments</figcaption>
+</figure>
 </body>
 </html>

@@ -84,7 +84,7 @@
 
 		<exec executable="pandoc" dir="${user_guide.dir}">
 			<arg value="-o"/>
-			<arg value="${user_guide_output.dir}/../AGREE Users Guide.pdf"/>
+			<arg value="${user_guide_output.dir}/../AGREE_Users_Guide.pdf"/>
 			<arg value="--toc"/>
 			<arg value="--number-sections"/>
 			<arg value="-s"/>
@@ -118,7 +118,7 @@
 
 		<exec executable="pandoc" dir="${user_guide.dir}">
 			<arg value="-o"/>
-			<arg value="${user_guide_output.dir}/../AGREE Users Guide.docx"/>
+			<arg value="${user_guide_output.dir}/../AGREE_Users_Guide.docx"/>
 			<arg value="--toc"/>
 			<arg value="--number-sections"/>
 			<arg value="-s"/>

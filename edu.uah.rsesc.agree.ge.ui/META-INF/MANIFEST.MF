@@ -11,11 +11,11 @@ Require-Bundle: org.eclipse.ui,
  org.osate.aadl2;bundle-version="[4.0.0,5.0.0)",
  org.osate.ge;bundle-version="[2.0.0,3.0.0)",
  org.osate.aadl2.edit;bundle-version="[4.0.0,5.0.0)",
- org.osate.ui;bundle-version="[2.0.0,6.0.0)",
+ org.osate.ui;bundle-version="[2.0.0,7.0.0)",
  org.osate.annexsupport;bundle-version="[1.0.1,4.0.0)",
  edu.uah.rsesc.agree.ge,
  com.rockwellcollins.atc.agree.ui,
- org.osate.xtext.aadl2.ui;bundle-version="[2.0.0,6.0.0)"
+ org.osate.xtext.aadl2.ui;bundle-version="[2.0.0,7.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: edu.uah.rsesc.agree.ge.ui

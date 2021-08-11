@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 
-public class AgreeNullValidator extends AbstractAgreeJavaValidator {
+public class AgreeNullValidator extends AbstractAgreeValidator {
 
 	@Override
 	protected boolean isResponsible(Map<Object, Object> context, EObject eObject) {

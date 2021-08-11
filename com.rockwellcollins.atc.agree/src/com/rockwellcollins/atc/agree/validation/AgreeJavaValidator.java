@@ -167,7 +167,7 @@ import com.rockwellcollins.atc.agree.visitors.ExprCycleVisitor;
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
-public class AgreeJavaValidator extends AbstractAgreeJavaValidator {
+public class AgreeJavaValidator extends AbstractAgreeValidator {
 	private final Set<Abstraction> checkedRecCalls = new HashSet<>();
 	private final Map<String, Map<String, NamedID>> enumSets = new HashMap<>();
 

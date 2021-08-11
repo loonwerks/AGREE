@@ -402,12 +402,12 @@
 		<repository>
 			<id>Eclipse</id>
 			<layout>p2</layout>
-			<url>${eclipse.mirror}/releases/2020-06/</url>
+			<url>${eclipse.mirror}/releases/2021-03/</url>
 		</repository>
 		<repository>
 			<id>Osate2</id>
 			<layout>p2</layout>
-			<url>https://osate-build.sei.cmu.edu/download/osate/stable/2.9.2/updates/</url>
+			<url>https://osate-build.sei.cmu.edu/download/osate/testing/updates/</url>
 		</repository>
 		<repository>
 			<id>codehaus-snapshots</id>

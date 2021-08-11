@@ -32,7 +32,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.ui.workbench,
  org.eclipse.e4.ui.model.workbench,
  org.eclipse.emf.common,
- org.osate.ge;bundle-version="[2.0.0,3.0.0)",
+ org.osate.ge;bundle-version="[2.0.0,4.0.0)",
  edu.uah.rsesc.aadlsimulator.xtext.ui,
  javax.annotation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

@@ -57,7 +57,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
       <import plugin="org.osate.annexsupport" version="3.0.0" match="compatible"/>
       <import plugin="com.rockwellcollins.atc.agree" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="com.rockwellcollins.atc.agree.analysis" version="2.0.0" match="greaterOrEqual"/>
-      <import plugin="org.osate.ge" version="2.0.0" match="compatible"/>
+      <import plugin="org.osate.ge" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="com.collins.trustedsystems.jkindapi" version="4.0.0" match="compatible"/>
       <import plugin="org.osate.ui" version="6.0.0" match="compatible"/>
    </requires>

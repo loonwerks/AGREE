@@ -75,7 +75,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import plugin="org.osate.xtext.aadl2.properties" version="3.0.0" match="compatible"/>
       <import plugin="com.rockwellcollins.atc.agree" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="com.rockwellcollins.atc.agree.ui" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.osate.ge" version="2.0.0" match="compatible"/>
+      <import plugin="org.osate.ge" version="2.0.0"  match="greaterOrEqual"/>
       <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="com.collins.trustedsystems.z3"/>
       <import plugin="org.osate.aadl2.instantiation" version="1.0.1" match="compatible"/>

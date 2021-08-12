@@ -339,7 +339,10 @@ public class AgreeTypeSystem {
 				String key = p.getQualifiedName();
 				key = key == null ? p.getName() : key;
 
-				if (key.equals("Data_Model::Data_Representation")) {
+				if (key == null) {
+					return Prim.ErrorTypeDef;
+				}
+				if (key.equalsIgnoreCase("Data_Model::Data_Representation")) {
 					if (v instanceof NamedValue) {
 						AbstractNamedValue anv = ((NamedValue) v).getNamedValue();
 						if (anv instanceof EnumerationLiteral) {
@@ -349,7 +352,7 @@ public class AgreeTypeSystem {
 						}
 					}
 
-				} else if (key.equals("Data_Model::Enumerators")) {
+				} else if (key.equalsIgnoreCase("Data_Model::Enumerators")) {
 					if (v instanceof ListValue) {
 						EList<PropertyExpression> peList = ((ListValue) v).getOwnedListElements();
 						String prefix = c.getQualifiedName() + "_";
@@ -362,7 +365,7 @@ public class AgreeTypeSystem {
 						}
 					}
 
-				} else if (key.equals("Data_Model::Base_Type")) {
+				} else if (key.equalsIgnoreCase("Data_Model::Base_Type")) {
 					if (v instanceof ListValue) {
 						ListValue l = (ListValue) v;
 						PropertyExpression pe = l.getOwnedListElements().get(0);
@@ -372,7 +375,7 @@ public class AgreeTypeSystem {
 
 					}
 
-				} else if (key.equals("Data_Model::Dimension")) {
+				} else if (key.equalsIgnoreCase("Data_Model::Dimension")) {
 					if (v instanceof ListValue) {
 						ListValue l = (ListValue) v;
 						PropertyExpression pe = l.getOwnedListElements().get(0);

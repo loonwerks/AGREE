@@ -20,9 +20,10 @@
  */
 package com.rockwellcollins.atc.agree.tests;
 
+import org.osate.testsupport.Aadl2InjectorProvider;
+
 import com.google.inject.Injector;
 import com.rockwellcollins.atc.agree.AgreeStandaloneSetup;
-import com.rockwellcollins.atc.agree.tests.testsupport.Aadl2InjectorProvider;
 
 public class AgreeInjectorProvider extends Aadl2InjectorProvider {
 	@Override

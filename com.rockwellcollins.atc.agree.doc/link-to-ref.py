@@ -24,10 +24,10 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
 """
 
 from pandocfilters import attributes, toJSONFilter, Cite, Link, Space, Span, Str
-import urlparse
+import urllib.parse
 
 def is_absolute(url):
-    return bool(urlparse.urlparse(url).netloc)
+    return bool(urllib.parse.urlparse(url).netloc)
 
 def links(key, value, format, meta):
     if key == 'Link':
@@ -41,7 +41,7 @@ def links(key, value, format, meta):
             #              "citationHash"    : 0}]
             # return Cite(citation, title)
             return Span(attributes({}),
-                        [Str(u'\u201c'), Span(attributes({}), title), Str(u'\u201d'),
+                        [Str('\u201c'), Span(attributes({}), title), Str('\u201d'),
                          Space(), Str('('), Str(target[0]), Str(')')])
         else:
             [_, _, targetInternal] = target[0].rpartition('#')

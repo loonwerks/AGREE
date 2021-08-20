@@ -20,6 +20,7 @@
  */
 package com.rockwellcollins.atc.agree.analysis.ast;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeASTVisitor;
@@ -36,14 +37,19 @@ public class AgreeProgram implements AgreeASTElement {
 	public final AgreeNode topNode;
 	public boolean containsRealTimePatterns;
 
+	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Type> globalTypes,
+			AgreeNode topNode) {
+		this(agreeNodes, globalLustreNodes, Collections.emptyList(), globalTypes, topNode, false);
+	}
+
+	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Type> globalTypes,
+			AgreeNode topNode, boolean containsRealTimePatterns) {
+		this(agreeNodes, globalLustreNodes, Collections.emptyList(), globalTypes, topNode, containsRealTimePatterns);
+	}
+
 	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Function> uninterpretedFunctions,
 			List<Type> globalTypes, AgreeNode topNode) {
-		this.agreeNodes = jkind.util.Util.safeList(agreeNodes);
-		this.globalLustreNodes = jkind.util.Util.safeList(globalLustreNodes);
-		this.uninterpretedFunctions = jkind.util.Util.safeList(uninterpretedFunctions);
-		this.globalTypes = jkind.util.Util.safeList(globalTypes);
-		this.topNode = topNode;
-		containsRealTimePatterns = false;
+		this(agreeNodes, globalLustreNodes, uninterpretedFunctions, globalTypes, topNode, false);
 	}
 
 	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Function> uninterpretedFunctions,

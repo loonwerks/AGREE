@@ -22,6 +22,25 @@ com.rockwellcollins.atc.agree.doc project.
 
 ## Development Guide
 
+### AGREE Branching Strategy (NEW!)
+
+Development in AGREE takes place on two main branches: 'master' and
+'stable.'  The 'master' branch is the leading edge of development of
+AGREE and it maintains compatibility with the OSATE master branch.
+Developers are encouraged to create branches from the AGREE master
+branch to implement new features, address issues, or fix bugs.  Once
+these branch developments are ready, they may be merged into the 
+master branch.  ATO be ready for merging onto the master branch,
+work must not break build or regression testing, must be deemed
+ready for use by the developmental users, and should have a suite
+of test cases.
+
+The AGREE 'stable' branch contains the releases of AGREE (since
+AGREE 2.7.2).  At time for releases, the progress on the master
+branch is merged onto the stable branch.  At this point progress
+on the master must be ready for release to the public user community
+vi a marked release in GitHub.
+
 ### Setting-Up a Development Environment
 
 The AGREE development environement is essentially the same as that for

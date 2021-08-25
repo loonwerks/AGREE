@@ -26,7 +26,7 @@ Require-Bundle: com.rockwellcollins.atc.agree;visibility:=reexport,
  org.eclipse.xtext.ui.codetemplates.ui
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: com.rockwellcollins.atc.agree.parsing,
  com.rockwellcollins.atc.agree.ui.contentassist,
  com.rockwellcollins.atc.agree.ui.internal,

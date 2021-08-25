@@ -35,7 +35,7 @@ Require-Bundle: org.eclipse.ui,
  org.osate.ge;bundle-version="[2.0.0,4.0.0)",
  edu.uah.rsesc.aadlsimulator.xtext.ui,
  javax.annotation
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Service-Component: components/DefaultSimulationUIService.xml
 Export-Package: edu.uah.rsesc.aadlsimulator.ui,

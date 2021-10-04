@@ -38,6 +38,7 @@ import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.RollbackException;
 import org.eclipse.emf.transaction.TransactionalCommandStack;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.workspace.WorkspaceEditingDomainFactory;
 import org.osate.aadl2.Aadl2Factory;
 import org.osate.aadl2.Aadl2Package;
 import org.osate.aadl2.AadlPackage;
@@ -142,8 +143,7 @@ public class EphemeralImplementationUtil {
 		List<ComponentImplementation> resultList;
 		ComponentImplementation result;
 
-		final TransactionalEditingDomain domain = TransactionalEditingDomain.Registry.INSTANCE
-				.getEditingDomain("org.osate.aadl2.ModelEditingDomain");
+		final TransactionalEditingDomain domain = WorkspaceEditingDomainFactory.INSTANCE.createEditingDomain();
 		// We execute this command on the command stack because otherwise, we will not
 		// have write permissions on the editing domain.
 		Command cmd = new RecordingCommand(domain) {

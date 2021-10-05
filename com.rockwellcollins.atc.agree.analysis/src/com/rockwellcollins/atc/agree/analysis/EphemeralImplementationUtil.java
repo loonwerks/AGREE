@@ -298,8 +298,7 @@ public class EphemeralImplementationUtil {
 	 * that point.
 	 */
 	public void cleanup() {
-		final TransactionalEditingDomain domain = TransactionalEditingDomain.Registry.INSTANCE
-				.getEditingDomain("org.osate.aadl2.ModelEditingDomain");
+		final TransactionalEditingDomain domain = WorkspaceEditingDomainFactory.INSTANCE.createEditingDomain();
 		// We execute this command on the command stack because otherwise, we will not
 		// have write permissions on the editing domain.
 		Command cmd = new RecordingCommand(domain) {

@@ -1,5 +1,9 @@
 version: 0.2
 
+env:
+  exported-variables:
+    - RELEASE_PKG_FILE
+    - MVN_VERSION_ID
 phases:
   install:
     runtime-versions:
@@ -13,8 +17,11 @@ phases:
       - mvn clean verify
   post_build:
     commands:
+      - export RELEASE_PKG_FILE=$(ls repository/target/com.rockwellcollins.atc.agree.repository-*.zip)
+      - echo Built $RELEASE_PKG_FILE
+      - export MVN_VERSION_ID=$(ls repository/target/repository/plugins/com.rockwellcollins.atc.agree_*.jar | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}")
+      - echo Version Id: $MVN_VERSION_ID
       - echo Build completed on `date`
 artifacts:
   files:
     - repository/target/repository/**/*
-

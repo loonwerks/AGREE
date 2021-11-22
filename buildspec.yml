@@ -8,10 +8,12 @@ phases:
     commands:
       - echo Nothing to do in the pre_build phase...
   build:
+    on-failure: ABORT
     commands:
       - echo Build started on `date`
       - mvn clean verify
   post_build:
+    on-failure: ABORT
     commands:
       - echo Build completed on `date`
       - rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git

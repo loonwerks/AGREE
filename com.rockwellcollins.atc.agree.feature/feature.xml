@@ -59,7 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    <includes
          id="com.collins.trustedsystems.z3.feature"
-         version="0.0.0"/>
+         version="4.8.10"/>
 
    <includes
          id="com.collins.trustedsystems.jkindapi.feature"

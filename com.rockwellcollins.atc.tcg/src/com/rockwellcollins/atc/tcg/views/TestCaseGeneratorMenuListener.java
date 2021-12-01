@@ -143,7 +143,8 @@ public class TestCaseGeneratorMenuListener implements IMenuListener {
 	private void viewTestSuite(JKindResult result, AgreeResultsLinker linker) {
 		TestSuite testSuite = TestSuiteUtils.
 				testSuiteFromJKindResult(result,
-						linker.getComponent(result).getQualifiedName(), result.getName(), result.getText());
+						linker.getComponent(result).getQualifiedName(), result.getName(), result.getText(),
+						(TcgRenaming) linker.getRenaming(result));
 		try {
 			TestSuiteView tcView = (TestSuiteView) window.getActivePage().showView(
 					TestSuiteView.ID);

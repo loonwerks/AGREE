@@ -125,4 +125,8 @@ public class TcgRenaming extends Renaming {
 	public Map<String, EObject> getTcgRefMap() {
 		return tcgRefMap;
 	}
+
+	public EObject mapAgreeToEObject(String name) {
+		return agreeRefMap.get(name);
+	}
 }

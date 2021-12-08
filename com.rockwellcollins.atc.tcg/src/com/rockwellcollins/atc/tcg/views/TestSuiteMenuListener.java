@@ -21,10 +21,13 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
 
 package com.rockwellcollins.atc.tcg.views;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -110,6 +113,7 @@ public class TestSuiteMenuListener implements IMenuListener {
 		addViewLogMenu(manager, testCase);
 		addViewTestCaseMenu(manager, testCase);
 		addViewLustreMenu(manager, testCase);
+		addCopyObligationToClipboardMeny(manager, testCase);
 	}
 
 	private void addOpenComponentMenu(IMenuManager manager, TestCase testCase) {
@@ -197,6 +201,19 @@ public class TestSuiteMenuListener implements IMenuListener {
 		if (program != null) {
 			manager.add(createWriteConsoleAction("View Lustre", "Lustre", program));
 		}
+	}
+
+	private void addCopyObligationToClipboardMeny(IMenuManager manager, TestCase testCase) {
+		manager.add(new Action("Copy Obligation to Clipboard") {
+			@Override
+			public void run() {
+				Toolkit.getDefaultToolkit().getSystemClipboard()
+						.setContents(
+								new StringSelection(String.join(", ", testCase.getSatisfiedObligations().stream()
+										.map(it -> it.getObligationExpr().toString()).collect(Collectors.toList()))),
+								null);
+			}
+		});
 	}
 
 	private IAction createHyperlinkAction(String text, final EObject eObject) {

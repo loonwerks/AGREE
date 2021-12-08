@@ -371,9 +371,14 @@ public class AgreeMenuListener implements IMenuListener {
 				if (tempLayout == null) {
 					tempLayout = linker.getLayout(result);
 				}
+				Renaming tempRenaming = linker.getRenaming(result.getParent());
+				if (tempRenaming == null) {
+					tempRenaming = linker.getRenaming(result);
+				}
 
 				final Layout layout = tempLayout;
 				final Map<String, EObject> refMap = tempRefMap;
+				final AgreeRenaming renaming = (AgreeRenaming) tempRenaming;
 
 				final Counterexample translatedCex = translateCounterexampleArrayIndices(cex);
 
@@ -383,7 +388,7 @@ public class AgreeMenuListener implements IMenuListener {
 				sub.add(new Action("Console") {
 					@Override
 					public void run() {
-						viewCexConsole(translatedCex, layout, refMap);
+						viewCexConsole(translatedCex, layout, refMap, renaming);
 					}
 				});
 
@@ -573,7 +578,8 @@ public class AgreeMenuListener implements IMenuListener {
 		};
 	}
 
-	private void viewCexConsole(final Counterexample cex, final Layout layout, Map<String, EObject> refMap) {
+	private void viewCexConsole(final Counterexample cex, final Layout layout, Map<String, EObject> refMap,
+			final AgreeRenaming renaming) {
 		final MessageConsole console = findConsole("Counterexample");
 		showConsole(console);
 		console.clearConsole();
@@ -609,17 +615,35 @@ public class AgreeMenuListener implements IMenuListener {
 					out.println();
 					printHLine(out, cex.getLength());
 
+					List<Signal<Value>> inputSignals = new ArrayList<>();
+					List<Signal<Value>> outputSignals = new ArrayList<>();
+					List<Signal<Value>> stateSignals = new ArrayList<>();
+
 					for (Signal<Value> signal : cex.getCategorySignals(layout, category)) {
 						// dont' print out values for properties
 						if (signal.getName().contains(":")) {
 							continue;
 						}
-						out.print(String.format("%-60s", "{" + signal.getName() + "}"));
-						for (int k2 = 0; k2 < cex.getLength(); k2++) {
-							out.print(String.format("%-15s", signal.getValue(k2).toString()));
+						String signalName = signal.getName();
+						EObject ref = renaming.findBestReference(signalName);
+						boolean isInput = (ref instanceof org.osate.aadl2.Port) ? ((org.osate.aadl2.Port) ref).isIn()
+								: false;
+						boolean isOutput = (ref instanceof org.osate.aadl2.Port) ? ((org.osate.aadl2.Port) ref).isOut()
+								: false;
+						if (isInput) {
+							inputSignals.add(signal);
+						} else if (isOutput) {
+							outputSignals.add(signal);
+						} else {
+							stateSignals.add(signal);
 						}
-						out.println();
 					}
+					out.println("Inputs:");
+					inputSignals.forEach(it -> printSignal(out, it, cex.getLength()));
+					out.println("State:");
+					stateSignals.forEach(it -> printSignal(out, it, cex.getLength()));
+					out.println("Outputs:");
+					outputSignals.forEach(it -> printSignal(out, it, cex.getLength()));
 					out.println();
 				}
 				printHLine(out, cex.getLength());
@@ -631,6 +655,14 @@ public class AgreeMenuListener implements IMenuListener {
 				e.printStackTrace();
 			}
 		}).start();
+	}
+
+	public static void printSignal(MessageConsoleStream out, Signal<Value> signal, int length) {
+		out.print(String.format("%-60s", "{" + signal.getName() + "}"));
+		for (int k2 = 0; k2 < length; k2++) {
+			out.print(String.format("%-15s", signal.getValue(k2).toString()));
+		}
+		out.println();
 	}
 
 	private boolean isEmpty(String category, Counterexample cex, Layout layout) {

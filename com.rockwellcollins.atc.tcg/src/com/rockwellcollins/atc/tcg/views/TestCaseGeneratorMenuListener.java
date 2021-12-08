@@ -311,14 +311,6 @@ public class TestCaseGeneratorMenuListener implements IMenuListener {
 		};
 	}
 
-	private static void printSignal(MessageConsoleStream out, Signal<Value> signal, int length) {
-		out.print(String.format("%-60s", "{" + signal.getName() + "}"));
-		for (int k2 = 0; k2 < length; k2++) {
-			out.print(String.format("%-15s", signal.getValue(k2).toString()));
-		}
-		out.println();
-	}
-
 	private void viewCexConsole(final Counterexample cex, final Layout layout, Map<String, EObject> refMap,
 			TcgRenaming tcgRenaming) {
 		final MessageConsole console = findConsole("Test Case");
@@ -375,11 +367,11 @@ public class TestCaseGeneratorMenuListener implements IMenuListener {
 						}
 					}
 					out.println("Inputs:");
-					inputSignals.forEach(it -> printSignal(out, it, cex.getLength()));
+					inputSignals.forEach(it -> AgreeMenuListener.printSignal(out, it, cex.getLength()));
 					out.println("State:");
-					stateSignals.forEach(it -> printSignal(out, it, cex.getLength()));
+					stateSignals.forEach(it -> AgreeMenuListener.printSignal(out, it, cex.getLength()));
 					out.println("Outputs:");
-					outputSignals.forEach(it -> printSignal(out, it, cex.getLength()));
+					outputSignals.forEach(it -> AgreeMenuListener.printSignal(out, it, cex.getLength()));
 					out.println();
 				}
 			} catch (IOException e) {

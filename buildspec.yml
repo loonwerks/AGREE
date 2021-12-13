@@ -17,16 +17,10 @@ phases:
     commands:
       - echo Build completed on `date`
       - export CODEBUILD_GIT_BRANCH=`git symbolic-ref HEAD --short 2>/dev/null`
-      - |
-        if [ X"$CODEBUILD_GIT_BRANCH" = X"" ] ; then
-          CODEBUILD_GIT_BRANCH=`git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }'` &&
-          export CODEBUILD_GIT_BRANCH=${CODEBUILD_GIT_BRANCH#remotes/origin/} &&
-          echo CODEBUILD_GIT_BRANCH=${CODEBUILD_GIT_BRANCH}
-        fi
       - export RELEASE_PKG_FILE=$(ls repository/target/com.rockwellcollins.atc.agree.repository-*.zip)
       - echo "Release package file is $RELEASE_PKG_FILE"
       - |
-        if [ X"$CODEBUILD_GIT_BRANCH" = X"stable" ] ; then
+        if [ X"$CODEBUILD_SOURCE_VERSION" = X"stable" ] ; then
           export SNAPSHOT_NUMBER=$(ls repository/target/repository/plugins/com.rockwellcollins.atc.agree_*.jar | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}") &&
           echo "deploying snapshot number $SNAPSHOT_NUMBER" &&
           rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git &&

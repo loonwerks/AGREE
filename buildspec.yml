@@ -19,6 +19,7 @@ phases:
       - export CODEBUILD_GIT_BRANCH=`git symbolic-ref HEAD --short 2>/dev/null`
       - export RELEASE_PKG_FILE=$(ls repository/target/com.rockwellcollins.atc.agree.repository-*.zip)
       - echo "Release package file is $RELEASE_PKG_FILE"
+      - echo "CODEBUILD_SOURCE_VERSION = $CODEBUILD_SOURCE_VERSION"
       - |
         if [ X"$CODEBUILD_SOURCE_VERSION" = X"stable" ] ; then
           export SNAPSHOT_NUMBER=$(ls repository/target/repository/plugins/com.rockwellcollins.atc.agree_*.jar | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}") &&

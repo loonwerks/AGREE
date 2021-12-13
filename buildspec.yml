@@ -19,19 +19,20 @@ phases:
       - export CODEBUILD_GIT_BRANCH=`git symbolic-ref HEAD --short 2>/dev/null`
       - |
         if [ "$CODEBUILD_GIT_BRANCH" == "" ] ; then
-          CODEBUILD_GIT_BRANCH=`git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }'`
-          export CODEBUILD_GIT_BRANCH=${CODEBUILD_GIT_BRANCH#remotes/origin/}
+          CODEBUILD_GIT_BRANCH=`git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }'` &&
+          export CODEBUILD_GIT_BRANCH=${CODEBUILD_GIT_BRANCH#remotes/origin/} &&
+          echo CODEBUILD_GIT_BRANCH=${CODEBUILD_GIT_BRANCH}
         fi
       - export RELEASE_PKG_FILE=$(ls repository/target/com.rockwellcollins.atc.agree.repository-*.zip)
       - echo "Release package file is $RELEASE_PKG_FILE"
       - |
         if [ "$CODEBUILD_GIT_BRANCH" == "stable" ] ; then
-          export SNAPSHOT_NUMBER=$(ls repository/target/repository/plugins/com.rockwellcollins.atc.agree_*.jar | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}")
-          echo "deploying snapshot number $SNAPSHOT_NUMBER"
-          rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git
-          pip3 install --user mako
-          python3 s3-tools/s3tools/DeployToP2CompositeRepository.py --path repository/target/repository --prefix p2/snapshots/agree --child-name agree_$SNAPSHOT_NUMBER --logging=INFO
-          python3 s3-tools/s3tools/ManageSnapshots.py --prefix p2/snapshots/agree --logging=INFO
+          export SNAPSHOT_NUMBER=$(ls repository/target/repository/plugins/com.rockwellcollins.atc.agree_*.jar | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}") &&
+          echo "deploying snapshot number $SNAPSHOT_NUMBER" &&
+          rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git &&
+          pip3 install --user mako &&
+          python3 s3-tools/s3tools/DeployToP2CompositeRepository.py --path repository/target/repository --prefix p2/snapshots/agree --child-name agree_$SNAPSHOT_NUMBER --logging=INFO &&
+          python3 s3-tools/s3tools/ManageSnapshots.py --prefix p2/snapshots/agree --logging=INFO &&
           echo Deploy completed on `date`
         fi
 artifacts:

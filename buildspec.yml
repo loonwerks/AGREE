@@ -16,14 +16,19 @@ phases:
     on-failure: ABORT
     commands:
       - echo Build completed on `date`
-      - rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git
       - export RELEASE_PKG_FILE=$(ls repository/target/com.rockwellcollins.atc.agree.repository-*.zip)
       - echo "Release package file is $RELEASE_PKG_FILE"
-      - export SNAPSHOT_NUMBER=$(ls repository/target/repository/plugins/com.rockwellcollins.atc.agree_*.jar | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}")
-      - echo "deploying snapshot number $SNAPSHOT_NUMBER"
-      - pip3 install --user mako
-      - python3 s3-tools/s3tools/DeployToP2CompositeRepository.py --path repository/target/repository --prefix p2/snapshots/agree --child-name agree_$SNAPSHOT_NUMBER --logging=INFO
-      - python3 s3-tools/s3tools/ManageSnapshots.py --prefix p2/snapshots/agree --logging=INFO
+      - echo "CODEBUILD_BUILD_ARN = $CODEBUILD_BUILD_ARN"
+      - |
+        if expr "${CODEBUILD_BUILD_ARN}" : ".*agree-devops-tooling-pipeline-stable" >/dev/null ; then
+          export SNAPSHOT_NUMBER=$(ls repository/target/repository/plugins/com.rockwellcollins.atc.agree_*.jar | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}") &&
+          echo "deploying snapshot number $SNAPSHOT_NUMBER" &&
+          rm -rf s3-tools && git clone --depth 1 https://github.com/loonwerks/s3-tools.git &&
+          pip3 install --user mako &&
+          python3 s3-tools/s3tools/DeployToP2CompositeRepository.py --path repository/target/repository --prefix p2/snapshots/agree --child-name agree_$SNAPSHOT_NUMBER --logging=INFO &&
+          python3 s3-tools/s3tools/ManageSnapshots.py --prefix p2/snapshots/agree --logging=INFO &&
+          echo Deploy completed on `date`
+        fi
 artifacts:
   files:
     - repository/target/repository/**/*

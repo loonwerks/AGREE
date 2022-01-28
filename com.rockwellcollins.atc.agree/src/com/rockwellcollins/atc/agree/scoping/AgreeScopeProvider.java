@@ -56,6 +56,7 @@ import org.osate.aadl2.PublicPackageSection;
 import org.osate.aadl2.Subcomponent;
 import org.osate.annexsupport.AnnexUtil;
 
+import com.google.common.collect.Lists;
 import com.rockwellcollins.atc.agree.AgreeTypeSystem;
 import com.rockwellcollins.atc.agree.AgreeTypeSystem.RecordTypeDef;
 import com.rockwellcollins.atc.agree.AgreeTypeSystem.TypeDef;
@@ -246,10 +247,9 @@ public class AgreeScopeProvider extends org.osate.xtext.aadl2.properties.scoping
 		}
 	}
 
-
 	IScope scope_NamedElement(AgreeContract ctx, EReference ref) {
 		EObject container = getAadlContainer(ctx);
-		AadlPackage pkg = getContainingPackage(container);
+		AadlPackage pkg = getContainingPackage(ctx);
 
 		Map<String, NamedElement> elems = new HashMap<>();
 
@@ -386,18 +386,11 @@ public class AgreeScopeProvider extends org.osate.xtext.aadl2.properties.scoping
 			}
 		}
 		return Scopes.scopeFor(bs);
+
 	}
 
 	IScope scope_NamedElement(ExistsExpr ctx, EReference ref) {
-		IScope prevScope = prevScope(ctx, ref);
-		List<EObject> bs = new ArrayList<EObject>();
-		bs.add(ctx.getBinding());
-		for (IEObjectDescription ieod : prevScope.getAllElements()) {
-			if (!ieod.getName().toString().equals(ctx.getBinding().getName())) {
-				bs.add(ieod.getEObjectOrProxy());
-			}
-		}
-		return Scopes.scopeFor(bs);
+		return Scopes.scopeFor(Lists.newArrayList(ctx.getBinding()), getScope(ctx.eContainer(), ref));
 	}
 
 	IScope scope_NamedElement(FlatmapExpr ctx, EReference ref) {

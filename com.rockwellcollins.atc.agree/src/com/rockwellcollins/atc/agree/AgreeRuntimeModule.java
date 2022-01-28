@@ -28,7 +28,6 @@ import com.google.inject.Binder;
 import com.rockwellcollins.atc.agree.generator.NullGenerator;
 import com.rockwellcollins.atc.agree.scoping.AgreeResourceDescriptionStrategy;
 import com.rockwellcollins.atc.agree.serializer.AgreeSerializer;
-import com.rockwellcollins.atc.agree.validation.AgreeNamesAreUniqueValidationHelper;
 
 /**
  * Use this class to register components to be used at runtime / without the
@@ -63,10 +62,6 @@ public class AgreeRuntimeModule extends com.rockwellcollins.atc.agree.AbstractAg
 
 	public Class<? extends org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
 		return AgreeResourceDescriptionStrategy.class;
-	}
-
-	public Class<? extends org.eclipse.xtext.validation.INamesAreUniqueValidationHelper> bindINamesAreUniqueValidationHelper() {
-		return AgreeNamesAreUniqueValidationHelper.class;
 	}
 
 }

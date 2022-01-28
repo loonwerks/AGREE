@@ -28,12 +28,13 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.xtext.validation.ComposedChecks;
+import org.eclipse.xtext.validation.NamesAreUniqueValidator;
 import org.osate.xtext.aadl2.properties.validation.PropertiesValidator;
 
 /**
  * @since 3.0
  */
-@ComposedChecks(validators = { AgreeNamesAreUniqueValidator.class })
+@ComposedChecks(validators = { NamesAreUniqueValidator.class })
 public abstract class AbstractAgreeValidator extends PropertiesValidator {
 
 	@Override

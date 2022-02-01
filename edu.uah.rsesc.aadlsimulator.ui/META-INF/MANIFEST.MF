@@ -2,39 +2,39 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AADL Simulator UI
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator.ui;singleton:=true
-Bundle-Version: 2.7.1.qualifier
+Bundle-Version: 2.8.0.qualifier
 Bundle-Vendor: The University of Alabama in Huntsville
 Bundle-Classpath: .,
  lib/jogamp-fat.jar,
  lib/jzy3d-api-1.0.0-20160507.130542-19.jar,
  lib/jzy3d-swt-1.0.0-20160507.130631-14.jar
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.emf.ecore,
- org.eclipse.emf.ecore.xmi,
+Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.20.0,4.0.0)",
+ org.eclipse.emf.ecore;bundle-version="[2.23.0,3.0.0)",
+ org.eclipse.emf.ecore.xmi;bundle-version="[2.16.0,3.0.0)",
  org.osate.aadl2.modelsupport;bundle-version="[2.0.0,7.0.0)",
  org.osate.aadl2;bundle-version="[4.0.0,5.0.0)",
- edu.uah.rsesc.aadlsimulator,
- org.eclipse.core.expressions,
- org.eclipse.ui.workbench,
- org.eclipse.xtext.util,
- org.eclipse.xtext,
- org.eclipse.ui.ide,
- org.eclipse.jface,
- org.eclipse.swt,
+ edu.uah.rsesc.aadlsimulator;bundle-version="[2.8.0,3.0.0)",
+ org.eclipse.core.expressions;bundle-version="[3.7.0,4.0.0)",
+ org.eclipse.ui.workbench;bundle-version="[3.122.0,4.0.0)",
+ org.eclipse.xtext.util;bundle-version="[2.25.0,3.0.0)",
+ org.eclipse.xtext;bundle-version="[2.25.0,3.0.0)",
+ org.eclipse.ui.ide;bundle-version="[3.18.0,4.0.0)",
+ org.eclipse.jface;bundle-version="[3.22.0,4.0.0)",
+ org.eclipse.swt;bundle-version="[3.116.0,4.0.0)",
  org.osate.xtext.aadl2.properties;bundle-version="[2.0.0,4.0.0)",
- org.eclipse.e4.core.contexts,
- org.eclipse.e4.core.di,
- org.eclipse.ui.console,
- org.eclipse.e4.core.services,
- org.eclipse.e4.ui.di,
+ org.eclipse.e4.core.contexts;bundle-version="[1.8.0,2.0.0)",
+ org.eclipse.e4.core.di;bundle-version="[1.7.0,2.0.0)",
+ org.eclipse.ui.console;bundle-version="[3.10.0,4.0.0)",
+ org.eclipse.e4.core.services;bundle-version="[2.2.0,3.0.0)",
+ org.eclipse.e4.ui.di;bundle-version="[1.3.0,2.0.0)",
  org.osate.ui;bundle-version="[2.0.0,7.0.0)",
- org.eclipse.e4.ui.workbench,
- org.eclipse.e4.ui.model.workbench,
- org.eclipse.emf.common,
+ org.eclipse.e4.ui.workbench;bundle-version="[1.12.0,2.0.0)",
+ org.eclipse.e4.ui.model.workbench;bundle-version="[2.1.0,3.0.0)",
+ org.eclipse.emf.common;bundle-version="[2.22.0,3.0.0)",
  org.osate.ge;bundle-version="[2.0.0,4.0.0)",
- edu.uah.rsesc.aadlsimulator.xtext.ui,
- javax.annotation
+ edu.uah.rsesc.aadlsimulator.xtext.ui;bundle-version="[3.0.0,4.0.0)",
+ javax.annotation;bundle-version="[1.3.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Service-Component: components/DefaultSimulationUIService.xml
@@ -43,6 +43,6 @@ Export-Package: edu.uah.rsesc.aadlsimulator.ui,
  edu.uah.rsesc.aadlsimulator.ui.launch,
  edu.uah.rsesc.aadlsimulator.ui.services
 Bundle-Activator: edu.uah.rsesc.aadlsimulator.ui.Activator
-Import-Package: org.apache.log4j;version="1.2.15",
- org.osgi.service.event
+Import-Package: org.apache.log4j;version="[1.2.15,2.0.0)",
+ org.osgi.service.event;version="[1.0.0,2.0.0)"
 Automatic-Module-Name: edu.uah.rsesc.aadlsimulator.ui

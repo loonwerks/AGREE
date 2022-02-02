@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.rockwellcollins.atc.agree.ui" version="2">
+    <resource path="src-gen/com/rockwellcollins/atc/agree/ide/contentassist/antlr/AgreeParser.java" type="com.rockwellcollins.atc.agree.ide.contentassist.antlr.AgreeParser">
+        <filter id="1110441988">
+            <message_arguments>
+                <message_argument value="com.rockwellcollins.atc.agree.ide.contentassist.antlr.AgreeParser"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src-gen/com/rockwellcollins/atc/agree/ide/contentassist/antlr/PartialAgreeContentAssistParser.java" type="com.rockwellcollins.atc.agree.ide.contentassist.antlr.PartialAgreeContentAssistParser">
+        <filter id="1110441988">
+            <message_arguments>
+                <message_argument value="com.rockwellcollins.atc.agree.ide.contentassist.antlr.PartialAgreeContentAssistParser"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src-gen/com/rockwellcollins/atc/agree/ide/contentassist/antlr/internal/InternalAgreeParser.java" type="com.rockwellcollins.atc.agree.ide.contentassist.antlr.internal.InternalAgreeParser">
+        <filter id="1110441988">
+            <message_arguments>
+                <message_argument value="com.rockwellcollins.atc.agree.ide.contentassist.antlr.internal.InternalAgreeParser"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src-gen/com/rockwellcollins/atc/agree/ide/contentassist/antlr/lexer/InternalAgreeLexer.java" type="com.rockwellcollins.atc.agree.ide.contentassist.antlr.lexer.InternalAgreeLexer">
+        <filter id="1110441988">
+            <message_arguments>
+                <message_argument value="com.rockwellcollins.atc.agree.ide.contentassist.antlr.lexer.InternalAgreeLexer"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src-gen/com/rockwellcollins/atc/agree/ui/internal/AgreeActivator.java" type="com.rockwellcollins.atc.agree.ui.internal.AgreeActivator">
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="PLUGIN_ID"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>

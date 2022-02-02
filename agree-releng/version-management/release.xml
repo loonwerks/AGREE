@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<release>
+	<plugin name="com.rockwellcollins.atc.agree" version="2.7.0"/>
+	<plugin name="com.rockwellcollins.atc.agree.analysis" version="2.7.0"/>
+	<plugin name="com.rockwellcollins.atc.agree.codegen" version="2.7.0"/>
+	<plugin name="com.rockwellcollins.atc.agree.doc" version="2.7.0"/>
+	<plugin name="com.rockwellcollins.atc.agree.ui" version="2.7.0"/>
+	<plugin name="com.rockwellcollins.atc.tcg" version="2.7.0"/>
+	<plugin name="edu.uah.rsesc.aadlsimulator" version="2.7.0"/>
+	<plugin name="edu.uah.rsesc.aadlsimulator.agree" version="2.7.0"/>
+	<plugin name="edu.uah.rsesc.aadlsimulator.agree.ui" version="2.7.0"/>
+	<plugin name="edu.uah.rsesc.aadlsimulator.doc" version="2.7.0"/>
+	<plugin name="edu.uah.rsesc.aadlsimulator.ui" version="2.7.0"/>
+	<plugin name="edu.uah.rsesc.aadlsimulator.xtext" version="2.7.0"/>
+	<plugin name="edu.uah.rsesc.aadlsimulator.xtext.ui" version="2.7.0"/>
+	<plugin name="edu.uah.rsesc.agree.ge" version="2.7.0"/>
+	<plugin name="edu.uah.rsesc.agree.ge.ui" version="2.7.0"/>
+</release>

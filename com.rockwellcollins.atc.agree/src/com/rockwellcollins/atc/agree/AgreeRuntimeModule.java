@@ -60,6 +60,9 @@ public class AgreeRuntimeModule extends com.rockwellcollins.atc.agree.AbstractAg
 		return com.rockwellcollins.atc.agree.serializer.AgreeCrossReferenceSerializer.class;
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	public Class<? extends org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
 		return AgreeResourceDescriptionStrategy.class;
 	}

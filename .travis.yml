@@ -38,7 +38,7 @@ before_install:
 - pip2 install --user pandocfilters
 - pip3 install --user --upgrade pip
 - pip3 install --user testresources
-- pip3 install --user --upgrade setuptools
+- pip3 install --user --upgrade setuptools setuptools_rust
 - pip3 install --user boto3 GitPython github3.py mako pandocfilters
 - wget https://github.com/jgm/pandoc/releases/download/2.12/pandoc-2.12-1-amd64.deb
 - sudo dpkg -i pandoc-2.12-1-amd64.deb

@@ -1,6 +1,27 @@
+/*
+ * Copyright (c) 2021, Collins Aerospace.
+ * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+ * including any software or models in source or binary form, as well as any drawings, specifications,
+ * and documentation (collectively "the Data"), to deal in the Data without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Data.
+ *
+ * THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
+ */
 package edu.uah.rsesc.aadlsimulator.xtext;
 
 import java.io.IOException;
+
 import edu.uah.rsesc.aadlsimulator.xtext.util.InputConstraintHelper;
 import edu.uah.rsesc.aadlsimulator.xtext.util.ReferenceTypeResolver;
 import edu.uah.rsesc.aadlsimulator.xtext.util.ResultType;
@@ -46,7 +67,7 @@ public class TestGrammar {
 		testConstraint("[0,ix]", ResultType.INTEGER, 0, true);
 		testConstraint("[,]", ResultType.REAL, 0, false); // Interval must not be completely unbounded
 		testConstraint("{}", ResultType.REAL, 0, false); // Sets must not be empty
-		testConstraint("{5.0, 6}", ResultType.REAL, 0, false); // All members of the set must be of the same type 
+		testConstraint("{5.0, 6}", ResultType.REAL, 0, false); // All members of the set must be of the same type
 		testConstraint("[, 100].rand_real()", ResultType.REAL, 0, false);
 		testConstraint("{1}", ResultType.INTEGER, 0, true);
 		testConstraint("{1}", ResultType.REAL, 0, false); // Not of the expected type
@@ -54,13 +75,13 @@ public class TestGrammar {
 		testConstraint("{1, 2, 3}.rand()", ResultType.INTEGER, 0, true);
 		testConstraint("{ix+1, iy+2, iz+3}.rand()", ResultType.INTEGER, 0, false);
 		testConstraint("{ix, iy}.rand()", ResultType.INTEGER, 0, false);
-		testConstraint("{pre(ix), pre(iy)}.rand()", ResultType.INTEGER, 1, true);		
+		testConstraint("{pre(ix), pre(iy)}.rand()", ResultType.INTEGER, 1, true);
 		testConstraint("a::ib", ResultType.INTEGER, 1, true);
 		testConstraint("a::b::ic", ResultType.INTEGER, 1, true);
 		testConstraint("a::b.ic", ResultType.INTEGER, 1, false); // Dot syntax not supported for constants
 		testConstraint("pre(a::b::ic)", ResultType.INTEGER, 1, true);
 	}
-	
+
 	private static void testConstraint(final String constraint, final ResultType expectedType, final int numberOfPreviousSteps, final boolean isConstraintValid) {
 		com.google.inject.Injector injector = new InputConstraintStandaloneSetup().createInjectorAndDoEMFRegistration();
 		final InputConstraintHelper parserHelper = injector.getInstance(InputConstraintHelper.class);
@@ -70,7 +91,7 @@ public class TestGrammar {
 		if(parseAndValidateResult.isValid()) {
 			if(isConstraintValid) {
 				System.out.println("Success: Constructed AST for constraint: " + constraint + " : " + parseAndValidateResult.getInputConstraint());
-				
+
 				// Try to unparse the constraint
 				parserHelper.unparse(parseAndValidateResult.getInputConstraint());
 			} else{
@@ -80,7 +101,7 @@ public class TestGrammar {
 			if(isConstraintValid) {
 				System.err.println("Error: Failed to create AST from constraint: " + constraint + ". " + parseAndValidateResult.getErrorMessage());
 			} else {
-				System.out.println("Success: Expected error for : " + constraint + " : " + parseAndValidateResult.getErrorMessage());				
+				System.out.println("Success: Expected error for : " + constraint + " : " + parseAndValidateResult.getErrorMessage());
 			}
 		}
 

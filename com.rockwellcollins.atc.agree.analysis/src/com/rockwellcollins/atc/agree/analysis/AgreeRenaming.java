@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2022, Collins Aerospace.
+ * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+ * including any software or models in source or binary form, as well as any drawings, specifications,
+ * and documentation (collectively "the Data"), to deal in the Data without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Data.
+ *
+ * THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
+ */
 package com.rockwellcollins.atc.agree.analysis;
 
 import java.util.HashMap;
@@ -41,6 +61,7 @@ public class AgreeRenaming extends Renaming {
 	private Map<String, String> supportRefStrings = new HashMap<>();
 	private Map<String, EObject> refMap;
 	private Set<String> invertedProperties = new HashSet<>();
+	private Set<String> uninterpretedFnIONames = new HashSet<>();
 
 	public AgreeRenaming() {
 		refMap = new HashMap<>();
@@ -66,6 +87,10 @@ public class AgreeRenaming extends Renaming {
 
 	public void addSupportRefString(String from, String refStr) {
 		supportRefStrings.put(renameIVC(from), refStr);
+	}
+
+	public void addUninterpretedFnIONames(String name) {
+		uninterpretedFnIONames.add(name);
 	}
 
 	@Override
@@ -98,14 +123,23 @@ public class AgreeRenaming extends Renaming {
 		return refMap;
 	}
 
+	/**
+	 * @since 2.8
+	 */
 	public void addInvertedProperty(String propertyName) {
 		invertedProperties.add(propertyName);
 	}
 
+	/**
+	 * @since 2.8
+	 */
 	public boolean propertyIsInverted(String propertyName) {
 		return invertedProperties.contains(propertyName);
 	}
 
+	/**
+	 * @since 2.8
+	 */
 	public Set<String> getInvertedProperties() {
 		return invertedProperties;
 	}
@@ -181,12 +215,28 @@ public class AgreeRenaming extends Renaming {
 				return newName;
 			} else if (original.endsWith(LustreAstBuilder.assumeHistSufix)) {
 				return newName;
+			} else if (matchUninterpretedFnIONames(newName)) {
+				return newName;
 			}
 			return null;
 		}
 
 		return newName;
 
+	}
+
+	private boolean matchUninterpretedFnIONames(String name) {
+		for (String uFnIOName : uninterpretedFnIONames) {
+			if (name.equals(uFnIOName)) {
+				return true;
+			}
+			// handle record type I/O
+			String uFnIOString = uFnIOName + ".";
+			if (name.startsWith(uFnIOString)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private EObject findBestReference(String refStr) {

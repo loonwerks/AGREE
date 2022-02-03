@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2021, Collins Aerospace.
+ * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+ * including any software or models in source or binary form, as well as any drawings, specifications,
+ * and documentation (collectively "the Data"), to deal in the Data without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Data.
+ *
+ * THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
+ */
 package edu.uah.rsesc.aadlsimulator.agree.engine;
 
 import java.math.BigDecimal;
@@ -43,52 +63,52 @@ public class InputConstraintToLustreValueExpression {
 	private final ReferenceEvaluator referenceEvaluator;
 	private final InputConstraintSwitch<Expr> evalSwitch = new InputConstraintSwitch<Expr>() {
 		private final Random rand = new Random();
-		
+
 		@Override
 		public Expr caseRandomIntegerExpression(final RandomIntegerExpression object) {
 			final IntervalExpression interval = object.getInterval();
 			Value leftValue = lustreExprToValue(doSwitch(interval.getLeft()));
-			Value rightValue = lustreExprToValue(doSwitch(interval.getRight()));			
+			Value rightValue = lustreExprToValue(doSwitch(interval.getRight()));
 			if(leftValue.getClass() != rightValue.getClass()) {
 				throw new RuntimeException("Unexpected case. Values are not of matching types");
 			}
-			
+
 			// Convert left and right values to big integers
 			BigInteger leftInteger;
 			BigInteger rightInteger;
 			if(leftValue instanceof IntegerValue) {
 				leftInteger = ((IntegerValue)leftValue).value;
 				rightInteger = ((IntegerValue)rightValue).value;
-				
+
 				// Adjust left and right values based on whether the bounds are closed
 				if(!interval.isLeftClosed()) {
 					leftInteger = leftInteger.add(BigInteger.ONE);
-				} 
-				
+				}
+
 				if(!interval.isRightClosed()) {
 					rightInteger = rightInteger.subtract(BigInteger.ONE);
-				}				
+				}
 			} else {
 				final BigInteger[] leftIntRemainder = bigFractionToInteger(((RealValue)leftValue).value);
 				final BigInteger[] rightIntRemainder = bigFractionToInteger(((RealValue)rightValue).value);
 				leftInteger = leftIntRemainder[0];
 				rightInteger = rightIntRemainder[0];
-				
+
 				// Adjust left and right values based on whether the bounds are closed and whether the value was truncated during the conversion to big integer
 				if(!interval.isLeftClosed() && leftIntRemainder[1].equals(BigInteger.ZERO)) {
 					leftInteger = leftInteger.add(BigInteger.ONE);
-				} 
+				}
 
 				if(!interval.isRightClosed() && leftIntRemainder[1].equals(BigInteger.ZERO)) {
 					rightInteger = rightInteger.subtract(BigInteger.ONE);
 				}
 			}
-			
+
 			final BigInteger range = rightInteger.subtract(leftInteger);
 			if(range.compareTo(BigInteger.ZERO) <= 0) {
 				throw new ConstraintEvaluationException("Invalid interval range: " + range, null);
 			}
-			
+
 			// Generate a 32-bit random value
 			// Use any random value except for the MAX_RANDOM_VALUE. MAX_RANDOM_VALUE will cause a value outside the range
 			// We do this to allow for a roughly even distribution of offsets
@@ -101,16 +121,16 @@ public class InputConstraintToLustreValueExpression {
 
 			return new IntExpr(randomInteger);
 		}
-		
+
 		@Override
 		public Expr caseRandomRealExpression(final RandomRealExpression object) {
 			final IntervalExpression interval = object.getInterval();
 			Value leftValue = lustreExprToValue(doSwitch(interval.getLeft()));
-			Value rightValue = lustreExprToValue(doSwitch(interval.getRight()));			
+			Value rightValue = lustreExprToValue(doSwitch(interval.getRight()));
 			if(leftValue.getClass() != rightValue.getClass()) {
 				throw new RuntimeException("Unexpected case. Values are not of matching types");
 			}
-			
+
 			// Convert left and right values to big fractions
 			final BigFraction leftFraction;
 			final BigFraction rightFraction;
@@ -121,7 +141,7 @@ public class InputConstraintToLustreValueExpression {
 				leftFraction = ((RealValue)leftValue).value;
 				rightFraction = ((RealValue)rightValue).value;
 			}
-			
+
 			// Determine range of the interval
 			final BigFraction range = rightFraction.subtract(leftFraction);
 			if(range.compareTo(BigFraction.ZERO) <= 0) {
@@ -133,12 +153,12 @@ public class InputConstraintToLustreValueExpression {
 			do {
 				randomValue = Integer.toUnsignedLong(rand.nextInt()); // 32-bit value
 			} while((randomValue == 0 && !interval.isLeftClosed()) || (randomValue == MAX_RANDOM_VALUE && !interval.isRightClosed()));
-			
+
 			final BigFraction scale = new BigFraction(BigInteger.valueOf(randomValue), BigInteger.valueOf(MAX_RANDOM_VALUE));
 			final BigFraction randomFraction = leftFraction.add(range.multiply(scale));
 			return new BinaryExpr(new RealExpr(new BigDecimal(randomFraction.getNumerator())), BinaryOp.DIVIDE, new RealExpr(new BigDecimal(randomFraction.getDenominator())));
 		}
-		
+
 		@Override
 		public Expr caseRandomElementExpression(final RandomElementExpression object) {
 			final int index = rand.nextInt(object.getSet().getMembers().size());
@@ -159,37 +179,38 @@ public class InputConstraintToLustreValueExpression {
 		public Expr caseBooleanLiteral(final BooleanLiteral object) {
 			return new BoolExpr(object.isValue());
 		}
- 
+
+		@Override
 		public Expr caseBinaryExpression(final BinaryExpression object) {
 			final Expr left = doSwitch(object.getLeft());
 			final Expr right = doSwitch(object.getRight());
-			
+
 			final BinaryOp lustreOperator;
 			switch(object.getOp()) {
 			case ADDITION:
 				lustreOperator = BinaryOp.PLUS;
 				break;
-				
+
 			case SUBTRACTION:
 				lustreOperator = BinaryOp.MINUS;
 				break;
-				
+
 			case MULTIPLICATION:
 				lustreOperator = BinaryOp.MULTIPLY;
 				break;
-				
+
 			case DIVISION:
 				lustreOperator = BinaryOp.DIVIDE;
 				break;
-				
+
 			default:
 				throw new RuntimeException("Unexpected operator: " + object.getOp());
 			}
-			
+
 			// Return the binary expression
 			return new BinaryExpr(left, lustreOperator, right);
-		}		
-		
+		}
+
 		@Override
 		public Expr casePreExpression(final PreExpression object) {
 			// Only one level of pre is supported for now.
@@ -204,7 +225,7 @@ public class InputConstraintToLustreValueExpression {
 				throw new RuntimeException("Unsupported reference: " + ref);
 			}
 		}
-		
+
 		private Expr lustreValueToExpr(final Value lustreValue) {
 			// Convert the lustre value into an expression
 			if(lustreValue instanceof BooleanValue) {
@@ -225,7 +246,7 @@ public class InputConstraintToLustreValueExpression {
 		public Expr caseElementRefExpression(final ElementRefExpression object) {
 			return referenceEvaluator.getLustreExpression(object);
 		}
-		
+
 		@Override
 		public Expr caseConstRefExpression(final ConstRefExpression object) {
 			return lustreValueToExpr(referenceEvaluator.getLustreValue(object, 0));
@@ -236,15 +257,15 @@ public class InputConstraintToLustreValueExpression {
 			return new UnaryExpr(UnaryOp.NEGATIVE, doSwitch(object.getValue()));
 		}
 	};
-	
+
 	public InputConstraintToLustreValueExpression(final ReferenceEvaluator referenceEvaluator) {
 		this.referenceEvaluator = Objects.requireNonNull(referenceEvaluator, "referenceEvaluator must not be null");
 	}
-	
+
 	public Expr eval(final InputConstraint ic) {
 		return evalSwitch.doSwitch(ic);
 	}
-	
+
 	// Only binary, unary, and literal expressions are supported
 	private static Value lustreExprToValue(final Expr lustreExpr) {
 		if(lustreExpr instanceof BoolExpr) {
@@ -264,11 +285,11 @@ public class InputConstraintToLustreValueExpression {
 			final Value operandValue = lustreExprToValue(unaryExpr.expr);
 			return operandValue.applyUnaryOp(unaryExpr.op);
 		}
-		
-		throw new RuntimeException("Unsupported expression: " + lustreExpr);		
+
+		throw new RuntimeException("Unsupported expression: " + lustreExpr);
 	}
-	
+
 	private static BigInteger[] bigFractionToInteger(final BigFraction bigFraction) {
 		return bigFraction.getNumerator().divideAndRemainder(bigFraction.getDenominator());
-	}	
+	}
 }

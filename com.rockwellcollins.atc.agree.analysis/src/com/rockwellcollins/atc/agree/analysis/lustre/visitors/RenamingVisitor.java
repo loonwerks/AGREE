@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2021, Collins Aerospace.
+ * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+ * including any software or models in source or binary form, as well as any drawings, specifications,
+ * and documentation (collectively "the Data"), to deal in the Data without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Data.
+ *
+ * THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
+ */
 package com.rockwellcollins.atc.agree.analysis.lustre.visitors;
 
 import java.util.stream.Collectors;
@@ -35,6 +55,7 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeVar;
 import com.rockwellcollins.atc.agree.analysis.ast.visitors.AgreeInlineLatchedConnections;
 import com.rockwellcollins.atc.agree.analysis.translation.LustreAstBuilder;
 
+import jkind.lustre.Function;
 import jkind.lustre.Node;
 import jkind.lustre.Program;
 import jkind.lustre.VarDecl;
@@ -48,6 +69,7 @@ public class RenamingVisitor extends AstIterVisitor {
 	private final Program program;
 	private boolean isMainNode;
 	private String nodeName;
+	private boolean isFunction = false;
 
 	public static void addRenamings(Program program, AgreeRenaming renaming, ComponentInstance rootInstance,
 			AgreeLayout layout) {
@@ -88,7 +110,22 @@ public class RenamingVisitor extends AstIterVisitor {
 	}
 
 	@Override
+	public Void visit(Function function) {
+		isFunction = true;
+		String functionName = function.id.replace("__", ".");
+		renaming.addUninterpretedFnIONames(functionName);
+		visitVarDecls(function.inputs);
+		visitVarDecls(function.outputs);
+		isFunction = false;
+		return null;
+	}
+
+	@Override
 	public Void visit(VarDecl e) {
+		if (isFunction) {
+			renaming.addUninterpretedFnIONames(e.id);
+			return null;
+		}
 		if (e instanceof AgreeVar) {
 			AgreeVar var = (AgreeVar) e;
 			String category = getCategory(rootInstance, var);
@@ -122,8 +159,6 @@ public class RenamingVisitor extends AstIterVisitor {
 		}
 		return null;
 	}
-
-
 
 	private String argToString(Arg arg) {
 		String result = arg.getName() + " : ";

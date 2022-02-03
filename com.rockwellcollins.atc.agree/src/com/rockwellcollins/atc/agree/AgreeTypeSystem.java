@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2022, Collins Aerospace.
+ * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+ * including any software or models in source or binary form, as well as any drawings, specifications,
+ * and documentation (collectively "the Data"), to deal in the Data without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Data.
+ *
+ * THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
+ */
 package com.rockwellcollins.atc.agree;
 
 import java.util.ArrayList;
@@ -100,6 +120,7 @@ import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
 import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 import com.rockwellcollins.atc.agree.agree.Type;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
+import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 
 public class AgreeTypeSystem {
 
@@ -246,8 +267,8 @@ public class AgreeTypeSystem {
 				|| (c instanceof DataImplementation && ((DataImplementation) c).getAllSubcomponents().isEmpty()
 						&& ((DataImplementation) c).getType() != null)) {
 			// Includes special case for data implementations implementing extensions of primitive types
-			List<PropertyAssociation> pas = c.getAllPropertyAssociations();
 			Classifier classifierType = c instanceof DataImplementation ? ((DataImplementation) c).getType() : c;
+			List<PropertyAssociation> pas = classifierType.getAllPropertyAssociations();
 			for (Classifier classType : classifierType.getSelfPlusAllExtended()) {
 				if (classType != null && hasIntegerDataRepresentation(classType)) {
 
@@ -318,7 +339,10 @@ public class AgreeTypeSystem {
 				String key = p.getQualifiedName();
 				key = key == null ? p.getName() : key;
 
-				if (key.equals("Data_Model::Data_Representation")) {
+				if (key == null) {
+					return Prim.ErrorTypeDef;
+				}
+				if (key.equalsIgnoreCase("Data_Model::Data_Representation")) {
 					if (v instanceof NamedValue) {
 						AbstractNamedValue anv = ((NamedValue) v).getNamedValue();
 						if (anv instanceof EnumerationLiteral) {
@@ -328,7 +352,7 @@ public class AgreeTypeSystem {
 						}
 					}
 
-				} else if (key.equals("Data_Model::Enumerators")) {
+				} else if (key.equalsIgnoreCase("Data_Model::Enumerators")) {
 					if (v instanceof ListValue) {
 						EList<PropertyExpression> peList = ((ListValue) v).getOwnedListElements();
 						String prefix = c.getQualifiedName() + "_";
@@ -341,7 +365,7 @@ public class AgreeTypeSystem {
 						}
 					}
 
-				} else if (key.equals("Data_Model::Base_Type")) {
+				} else if (key.equalsIgnoreCase("Data_Model::Base_Type")) {
 					if (v instanceof ListValue) {
 						ListValue l = (ListValue) v;
 						PropertyExpression pe = l.getOwnedListElements().get(0);
@@ -351,7 +375,7 @@ public class AgreeTypeSystem {
 
 					}
 
-				} else if (key.equals("Data_Model::Dimension")) {
+				} else if (key.equalsIgnoreCase("Data_Model::Dimension")) {
 					if (v instanceof ListValue) {
 						ListValue l = (ListValue) v;
 						PropertyExpression pe = l.getOwnedListElements().get(0);
@@ -959,6 +983,9 @@ public class AgreeTypeSystem {
 					return Prim.RealTypeDef;
 				} else if (namedEl instanceof LibraryFnDef) {
 					LibraryFnDef fnDef = (LibraryFnDef) namedEl;
+					return typeDefFromType(fnDef.getType());
+				} else if (namedEl instanceof UninterpretedFnDef) {
+					UninterpretedFnDef fnDef = (UninterpretedFnDef) namedEl;
 					return typeDefFromType(fnDef.getType());
 				}
 

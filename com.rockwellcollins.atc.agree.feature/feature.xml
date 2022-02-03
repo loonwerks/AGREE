@@ -1,17 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2022, Collins Aerospace.
+ * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
+ * including any software or models in source or binary form, as well as any drawings, specifications, 
+ * and documentation (collectively &quot;the Data&quot;), to deal in the Data without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ * and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, 
+ * subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all copies or 
+ * substantial portions of the Data.
+ * 
+ * THE DATA IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+ * IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE 
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
+ -->
 <feature
       id="com.rockwellcollins.atc.agree.feature"
       label="AGREE Annex for OSATE2"
-      version="2.6.1.qualifier"
+      version="2.7.1.qualifier"
       provider-name="Collins Aerospace">
 
    <copyright>
-      Copyright (c) 2012-2018, Rockwell Collins
+      Copyright (c) 2012-2022, Rockwell Collins
 All rights reserved.
    </copyright>
 
    <license url="">
-      Copyright (c) 2012-2018, Rockwell Collins
+      Copyright (c) 2012-2022, Rockwell Collins
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -39,7 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    <includes
          id="com.collins.trustedsystems.z3.feature"
-         version="0.0.0"/>
+         version="4.8.10"/>
 
    <includes
          id="com.collins.trustedsystems.jkindapi.feature"
@@ -52,11 +72,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import plugin="org.eclipse.ui.console" version="3.5.100" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.expressions" version="3.4.401" match="greaterOrEqual"/>
       <import plugin="org.osate.aadl2" version="2.0.0"/>
+      <import plugin="org.osate.xtext.aadl2.properties" version="3.0.0" match="compatible"/>
       <import plugin="com.rockwellcollins.atc.agree" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="com.rockwellcollins.atc.agree.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.osate.ge" version="2.0.0"  match="greaterOrEqual"/>
       <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="com.collins.trustedsystems.z3"/>
       <import plugin="org.osate.aadl2.instantiation" version="1.0.1" match="compatible"/>
+      <import plugin="org.osate.annexsupport" version="3.0.0" match="compatible"/>
       <import plugin="com.collins.trustedsystems.jkindapi" version="4.3.0" match="compatible"/>
       <import plugin="org.apache.commons.lang"/>
       <import plugin="org.eclipse.xtext.ui"/>
@@ -67,6 +90,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import plugin="org.antlr.runtime"/>
       <import plugin="org.eclipse.xtext.common.types.ui"/>
       <import plugin="org.eclipse.compare"/>
+      <import plugin="org.osate.xtext.aadl2.properties.ui" version="4.0.0" match="compatible"/>
       <import plugin="org.osate.aadl2" version="4.0.0" match="compatible"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.xtext.xbase.lib"/>
@@ -85,14 +109,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import plugin="org.osate.xtext.aadl2.ui" version="2.0.0"/>
       <import feature="org.osate.core.feature" version="2.7.0" match="greaterOrEqual"/>
       <import feature="org.osate.ge.feature" version="2.7.0" match="greaterOrEqual"/>
-      <import plugin="org.osate.aadl2.modelsupport" version="5.0.0" match="compatible"/>
-      <import plugin="org.osate.ui" version="5.0.0" match="compatible"/>
-      <import plugin="org.osate.xtext.aadl2.properties" version="3.0.0" match="compatible"/>
-      <import plugin="org.osate.ge" version="2.0.0" match="compatible"/>
-      <import plugin="org.osate.annexsupport" version="3.0.0" match="compatible"/>
-      <import plugin="org.osate.xtext.aadl2.properties.ui" version="4.0.0" match="compatible"/>
-      <import plugin="org.osate.xtext.aadl2.ui" version="5.0.0" match="compatible"/>
-      <import plugin="org.osate.xtext.aadl2" version="5.0.0" match="compatible"/>
+      <import plugin="org.osate.aadl2.modelsupport" version="6.0.0" match="compatible"/>
+      <import plugin="org.osate.ui" version="6.0.0" match="compatible"/>
+      <import plugin="org.osate.xtext.aadl2.ui" version="5.0.0"/>
+      <import plugin="org.osate.xtext.aadl2" version="6.0.0" match="compatible"/>
    </requires>
 
    <plugin

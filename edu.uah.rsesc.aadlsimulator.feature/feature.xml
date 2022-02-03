@@ -2,15 +2,15 @@
 <feature
       id="edu.uah.rsesc.aadlsimulator.feature"
       label="AADL Simulator"
-      version="2.6.1.qualifier"
+      version="2.7.1.qualifier"
       provider-name="The University of Alabama in Huntsville">
 
    <copyright>
-      Copyright (c) 2018, Rockwell Collins.
+      Copyright (c) 2018-2022, Rockwell Collins.
    </copyright>
 
    <license url="">
-      Copyright (c) 2018, Rockwell Collins.
+      Copyright (c) 2018-2022, Rockwell Collins.
 
 Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
 
@@ -534,7 +534,7 @@ A.7) The JOGL source tree _may_ contain code from Oculus VR, Inc.
       <import plugin="org.eclipse.xtext.ui.shared"/>
       <import plugin="org.osate.xtext.aadl2.properties" version="3.0.0"/>
       <import plugin="org.osate.xtext.aadl2.properties" version="2.0.0"/>
-      <import plugin="org.osate.ge" version="2.0.0" match="compatible"/>
+      <import plugin="org.osate.ge" version="2.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

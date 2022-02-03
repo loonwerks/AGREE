@@ -3,7 +3,7 @@ Automatic-Module-Name: com.rockwellcollins.atc.agree.tests
 Bundle-ManifestVersion: 2
 Bundle-Name: AGREE Language Tests
 Bundle-Vendor: Collins Aerospace
-Bundle-Version: 2.6.1.qualifier
+Bundle-Version: 2.7.1.qualifier
 Bundle-SymbolicName: com.rockwellcollins.atc.agree.tests;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.google.guava,
@@ -12,17 +12,20 @@ Require-Bundle: com.google.guava,
  org.junit.jupiter.api;bundle-version="[5.0.0,6.0.0)",
  org.eclipse.xtext.testing,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
- com.itemis.xtext.testing;bundle-version="0.2.0",
+ org.eclipse.xtext.testing;bundle-version="2.25.0",
  org.osate.aadl2;bundle-version="[4.0.0,5.0.0)",
  org.osate.aadl2.instantiation;bundle-version="[1.0.1,2.0.0)",
- org.osate.xtext.aadl2;bundle-version="[5.0.0,6.0.0)",
- org.osate.xtext.aadl2.ui;bundle-version="[5.0.0,6.0.0)",
- org.osate.pluginsupport;bundle-version="[5.0.0,6.0.0)",
+ org.osate.xtext.aadl2;bundle-version="[6.0.0,7.0.0)",
+ org.osate.xtext.aadl2.ui;bundle-version="[6.0.0,7.0.0)",
+ org.osate.pluginsupport;bundle-version="[7.0.0,8.0.0)",
  com.rockwellcollins.atc.agree,
  com.rockwellcollins.atc.agree.analysis;bundle-version="[2.4.0,3.0.0)",
  com.rockwellcollins.atc.agree.ui;bundle-version="2.4.0",
  org.eclipse.emf.mwe.utils;bundle-version="[1.5.0,2.0.0)",
- com.collins.trustedsystems.jkindapi;bundle-version="[4.0.0,5.0.0)"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+ com.collins.trustedsystems.jkindapi;bundle-version="[4.0.0,5.0.0)",
+ org.apache.log4j,
+ org.junit;bundle-version="4.13.0",
+ org.osate.testsupport;bundle-version="3.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: com.rockwellcollins.atc.agree.tests;x-internal=true
 Bundle-Activator: com.rockwellcollins.atc.agree.tests.Activator

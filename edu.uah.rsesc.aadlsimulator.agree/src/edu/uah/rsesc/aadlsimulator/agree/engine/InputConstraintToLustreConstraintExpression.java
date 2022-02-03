@@ -1,6 +1,27 @@
+/*
+ * Copyright (c) 2021, Collins Aerospace.
+ * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+ * including any software or models in source or binary form, as well as any drawings, specifications,
+ * and documentation (collectively "the Data"), to deal in the Data without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Data.
+ *
+ * THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
+ */
 package edu.uah.rsesc.aadlsimulator.agree.engine;
 
 import java.util.Objects;
+
 import edu.uah.rsesc.aadlsimulator.xtext.inputConstraint.InputConstraint;
 import edu.uah.rsesc.aadlsimulator.xtext.inputConstraint.IntervalExpression;
 import edu.uah.rsesc.aadlsimulator.xtext.inputConstraint.ScalarExpression;
@@ -24,19 +45,19 @@ public class InputConstraintToLustreConstraintExpression {
 			Expr expr = null;
 			if(object.getLeft() != null) {
 				final BinaryOp op = object.isRightClosed() ? BinaryOp.GREATEREQUAL : BinaryOp.GREATER;
-				expr = new BinaryExpr(constrainedVariableExpr, op, innerExprEvaluator.eval(object.getLeft()));				
+				expr = new BinaryExpr(constrainedVariableExpr, op, innerExprEvaluator.eval(object.getLeft()));
 			}
-			
+
 			if(object.getRight() != null) {
 				final BinaryOp op = object.isRightClosed() ? BinaryOp.LESSEQUAL : BinaryOp.LESS;
-				final Expr rightExpr = new BinaryExpr(constrainedVariableExpr, op, innerExprEvaluator.eval(object.getRight()));	
+				final Expr rightExpr = new BinaryExpr(constrainedVariableExpr, op, innerExprEvaluator.eval(object.getRight()));
 				if(expr == null) {
 					expr = rightExpr;
 				} else {
 					expr = new BinaryExpr(expr, BinaryOp.AND, rightExpr);
 				}
 			}
-			
+
 			return expr;
 		}
 
@@ -52,20 +73,20 @@ public class InputConstraintToLustreConstraintExpression {
 					expr = new BinaryExpr(expr, BinaryOp.OR, newExpr);
 				}
 			}
-			
+
 			return expr;
 		}
-				
+
 		@Override
 		public Expr caseScalarExpression(final ScalarExpression object) {
 			return new BinaryExpr(constrainedVariableExpr, BinaryOp.EQUAL, innerExprEvaluator.eval(object));
 		}
 	};
-	
+
 	public InputConstraintToLustreConstraintExpression(final ReferenceEvaluator referenceEvaluator) {
 		this.innerExprEvaluator = new InputConstraintToLustreValueExpression(Objects.requireNonNull(referenceEvaluator, "referenceEvaluator must not be null"));
 	}
-	
+
 	public Expr eval(final InputConstraint ic, final Expr constrainedVariableExpr) {
 		this.constrainedVariableExpr = Objects.requireNonNull(constrainedVariableExpr, "constrainedVariableId must not be null");
 		return evalSwitch.doSwitch(ic);

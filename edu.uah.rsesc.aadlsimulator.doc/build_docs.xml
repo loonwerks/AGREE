@@ -1,78 +1,99 @@
 <?xml version="1.0"?>
+<!--
+ Copyright (c) 2021, Collins Aerospace.
+ Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
+ including any software or models in source or binary form, as well as any drawings, specifications, 
+ and documentation (collectively &quot;the Data&quot;), to deal in the Data without restriction, including
+ without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, 
+ subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies or 
+ substantial portions of the Data.
+
+ THE DATA IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+ LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+ IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE 
+ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
+ -->
 <project name="build Eclipse Help" default="build-help">
 
-  <description>
-    Used to transform DocBook XML to Eclipse help output
-  </description>
+	<description>
+	Used to transform DocBook XML to Eclipse help output
+	</description>
 
-  <!-- Define base properties -->
-  <property name="user_guide.dir" value="user_guide" />
-  <property name="user_guide_output.dir" value="user_guide-gen" />
+	<!-- Define base properties -->
+	<property name="user_guide.dir" value="${basedir}/user_guide" />
+	<property name="user_guide_output.dir" value="${basedir}/user_guide-gen" />
 
-  <!-- - target: usage -->
-  <target name="usage" description="Prints help">
-<echo message="Use -projecthelp to get a list of the available targets." />
-  </target>
+	<!-- - target: usage -->
+	<target name="usage" description="Prints help">
+		<echo message="Use -projecthelp to get a list of the available targets." />
+	</target>
 
-  <!-- - target: clean -->
-  <target name="clean" description="Cleans up generated files.">
-  <delete dir="${dev_guide_output.dir}" />
-  <delete dir="${user_guide_output.dir}" />
-  </target>
+	<!-- - target: clean -->
+	<target name="clean" description="Cleans up generated files.">
+		<delete dir="${dev_guide_output.dir}" />
+		<delete dir="${user_guide_output.dir}" />
+	</target>
 
-  <target name="build-help" depends="clean, build_user_guide_eclipse, build_user_guide_pdf">
-  </target>
-	
+	<target name="build-help" depends="clean, build_user_guide_eclipse, build_user_guide_pdf">
+	</target>
+
 	<target name="build_user_guide_eclipse" description="Build the user guide">
 		<mkdir dir="${user_guide_output.dir}" />
-		
-		<exec executable="pandoc" dir="./user_guide/">
-			<arg value="user_guide.md"/>
-			<arg value="--toc"/>
-			<arg value="--number-sections"/>
-	    	<arg value="-s"/>
-			<arg value="--filter"/>
-			<arg value="pandoc-crossref"/>
-	   		<arg value="-f"/>
-	   	    <arg value="markdown"/>
-	   		<arg value="-t"/>
-	   		<arg value="html5"/>
-			<arg value="--css=../css/pandoc.css"/>
-	   		<arg value="-o"/>
-			<arg value="../user_guide-gen/user_guide.html"/>
+
+		<exec executable="pandoc" dir="${user_guide.dir}">
+			<arg value="user_guide.md" />
+			<arg value="--toc" />
+			<arg value="--number-sections" />
+			<arg value="-s" />
+			<arg value="--filter" />
+			<arg value="pandoc-crossref" />
+			<arg value="-f" />
+			<arg value="markdown" />
+			<arg value="-t" />
+			<arg value="html5" />
+			<arg value="--css=../css/pandoc.css" />
+			<arg value="-o" />
+			<arg value="${user_guide_output.dir}/user_guide.html" />
 		</exec>
-		
-		<exec executable="pandoc" dir="./user_guide/">
-			<env key="HTML_FILEPATH" value="user_guide-gen/user_guide.html"/>
-			<arg value="user_guide.md"/>
-	    	<arg value="-t"/>
-	   		<arg value="../create_toc.lua"/>
-	   		<arg value="-o"/>
-			<arg value="../user_guide-gen/user_guide_toc.xml"/>
+
+		<exec executable="pandoc" dir="${user_guide.dir}">
+			<env key="HTML_FILEPATH" value="${user_guide_output.dir}/user_guide.html" />
+			<arg value="user_guide.md" />
+			<arg value="-t" />
+			<arg value="../create_toc.lua" />
+			<arg value="-o" />
+			<arg value="${user_guide_output.dir}/user_guide_toc.xml" />
 		</exec>
 	</target>
-	
+
 	<target name="build_user_guide_pdf" description="Build the user guide PDF">
-		<mkdir dir="../../../documentation/simulator/" />
-		
-		<exec executable="pandoc" dir="./user_guide/">
-			<arg value="user_guide.md"/>
-			<arg value="--toc"/>
-			<arg value="--number-sections"/>
-	    	<arg value="-s"/>
-			<arg value="--filter"/>
-			<arg value="pandoc-crossref"/>
-	   		<arg value="-f"/>
-	   	    <arg value="markdown"/>
-			<arg value="--latex-engine=xelatex"/>
-			<arg value="-V"/>
-			<arg value="lof"/>
-			<arg value="-V"/>
-			<arg value="lot"/>
-			<arg value="-V"/>
-			<arg value="documentclass=report"/>
-	   		<arg value="-o"/>
-			<arg value="../../../../documentation/simulator/agree_simulator_user_guide.pdf"/>
+		<mkdir dir="${user_guide_output.dir}" />
+
+		<exec executable="pandoc" dir="${user_guide.dir}">
+			<arg value="user_guide.md" />
+			<arg value="--toc" />
+			<arg value="--number-sections" />
+			<arg value="-s" />
+			<arg value="--filter" />
+			<arg value="pandoc-crossref" />
+			<arg value="-f" />
+			<arg value="markdown" />
+			<arg value="--pdf-engine" />
+			<arg value="xelatex" />
+			<arg value="-V" />
+			<arg value="lof" />
+			<arg value="-V" />
+			<arg value="lot" />
+			<arg value="-V" />
+			<arg value="documentclass=report" />
+			<arg value="-o" />
+			<arg value="${user_guide_output.dir}/agree_simulator_user_guide.pdf" />
 		</exec>
 	</target>
-</project> 
+</project>

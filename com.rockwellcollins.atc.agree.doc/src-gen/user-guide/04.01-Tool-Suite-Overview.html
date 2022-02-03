@@ -151,6 +151,10 @@
 <header id="title-block-header">
 <h1 class="title">AGREE User Guide</h1>
 </header>
+<p>Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this data, including any software or models in source or binary form, as well as any drawings, specifications, and documentation (collectively “the Data”), to deal in the Data without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Data.</p>
+<p>THE DATA IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA. )</p>
 <h2 id="sec:tool_suite_overview">Tool Suite Overview</h2>
 <p>Figure <a href="#fig:agree_osate_tool_suite">1</a> shows an overview of the AGREE/OSATE tool suite. As presented in the figure, OSATE is installed as an Eclipse plugin that serves as the IDE for creating AADL models. AGREE runs as a plugin inside OSATE that provides both a language (AADL annex to annotate the models with assume-guarantee behavioral contracts) and a tool (for compositional verification of the contracts reside in AADL models). AGREE translates an AADL model and its contract annotations into Lustre and then queries the JKind model checker to perform the verification. JKind invokes a backend Satisfiability Modulo Theories (SMT) solver (e.g., Yices or Z3) to validate if the guarantees are valid in the compositional setting.</p>
 <figure>

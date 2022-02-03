@@ -521,7 +521,7 @@ public class AgreeValidator extends AbstractAgreeValidator {
 		checkTypeExists(floor.getExpr());
 		TypeDef exprType = AgreeTypeSystem.infer(floor.getExpr());
 
-		if (!AgreeTypeSystem.typesEqual(AgreeTypeSystem.Prim.BoolTypeDef, exprType)) {
+		if (!AgreeTypeSystem.typesEqual(AgreeTypeSystem.Prim.RealTypeDef, exprType)) {
 			error(floor,
 					"Argument of floor cast is of type '" + nameOfTypeDef(exprType) + "' but must be of type 'real'");
 		}

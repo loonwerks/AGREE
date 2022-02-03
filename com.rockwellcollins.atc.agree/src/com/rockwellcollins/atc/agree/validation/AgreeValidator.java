@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
@@ -169,6 +169,7 @@ import com.rockwellcollins.atc.agree.visitors.ExprCycleVisitor;
  * This class contains custom validation rules.
  *
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
+ * @since 3.0
  */
 public class AgreeValidator extends AbstractAgreeValidator {
 	private final Set<Abstraction> checkedRecCalls = new HashSet<>();
@@ -520,7 +521,7 @@ public class AgreeValidator extends AbstractAgreeValidator {
 		checkTypeExists(floor.getExpr());
 		TypeDef exprType = AgreeTypeSystem.infer(floor.getExpr());
 
-		if (!AgreeTypeSystem.typesEqual(AgreeTypeSystem.Prim.BoolTypeDef, exprType)) {
+		if (!AgreeTypeSystem.typesEqual(AgreeTypeSystem.Prim.RealTypeDef, exprType)) {
 			error(floor,
 					"Argument of floor cast is of type '" + nameOfTypeDef(exprType) + "' but must be of type 'real'");
 		}

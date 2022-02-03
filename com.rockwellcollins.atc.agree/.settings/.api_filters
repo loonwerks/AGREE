@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.rockwellcollins.atc.agree" version="2">
+    <resource path="src-gen/com/rockwellcollins/atc/agree/AbstractAgreeRuntimeModule.java" type="com.rockwellcollins.atc.agree.AbstractAgreeRuntimeModule">
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="bindAgreeValidator()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="bindIKeywordSerializer()"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src-gen/com/rockwellcollins/atc/agree/scoping/AbstractAgreeScopeProvider.java" type="com.rockwellcollins.atc.agree.scoping.AbstractAgreeScopeProvider">
+        <filter id="1110441988">
+            <message_arguments>
+                <message_argument value="com.rockwellcollins.atc.agree.scoping.AbstractAgreeScopeProvider"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src-gen/com/rockwellcollins/atc/agree/validation/AbstractAgreeValidator.java" type="com.rockwellcollins.atc.agree.validation.AbstractAgreeValidator">
+        <filter id="1110441988">
+            <message_arguments>
+                <message_argument value="com.rockwellcollins.atc.agree.validation.AbstractAgreeValidator"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>

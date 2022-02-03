@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -27,6 +27,7 @@
     <version>2.7.1-SNAPSHOT</version>
   </parent>
   <artifactId>com.rockwellcollins.atc.agree.analysis</artifactId>
+  <version>2.8.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 
 	<properties>

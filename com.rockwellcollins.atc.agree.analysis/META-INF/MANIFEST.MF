@@ -2,33 +2,33 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AGREE Analysis
 Bundle-SymbolicName: com.rockwellcollins.atc.agree.analysis; singleton:=true
-Bundle-Version: 2.7.1.qualifier
+Bundle-Version: 2.8.0.qualifier
 Bundle-Activator: com.rockwellcollins.atc.agree.analysis.Activator
 Bundle-Vendor: Rockwell Collins, Inc.
-Require-Bundle: org.eclipse.ui,
- org.eclipse.emf.transaction;bundle-version="1.9.0",
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
+ org.eclipse.emf.transaction;bundle-version="[1.9.0,2.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.20.0,4.0.0)",
  org.osate.aadl2.modelsupport;bundle-version="[6.0.0,7.0.0)",
- org.eclipse.ui.console;bundle-version="3.5.100",
- org.eclipse.core.expressions;bundle-version="3.4.401",
+ org.eclipse.ui.console;bundle-version="[3.5.100,4.0.0)",
+ org.eclipse.core.expressions;bundle-version="[3.4.401,4.0.0)",
  org.osate.aadl2;bundle-version="[2.0.0,5.0.0)",
  org.osate.ui;bundle-version="[6.0.0,7.0.0)",
  org.osate.xtext.aadl2.properties;bundle-version="[3.0.0,4.0.0)",
- com.rockwellcollins.atc.agree;bundle-version="1.0.0",
- com.rockwellcollins.atc.agree.ui;bundle-version="1.0.0",
+ com.rockwellcollins.atc.agree;bundle-version="[3.0.0,4.0.0)",
+ com.rockwellcollins.atc.agree.ui;bundle-version="[3.0.0,4.0.0)",
  org.osate.ge;bundle-version="[2.0.0,4.0.0)",
- org.eclipse.emf.ecore,
- com.collins.trustedsystems.z3,
+ org.eclipse.emf.ecore;bundle-version="[2.23.0,3.0.0)",
+ com.collins.trustedsystems.z3;bundle-version="[4.0.0,5.0.0)",
  org.osate.aadl2.instantiation;bundle-version="[1.0.1,2.0.0)",
  org.osate.annexsupport;bundle-version="[3.0.0,4.0.0)",
  com.collins.trustedsystems.jkindapi;bundle-version="[4.3.0,5.0.0)",
- org.eclipse.emf.workspace
+ org.eclipse.emf.workspace;bundle-version="[1.5.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/gson.jar
 Import-Package: 
- org.apache.commons.lang;version="2.6.0"
+ org.apache.commons.lang;version="[2.6.0,3.0.0)"
 Export-Package: com.rockwellcollins.atc.agree.analysis,
  com.rockwellcollins.atc.agree.analysis.ast,
  com.rockwellcollins.atc.agree.analysis.ast.visitors,

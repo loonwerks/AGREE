@@ -37,11 +37,17 @@ public class AgreeProgram implements AgreeASTElement {
 	public final AgreeNode topNode;
 	public boolean containsRealTimePatterns;
 
+	/**
+	 * @since 2.8
+	 */
 	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Type> globalTypes,
 			AgreeNode topNode) {
 		this(agreeNodes, globalLustreNodes, Collections.emptyList(), globalTypes, topNode, false);
 	}
 
+	/**
+	 * @since 2.8
+	 */
 	public AgreeProgram(List<AgreeNode> agreeNodes, List<Node> globalLustreNodes, List<Type> globalTypes,
 			AgreeNode topNode, boolean containsRealTimePatterns) {
 		this(agreeNodes, globalLustreNodes, Collections.emptyList(), globalTypes, topNode, containsRealTimePatterns);

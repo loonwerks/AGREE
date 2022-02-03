@@ -22,7 +22,7 @@ com.rockwellcollins.atc.agree.doc project.
 
 ## Development Guide
 
-### AGREE Branching Strategy (NEW!)
+### AGREE Branching Strategy
 
 Development in AGREE takes place on two main branches: 'master' and
 'stable.'  The 'master' branch is the leading edge of development of
@@ -149,7 +149,20 @@ snapshots are uploaded to the GitHub
 Additionally, Travis-CI conducts builds and tests in response to pull
 requests against the AGREE repository.
 
-### Releases
+### Releases (Updated!)
+
+Since AGREE has converted to the [Semantic
+Versioning](https://semver.org/) model, each of the plugins that
+compose the AGREE, TCG, and AADL Simulator features now have
+individual version numbers that reflect the updates to that plugin.
+Thus, they are no longer synchronized to the feature versions.
+
+The AGREE code base has been modified to enable Eclipse plugin API
+analysis which will result in error messages and warnings (in the
+"Problems" tab of the IDE) to guide developers as to how and when to
+update version numbers and apply API tags such as @since to added or
+modified elements.  The Oomph version management analysis has also
+been enabled to assist with version number markings.
 
 The process for a release updates master branch with the release
 version number, commits the master branch version number updates,
@@ -163,36 +176,13 @@ follows:
 
 1. Prepare for the release by running the release workflow plugin:
 
-   `mvn release:prepare -DreleaseVersion=x.x.x
-   -DdevelopmentVersion=y.y.y-SNAPSHOT`
+   `mvn release:prepare`
 
-   where 'x.x.x' is replaced withe the desired version number for the
-   release and 'y.y.y' is replaced with the desired version number for
-   the next development cycle.  The SNAPSHOT qualifier must be
-   appended to the development version as shown to facilitate the
-   CI/CD automation of interim development builds.
-
-   During this process maven will ask for the tag to applied to the
+   During this process maven will ask to confirm all of the plugin and
+   feature versions and for the tag to applied to the
    release. Release tags shall be of the form 'x.y.z-RELEASE' where
    `x` is the major version number, `y` is the minor version number,
-   and `z` is the patch version number.  Ordinarily, AGREE would
-   follow the [Semantic Versioning](https://semver.org/) method.
-   However, OSATE does not guarantee that micro versions have backward
-   compatible API changes and AGREE must follow this.
-
-   Also during the process an apparent bug in the Tycho release plugin
-   will likely be encountered due to the apparent failure to be able
-   to resolve the new version of the target. DON'T PANIC! If this
-   occurs, edit the parent-level pom.xml and update the version of the
-   target at approximately line 155, updating it to the new release
-   version. Then resume the release process with the same command line
-   as before.
-
-   And, the same thing will happen again as it updates the manifests
-   for the new development version.  Again edit the parent-level
-   pom.xml and update the version of the target at approximately line
-   155, updating to the new development version.  Then, again, resume
-   the release process with the same command line as before.
+   and `z` is the patch version number.
 
 1. Ordinarily one would expect to actually perform the release using
    the customary `mvn release:perform -Dgoals="clean verify"` command.
@@ -205,13 +195,17 @@ follows:
    where `x.x.x` is the version number to be released.
 
 1. Commit the release binaries into the companion releases repository at
-   git@github.com:loonwerks/AGREE-releases.git:
+   git@github.com:loonwerks/AGREE-Updates.git:
+
+   `cp -r <path to built AGREE release>/repository/target/repository agree-<release-version-number>`
+
+   Update the contents of the compositeArtifacts.xml and compositeContent.xml files.
 
    `git add ...`
 
-   `git commit -m "Commit release binaries into repository"`
+   `git commit -m "Add AGREE <release-version-number>"`
 
-1. Finally, push the update develop branch to the origin repository:
+1. Finally, push the update stable branch to the origin repository:
 
    `git push`
 

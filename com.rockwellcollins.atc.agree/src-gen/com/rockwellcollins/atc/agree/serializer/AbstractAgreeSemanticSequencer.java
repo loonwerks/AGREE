@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -88,6 +88,7 @@ import com.rockwellcollins.atc.agree.agree.PreExpr;
 import com.rockwellcollins.atc.agree.agree.PrevExpr;
 import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.PropertyStatement;
+import com.rockwellcollins.atc.agree.agree.ReachableStatement;
 import com.rockwellcollins.atc.agree.agree.RealCast;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordDef;
@@ -440,6 +441,9 @@ public abstract class AbstractAgreeSemanticSequencer extends PropertiesSemanticS
 				return; 
 			case AgreePackage.PROPERTY_STATEMENT:
 				sequence_PropertyStatement(context, (PropertyStatement) semanticObject); 
+				return; 
+			case AgreePackage.REACHABLE_STATEMENT:
+				sequence_NamedSpecStatement(context, (ReachableStatement) semanticObject); 
 				return; 
 			case AgreePackage.REAL_CAST:
 				sequence_TermExpr(context, (RealCast) semanticObject); 
@@ -1488,6 +1492,21 @@ public abstract class AbstractAgreeSemanticSequencer extends PropertiesSemanticS
 	 *     (name=ID? str=STRING (expr=Expr | pattern=PatternStatement))
 	 */
 	protected void sequence_NamedSpecStatement(ISerializationContext context, LemmaStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     NamedElement returns ReachableStatement
+	 *     Element returns ReachableStatement
+	 *     SpecStatement returns ReachableStatement
+	 *     NamedSpecStatement returns ReachableStatement
+	 *
+	 * Constraint:
+	 *     (name=ID? str=STRING (expr=Expr | pattern=PatternStatement))
+	 */
+	protected void sequence_NamedSpecStatement(ISerializationContext context, ReachableStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

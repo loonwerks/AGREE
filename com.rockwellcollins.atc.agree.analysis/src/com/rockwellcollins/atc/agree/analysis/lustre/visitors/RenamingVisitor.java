@@ -44,6 +44,7 @@ import com.rockwellcollins.atc.agree.agree.InputStatement;
 import com.rockwellcollins.atc.agree.agree.LemmaStatement;
 import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.PropertyStatement;
+import com.rockwellcollins.atc.agree.agree.ReachableStatement;
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout.SigType;
@@ -223,6 +224,15 @@ public class RenamingVisitor extends AstIterVisitor {
 				id = "[" + id + "] ";
 			}
 			return prefix + " lemma: " + id + ((LemmaStatement) reference).getStr();
+		} else if (reference instanceof ReachableStatement) {
+			renaming.addInvertedProperty(var.id);
+			String id = ((ReachableStatement) reference).getName();
+			if (id == null || id.isEmpty()) {
+				id = "";
+			} else {
+				id = "[" + id + "] ";
+			}
+			return prefix + " reachable: " + id + ((ReachableStatement) reference).getStr();
 		} else if (reference instanceof AssertStatement) {
 			throw new AgreeException("We really didn't expect to see an assert statement here");
 		} else if (reference instanceof Arg) {

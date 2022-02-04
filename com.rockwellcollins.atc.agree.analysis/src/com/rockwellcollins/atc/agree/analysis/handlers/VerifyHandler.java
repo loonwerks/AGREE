@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -412,7 +413,10 @@ public abstract class VerifyHandler extends AadlHandler {
 			result = new JRealizabilityResult(resultName, renaming);
 			break;
 		case AssumeGuarantee:
-			result = new JKindResult(resultName, properties, renaming);
+			final Set<String> invertedProperties = renaming.getInvertedProperties();
+			List<Boolean> invertedPropertyMask = mainNode.properties.stream().map(p -> invertedProperties.contains(p))
+					.collect(Collectors.toList());
+			result = new JKindResult(resultName, properties, invertedPropertyMask, renaming);
 			break;
 		default:
 			throw new AgreeException("Unhandled Analysis Type");

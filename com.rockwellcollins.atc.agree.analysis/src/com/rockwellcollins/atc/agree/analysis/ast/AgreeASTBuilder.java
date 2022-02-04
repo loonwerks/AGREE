@@ -129,6 +129,7 @@ import com.rockwellcollins.atc.agree.agree.PatternStatement;
 import com.rockwellcollins.atc.agree.agree.PreExpr;
 import com.rockwellcollins.atc.agree.agree.PrevExpr;
 import com.rockwellcollins.atc.agree.agree.PropertyStatement;
+import com.rockwellcollins.atc.agree.agree.ReachableStatement;
 import com.rockwellcollins.atc.agree.agree.RealCast;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordDef;
@@ -384,6 +385,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 						userDefinedConections.addAll(getConnectionStatements(contract.getSpecs()));
 
 						lemmas.addAll(getLemmaStatements(contract.getSpecs()));
+						lemmas.addAll(getReachableStatements(contract.getSpecs(), portRewriteMap));
 						addLustreNodes(contract.getSpecs());
 						gatherLustreTypes(contract.getSpecs());
 						// the clock constraints contain other nodes that we add
@@ -479,6 +481,7 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 				if (!isMonolithic || isTop || !hasSubcomponents) {
 					assumptions.addAll(getAssumptionStatements(contract.getSpecs(), portRewriteMap));
 					guarantees.addAll(getGuaranteeStatements(contract.getSpecs(), portRewriteMap));
+					lemmas.addAll(getReachableStatements(contract.getSpecs(), portRewriteMap));
 				}
 
 				// Count eq statements with expressions as assertions
@@ -630,6 +633,30 @@ public class AgreeASTBuilder extends AgreeSwitch<Expr> {
 			}
 		}
 		return lemmas;
+	}
+
+	private List<AgreeStatement> getReachableStatements(EList<SpecStatement> specs,
+			Map<String, jkind.lustre.Expr> rewriteMap) {
+		List<AgreeStatement> reachables = new ArrayList<>();
+		for (SpecStatement spec : specs) {
+			if (spec instanceof ReachableStatement) {
+				ReachableStatement reachable = (ReachableStatement) spec;
+				if (reachable.getExpr() != null) {
+					reachables.add(new AgreeStatement(reachable.getStr(),
+							new jkind.lustre.UnaryExpr(jkind.lustre.UnaryOp.NOT,
+									doSwitch(reachable.getExpr()).accept(new SubstitutionVisitor(rewriteMap))),
+							spec));
+				} else {
+					PatternStatement pattern = reachable.getPattern();
+					AgreeStatement patStatement = new AgreePatternBuilder(reachable.getStr(), reachable, this)
+							.doSwitch(pattern);
+					patStatement.expr = new jkind.lustre.UnaryExpr(jkind.lustre.UnaryOp.NOT,
+							patStatement.expr.accept(new SubstitutionVisitor(rewriteMap)));
+					reachables.add(patStatement);
+				}
+			}
+		}
+		return reachables;
 	}
 
 	private TimingModel getTimingModel(EList<SpecStatement> specs) {

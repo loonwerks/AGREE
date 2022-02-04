@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -96,6 +96,7 @@ import com.rockwellcollins.atc.agree.agree.PreExpr;
 import com.rockwellcollins.atc.agree.agree.PrevExpr;
 import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.PropertyStatement;
+import com.rockwellcollins.atc.agree.agree.ReachableStatement;
 import com.rockwellcollins.atc.agree.agree.RealCast;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.agree.RealTimeStatement;
@@ -464,6 +465,13 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
    * @generated
    */
   private EClass lemmaStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass reachableStatementEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -2041,6 +2049,17 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
   public EClass getLemmaStatement()
   {
     return lemmaStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getReachableStatement()
+  {
+    return reachableStatementEClass;
   }
 
   /**
@@ -3796,6 +3815,8 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
 
     lemmaStatementEClass = createEClass(LEMMA_STATEMENT);
 
+    reachableStatementEClass = createEClass(REACHABLE_STATEMENT);
+
     alwaysStatementEClass = createEClass(ALWAYS_STATEMENT);
     createEReference(alwaysStatementEClass, ALWAYS_STATEMENT__EXPR);
 
@@ -4088,6 +4109,7 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
     guaranteeStatementEClass.getESuperTypes().add(this.getNamedSpecStatement());
     assertStatementEClass.getESuperTypes().add(this.getNamedSpecStatement());
     lemmaStatementEClass.getESuperTypes().add(this.getNamedSpecStatement());
+    reachableStatementEClass.getESuperTypes().add(this.getNamedSpecStatement());
     alwaysStatementEClass.getESuperTypes().add(this.getPatternStatement());
     whenHoldsStatementEClass.getESuperTypes().add(this.getWhenStatement());
     whenOccursStatmentEClass.getESuperTypes().add(this.getWhenStatement());
@@ -4292,6 +4314,8 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
     initEClass(assertStatementEClass, AssertStatement.class, "AssertStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(lemmaStatementEClass, LemmaStatement.class, "LemmaStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(reachableStatementEClass, ReachableStatement.class, "ReachableStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(alwaysStatementEClass, AlwaysStatement.class, "AlwaysStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAlwaysStatement_Expr(), this.getExpr(), null, "expr", null, 0, 1, AlwaysStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

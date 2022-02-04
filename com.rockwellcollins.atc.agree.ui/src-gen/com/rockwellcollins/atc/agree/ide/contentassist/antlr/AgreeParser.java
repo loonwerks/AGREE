@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -59,6 +59,7 @@ public class AgreeParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getNamedSpecStatementAccess().getAlternatives_1_5(), "rule__NamedSpecStatement__Alternatives_1_5");
 			builder.put(grammarAccess.getNamedSpecStatementAccess().getAlternatives_2_3(), "rule__NamedSpecStatement__Alternatives_2_3");
 			builder.put(grammarAccess.getNamedSpecStatementAccess().getAlternatives_3_5(), "rule__NamedSpecStatement__Alternatives_3_5");
+			builder.put(grammarAccess.getNamedSpecStatementAccess().getAlternatives_4_5(), "rule__NamedSpecStatement__Alternatives_4_5");
 			builder.put(grammarAccess.getPatternStatementAccess().getAlternatives(), "rule__PatternStatement__Alternatives");
 			builder.put(grammarAccess.getWhenStatementAccess().getAlternatives(), "rule__WhenStatement__Alternatives");
 			builder.put(grammarAccess.getWheneverStatementAccess().getAlternatives(), "rule__WheneverStatement__Alternatives");
@@ -110,6 +111,7 @@ public class AgreeParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getNamedSpecStatementAccess().getGroup_2(), "rule__NamedSpecStatement__Group_2__0");
 			builder.put(grammarAccess.getNamedSpecStatementAccess().getGroup_2_2(), "rule__NamedSpecStatement__Group_2_2__0");
 			builder.put(grammarAccess.getNamedSpecStatementAccess().getGroup_3(), "rule__NamedSpecStatement__Group_3__0");
+			builder.put(grammarAccess.getNamedSpecStatementAccess().getGroup_4(), "rule__NamedSpecStatement__Group_4__0");
 			builder.put(grammarAccess.getPatternStatementAccess().getGroup_1(), "rule__PatternStatement__Group_1__0");
 			builder.put(grammarAccess.getWhenStatementAccess().getGroup_0(), "rule__WhenStatement__Group_0__0");
 			builder.put(grammarAccess.getWhenStatementAccess().getGroup_0_0(), "rule__WhenStatement__Group_0_0__0");
@@ -379,6 +381,10 @@ public class AgreeParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getNamedSpecStatementAccess().getStrAssignment_3_3(), "rule__NamedSpecStatement__StrAssignment_3_3");
 			builder.put(grammarAccess.getNamedSpecStatementAccess().getExprAssignment_3_5_0(), "rule__NamedSpecStatement__ExprAssignment_3_5_0");
 			builder.put(grammarAccess.getNamedSpecStatementAccess().getPatternAssignment_3_5_1(), "rule__NamedSpecStatement__PatternAssignment_3_5_1");
+			builder.put(grammarAccess.getNamedSpecStatementAccess().getNameAssignment_4_2(), "rule__NamedSpecStatement__NameAssignment_4_2");
+			builder.put(grammarAccess.getNamedSpecStatementAccess().getStrAssignment_4_3(), "rule__NamedSpecStatement__StrAssignment_4_3");
+			builder.put(grammarAccess.getNamedSpecStatementAccess().getExprAssignment_4_5_0(), "rule__NamedSpecStatement__ExprAssignment_4_5_0");
+			builder.put(grammarAccess.getNamedSpecStatementAccess().getPatternAssignment_4_5_1(), "rule__NamedSpecStatement__PatternAssignment_4_5_1");
 			builder.put(grammarAccess.getPatternStatementAccess().getExprAssignment_1_2(), "rule__PatternStatement__ExprAssignment_1_2");
 			builder.put(grammarAccess.getWhenStatementAccess().getConditionAssignment_0_0_0_2(), "rule__WhenStatement__ConditionAssignment_0_0_0_2");
 			builder.put(grammarAccess.getWhenStatementAccess().getConditionIntervalAssignment_0_2(), "rule__WhenStatement__ConditionIntervalAssignment_0_2");

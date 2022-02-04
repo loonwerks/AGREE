@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -130,6 +130,7 @@ public class AgreeFactoryImpl extends EFactoryImpl implements AgreeFactory
       case AgreePackage.GUARANTEE_STATEMENT: return createGuaranteeStatement();
       case AgreePackage.ASSERT_STATEMENT: return createAssertStatement();
       case AgreePackage.LEMMA_STATEMENT: return createLemmaStatement();
+      case AgreePackage.REACHABLE_STATEMENT: return createReachableStatement();
       case AgreePackage.ALWAYS_STATEMENT: return createAlwaysStatement();
       case AgreePackage.WHEN_HOLDS_STATEMENT: return createWhenHoldsStatement();
       case AgreePackage.WHEN_OCCURS_STATMENT: return createWhenOccursStatment();
@@ -739,6 +740,18 @@ public class AgreeFactoryImpl extends EFactoryImpl implements AgreeFactory
   {
     LemmaStatementImpl lemmaStatement = new LemmaStatementImpl();
     return lemmaStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public ReachableStatement createReachableStatement()
+  {
+    ReachableStatementImpl reachableStatement = new ReachableStatementImpl();
+    return reachableStatement;
   }
 
   /**

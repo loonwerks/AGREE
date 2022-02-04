@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -56,6 +56,8 @@ Initially : ('I'|'i')('N'|'n')('I'|'i')('T'|'t')('I'|'i')('A'|'a')('L'|'l')('L'|
 No_simult : ('N'|'n')('O'|'o')'_'('S'|'s')('I'|'i')('M'|'m')('U'|'u')('L'|'l')('T'|'t');
 
 Parameter : ('P'|'p')('A'|'a')('R'|'r')('A'|'a')('M'|'m')('E'|'e')('T'|'t')('E'|'e')('R'|'r');
+
+Reachable : ('R'|'r')('E'|'e')('A'|'a')('C'|'c')('H'|'h')('A'|'a')('B'|'b')('L'|'l')('E'|'e');
 
 Reference : ('R'|'r')('E'|'e')('F'|'f')('E'|'e')('R'|'r')('E'|'e')('N'|'n')('C'|'c')('E'|'e');
 

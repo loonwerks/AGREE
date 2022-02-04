@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -571,12 +571,27 @@ public class AgreeGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		private final Assignment cPatternAssignment_3_5_1 = (Assignment)cAlternatives_3_5.eContents().get(1);
 		private final RuleCall cPatternPatternStatementParserRuleCall_3_5_1_0 = (RuleCall)cPatternAssignment_3_5_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_3_6 = (Keyword)cGroup_3.eContents().get(6);
+		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
+		private final Action cReachableStatementAction_4_0 = (Action)cGroup_4.eContents().get(0);
+		private final Keyword cReachableKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
+		private final Assignment cNameAssignment_4_2 = (Assignment)cGroup_4.eContents().get(2);
+		private final RuleCall cNameIDTerminalRuleCall_4_2_0 = (RuleCall)cNameAssignment_4_2.eContents().get(0);
+		private final Assignment cStrAssignment_4_3 = (Assignment)cGroup_4.eContents().get(3);
+		private final RuleCall cStrSTRINGTerminalRuleCall_4_3_0 = (RuleCall)cStrAssignment_4_3.eContents().get(0);
+		private final Keyword cColonKeyword_4_4 = (Keyword)cGroup_4.eContents().get(4);
+		private final Alternatives cAlternatives_4_5 = (Alternatives)cGroup_4.eContents().get(5);
+		private final Assignment cExprAssignment_4_5_0 = (Assignment)cAlternatives_4_5.eContents().get(0);
+		private final RuleCall cExprExprParserRuleCall_4_5_0_0 = (RuleCall)cExprAssignment_4_5_0.eContents().get(0);
+		private final Assignment cPatternAssignment_4_5_1 = (Assignment)cAlternatives_4_5.eContents().get(1);
+		private final RuleCall cPatternPatternStatementParserRuleCall_4_5_1_0 = (RuleCall)cPatternAssignment_4_5_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_4_6 = (Keyword)cGroup_4.eContents().get(6);
 		
 		//NamedSpecStatement:
 		//    {AssumeStatement} 'assume' (name=ID)? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 		//    | {GuaranteeStatement} 'guarantee' (name=ID)? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 		//    | {AssertStatement} 'assert' ((name=ID)? str=STRING ':')? (expr=Expr | pattern=PatternStatement) ';'
 		//    | {LemmaStatement} 'lemma' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
+		//    | {ReachableStatement} 'reachable' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 		//    ;
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -584,6 +599,7 @@ public class AgreeGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		//| {GuaranteeStatement} 'guarantee' (name=ID)? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 		//| {AssertStatement} 'assert' ((name=ID)? str=STRING ':')? (expr=Expr | pattern=PatternStatement) ';'
 		//| {LemmaStatement} 'lemma' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
+		//| {ReachableStatement} 'reachable' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//{AssumeStatement} 'assume' (name=ID)? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
@@ -756,6 +772,48 @@ public class AgreeGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		
 		//';'
 		public Keyword getSemicolonKeyword_3_6() { return cSemicolonKeyword_3_6; }
+		
+		//{ReachableStatement} 'reachable' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
+		public Group getGroup_4() { return cGroup_4; }
+		
+		//{ReachableStatement}
+		public Action getReachableStatementAction_4_0() { return cReachableStatementAction_4_0; }
+		
+		//'reachable'
+		public Keyword getReachableKeyword_4_1() { return cReachableKeyword_4_1; }
+		
+		//(name=ID)?
+		public Assignment getNameAssignment_4_2() { return cNameAssignment_4_2; }
+		
+		//ID
+		public RuleCall getNameIDTerminalRuleCall_4_2_0() { return cNameIDTerminalRuleCall_4_2_0; }
+		
+		//str=STRING
+		public Assignment getStrAssignment_4_3() { return cStrAssignment_4_3; }
+		
+		//STRING
+		public RuleCall getStrSTRINGTerminalRuleCall_4_3_0() { return cStrSTRINGTerminalRuleCall_4_3_0; }
+		
+		//':'
+		public Keyword getColonKeyword_4_4() { return cColonKeyword_4_4; }
+		
+		//(expr=Expr | pattern=PatternStatement)
+		public Alternatives getAlternatives_4_5() { return cAlternatives_4_5; }
+		
+		//expr=Expr
+		public Assignment getExprAssignment_4_5_0() { return cExprAssignment_4_5_0; }
+		
+		//Expr
+		public RuleCall getExprExprParserRuleCall_4_5_0_0() { return cExprExprParserRuleCall_4_5_0_0; }
+		
+		//pattern=PatternStatement
+		public Assignment getPatternAssignment_4_5_1() { return cPatternAssignment_4_5_1; }
+		
+		//PatternStatement
+		public RuleCall getPatternPatternStatementParserRuleCall_4_5_1_0() { return cPatternPatternStatementParserRuleCall_4_5_1_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_4_6() { return cSemicolonKeyword_4_6; }
 	}
 	public class PatternStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.rockwellcollins.atc.agree.Agree.PatternStatement");
@@ -5810,6 +5868,7 @@ public class AgreeGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	//    | {GuaranteeStatement} 'guarantee' (name=ID)? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 	//    | {AssertStatement} 'assert' ((name=ID)? str=STRING ':')? (expr=Expr | pattern=PatternStatement) ';'
 	//    | {LemmaStatement} 'lemma' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
+	//    | {ReachableStatement} 'reachable' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 	//    ;
 	public NamedSpecStatementElements getNamedSpecStatementAccess() {
 		return pNamedSpecStatement;

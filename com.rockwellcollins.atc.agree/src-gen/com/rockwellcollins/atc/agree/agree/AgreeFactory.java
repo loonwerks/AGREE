@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -455,6 +455,15 @@ public interface AgreeFactory extends EFactory
    * @generated
    */
   LemmaStatement createLemmaStatement();
+
+  /**
+   * Returns a new object of class '<em>Reachable Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Reachable Statement</em>'.
+   * @generated
+   */
+  ReachableStatement createReachableStatement();
 
   /**
    * Returns a new object of class '<em>Always Statement</em>'.

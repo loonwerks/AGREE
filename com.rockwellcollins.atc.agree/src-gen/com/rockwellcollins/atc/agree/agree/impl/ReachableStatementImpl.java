@@ -23,25 +23,25 @@
 package com.rockwellcollins.atc.agree.agree.impl;
 
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
-import com.rockwellcollins.atc.agree.agree.ThisRef;
+import com.rockwellcollins.atc.agree.agree.ReachableStatement;
 
 import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>This Ref</b></em>'.
+ * An implementation of the model object '<em><b>Reachable Statement</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class ThisRefImpl extends ComponentRefImpl implements ThisRef
+public class ReachableStatementImpl extends NamedSpecStatementImpl implements ReachableStatement
 {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ThisRefImpl()
+  protected ReachableStatementImpl()
   {
     super();
   }
@@ -54,7 +54,7 @@ public class ThisRefImpl extends ComponentRefImpl implements ThisRef
   @Override
   protected EClass eStaticClass()
   {
-    return AgreePackage.Literals.THIS_REF;
+    return AgreePackage.Literals.REACHABLE_STATEMENT;
   }
 
-} //ThisRefImpl
+} //ReachableStatementImpl

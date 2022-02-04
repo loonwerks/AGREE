@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -1075,6 +1075,105 @@ ruleNamedSpecStatement returns [EObject current=null]
 			otherlv_31=Semicolon
 			{
 				newLeafNode(otherlv_31, grammarAccess.getNamedSpecStatementAccess().getSemicolonKeyword_3_6());
+			}
+		)
+		    |
+		(
+			(
+				{
+					$current = forceCreateModelElement(
+						grammarAccess.getNamedSpecStatementAccess().getReachableStatementAction_4_0(),
+						$current);
+				}
+			)
+			otherlv_33=Reachable
+			{
+				newLeafNode(otherlv_33, grammarAccess.getNamedSpecStatementAccess().getReachableKeyword_4_1());
+			}
+			(
+				(
+					lv_name_34_0=RULE_ID
+					{
+						newLeafNode(lv_name_34_0, grammarAccess.getNamedSpecStatementAccess().getNameIDTerminalRuleCall_4_2_0());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getNamedSpecStatementRule());
+						}
+						setWithLastConsumed(
+							$current,
+							"name",
+							lv_name_34_0,
+							"org.osate.xtext.aadl2.properties.Properties.ID");
+					}
+				)
+			)?
+			(
+				(
+					lv_str_35_0=RULE_STRING
+					{
+						newLeafNode(lv_str_35_0, grammarAccess.getNamedSpecStatementAccess().getStrSTRINGTerminalRuleCall_4_3_0());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getNamedSpecStatementRule());
+						}
+						setWithLastConsumed(
+							$current,
+							"str",
+							lv_str_35_0,
+							"org.osate.xtext.aadl2.properties.Properties.STRING");
+					}
+				)
+			)
+			otherlv_36=Colon
+			{
+				newLeafNode(otherlv_36, grammarAccess.getNamedSpecStatementAccess().getColonKeyword_4_4());
+			}
+			(
+				(
+					(
+						{
+							newCompositeNode(grammarAccess.getNamedSpecStatementAccess().getExprExprParserRuleCall_4_5_0_0());
+						}
+						lv_expr_37_0=ruleExpr
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getNamedSpecStatementRule());
+							}
+							set(
+								$current,
+								"expr",
+								lv_expr_37_0,
+								"com.rockwellcollins.atc.agree.Agree.Expr");
+							afterParserOrEnumRuleCall();
+						}
+					)
+				)
+				    |
+				(
+					(
+						{
+							newCompositeNode(grammarAccess.getNamedSpecStatementAccess().getPatternPatternStatementParserRuleCall_4_5_1_0());
+						}
+						lv_pattern_38_0=rulePatternStatement
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getNamedSpecStatementRule());
+							}
+							set(
+								$current,
+								"pattern",
+								lv_pattern_38_0,
+								"com.rockwellcollins.atc.agree.Agree.PatternStatement");
+							afterParserOrEnumRuleCall();
+						}
+					)
+				)
+			)
+			otherlv_39=Semicolon
+			{
+				newLeafNode(otherlv_39, grammarAccess.getNamedSpecStatementAccess().getSemicolonKeyword_4_6());
 			}
 		)
 	)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
@@ -60,6 +60,7 @@ public class AgreeRenaming extends Renaming {
 	private Map<String, String> supportRenames = new HashMap<>();
 	private Map<String, String> supportRefStrings = new HashMap<>();
 	private Map<String, EObject> refMap;
+	private Set<String> invertedProperties = new HashSet<>();
 	private Set<String> uninterpretedFnIONames = new HashSet<>();
 
 	public AgreeRenaming() {
@@ -120,6 +121,27 @@ public class AgreeRenaming extends Renaming {
 
 	public Map<String, EObject> getRefMap() {
 		return refMap;
+	}
+
+	/**
+	 * @since 2.8
+	 */
+	public void addInvertedProperty(String propertyName) {
+		invertedProperties.add(propertyName);
+	}
+
+	/**
+	 * @since 2.8
+	 */
+	public boolean propertyIsInverted(String propertyName) {
+		return invertedProperties.contains(propertyName);
+	}
+
+	/**
+	 * @since 2.8
+	 */
+	public Set<String> getInvertedProperties() {
+		return invertedProperties;
 	}
 
 	public String forceRename(String original) {

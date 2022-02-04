@@ -92,6 +92,7 @@ NamedSpecStatement:
 	| {GuaranteeStatement} 'guarantee' (name=ID)? str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 	| {AssertStatement} 'assert' ((name=ID)? str=STRING ':')? (expr=Expr | pattern=PatternStatement) ';'
 	| {LemmaStatement} 'lemma' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
+	| {ReachableStatement} 'reachable' (name=ID)?  str=STRING ':' (expr=Expr | pattern=PatternStatement) ';'
 	;
 
 	

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -329,6 +329,11 @@ public class AgreeAdapterFactory extends AdapterFactoryImpl
       public Adapter caseLemmaStatement(LemmaStatement object)
       {
         return createLemmaStatementAdapter();
+      }
+      @Override
+      public Adapter caseReachableStatement(ReachableStatement object)
+      {
+        return createReachableStatementAdapter();
       }
       @Override
       public Adapter caseAlwaysStatement(AlwaysStatement object)
@@ -1333,6 +1338,21 @@ public class AgreeAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createLemmaStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.rockwellcollins.atc.agree.agree.ReachableStatement <em>Reachable Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.rockwellcollins.atc.agree.agree.ReachableStatement
+   * @generated
+   */
+  public Adapter createReachableStatementAdapter()
   {
     return null;
   }

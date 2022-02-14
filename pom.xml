@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2021, Collins Aerospace.
+ * Copyright (c) 2022, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -447,7 +447,7 @@
 		</repository>
 		<repository>
 			<id>z3-plugin</id>
-			<url>https://raw.githubusercontent.com/loonwerks/z3-plugin/master/com.collins.trustedsystems.z3.updates/target/repository</url>
+			<url>https://raw.githubusercontent.com/loonwerks/z3-plugin-updates/master/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>

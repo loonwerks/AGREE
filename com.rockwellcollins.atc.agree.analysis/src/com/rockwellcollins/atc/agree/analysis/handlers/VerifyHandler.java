@@ -34,17 +34,10 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IViewPart;
@@ -61,11 +54,9 @@ import org.osate.aadl2.ComponentType;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.SystemInstance;
-import org.osate.aadl2.instantiation.InstantiateModel;
 import org.osate.aadl2.modelsupport.errorreporting.AnalysisErrorReporterManager;
 import org.osate.aadl2.modelsupport.errorreporting.QueuingAnalysisErrorReporter;
 import org.osate.aadl2.modelsupport.errorreporting.QueuingAnalysisErrorReporter.Message;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
 import org.osate.annexsupport.AnnexUtil;
 import org.osate.ui.dialogs.Dialog;
@@ -130,31 +121,10 @@ public abstract class VerifyHandler extends AadlHandler {
 
 	protected SystemInstance getSysInstance(ComponentImplementation ci, EphemeralImplementationUtil implUtil) {
 		try {
-			// add it to a resource; otherwise we cannot attach error messages to
-			// the instance file
-			URI instanceURI = InstantiateModel.getInstanceModelURI(ci);
-			IFile file = OsateResourceUtil.toIFile(instanceURI);
-			if (file != null && file.isAccessible()) {
-				file.deleteMarkers(null, true, IResource.DEPTH_INFINITE);
-			}
-			ResourceSet resourceSet = new ResourceSetImpl();
-			Resource aadlResource = resourceSet.createResource(instanceURI);
-			aadlResource.save(null);
-			aadlResource.unload();
-
 			AnalysisErrorReporterManager errorManager = new AnalysisErrorReporterManager(
 					QueuingAnalysisErrorReporter.factory);
-			final InstantiateModel instantiateModel = new InstantiateModel(new NullProgressMonitor(), errorManager);
 
-			// This strange little dance is necessary in the case of realizability analysis where the
-			// component implementation is ephemeral making its resource a NoCacheDerivedStateAwareResource
-			// which is not correctly fetched from the OSATE resource set.
-			URI compImplUri = EcoreUtil.getURI(ci);
-			ComponentImplementation compImpl = (ComponentImplementation) (resourceSet.getEObject(compImplUri,
-					true) != null ? (ComponentImplementation) resourceSet.getEObject(compImplUri, true)
-							: ci.eResource().getResourceSet().getEObject(compImplUri, true));
-
-			SystemInstance result = instantiateModel.createSystemInstance(compImpl, aadlResource);
+			SystemInstance result = implUtil.generateEphemeralCompInstanceFromImplementation(ci);
 			QueuingAnalysisErrorReporter errorReporter = (QueuingAnalysisErrorReporter) errorManager
 					.getReporter(result.eResource());
 			StringBuilder stringBuilder = new StringBuilder();

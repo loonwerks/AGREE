@@ -444,15 +444,4 @@
            id="com.rockwellcollins.atc.agree.unparser">
      </unparser>
   </extension>
-  <extension
-        id="AgreeResourceDescriptionStrategy"
-        name="agree"
-        point="org.osate.annexsupport.resourcedescriptionstrategy">
-     <resourcedescriptionstrategy
-           annexName="agree"
-           class="com.rockwellcollins.atc.agree.ui.scoping.AgreeResourceDescriptionStrategyProxy"
-           id="com.rockwellcollins.atc.agree.resourcedescriptionstrategy"
-           name="AGREE Resource Description Strategy">
-     </resourcedescriptionstrategy>
-  </extension>
 </plugin>

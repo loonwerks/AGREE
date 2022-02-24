@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <release>
+	<feature name="com.collins.trustedsystems.jkindapi.feature" version="4.4.2">
+		<plugin name="com.collins.trustedsystems.jkindapi" version="4.4.2"/>
+	</feature>
+	<feature name="com.collins.trustedsystems.z3.feature" version="4.8.8">
+		<plugin name="com.collins.trustedsystems.z3" version="4.8.8"/>
+		<plugin name="com.collins.trustedsystems.z3.linux.gtk.x86_64" fragment="true" version="4.8.8"/>
+		<plugin name="com.collins.trustedsystems.z3.macosx.cocoa.x86_64" fragment="true" version="4.8.8"/>
+		<plugin name="com.collins.trustedsystems.z3.win32.win32.x86_64" fragment="true" version="4.8.8"/>
+	</feature>
+	<feature name="com.rockwellcollins.atc.agree.feature" version="2.7.0">
+		<feature name="com.collins.trustedsystems.z3.feature" version="4.8.8"/>
+		<feature name="com.collins.trustedsystems.jkindapi.feature" version="4.4.2"/>
+		<plugin name="com.rockwellcollins.atc.agree.analysis" version="2.7.0"/>
+		<plugin name="com.rockwellcollins.atc.agree.ui" version="2.7.0"/>
+		<plugin name="com.rockwellcollins.atc.agree" version="2.7.0"/>
+		<plugin name="com.rockwellcollins.atc.agree.codegen" version="2.7.0"/>
+		<plugin name="com.rockwellcollins.atc.agree.doc" version="2.7.0"/>
+		<plugin name="edu.uah.rsesc.agree.ge" version="2.7.0"/>
+		<plugin name="edu.uah.rsesc.agree.ge.ui" version="2.7.0"/>
+	</feature>
+	<feature name="com.rockwellcollins.atc.tcg.feature" version="2.7.0">
+		<plugin name="com.rockwellcollins.atc.tcg" version="2.7.0"/>
+	</feature>
+	<feature name="edu.uah.rsesc.aadlsimulator.agree.feature" version="2.7.0">
+		<plugin name="edu.uah.rsesc.aadlsimulator.agree" version="2.7.0"/>
+		<plugin name="edu.uah.rsesc.aadlsimulator.agree.ui" version="2.7.0"/>
+	</feature>
+	<feature name="edu.uah.rsesc.aadlsimulator.feature" version="2.7.0">
+		<plugin name="edu.uah.rsesc.aadlsimulator" version="2.7.0"/>
+		<plugin name="edu.uah.rsesc.aadlsimulator.ui" version="2.7.0"/>
+		<plugin name="edu.uah.rsesc.aadlsimulator.xtext" version="2.7.0"/>
+		<plugin name="edu.uah.rsesc.aadlsimulator.xtext.ui" version="2.7.0"/>
+		<plugin name="edu.uah.rsesc.aadlsimulator.doc" version="2.7.0"/>
+	</feature>
+	<plugin name="com.collins.trustedsystems.jkindapi" version="4.4.2"/>
+	<plugin name="com.collins.trustedsystems.z3" version="4.8.8"/>
+	<plugin name="com.collins.trustedsystems.z3.linux.gtk.x86_64" fragment="true" version="4.8.8"/>
+	<plugin name="com.collins.trustedsystems.z3.macosx.cocoa.x86_64" fragment="true" version="4.8.8"/>
+	<plugin name="com.collins.trustedsystems.z3.win32.win32.x86_64" fragment="true" version="4.8.8"/>
 	<plugin name="com.rockwellcollins.atc.agree" version="2.7.0"/>
 	<plugin name="com.rockwellcollins.atc.agree.analysis" version="2.7.0"/>
 	<plugin name="com.rockwellcollins.atc.agree.codegen" version="2.7.0"/>

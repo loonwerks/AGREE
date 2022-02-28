@@ -55,6 +55,9 @@ public class AgreeCounterexampleTreeViewer {
 		setInput(cex, layout, Collections.emptyMap());
 	}
 
+	/**
+	 * @since 2.8
+	 */
 	public void setInput(Counterexample cex, Layout layout, Map<String, EObject> refMap) {
 		initializeTreeViewer(layout, refMap);
 		createColumns(cex);

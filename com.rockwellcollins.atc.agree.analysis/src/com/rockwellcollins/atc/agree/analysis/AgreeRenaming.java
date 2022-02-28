@@ -239,7 +239,10 @@ public class AgreeRenaming extends Renaming {
 		return false;
 	}
 
-	private EObject findBestReference(String refStr) {
+	/**
+	 * @since 2.8
+	 */
+	public EObject findBestReference(String refStr) {
 
 		EObject ref = null;
 		while (ref == null && refStr != null && !refStr.equals("")) {

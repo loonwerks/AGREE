@@ -20,6 +20,7 @@
  */
 package com.rockwellcollins.atc.agree.analysis.views;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
@@ -48,6 +49,10 @@ public class AgreeCounterexampleTreeViewer {
 		if (treeViewer != null) {
 			treeViewer.getTree().setFocus();
 		}
+	}
+
+	public void setInput(Counterexample cex, Layout layout) {
+		setInput(cex, layout, Collections.emptyMap());
 	}
 
 	public void setInput(Counterexample cex, Layout layout, Map<String, EObject> refMap) {

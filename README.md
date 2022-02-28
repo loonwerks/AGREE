@@ -50,8 +50,8 @@ instructions](https://osate.org/setup-development.html) provided by
 the OSATE team and then import the AGREE projects.  Note that as OSATE
 does not guarantee backward compatibility for minor version updates,
 it is important to match the version of OSATE to the version of AGREE.
-Presently, AGREE is being developed with respect to OSATE version
-2.6.x on Eclipse 2019-09.
+Presently, the AGREE master branch is being developed with respect to
+the OSATE master branch.
 
 ### Xtext Artifacts
 
@@ -143,10 +143,10 @@ special points in the development process.
 ### Continuous Integration / Continuous Deployment
 
 AGREE continuous integration is carried out at
-[Travis-CI](https://www.travis.org).  Daily builds of developmental
-snapshots are uploaded to the GitHub
-[AGREE releases](https://github.com/loonwerks/AGREE/releases) page.
-Additionally, Travis-CI conducts builds and tests in response to pull
+[Amazon CodeBuild](https://aws.amazon.com).  Builds of developmental
+snapshots are uploaded to the AWS bucket
+[AGREE snapshots](http://ca-trustedsystems-dev-us-east-1.s3-website-us-east-1.amazonaws.com/p2/snapshots/agree/) page.
+Additionally, CodeBuild conducts builds and tests in response to pull
 requests against the AGREE repository.
 
 ### Releases (Updated!)

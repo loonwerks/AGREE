@@ -23,6 +23,7 @@ package com.rockwellcollins.atc.tcg.views;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -143,7 +144,8 @@ public class TestCaseGeneratorMenuListener implements IMenuListener {
 	private void viewTestSuite(JKindResult result, AgreeResultsLinker linker) {
 		TestSuite testSuite = TestSuiteUtils.
 				testSuiteFromJKindResult(result,
-						linker.getComponent(result).getQualifiedName(), result.getName(), result.getText());
+						linker.getComponent(result).getQualifiedName(), result.getName(), result.getText(),
+						(TcgRenaming) linker.getRenaming(result));
 		try {
 			TestSuiteView tcView = (TestSuiteView) window.getActivePage().showView(
 					TestSuiteView.ID);
@@ -185,7 +187,7 @@ public class TestCaseGeneratorMenuListener implements IMenuListener {
 			sub.add(new Action("Console") {
 				@Override
 				public void run() {
-					viewCexConsole(translatedCex, layout, refMap);
+					viewCexConsole(translatedCex, layout, refMap, (TcgRenaming) renaming);
 				}
 			});
 
@@ -309,7 +311,8 @@ public class TestCaseGeneratorMenuListener implements IMenuListener {
 		};
 	}
 
-	private void viewCexConsole(final Counterexample cex, final Layout layout, Map<String, EObject> refMap) {
+	private void viewCexConsole(final Counterexample cex, final Layout layout, Map<String, EObject> refMap,
+			TcgRenaming tcgRenaming) {
 		final MessageConsole console = findConsole("Test Case");
 		showConsole(console);
 		console.clearConsole();
@@ -340,17 +343,35 @@ public class TestCaseGeneratorMenuListener implements IMenuListener {
 					out.println();
 					printHLine(out, cex.getLength());
 
+					List<Signal<Value>> inputSignals = new ArrayList<>();
+					List<Signal<Value>> outputSignals = new ArrayList<>();
+					List<Signal<Value>> stateSignals = new ArrayList<>();
+
 					for (Signal<Value> signal : cex.getCategorySignals(layout, category)) {
 						// dont' print out values for properties
 						if (signal.getName().contains(":")) {
 							continue;
 						}
-						out.print(String.format("%-60s", "{" + signal.getName() + "}"));
-						for (int k2 = 0; k2 < cex.getLength(); k2++) {
-							out.print(String.format("%-15s", signal.getValue(k2).toString()));
+						String signalName = signal.getName();
+						EObject ref = tcgRenaming.mapAgreeToEObject(signalName);
+						boolean isInput = (ref instanceof org.osate.aadl2.Port) ? ((org.osate.aadl2.Port) ref).isIn()
+								: false;
+						boolean isOutput = (ref instanceof org.osate.aadl2.Port) ? ((org.osate.aadl2.Port) ref).isOut()
+								: false;
+						if (isInput) {
+							inputSignals.add(signal);
+						} else if (isOutput) {
+							outputSignals.add(signal);
+						} else {
+							stateSignals.add(signal);
 						}
-						out.println();
 					}
+					out.println("Inputs:");
+					inputSignals.forEach(it -> AgreeMenuListener.printSignal(out, it, cex.getLength()));
+					out.println("State:");
+					stateSignals.forEach(it -> AgreeMenuListener.printSignal(out, it, cex.getLength()));
+					out.println("Outputs:");
+					outputSignals.forEach(it -> AgreeMenuListener.printSignal(out, it, cex.getLength()));
 					out.println();
 				}
 			} catch (IOException e) {

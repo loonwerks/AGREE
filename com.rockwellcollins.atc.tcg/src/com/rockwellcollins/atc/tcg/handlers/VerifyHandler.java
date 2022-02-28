@@ -2,20 +2,20 @@
 Copyright (c) 2016, Rockwell Collins.
 Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
-including any software or models in source or binary form, as well as any drawings, specifications, 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+including any software or models in source or binary form, as well as any drawings, specifications,
 and documentation (collectively "the Data"), to deal in the Data without restriction, including
-without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, 
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
 subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or 
+The above copyright notice and this permission notice shall be included in all copies or
 substantial portions of the Data.
 
-THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
-LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
 */
 
@@ -27,13 +27,6 @@ import java.io.StringWriter;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
-
-import jkind.JKindException;
-import jkind.api.KindApi;
-import jkind.api.results.AnalysisResult;
-import jkind.api.results.CompositeAnalysisResult;
-import jkind.api.results.JKindResult;
-import jkind.lustre.Program;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -61,6 +54,13 @@ import com.rockwellcollins.atc.tcg.views.TestCaseGeneratorResultsView;
 import com.rockwellcollins.atc.tcg.writers.TcgWriterUtils;
 import com.rockwellcollins.atc.tcg.writers.TcgXmlWriter;
 
+import jkind.JKindException;
+import jkind.api.KindApi;
+import jkind.api.results.AnalysisResult;
+import jkind.api.results.CompositeAnalysisResult;
+import jkind.api.results.JKindResult;
+import jkind.lustre.Program;
+
 public class VerifyHandler extends AadlHandler {
     protected Queue<JKindResult> queue = new ArrayDeque<>();
     protected AgreeResultsLinker linker = new AgreeResultsLinker();
@@ -68,8 +68,8 @@ public class VerifyHandler extends AadlHandler {
     protected AtomicReference<IProgressMonitor> monitorRef = new AtomicReference<>();
 	protected boolean Debug = false;
 	private IHandlerActivation terminateActivation;
-	
-	
+
+
 	public boolean isRecursive() {
 		return false;
 	}
@@ -86,27 +86,27 @@ public class VerifyHandler extends AadlHandler {
         pw.close();
         return sw.toString();
     }
-	
+
 	@Override
 	protected final IStatus runJob(Element root, IProgressMonitor monitor) {
-		handlerService = (IHandlerService) getWindow().getService(IHandlerService.class);
+		handlerService = getWindow().getService(IHandlerService.class);
 
 		if (!(root instanceof ComponentImplementation)) {
 			return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Must select an AADL Component Implementation");
 		}
-        
+
 		if (isRecursive() && AgreeUtils.usingKind2()){
             throw new AgreeException("Kind2 only supports monolithic verification");
         }
 
 		try {
-			TcgLinkerFactory factory = 
-				new TcgLinkerFactory((ComponentImplementation)root, isMonolithic(), isRecursive()); 
-            
+			TcgLinkerFactory factory =
+				new TcgLinkerFactory((ComponentImplementation)root, isMonolithic(), isRecursive());
+
             AnalysisResult result = factory.getAnalysisResult();
             linker = factory.getLinker();
             queue = factory.getWorkQueue();
-            
+
             showView(result, linker);
             return doAnalysis(root, monitor);
         } catch (Throwable e) {
@@ -121,33 +121,27 @@ public class VerifyHandler extends AadlHandler {
 		 * otherwise we can get a deadlock condition if the UI tries to lock the document,
 		 * e.g., to pull up hover information.
 		 */
-        getWindow().getShell().getDisplay().asyncExec(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    TestCaseGeneratorResultsView page =
-                            (TestCaseGeneratorResultsView) getWindow().getActivePage().showView(TestCaseGeneratorResultsView.ID);
-                    page.setInput(result, linker);
-                } catch (PartInitException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        getWindow().getShell().getDisplay().asyncExec(() -> {
+		    try {
+		        TestCaseGeneratorResultsView page =
+		                (TestCaseGeneratorResultsView) getWindow().getActivePage().showView(TestCaseGeneratorResultsView.ID);
+		        page.setInput(result, linker);
+		    } catch (PartInitException e) {
+		        e.printStackTrace();
+		    }
+		});
     }
 
     protected void clearView() {
-        getWindow().getShell().getDisplay().syncExec(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    TestCaseGeneratorResultsView page =
-                            (TestCaseGeneratorResultsView) getWindow().getActivePage().showView(TestCaseGeneratorResultsView.ID);
-                    page.setInput(new CompositeAnalysisResult("empty"), null);
-                } catch (PartInitException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        getWindow().getShell().getDisplay().syncExec(() -> {
+		    try {
+		        TestCaseGeneratorResultsView page =
+		                (TestCaseGeneratorResultsView) getWindow().getActivePage().showView(TestCaseGeneratorResultsView.ID);
+		        page.setInput(new CompositeAnalysisResult("empty"), null);
+		    } catch (PartInitException e) {
+		        e.printStackTrace();
+		    }
+		});
     }
 
     private Program constructUfcProgram(Program program, TcgRenaming renaming) {
@@ -160,7 +154,7 @@ public class VerifyHandler extends AadlHandler {
 		return ufcGenerator.constructNewProgram();
 	}
 
-	
+
 	private void writeIntermediateFiles(Program program, Program ufcProgram) {
 		if (Debug) {
 			try {
@@ -173,7 +167,7 @@ public class VerifyHandler extends AadlHandler {
 		}
 	}
 
-	
+
 	private void emitResult(TestSuite testSuite) {
 		TcgPreferenceUtils.AutoSaveFileInfo fileInfo = TcgPreferenceUtils.getAutoSaveFileInfo();
 		Boolean doAutoSave = fileInfo.autoSaveType != TcgPreferenceUtils.AutoSaveType.DO_NOT_SAVE;
@@ -182,9 +176,9 @@ public class VerifyHandler extends AadlHandler {
 			if (fileInfo.autoSaveType == TcgPreferenceUtils.AutoSaveType.SAVE_TO_NEW_FILE) {
 				fileName = TcgWriterUtils.createUniqueFileName(fileName);
 			}
-			
+
 			try {
-				
+
 				testSuite.setName(TcgWriterUtils.getFileNameNoExtension(fileName));
 				TcgXmlWriter writer = new TcgXmlWriter(fileName, null, false);
 				writer.writeSuite(testSuite);
@@ -212,20 +206,22 @@ public class VerifyHandler extends AadlHandler {
 					NullProgressMonitor subMonitor = new NullProgressMonitor();
                     monitorRef.set(subMonitor);
 
-					Program ufcProgram = constructUfcProgram(linker.getProgram(result), (TcgRenaming)linker.getRenaming(result)); 
+					TcgRenaming tcgRenaming = (TcgRenaming)linker.getRenaming(result);
+					Program ufcProgram = constructUfcProgram(linker.getProgram(result), tcgRenaming);
 					ufcProgram.getMainNode().properties.forEach(p -> result.addProperty(p));
-					writeIntermediateFiles(linker.getProgram(result), ufcProgram); 
+					writeIntermediateFiles(linker.getProgram(result), ufcProgram);
 
 					try {
 						System.out.println("Calling jkind...");
 						api.execute(ufcProgram, result, monitor);
 						System.out.println("executed API...");
 						TestSuite testSuite = TestSuiteUtils.
-							testSuiteFromJKindResult(result, 
-									linker.getComponent(result).getQualifiedName(), result.getName(), result.getText());
+							testSuiteFromJKindResult(result,
+									linker.getComponent(result).getQualifiedName(), result.getName(), result.getText(),
+										tcgRenaming);
 						emitResult(testSuite);
 						// showSuiteView(testSuite, linker);
-						
+
 					} catch (JKindException e) {
 						System.out.println(result.getText());
 						System.out.println("******** Error Occurred: HERE IS THE LUSTRE ********");
@@ -270,7 +266,7 @@ public class VerifyHandler extends AadlHandler {
 		return new JKindResult("Properties", properties, renaming);
 	}
 */
-	
+
 	private void showSuiteView(final TestSuite result, final AgreeResultsLinker linker) {
 		syncExec(() -> {
 //			try {
@@ -284,7 +280,7 @@ public class VerifyHandler extends AadlHandler {
 //			}
 		});
 	}
-	
+
 	@Override
 	protected String getJobName() {
 		return "TCG - Generate tests";

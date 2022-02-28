@@ -21,11 +21,13 @@
 package com.rockwellcollins.atc.agree.analysis;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import jkind.results.layout.Layout;
+import jkind.util.StringNaturalOrdering;
 
 public class AgreeLayout implements Layout {
 	private List<String> categories = new ArrayList<>();
@@ -62,7 +64,9 @@ public class AgreeLayout implements Layout {
 
 	@Override
 	public List<String> getCategories() {
-		return categories;
+		List<String> result = new ArrayList<>(categories);
+		Collections.sort(result, new StringNaturalOrdering());
+		return result;
 	}
 
 	@Override

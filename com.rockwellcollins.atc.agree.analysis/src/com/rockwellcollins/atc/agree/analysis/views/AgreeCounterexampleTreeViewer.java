@@ -20,6 +20,10 @@
  */
 package com.rockwellcollins.atc.agree.analysis.views;
 
+import java.util.Collections;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -28,7 +32,6 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import jkind.api.ui.counterexample.CounterexampleContentProvider;
 import jkind.api.ui.counterexample.CounterexampleNameLabelProvider;
 import jkind.results.Counterexample;
 import jkind.results.layout.Layout;
@@ -49,19 +52,23 @@ public class AgreeCounterexampleTreeViewer {
 	}
 
 	public void setInput(Counterexample cex, Layout layout) {
-		initializeTreeViewer(layout);
+		setInput(cex, layout, Collections.emptyMap());
+	}
+
+	public void setInput(Counterexample cex, Layout layout, Map<String, EObject> refMap) {
+		initializeTreeViewer(layout, refMap);
 		createColumns(cex);
 		treeViewer.setInput(cex);
 		composite.layout(true);
 	}
 
-	private void initializeTreeViewer(Layout layout) {
+	private void initializeTreeViewer(Layout layout, Map<String, EObject> refMap) {
 		if (treeViewer != null) {
 			treeViewer.getControl().dispose();
 		}
 		treeViewer = new TreeViewer(composite, SWT.MULTI | SWT.FULL_SELECTION);
 
-		treeViewer.setContentProvider(new CounterexampleContentProvider(layout));
+		treeViewer.setContentProvider(new AgreeCounterexampleContentProvider(layout, refMap));
 		treeViewer.getTree().setHeaderVisible(true);
 		treeViewer.getTree().setLinesVisible(true);
 	}

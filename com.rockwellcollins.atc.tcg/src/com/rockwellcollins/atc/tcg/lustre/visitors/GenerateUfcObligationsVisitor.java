@@ -24,8 +24,10 @@ package com.rockwellcollins.atc.tcg.lustre.visitors;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -199,7 +201,8 @@ public class GenerateUfcObligationsVisitor implements AstVisitor<ObligationSet, 
 
 			// renaming information
 			if(renaming != null) {
-				renaming.addRenaming(varName, ob.getEqAssignId(), ob.getTestedCondition().toString());
+				renaming.addRenaming(varName, ob.getEqAssignId(), ob.getTestedCondition().toString(),
+						new HashSet<Obligation>(Arrays.asList(ob)));
 			}
 			System.out.println("Renaming: mapping " + varName + " --> " + ob.getEqAssignId());
 		}

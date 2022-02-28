@@ -20,6 +20,7 @@
  */
 package com.rockwellcollins.atc.agree.analysis.views;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
 
@@ -54,7 +55,7 @@ public class AgreeCounterexampleView extends ViewPart {
 	}
 
 	public void setInput(Counterexample cex, Layout layout, Map<String, EObject> refMap) {
-		tree.setInput(cex, layout);
+		tree.setInput(cex, layout, refMap);
 		this.refMap = refMap;
 		tree.getTreeViewer().addDoubleClickListener(event -> {
 			if (event.getSelection() instanceof IStructuredSelection) {
@@ -64,6 +65,10 @@ public class AgreeCounterexampleView extends ViewPart {
 				}
 			}
 		});
+	}
+
+	public void setInput(Counterexample cex, Layout layout) {
+		setInput(cex, layout, Collections.<String, EObject> emptyMap());
 	}
 
 	private void open(SignalGroup group) {

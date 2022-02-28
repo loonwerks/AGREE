@@ -657,6 +657,9 @@ public class AgreeMenuListener implements IMenuListener {
 		}).start();
 	}
 
+	/**
+	 * @since 2.8
+	 */
 	public static void printSignal(MessageConsoleStream out, Signal<Value> signal, int length) {
 		out.print(String.format("%-60s", "{" + signal.getName() + "}"));
 		for (int k2 = 0; k2 < length; k2++) {

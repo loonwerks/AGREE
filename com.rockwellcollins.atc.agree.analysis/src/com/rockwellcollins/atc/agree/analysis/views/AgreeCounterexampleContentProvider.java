@@ -18,6 +18,9 @@ import jkind.results.Counterexample;
 import jkind.results.Signal;
 import jkind.results.layout.Layout;
 
+/**
+ * @since 2.8
+ */
 public class AgreeCounterexampleContentProvider extends CounterexampleContentProvider {
 
 	private final Layout layout;

@@ -239,6 +239,9 @@ public class AgreeRenaming extends Renaming {
 		return false;
 	}
 
+	/**
+	 * @since 2.8
+	 */
 	public EObject findBestReference(String refStr) {
 
 		EObject ref = null;

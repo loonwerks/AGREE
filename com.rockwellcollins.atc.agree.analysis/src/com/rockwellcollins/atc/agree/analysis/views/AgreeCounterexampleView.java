@@ -54,6 +54,9 @@ public class AgreeCounterexampleView extends ViewPart {
 		tree.setFocus();
 	}
 
+	/**
+	 * @since 2.8
+	 */
 	public void setInput(Counterexample cex, Layout layout, Map<String, EObject> refMap) {
 		tree.setInput(cex, layout, refMap);
 		this.refMap = refMap;

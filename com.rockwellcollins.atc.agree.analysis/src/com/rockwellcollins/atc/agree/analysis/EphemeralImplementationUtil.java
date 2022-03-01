@@ -54,6 +54,11 @@ import org.osate.aadl2.SubprogramType;
 import org.osate.aadl2.SystemType;
 import org.osate.aadl2.ThreadGroupType;
 import org.osate.aadl2.ThreadType;
+import org.osate.aadl2.instance.SystemInstance;
+import org.osate.aadl2.instantiation.InstantiateModel;
+import org.osate.aadl2.modelsupport.AadlConstants;
+import org.osate.aadl2.modelsupport.errorreporting.AnalysisErrorReporterManager;
+import org.osate.aadl2.modelsupport.errorreporting.MarkerAnalysisErrorReporter;
 
 public class EphemeralImplementationUtil {
 
@@ -288,6 +293,186 @@ public class EphemeralImplementationUtil {
 			return null;
 		}
 		return compImpl;
+	}
+
+	/**
+	 * Generate an ephemeral {@link SystemInstance} matching the subtype of the given {@link ComponentType}.
+	 * <p>
+	 * Ephemerally generated system instances are placed it in an ephemeral {@link Resource}.  The ephemeral
+	 * resources are intended to have short lifecycles and deleted by the {@link cleanup} method.
+	 *
+	 * @param ct The component type for which to create an ephemeral implementation.
+	 * @return A system instance for the given component type.
+	 * @throws Exception
+	 * @since 2.8
+	 */
+	@SuppressWarnings("unchecked")
+	public SystemInstance generateEphemeralCompInstanceFromType(ComponentType ct) throws Exception {
+		Resource implementationAadlResource = getResource(getEphemeralImplURI(ct));
+
+		ephemeralResources.add(implementationAadlResource);
+		List<ComponentImplementation> implementationResultList;
+		ComponentImplementation implementationResult;
+
+		final TransactionalEditingDomain domain = WorkspaceEditingDomainFactory.INSTANCE.createEditingDomain();
+
+		Command implementationCmd = new RecordingCommand(domain) {
+			public ComponentImplementation implementation;
+
+			@Override
+			protected void doExecute() {
+				try {
+					implementation = createComponentImplementationInternal(ct, implementationAadlResource);
+				} catch (InterruptedException e) {
+					// Do nothing. Will be thrown after execute.
+				}
+			}
+
+			@Override
+			public List<ComponentImplementation> getResult() {
+				return Collections.singletonList(implementation);
+			}
+		};
+
+		((TransactionalCommandStack) domain.getCommandStack()).execute(implementationCmd, null);
+		if (monitor.isCanceled()) {
+			throw new InterruptedException();
+		}
+
+		try {
+			// We're done: Save the model.
+			// We don't respond to a cancel at this point
+			monitor.subTask("Saving implementation model");
+			implementationAadlResource.save(null);
+		} catch (IOException e) {
+			e.printStackTrace();
+			setErrorMessage(e.getMessage());
+			return null;
+		}
+		implementationResultList = (List<ComponentImplementation>) implementationCmd.getResult();
+		implementationResult = implementationResultList.get(0);
+
+		Resource instanceAadlResource = getResource(InstantiateModel.getInstanceModelURI(implementationResult));
+		ephemeralResources.add(instanceAadlResource);
+
+		List<SystemInstance> instanceResultList;
+		SystemInstance instanceResult;
+
+		// We execute this command on the command stack because otherwise, we will not
+		// have write permissions on the editing domain.
+		Command instanceCmd = new RecordingCommand(domain) {
+			public SystemInstance systemInstance;
+
+			@Override
+			protected void doExecute() {
+				try {
+					final InstantiateModel instantiateModel = new InstantiateModel(monitor,
+							new AnalysisErrorReporterManager(new MarkerAnalysisErrorReporter.Factory(
+									AadlConstants.INSTANTIATION_OBJECT_MARKER)));
+					systemInstance = instantiateModel.createSystemInstance(implementationResult, instanceAadlResource);
+				} catch (InterruptedException e) {
+					// Do nothing. Will be thrown after execute.
+				} catch (Exception e) {
+					e.printStackTrace();
+					errorMessage = e.getMessage();
+
+					e.getMessage();
+				}
+			}
+
+			@Override
+			public List<SystemInstance> getResult() {
+				return Collections.singletonList(systemInstance);
+			}
+		};
+
+		((TransactionalCommandStack) domain.getCommandStack()).execute(instanceCmd, null);
+		if (monitor.isCanceled()) {
+			throw new InterruptedException();
+		}
+
+		try {
+			// We're done: Save the model.
+			monitor.subTask("Saving instance model");
+			instanceAadlResource.save(null);
+		} catch (IOException e) {
+			e.printStackTrace();
+			setErrorMessage(e.getMessage());
+			return null;
+		}
+		instanceResultList = (List<SystemInstance>) instanceCmd.getResult();
+		instanceResult = instanceResultList.get(0);
+
+		return instanceResult;
+	}
+
+	/**
+	 * Generate an ephemeral {@link SystemInstance} matching the subtype of the given {@link ComponentType}.
+	 * <p>
+	 * Ephemerally generated system instances are placed it in an ephemeral {@link Resource}.  The ephemeral
+	 * resources are intended to have short lifecycles and deleted by the {@link cleanup} method.
+	 *
+	 * @param ct The component type for which to create an ephemeral implementation.
+	 * @return A system instance for the given component type.
+	 * @throws Exception
+	 * @since 2.8
+	 */
+	@SuppressWarnings("unchecked")
+	public SystemInstance generateEphemeralCompInstanceFromImplementation(ComponentImplementation ci) throws Exception {
+		final TransactionalEditingDomain domain = WorkspaceEditingDomainFactory.INSTANCE.createEditingDomain();
+
+		Resource instanceAadlResource = getResource(InstantiateModel.getInstanceModelURI(ci));
+		ephemeralResources.add(instanceAadlResource);
+
+		List<SystemInstance> instanceResultList;
+		SystemInstance instanceResult;
+
+		// We execute this command on the command stack because otherwise, we will not
+		// have write permissions on the editing domain.
+		Command instanceCmd = new RecordingCommand(domain) {
+			public SystemInstance systemInstance;
+
+			@Override
+			protected void doExecute() {
+				try {
+					final InstantiateModel instantiateModel = new InstantiateModel(monitor,
+							new AnalysisErrorReporterManager(new MarkerAnalysisErrorReporter.Factory(
+									AadlConstants.INSTANTIATION_OBJECT_MARKER)));
+					systemInstance = instantiateModel.createSystemInstance(ci, instanceAadlResource);
+				} catch (InterruptedException e) {
+					// Do nothing. Will be thrown after execute.
+				} catch (Exception e) {
+					e.printStackTrace();
+					errorMessage = e.getMessage();
+
+					e.getMessage();
+				}
+			}
+
+			@Override
+			public List<SystemInstance> getResult() {
+				return Collections.singletonList(systemInstance);
+			}
+		};
+
+		((TransactionalCommandStack) domain.getCommandStack()).execute(instanceCmd, null);
+		if (monitor.isCanceled()) {
+			throw new InterruptedException();
+		}
+
+		try {
+			// We're done: Save the model.
+			monitor.subTask("Saving instance model");
+			instanceAadlResource.save(null);
+		} catch (IOException e) {
+			e.printStackTrace();
+			setErrorMessage(e.getMessage());
+			return null;
+		}
+		instanceResultList = (List<SystemInstance>) instanceCmd.getResult();
+		instanceResult = instanceResultList.get(0);
+
+		return instanceResult;
 	}
 
 	/**

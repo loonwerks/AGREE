@@ -47,7 +47,6 @@ import org.osate.aadl2.Property;
 import org.osate.aadl2.PropertyAssociation;
 import org.osate.aadl2.StringLiteral;
 import org.osate.aadl2.instance.SystemInstance;
-import org.osate.aadl2.instantiation.InstantiateModel;
 import org.osate.aadl2.modelsupport.scoping.Aadl2GlobalScopeUtil;
 import org.osate.aadl2.properties.PropertyNotPresentException;
 import org.osate.annexsupport.AnnexUtil;
@@ -101,34 +100,11 @@ public class MATLABFunctionHandler extends ModifyingAadlHandler {
 		}
 
 		ComponentType ct = (ComponentType) classifier;
-//
-//		//Allow a runnable to be executed by the UI-thread asynchronously
-//		Display.getDefault().asyncExec(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				doWork(ct);
-//			}
-//		});
-//
-//		return Status.OK_STATUS;
-//	}
-//
-//	protected void doWork(ComponentType ct){
+
 		ComponentImplementation ci = null;
 		EphemeralImplementationUtil implUtil = new EphemeralImplementationUtil(monitor);
 		try {
-			// ci = AgreeUtils.generateEphemeralCompImplFromType(ct);
-			ci = implUtil.generateEphemeralCompImplFromType(ct);
-
-			SystemInstance si = null;
-			try {
-				si = InstantiateModel.buildInstanceModelFile(ci);
-			} catch (Exception e) {
-				Dialog.showError("Model Instantiate", "Error while re-instantiating the model: " + e.getMessage());
-				// return;
-				return Status.CANCEL_STATUS;
-			}
+			SystemInstance si = implUtil.generateEphemeralCompInstanceFromType(ct);
 
 			ComponentType sysType = AgreeUtils.getInstanceType(si);
 

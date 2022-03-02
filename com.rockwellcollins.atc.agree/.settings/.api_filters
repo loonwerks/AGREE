@@ -238,4 +238,12 @@
             </message_arguments>
         </filter>
     </resource>
+    <resource path="xtend-gen/com/rockwellcollins/atc/agree/formatting2/AgreeFormatter.java" type="com.rockwellcollins.atc.agree.formatting2.AgreeFormatter">
+        <filter id="305422471">
+            <message_arguments>
+                <message_argument value="com.rockwellcollins.atc.agree.formatting2.AgreeFormatter"/>
+                <message_argument value="com.rockwellcollins.atc.agree.ui_3.0.0"/>
+            </message_arguments>
+        </filter>
+    </resource>
 </component>

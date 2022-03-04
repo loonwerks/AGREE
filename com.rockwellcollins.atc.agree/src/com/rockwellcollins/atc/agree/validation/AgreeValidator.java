@@ -1960,7 +1960,7 @@ public class AgreeValidator extends AbstractAgreeValidator {
 			type = (ComponentType) container;
 		}
 
-		if (type != null) {
+		if (type != null && (namedEl.getName() != null)) {
 			for (Feature feat : type.getAllFeatures()) {
 				if (namedEl.getName().equals(feat.getName())) {
 					error(feat, "Element of the same name ('" + namedEl.getName() + "') in AGREE Annex in '"

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -64,6 +65,7 @@ import org.osate.aadl2.StringLiteral;
 import org.osate.aadl2.Subcomponent;
 import org.osate.annexsupport.AnnexUtil;
 
+import com.google.common.collect.Sets;
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.AgreeContractSubclause;
 import com.rockwellcollins.atc.agree.agree.AgreePackage;
@@ -728,274 +730,374 @@ public class AgreeTypeSystem {
 
 	}
 
-
 	public static TypeDef infer(Expr expr) {
+		return new TypeInferrer().infer(expr);
+	}
 
-		if (expr instanceof SelectionExpr) {
+	public static TypeDef inferFromNamedElement(NamedElement ne) {
+		return new TypeInferrer().inferFromNamedElement(ne);
+	}
 
-			Expr target = ((SelectionExpr) expr).getTarget();
-			TypeDef targetType = infer(target);
-			String field = ((SelectionExpr) expr).getField().getName();
+	private static class TypeInferrer {
+		private Set<Expr> seenExprs = Sets.newIdentityHashSet();
 
-			if (targetType instanceof AgreeTypeSystem.RecordTypeDef) {
-				Map<String, TypeDef> fields = ((AgreeTypeSystem.RecordTypeDef) targetType).fields;
-				if (fields.containsKey(field)) {
-					return fields.get(field);
+		public TypeDef infer(Expr expr) {
+
+			if (seenExprs.contains(expr)) {
+				// Circular type inference
+				return Prim.ErrorTypeDef;
+			}
+			seenExprs.add(expr);
+
+			if (expr instanceof SelectionExpr) {
+
+				Expr target = ((SelectionExpr) expr).getTarget();
+				TypeDef targetType = infer(target);
+				String field = ((SelectionExpr) expr).getField().getName();
+
+				if (targetType instanceof AgreeTypeSystem.RecordTypeDef) {
+					Map<String, TypeDef> fields = ((AgreeTypeSystem.RecordTypeDef) targetType).fields;
+					if (fields.containsKey(field)) {
+						return fields.get(field);
+					}
+
 				}
 
-			}
+			} else if (expr instanceof TagExpr) {
 
-		} else if (expr instanceof TagExpr) {
-
-			String tag = ((TagExpr) expr).getTag();
-			if (tag != null) {
-				switch (tag) {
-				case "_CLK":
-				case "_INSERT":
-				case "_REMOVE":
-					return Prim.BoolTypeDef;
-				case "_COUNT":
-					return Prim.IntTypeDef;
+				String tag = ((TagExpr) expr).getTag();
+				if (tag != null) {
+					switch (tag) {
+					case "_CLK":
+					case "_INSERT":
+					case "_REMOVE":
+						return Prim.BoolTypeDef;
+					case "_COUNT":
+						return Prim.IntTypeDef;
+					}
 				}
-			}
 
-		} else if (expr instanceof ArraySubExpr) {
-			Expr arrExpr = ((ArraySubExpr) expr).getExpr();
-			TypeDef arrType = infer(arrExpr);
-			if (arrType instanceof ArrayTypeDef) {
-				return ((ArrayTypeDef) arrType).stemType;
-			}
+			} else if (expr instanceof ArraySubExpr) {
+				Expr arrExpr = ((ArraySubExpr) expr).getExpr();
+				TypeDef arrType = infer(arrExpr);
+				if (arrType instanceof ArrayTypeDef) {
+					return ((ArrayTypeDef) arrType).stemType;
+				}
 
-		} else if (expr instanceof IndicesExpr) {
-			TypeDef arrType = infer(((IndicesExpr) expr).getArray());
-			if (arrType instanceof ArrayTypeDef) {
-				int size = ((ArrayTypeDef) arrType).size;
-				return new ArrayTypeDef(Prim.IntTypeDef, size, Optional.empty());
-			}
-
-		} else if (expr instanceof ForallExpr) {
-			return Prim.BoolTypeDef;
-
-		} else if (expr instanceof ExistsExpr) {
-			return Prim.BoolTypeDef;
-
-		} else if (expr instanceof FlatmapExpr) {
-			TypeDef innerArrType = infer(((FlatmapExpr) expr).getExpr());
-			if (innerArrType instanceof ArrayTypeDef) {
-				TypeDef stemType = ((ArrayTypeDef) innerArrType).stemType;
-				TypeDef arrType = infer(((FlatmapExpr) expr).getArray());
-
+			} else if (expr instanceof IndicesExpr) {
+				TypeDef arrType = infer(((IndicesExpr) expr).getArray());
 				if (arrType instanceof ArrayTypeDef) {
 					int size = ((ArrayTypeDef) arrType).size;
-					return new ArrayTypeDef(stemType, size, Optional.empty());
+					return new ArrayTypeDef(Prim.IntTypeDef, size, Optional.empty());
 				}
-			}
 
-
-
-		} else if (expr instanceof FoldLeftExpr) {
-			return infer(((FoldLeftExpr) expr).getExpr());
-
-		} else if (expr instanceof FoldRightExpr) {
-			return infer(((FoldRightExpr) expr).getExpr());
-
-		} else if (expr instanceof BinaryExpr) {
-			TypeDef leftType = infer(((BinaryExpr) expr).getLeft());
-			String op = ((BinaryExpr) expr).getOp();
-
-			switch (op) {
-			case "->":
-				return leftType;
-			case "=>":
-			case "<=>":
-			case "and":
-			case "or":
-			case "<>":
-			case "!=":
-			case "<":
-			case "<=":
-			case ">":
-			case ">=":
-			case "=":
+			} else if (expr instanceof ForallExpr) {
 				return Prim.BoolTypeDef;
-			case "+":
-			case "-":
-			case "*":
-			case "/":
-			case "mod":
-			case "div":
-			case "^":
-				return leftType;
-			}
 
-		} else if (expr instanceof UnaryExpr) {
-			return infer(((UnaryExpr) expr).getExpr());
+			} else if (expr instanceof ExistsExpr) {
+				return Prim.BoolTypeDef;
 
-		} else if (expr instanceof IfThenElseExpr) {
-			return infer(((IfThenElseExpr) expr).getB());
+			} else if (expr instanceof FlatmapExpr) {
+				TypeDef innerArrType = infer(((FlatmapExpr) expr).getExpr());
+				if (innerArrType instanceof ArrayTypeDef) {
+					TypeDef stemType = ((ArrayTypeDef) innerArrType).stemType;
+					TypeDef arrType = infer(((FlatmapExpr) expr).getArray());
 
-		} else if (expr instanceof PrevExpr) {
-			return infer(((PrevExpr) expr).getInit());
-
-		} else if (expr instanceof GetPropertyExpr) {
-
-
-			ComponentRef cr = ((GetPropertyExpr) expr).getComponentRef();
-			NamedElement prop = ((GetPropertyExpr) expr).getProp();
-			if (cr instanceof ThisRef) {
-
-				if (prop instanceof Property) {
-					PropertyType pt = ((Property) prop).getPropertyType();
-
-					return toTypeFromPropertyType(pt);
-
-				} else {
-
-					EObject container = expr.getContainingClassifier();
-					List<PropertyAssociation> pas = ((Classifier) container).getAllPropertyAssociations();
-					for (PropertyAssociation choice : pas) {
-						if (choice.getProperty().getName().equals(prop.getName())) {
-							PropertyType pt = choice.getProperty().getPropertyType();
-							return toTypeFromPropertyType(pt);
-						}
+					if (arrType instanceof ArrayTypeDef) {
+						int size = ((ArrayTypeDef) arrType).size;
+						return new ArrayTypeDef(stemType, size, Optional.empty());
 					}
 				}
 
-			} else if (cr instanceof DoubleDotRef) {
+			} else if (expr instanceof FoldLeftExpr) {
+				return infer(((FoldLeftExpr) expr).getExpr());
 
-				EObject container = expr.getContainingComponentImpl();
-				if (container instanceof ComponentImplementation) {
-					List<Subcomponent> subcomps = ((ComponentImplementation) container).getAllSubcomponents();
-					for (Subcomponent choice : subcomps) {
+			} else if (expr instanceof FoldRightExpr) {
+				return infer(((FoldRightExpr) expr).getExpr());
 
-						List<PropertyAssociation> pas = choice.getOwnedPropertyAssociations();
-						for (PropertyAssociation pchoice : pas) {
+			} else if (expr instanceof BinaryExpr) {
+				TypeDef leftType = infer(((BinaryExpr) expr).getLeft());
+				String op = ((BinaryExpr) expr).getOp();
 
-							if (pchoice.getProperty().getName().equals(prop.getName())) {
-								PropertyType pt = pchoice.getProperty().getPropertyType();
-								return inferFromNamedElement(pt);
+				switch (op) {
+				case "->":
+					return leftType;
+				case "=>":
+				case "<=>":
+				case "and":
+				case "or":
+				case "<>":
+				case "!=":
+				case "<":
+				case "<=":
+				case ">":
+				case ">=":
+				case "=":
+					return Prim.BoolTypeDef;
+				case "+":
+				case "-":
+				case "*":
+				case "/":
+				case "mod":
+				case "div":
+				case "^":
+					return leftType;
+				}
+
+			} else if (expr instanceof UnaryExpr) {
+				return infer(((UnaryExpr) expr).getExpr());
+
+			} else if (expr instanceof IfThenElseExpr) {
+				return infer(((IfThenElseExpr) expr).getB());
+
+			} else if (expr instanceof PrevExpr) {
+				return infer(((PrevExpr) expr).getInit());
+
+			} else if (expr instanceof GetPropertyExpr) {
+
+				ComponentRef cr = ((GetPropertyExpr) expr).getComponentRef();
+				NamedElement prop = ((GetPropertyExpr) expr).getProp();
+				if (cr instanceof ThisRef) {
+
+					if (prop instanceof Property) {
+						PropertyType pt = ((Property) prop).getPropertyType();
+
+						return toTypeFromPropertyType(pt);
+
+					} else {
+
+						EObject container = expr.getContainingClassifier();
+						List<PropertyAssociation> pas = ((Classifier) container).getAllPropertyAssociations();
+						for (PropertyAssociation choice : pas) {
+							if (choice.getProperty().getName().equals(prop.getName())) {
+								PropertyType pt = choice.getProperty().getPropertyType();
+								return toTypeFromPropertyType(pt);
 							}
 						}
-
 					}
 
+				} else if (cr instanceof DoubleDotRef) {
+
+					EObject container = expr.getContainingComponentImpl();
+					if (container instanceof ComponentImplementation) {
+						List<Subcomponent> subcomps = ((ComponentImplementation) container).getAllSubcomponents();
+						for (Subcomponent choice : subcomps) {
+
+							List<PropertyAssociation> pas = choice.getOwnedPropertyAssociations();
+							for (PropertyAssociation pchoice : pas) {
+
+								if (pchoice.getProperty().getName().equals(prop.getName())) {
+									PropertyType pt = pchoice.getProperty().getPropertyType();
+									return inferFromNamedElement(pt);
+								}
+							}
+						}
+					}
+				}
+
+			} else if (expr instanceof IntLitExpr) {
+				return Prim.IntTypeDef;
+
+			} else if (expr instanceof RealLitExpr) {
+				return Prim.RealTypeDef;
+
+			} else if (expr instanceof BoolLitExpr) {
+				return Prim.BoolTypeDef;
+
+			} else if (expr instanceof FloorCast) {
+				return Prim.IntTypeDef;
+
+			} else if (expr instanceof RealCast) {
+				return Prim.RealTypeDef;
+
+			} else if (expr instanceof EventExpr) {
+				return Prim.BoolTypeDef;
+
+			} else if (expr instanceof TimeExpr) {
+				return Prim.RealTypeDef;
+
+			} else if (expr instanceof EnumLitExpr) {
+				return typeDefFromType(((EnumLitExpr) expr).getEnumType());
+
+			} else if (expr instanceof LatchedExpr) {
+				return infer(((LatchedExpr) expr).getExpr());
+
+			} else if (expr instanceof TimeOfExpr) {
+				return Prim.RealTypeDef;
+
+			} else if (expr instanceof TimeRiseExpr) {
+				return Prim.RealTypeDef;
+
+			} else if (expr instanceof TimeFallExpr) {
+				return Prim.RealTypeDef;
+
+			} else if (expr instanceof TimeOfExpr) {
+				return Prim.RealTypeDef;
+
+			} else if (expr instanceof TimeRiseExpr) {
+				return Prim.RealTypeDef;
+
+			} else if (expr instanceof TimeFallExpr) {
+				return Prim.RealTypeDef;
+
+			} else if (expr instanceof PreExpr) {
+				return infer(((PreExpr) expr).getExpr());
+
+			} else if (expr instanceof ArrayLiteralExpr) {
+				EList<Expr> elems = ((ArrayLiteralExpr) expr).getElems();
+				Expr first = elems.get(0);
+				int size = elems.size();
+				TypeDef firstType = infer(first);
+
+				return new ArrayTypeDef(firstType, size, Optional.empty());
+
+			} else if (expr instanceof ArrayUpdateExpr) {
+				return infer(((ArrayUpdateExpr) expr).getArray());
+
+			} else if (expr instanceof RecordLitExpr) {
+				return typeDefFromType(((RecordLitExpr) expr).getRecordType());
+
+			} else if (expr instanceof RecordUpdateExpr) {
+				return infer(((RecordUpdateExpr) expr).getRecord());
+
+			} else if (expr instanceof NamedElmExpr) {
+				NamedElement ne = ((NamedElmExpr) expr).getElm();
+				return inferFromNamedElement(ne);
+
+			} else if (expr instanceof CallExpr) {
+
+				CallExpr fnCall = ((CallExpr) expr);
+				DoubleDotRef dotId = fnCall.getRef();
+				NamedElement namedEl = dotId.getElm();
+
+				if (isInLinearizationBody(fnCall)) {
+					// extract in/out arguments
+					if (namedEl instanceof LinearizationDef) {
+						return Prim.RealTypeDef;
+					} else if (namedEl instanceof LibraryFnDef) {
+						LibraryFnDef fnDef = (LibraryFnDef) namedEl;
+						return typeDefFromType(fnDef.getType());
+					}
+
+				} else {
+					// extract in/out arguments
+					if (namedEl instanceof FnDef) {
+						FnDef fnDef = (FnDef) namedEl;
+						return typeDefFromType(fnDef.getType());
+					} else if (namedEl instanceof NodeDef) {
+						NodeDef nodeDef = (NodeDef) namedEl;
+						List<Type> outDefTypes = typesFromArgs(nodeDef.getRets());
+						if (outDefTypes.size() == 1) {
+							return typeDefFromType(outDefTypes.get(0));
+						}
+					} else if (namedEl instanceof LinearizationDef) {
+						return Prim.RealTypeDef;
+					} else if (namedEl instanceof LibraryFnDef) {
+						LibraryFnDef fnDef = (LibraryFnDef) namedEl;
+						return typeDefFromType(fnDef.getType());
+					} else if (namedEl instanceof UninterpretedFnDef) {
+						UninterpretedFnDef fnDef = (UninterpretedFnDef) namedEl;
+						return typeDefFromType(fnDef.getType());
+					}
 
 				}
+			}
+			return Prim.ErrorTypeDef;
+		}
+
+		public TypeDef inferFromNamedElement(NamedElement ne) {
+
+			if (ne instanceof PropertyStatement) {
+				return infer(((PropertyStatement) ne).getExpr());
+
+			} else if (ne instanceof NamedID && ne.eContainer() instanceof EnumStatement) {
+
+				EnumStatement enumDef = (EnumStatement) ne.eContainer();
+				String name = enumDef.getQualifiedName();
+				List<String> enumValues = new ArrayList<String>();
+
+				for (NamedID nid : enumDef.getEnums()) {
+					String enumValue = name + "_" + nid.getName();
+					enumValues.add(enumValue);
+				}
+				return new EnumTypeDef(name, enumValues, enumDef);
+
+			} else if (ne instanceof NamedID) {
+				EObject container = ne.eContainer();
+
+				Expr arrExpr = null;
+				boolean isItemBinding = false;
+
+				if (container instanceof ForallExpr) {
+					arrExpr = ((ForallExpr) container).getArray();
+					isItemBinding = true;
+
+				} else if (container instanceof ExistsExpr) {
+					arrExpr = ((ExistsExpr) container).getArray();
+					isItemBinding = true;
+
+				} else if (container instanceof FlatmapExpr) {
+					arrExpr = ((FlatmapExpr) container).getArray();
+					isItemBinding = true;
+
+				} else if (container instanceof FoldLeftExpr) {
+					FoldLeftExpr fexpr = (FoldLeftExpr) container;
+					arrExpr = fexpr.getArray();
+					isItemBinding = fexpr.getBinding().getName().equals(ne.getName());
+
+				} else if (container instanceof FoldRightExpr) {
+					FoldRightExpr fexpr = (FoldRightExpr) container;
+					arrExpr = fexpr.getArray();
+					isItemBinding = fexpr.getBinding().getName().equals(ne.getName());
+
+				}
+
+				if (arrExpr != null) {
+					if (isItemBinding) {
+						TypeDef arrType = infer(arrExpr);
+						if (arrType instanceof ArrayTypeDef) {
+							return ((ArrayTypeDef) arrType).stemType;
+						}
+					} else {
+						// ne must be the accumulator
+						if (container instanceof FoldLeftExpr) {
+							Expr initExpr = ((FoldLeftExpr) container).getInitial();
+							TypeDef initType = infer(initExpr);
+							return initType;
+
+						} else if (container instanceof FoldRightExpr) {
+							Expr initExpr = ((FoldRightExpr) container).getInitial();
+							TypeDef initType = infer(initExpr);
+							return initType;
+						}
+					}
+				}
+
+
+			} else if (ne instanceof ConstStatement) {
+				return typeDefFromType(((ConstStatement) ne).getType());
+
+			} else if (ne instanceof Arg) {
+				return typeDefFromType(((Arg) ne).getType());
+
+			} else if (ne instanceof Subcomponent) {
+				return getTypeDefFromFeatureOrSubcomp(ne);
+
+			} else if (ne instanceof Feature) {
+				return getTypeDefFromFeatureOrSubcomp(ne);
+
+			} else if (ne instanceof PropertyConstant) {
+				PropertyExpression pe = ((PropertyConstant) ne).getConstantValue();
+				return inferPropExp(pe);
 
 			}
 
-		} else if (expr instanceof IntLitExpr) {
-			return Prim.IntTypeDef;
-
-		} else if (expr instanceof RealLitExpr) {
-			return Prim.RealTypeDef;
-
-		} else if (expr instanceof BoolLitExpr) {
-			return Prim.BoolTypeDef;
-
-		} else if (expr instanceof FloorCast) {
-			return Prim.IntTypeDef;
-
-		} else if (expr instanceof RealCast) {
-			return Prim.RealTypeDef;
-
-		} else if (expr instanceof EventExpr) {
-			return Prim.BoolTypeDef;
-
-		} else if (expr instanceof TimeExpr) {
-			return Prim.RealTypeDef;
-
-		} else if (expr instanceof EnumLitExpr) {
-			return typeDefFromType(((EnumLitExpr) expr).getEnumType());
-
-		} else if (expr instanceof LatchedExpr) {
-			return infer(((LatchedExpr) expr).getExpr());
-
-		} else if (expr instanceof TimeOfExpr) {
-			return Prim.RealTypeDef;
-
-		} else if (expr instanceof TimeRiseExpr) {
-			return Prim.RealTypeDef;
-
-		} else if (expr instanceof TimeFallExpr) {
-			return Prim.RealTypeDef;
-
-		} else if (expr instanceof TimeOfExpr) {
-			return Prim.RealTypeDef;
-
-		} else if (expr instanceof TimeRiseExpr) {
-			return Prim.RealTypeDef;
-
-		} else if (expr instanceof TimeFallExpr) {
-			return Prim.RealTypeDef;
-
-		} else if (expr instanceof PreExpr) {
-			return infer(((PreExpr) expr).getExpr());
-
-		} else if (expr instanceof ArrayLiteralExpr) {
-			EList<Expr> elems = ((ArrayLiteralExpr) expr).getElems();
-			Expr first = elems.get(0);
-			int size = elems.size();
-			TypeDef firstType = infer(first);
-
-			return new ArrayTypeDef(firstType, size, Optional.empty());
-
-		} else if (expr instanceof ArrayUpdateExpr) {
-			return infer(((ArrayUpdateExpr) expr).getArray());
-
-		} else if (expr instanceof RecordLitExpr) {
-			return typeDefFromType(((RecordLitExpr) expr).getRecordType());
-
-		} else if (expr instanceof RecordUpdateExpr) {
-			return infer(((RecordUpdateExpr) expr).getRecord());
-
-		} else if (expr instanceof NamedElmExpr) {
-			NamedElement ne = ((NamedElmExpr) expr).getElm();
-			return inferFromNamedElement(ne);
-
-		} else if (expr instanceof CallExpr) {
-
-			CallExpr fnCall = ((CallExpr) expr);
-			DoubleDotRef dotId = fnCall.getRef();
-			NamedElement namedEl = dotId.getElm();
-
-			if (isInLinearizationBody(fnCall)) {
-				// extract in/out arguments
-				if (namedEl instanceof LinearizationDef) {
-					return Prim.RealTypeDef;
-				} else if (namedEl instanceof LibraryFnDef) {
-					LibraryFnDef fnDef = (LibraryFnDef) namedEl;
-					return typeDefFromType(fnDef.getType());
-				}
-
-			} else {
-				// extract in/out arguments
-				if (namedEl instanceof FnDef) {
-					FnDef fnDef = (FnDef) namedEl;
-					return typeDefFromType(fnDef.getType());
-				} else if (namedEl instanceof NodeDef) {
-					NodeDef nodeDef = (NodeDef) namedEl;
-					List<Type> outDefTypes = typesFromArgs(nodeDef.getRets());
-					if (outDefTypes.size() == 1) {
-						return typeDefFromType(outDefTypes.get(0));
-					}
-				} else if (namedEl instanceof LinearizationDef) {
-					return Prim.RealTypeDef;
-				} else if (namedEl instanceof LibraryFnDef) {
-					LibraryFnDef fnDef = (LibraryFnDef) namedEl;
-					return typeDefFromType(fnDef.getType());
-				} else if (namedEl instanceof UninterpretedFnDef) {
-					UninterpretedFnDef fnDef = (UninterpretedFnDef) namedEl;
-					return typeDefFromType(fnDef.getType());
-				}
-
-			}
-
+			return Prim.ErrorTypeDef;
 
 		}
-		return Prim.ErrorTypeDef;
 
 	}
+
 
 	private static TypeDef toTypeFromPropertyType(PropertyType propType) {
 		if (propType instanceof AadlBoolean) {
@@ -1013,97 +1115,6 @@ public class AgreeTypeSystem {
 		throw new RuntimeException();
 	}
 
-	public static TypeDef inferFromNamedElement(NamedElement ne) {
-
-
-		if (ne instanceof PropertyStatement) {
-			return infer(((PropertyStatement) ne).getExpr());
-
-		} else if (ne instanceof NamedID && ne.eContainer() instanceof EnumStatement) {
-
-			EnumStatement enumDef = (EnumStatement) ne.eContainer();
-			String name = enumDef.getQualifiedName();
-			List<String> enumValues = new ArrayList<String>();
-
-			for (NamedID nid : enumDef.getEnums()) {
-				String enumValue = name + "_" + nid.getName();
-				enumValues.add(enumValue);
-			}
-			return new EnumTypeDef(name, enumValues, enumDef);
-
-		} else if (ne instanceof NamedID) {
-			EObject container = ne.eContainer();
-
-			Expr arrExpr = null;
-			boolean isItemBinding = false;
-
-			if (container instanceof ForallExpr) {
-				arrExpr = ((ForallExpr) container).getArray();
-				isItemBinding = true;
-
-			} else if (container instanceof ExistsExpr) {
-				arrExpr = ((ExistsExpr) container).getArray();
-				isItemBinding = true;
-
-			} else if (container instanceof FlatmapExpr) {
-				arrExpr = ((FlatmapExpr) container).getArray();
-				isItemBinding = true;
-
-			} else if (container instanceof FoldLeftExpr) {
-				FoldLeftExpr fexpr = (FoldLeftExpr) container;
-				arrExpr = fexpr.getArray();
-				isItemBinding = fexpr.getBinding().getName().equals(ne.getName());
-
-			} else if (container instanceof FoldRightExpr) {
-				FoldRightExpr fexpr = (FoldRightExpr) container;
-				arrExpr = fexpr.getArray();
-				isItemBinding = fexpr.getBinding().getName().equals(ne.getName());
-
-			}
-
-			if (arrExpr != null) {
-				if (isItemBinding) {
-					TypeDef arrType = infer(arrExpr);
-					if (arrType instanceof ArrayTypeDef) {
-						return ((ArrayTypeDef) arrType).stemType;
-					}
-				} else {
-					// ne must be the accumulator
-					if (container instanceof FoldLeftExpr) {
-						Expr initExpr = ((FoldLeftExpr) container).getInitial();
-						TypeDef initType = infer(initExpr);
-						return initType;
-
-					} else if (container instanceof FoldRightExpr) {
-						Expr initExpr = ((FoldRightExpr) container).getInitial();
-						TypeDef initType = infer(initExpr);
-						return initType;
-					}
-				}
-			}
-
-
-		} else if (ne instanceof ConstStatement) {
-			return typeDefFromType(((ConstStatement) ne).getType());
-
-		} else if (ne instanceof Arg) {
-			return typeDefFromType(((Arg) ne).getType());
-
-		} else if (ne instanceof Subcomponent) {
-			return getTypeDefFromFeatureOrSubcomp(ne);
-
-		} else if (ne instanceof Feature) {
-			return getTypeDefFromFeatureOrSubcomp(ne);
-
-		} else if (ne instanceof PropertyConstant) {
-			PropertyExpression pe = ((PropertyConstant) ne).getConstantValue();
-			return inferPropExp(pe);
-
-		}
-
-		return Prim.ErrorTypeDef;
-
-	}
 
 	private static TypeDef getTypeDefFromFeatureOrSubcomp(NamedElement ne) {
 

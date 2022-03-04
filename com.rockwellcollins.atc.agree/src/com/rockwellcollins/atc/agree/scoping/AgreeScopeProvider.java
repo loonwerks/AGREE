@@ -32,7 +32,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.EcoreUtil2;
-import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.FilteringScope;
@@ -56,6 +55,7 @@ import org.osate.aadl2.PublicPackageSection;
 import org.osate.aadl2.Subcomponent;
 import org.osate.annexsupport.AnnexUtil;
 
+import com.google.common.collect.Lists;
 import com.rockwellcollins.atc.agree.AgreeTypeSystem;
 import com.rockwellcollins.atc.agree.AgreeTypeSystem.RecordTypeDef;
 import com.rockwellcollins.atc.agree.AgreeTypeSystem.TypeDef;
@@ -246,10 +246,9 @@ public class AgreeScopeProvider extends org.osate.xtext.aadl2.properties.scoping
 		}
 	}
 
-
 	IScope scope_NamedElement(AgreeContract ctx, EReference ref) {
 		EObject container = getAadlContainer(ctx);
-		AadlPackage pkg = getContainingPackage(container);
+		AadlPackage pkg = getContainingPackage(ctx);
 
 		Map<String, NamedElement> elems = new HashMap<>();
 
@@ -377,73 +376,26 @@ public class AgreeScopeProvider extends org.osate.xtext.aadl2.properties.scoping
 	}
 
 	IScope scope_NamedElement(ForallExpr ctx, EReference ref) {
-		IScope prevScope = prevScope(ctx, ref);
-		List<EObject> bs = new ArrayList<EObject>();
-		bs.add(ctx.getBinding());
-		for (IEObjectDescription ieod : prevScope.getAllElements()) {
-			if (!ieod.getName().toString().equals(ctx.getBinding().getName())) {
-				bs.add(ieod.getEObjectOrProxy());
-			}
-		}
-		return Scopes.scopeFor(bs);
+		return Scopes.scopeFor(Lists.newArrayList(ctx.getBinding()), getScope(ctx.eContainer(), ref));
 	}
 
 	IScope scope_NamedElement(ExistsExpr ctx, EReference ref) {
-		IScope prevScope = prevScope(ctx, ref);
-		List<EObject> bs = new ArrayList<EObject>();
-		bs.add(ctx.getBinding());
-		for (IEObjectDescription ieod : prevScope.getAllElements()) {
-			if (!ieod.getName().toString().equals(ctx.getBinding().getName())) {
-				bs.add(ieod.getEObjectOrProxy());
-			}
-		}
-		return Scopes.scopeFor(bs);
+		return Scopes.scopeFor(Lists.newArrayList(ctx.getBinding()), getScope(ctx.eContainer(), ref));
 	}
 
 	IScope scope_NamedElement(FlatmapExpr ctx, EReference ref) {
-		IScope prevScope = prevScope(ctx, ref);
-		List<EObject> bs = new ArrayList<EObject>();
-		bs.add(ctx.getBinding());
-		for (IEObjectDescription ieod : prevScope.getAllElements()) {
-			if (!ieod.getName().toString().equals(ctx.getBinding().getName())) {
-				bs.add(ieod.getEObjectOrProxy());
-			}
-		}
-		return Scopes.scopeFor(bs);
+		return Scopes.scopeFor(Lists.newArrayList(ctx.getBinding()), getScope(ctx.eContainer(), ref));
 	}
 
 	IScope scope_NamedElement(FoldLeftExpr ctx, EReference ref) {
-		IScope prevScope = prevScope(ctx, ref);
-
-		List<EObject> bs = new ArrayList<EObject>();
-
-		bs.add(ctx.getAccumulator());
-		bs.add(ctx.getBinding());
-		for (IEObjectDescription ieod : prevScope.getAllElements()) {
-			if (!ieod.getName().toString().equals(ctx.getBinding().getName())
-					&& !ieod.getName().toString().equals(ctx.getAccumulator().getName())) {
-				bs.add(ieod.getEObjectOrProxy());
-			}
-		}
-		return Scopes.scopeFor(bs);
+		return Scopes.scopeFor(Lists.newArrayList(ctx.getAccumulator(), ctx.getBinding()),
+				getScope(ctx.eContainer(), ref));
 	}
 
 	IScope scope_NamedElement(FoldRightExpr ctx, EReference ref) {
-		IScope prevScope = prevScope(ctx, ref);
-
-		List<EObject> bs = new ArrayList<EObject>();
-
-		bs.add(ctx.getAccumulator());
-		bs.add(ctx.getBinding());
-		for (IEObjectDescription ieod : prevScope.getAllElements()) {
-			if (!ieod.getName().toString().equals(ctx.getBinding().getName())
-					&& !ieod.getName().toString().equals(ctx.getAccumulator().getName())) {
-				bs.add(ieod.getEObjectOrProxy());
-			}
-		}
-		return Scopes.scopeFor(bs);
+		return Scopes.scopeFor(Lists.newArrayList(ctx.getAccumulator(), ctx.getBinding()),
+				getScope(ctx.eContainer(), ref));
 	}
-
 
 	protected IScope scope_GetPropertyExpr_prop(GetPropertyExpr ctx, EReference ref) {
 

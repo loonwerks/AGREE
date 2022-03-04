@@ -21,9 +21,12 @@
 package com.rockwellcollins.atc.agree;
 
 import org.eclipse.xtext.generator.IGenerator;
+import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
 import org.eclipse.xtext.serializer.ISerializer;
 
+import com.google.inject.Binder;
 import com.rockwellcollins.atc.agree.generator.NullGenerator;
+import com.rockwellcollins.atc.agree.scoping.AgreeResourceDescriptionStrategy;
 import com.rockwellcollins.atc.agree.serializer.AgreeSerializer;
 
 /**
@@ -31,6 +34,14 @@ import com.rockwellcollins.atc.agree.serializer.AgreeSerializer;
  * Equinox extension registry.
  */
 public class AgreeRuntimeModule extends com.rockwellcollins.atc.agree.AbstractAgreeRuntimeModule {
+
+	@Override
+	public void configure(final Binder binder) {
+		super.configure(binder);
+		binder.bind(IDefaultResourceDescriptionStrategy.class)
+				.to(AgreeResourceDescriptionStrategy.class);
+	}
+
 	public Class<? extends IGenerator> bindIGenerator() {
 		return NullGenerator.class;
 	}
@@ -47,6 +58,13 @@ public class AgreeRuntimeModule extends com.rockwellcollins.atc.agree.AbstractAg
 	@SuppressWarnings("restriction")
 	public Class<? extends org.eclipse.xtext.serializer.tokens.ICrossReferenceSerializer> bindICrossReferenceSerializer() {
 		return com.rockwellcollins.atc.agree.serializer.AgreeCrossReferenceSerializer.class;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public Class<? extends org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
+		return AgreeResourceDescriptionStrategy.class;
 	}
 
 }

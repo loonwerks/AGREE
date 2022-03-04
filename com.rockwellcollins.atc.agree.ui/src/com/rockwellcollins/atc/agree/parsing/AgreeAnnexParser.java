@@ -69,4 +69,12 @@ public class AgreeAnnexParser implements AnnexParser {
 				getGrammarAccess().getNamedSpecStatementRule(), "", 0, 0, NullParseErrorReporter.prototype);
 	}
 
+	/**
+	 * @since 3.0
+	 */
+	@Override
+	public String getFileExtension() {
+		return "agree";
+	}
+
 }

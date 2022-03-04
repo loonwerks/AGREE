@@ -173,7 +173,7 @@ Workflow {
 			fragment = ecore2xtext.Ecore2XtextValueConverterServiceFragment2 {}
 
 			fragment = validation.ValidatorFragment2 {
-			//	composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
+				composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
 			}
 
 			fragment = scoping.ImportNamespacesScopingFragment2 {

@@ -81,7 +81,7 @@ class Issue24Test extends XtextTest {
 					Input: refined to in data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 					Output: refined to out data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 				annex agree {**
-					assume "" : Input < 20;
+					assume A1 "" : Input < 20;
 				**};
 			end A_agree;
 		
@@ -90,7 +90,7 @@ class Issue24Test extends XtextTest {
 					Input: refined to in data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 					Output: refined to out data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 				annex agree {**
-					assume "" : Input < 10;
+					assume A1 "" : Input < 10;
 				**};
 			end S_agree;
 		
@@ -116,7 +116,7 @@ class Issue24Test extends XtextTest {
 					Input: in data port Base_Types::Integer;
 					Output: out data port Base_Types::Integer;
 				annex agree {**
-					assume "" : Input < 10;
+					assume A1 "" : Input < 10;
 				**};
 			end S_agree_new;
 		
@@ -168,13 +168,13 @@ class Issue24Test extends XtextTest {
 		
 			system A_agree extends A
 				annex agree {**
-					assume "" : Input < 20;
+					assume A1  "" : Input < 20;
 				**};
 			end A_agree;
 		
 			system S_agree extends S
 				annex agree {**
-					assume "" : Input < 10;
+					assume A1 "" : Input < 10;
 				**};
 			end S_agree;
 		
@@ -198,7 +198,7 @@ class Issue24Test extends XtextTest {
 					Input: in data port Base_Types::Integer;
 					Output: out data port Base_Types::Integer;
 				annex agree {**
-					assume "" : Input < 10;
+					assume A1 "" : Input < 10;
 				**};
 			end S_agree_new;
 		
@@ -262,7 +262,7 @@ class Issue24Test extends XtextTest {
 					Input: refined to in data port packet.impl {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 					Output: refined to out data port packet.impl {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 				annex agree {**
-					assume "" : Input.integer1 < 20;
+					assume A1 "" : Input.integer1 < 20;
 				**};
 			end A_agree;
 		
@@ -271,7 +271,7 @@ class Issue24Test extends XtextTest {
 					Input: refined to in data port packet.impl {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 					Output: refined to out data port packet.impl {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 				annex agree {**
-					assume "" : Input.integer1 < 10;
+					assume A1 "" : Input.integer1 < 10;
 				**};
 			end S_agree;
 		
@@ -297,7 +297,7 @@ class Issue24Test extends XtextTest {
 					Input: in data port packet.impl;
 					Output: out data port packet.impl;
 				annex agree {**
-					assume "" : Input.integer1 < 10;
+					assume A1 "" : Input.integer1 < 10;
 				**};
 			end S_agree_new;
 		
@@ -358,13 +358,13 @@ class Issue24Test extends XtextTest {
 		
 			system A_agree extends A
 				annex agree {**
-					assume "" : Input.integer1 < 20;
+					assume A1 "" : Input.integer1 < 20;
 				**};
 			end A_agree;
 		
 			system S_agree extends S
 				annex agree {**
-					assume "" : Input.integer1 < 10;
+					assume A1 "" : Input.integer1 < 10;
 				**};
 			end S_agree;
 		
@@ -388,7 +388,7 @@ class Issue24Test extends XtextTest {
 					Input: in data port packet.impl;
 					Output: out data port packet.impl;
 				annex agree {**
-					assume "" : Input.integer1 < 10;
+					assume A1 "" : Input.integer1 < 10;
 				**};
 			end S_agree_new;
 		
@@ -456,7 +456,7 @@ class Issue24Test extends XtextTest {
 					inp: refined to in data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 					outp: refined to out data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 				annex agree {**
-					assume "" : inp < 20;
+					assume A1 "" : inp < 20;
 				**};
 			end Inner_agree;
 		
@@ -465,7 +465,7 @@ class Issue24Test extends XtextTest {
 					inp: refined to in data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 					outp: refined to out data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 				annex agree {**
-					assume "" : inp < 15;
+					assume A1 "" : inp < 15;
 				**};
 			end Middle_agree;
 		
@@ -474,7 +474,7 @@ class Issue24Test extends XtextTest {
 					inp: refined to in data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 					outp: refined to out data port Base_Types::Integer {Classifier_Substitution_Rule => Type_Extension;}; -- refined type
 				annex agree {**
-					assume "" : inp < 10;
+					assume A1 "" : inp < 10;
 				**};
 			end Outer_agree;
 		
@@ -543,8 +543,8 @@ class Issue24Test extends XtextTest {
 					Input: refined to in data port packet_agree.impl {Classifier_Substitution_Rule => Type_Extension;};
 					Output: refined to out data port packet_agree.impl {Classifier_Substitution_Rule => Type_Extension;};
 				annex agree {**
-					assume "" : Input.foo < 20;
-					guarantee "" : Output.foo < 20;
+					assume A1 "" : Input.foo < 20;
+					guarantee G1 "" : Output.foo < 20;
 				**};
 			end A_agree;
 		
@@ -575,8 +575,8 @@ class Issue24Test extends XtextTest {
 					Input: refined to in data port packet_agree.impl {Classifier_Substitution_Rule => Type_Extension;};
 					Output: refined to out data port packet_agree.impl {Classifier_Substitution_Rule => Type_Extension;};
 				annex agree {**
-					assume "" : Input.foo < 10;
-					guarantee "" : Output.foo < 30;
+					assume A1 "" : Input.foo < 10;
+					guarantee G1 "" : Output.foo < 30;
 				**};
 			end S_agree;
 		

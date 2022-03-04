@@ -71,7 +71,7 @@ class AgreeValidatorTest extends XtextTest {
 				Input_Val: in data port Base_Types::Float;
 				Output_Val: out data port Base_Types::Float;
 			annex agree {**
-				assume "" : Input_Val < 20; -- should throw an error
+				assume A1 "" : Input_Val < 20; -- should throw an error
 			**};
 		end A;
 		
@@ -80,7 +80,7 @@ class AgreeValidatorTest extends XtextTest {
 				Input_Val: in data port Base_Types::Float;
 				Output_Val: out data port Base_Types::Float;
 			annex agree {**
-				assume "" : Input_Val < TEST_VAL;
+				assume A1 "" : Input_Val < TEST_VAL;
 			**};
 		end S;
 		

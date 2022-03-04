@@ -71,10 +71,10 @@ class Issue30Test extends XtextTest {
 					temp_reading : out data port Integer;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						((env_temp > 0) and (env_temp < 10));
 		
-					guarantee "If temperature is high, output high indication.":
+					guarantee G1 "If temperature is high, output high indication.":
 						(((env_temp > 8) <=> high_temp_indicator) and (env_temp = temp_reading));
 				**};
 		
@@ -87,10 +87,10 @@ class Issue30Test extends XtextTest {
 					temp_high : out data port Boolean;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						((env_temp > 0) and (env_temp < 10));
 		
-					guarantee "Temperature guarantee.":
+					guarantee G1 "Temperature guarantee.":
 						(env_temp = temp_read) and ((env_temp > 8) <=> temp_high);
 				**};
 		
@@ -113,7 +113,7 @@ class Issue30Test extends XtextTest {
 					temp_sensor_high : out data port Boolean;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						(env_temp > 0) and (env_temp < 10);
 				**};
 			
@@ -128,7 +128,7 @@ class Issue30Test extends XtextTest {
 					temp_indicator : port sensors.temp_high -> temp_sensor_high;
 			
 				annex agree{**
-					lemma "The sensor only reports high when temp is actually high." :
+					lemma L1 "The sensor only reports high when temp is actually high." :
 						((env_temp > 8) <=> temp_sensor_high);
 				**};
 		
@@ -165,10 +165,10 @@ class Issue30Test extends XtextTest {
 					temp_reading : out data port Integer;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						((env_temp > 0) and (env_temp < 10));
 		
-					guarantee "If temperature is high, output high indication.":
+					guarantee G1 "If temperature is high, output high indication.":
 						(((env_temp > 8) <=> high_temp_indicator) and (env_temp = temp_reading));
 				**};
 		
@@ -181,10 +181,10 @@ class Issue30Test extends XtextTest {
 					temp_high : out data port Boolean;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						((env_temp > 0) and (env_temp < 10));
 		
-					guarantee "Temperature guarantee.":
+					guarantee G1 "Temperature guarantee.":
 						(env_temp = temp_read) and ((env_temp > 8) <=> temp_high);
 				**};
 		
@@ -208,7 +208,7 @@ class Issue30Test extends XtextTest {
 					temp_read : out data port Integer;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						(env_temp > 0) and (env_temp < 10);
 				**};
 			
@@ -224,7 +224,7 @@ class Issue30Test extends XtextTest {
 					temp_sensor_read : port sensors.temp_read -> temp_read;
 			
 				annex agree{**
-					lemma "The sensor only reports high when temp is actually high." :
+					lemma L1 "The sensor only reports high when temp is actually high." :
 						((env_temp > 8) <=> temp_sensor_high);
 				**};
 		
@@ -264,10 +264,10 @@ class Issue30Test extends XtextTest {
 					high_temp_indicator : out data port Boolean;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						((env_temp > 0) and (env_temp < 10));
 		
-					guarantee "If temperature is high, output high indication.":
+					guarantee G1 "If temperature is high, output high indication.":
 						((env_temp > 8) <=> high_temp_indicator);
 				**};
 		
@@ -284,10 +284,10 @@ class Issue30Test extends XtextTest {
 					temp_high : out data port Boolean;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						((env_temp > 0) and (env_temp < 10));
 		
-					guarantee "Temperature guarantee.":
+					guarantee G1 "Temperature guarantee.":
 						((env_temp > 8) <=> temp_high);
 				**};
 		
@@ -318,7 +318,7 @@ class Issue30Test extends XtextTest {
 					temp_sensor_high : out data port Boolean;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						(env_temp > 0) and (env_temp < 10);
 				**};
 			
@@ -333,7 +333,7 @@ class Issue30Test extends XtextTest {
 					temp_indicator : port sensors.temp_high -> temp_sensor_high;
 			
 				annex agree{**
-					lemma "The sensor only reports high when temp is actually high." :
+					lemma L1 "The sensor only reports high when temp is actually high." :
 						((env_temp > 8) <=> temp_sensor_high);
 				**};
 		
@@ -374,10 +374,10 @@ class Issue30Test extends XtextTest {
 					high_temp_indicator : out data port Boolean;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						((env_temp > 0) and (env_temp < 10));
 		
-					guarantee "If temperature is high, output high indication.":
+					guarantee G1 "If temperature is high, output high indication.":
 						((env_temp > 8) <=> high_temp_indicator);
 				**};
 		
@@ -389,10 +389,10 @@ class Issue30Test extends XtextTest {
 					temp_high : out data port Boolean;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						((env_temp > 0) and (env_temp < 10));
 		
-					guarantee "Temperature guarantee.":
+					guarantee G1 "Temperature guarantee.":
 						((env_temp > 8) <=> temp_high);
 				**};
 		
@@ -417,7 +417,7 @@ class Issue30Test extends XtextTest {
 					temp_sensor_high : out data port Boolean;
 			
 				annex agree {**
-					assume "Temp bounded":
+					assume A1 "Temp bounded":
 						(env_temp > 0) and (env_temp < 10);
 				**};
 			
@@ -432,7 +432,7 @@ class Issue30Test extends XtextTest {
 					temp_indicator : port sensors.temp_high -> temp_sensor_high;
 			
 				annex agree{**
-					lemma "The sensor only reports high when temp is actually high." :
+					lemma L1 "The sensor only reports high when temp is actually high." :
 						((env_temp > 8) <=> temp_sensor_high);
 				**};
 		

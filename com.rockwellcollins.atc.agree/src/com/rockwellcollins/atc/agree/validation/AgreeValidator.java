@@ -139,6 +139,7 @@ import com.rockwellcollins.atc.agree.agree.PreExpr;
 import com.rockwellcollins.atc.agree.agree.PrevExpr;
 import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.PropertyStatement;
+import com.rockwellcollins.atc.agree.agree.ReachableStatement;
 import com.rockwellcollins.atc.agree.agree.RealCast;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordDef;
@@ -828,6 +829,12 @@ public class AgreeValidator extends AbstractAgreeValidator {
 						+ "' but must be of type 'bool'");
 			}
 		}
+
+		if (assume.getName() == null) {
+			info(assume, "It is recommended that assume statements be named."
+					+ " (Hint: an identifier may be placed between the \"assume\" keyword and the quoted description.)");
+		}
+
 	}
 
 	@Check(CheckType.FAST)
@@ -1033,6 +1040,10 @@ public class AgreeValidator extends AbstractAgreeValidator {
 				+ "assertions are realizable.  It is likely that you can specify the "
 				+ "behavior you want by changing the subcomponent contracts or " + "by using assignment statements.");
 
+		if (asser.getName() == null) {
+			info(asser, "It is recommended that assert statements be named."
+					+ " (Hint: an identifier may be placed between the \"assert\" keyword and the quoted description.)");
+		}
 	}
 
 	@Check(CheckType.FAST)
@@ -1074,6 +1085,34 @@ public class AgreeValidator extends AbstractAgreeValidator {
 				error(guar, "Expression for guarantee statement is of type '" + nameOfTypeDef(exprType)
 						+ "' but must be of type 'bool'");
 			}
+		}
+
+		if (guar.getName() == null) {
+			info(guar, "It is recommended that guarantee statements be named."
+					+ " (Hint: an identifier may be placed between the \"guarantee\" keyword and the quoted description.)");
+		}
+	}
+
+	@Check(CheckType.FAST)
+	public void checkReachable(ReachableStatement reachable) {
+		Classifier comp = reachable.getContainingClassifier();
+		if (!(comp instanceof ComponentImplementation)) {
+			error(reachable, "Reachable statements are allowed only in component implementations");
+		}
+
+		// the expression could be null if a pattern is used
+		Expr expr = reachable.getExpr();
+		if (expr != null) {
+			TypeDef exprType = AgreeTypeSystem.infer(expr);
+			if (!AgreeTypeSystem.typesEqual(AgreeTypeSystem.Prim.BoolTypeDef, exprType)) {
+				error(reachable, "Expression for reachable statement is of type '" + nameOfTypeDef(exprType)
+						+ "' but must be of type 'bool'");
+			}
+		}
+
+		if (reachable.getName() == null) {
+			info(reachable, "It is recommended that reachable statements be named."
+					+ " (Hint: an identifier may be placed between the \"reachable\" keyword and the quoted description.)");
 		}
 	}
 
@@ -1387,6 +1426,11 @@ public class AgreeValidator extends AbstractAgreeValidator {
 				error(lemma, "Expression for lemma statement is of type '" + nameOfTypeDef(exprType)
 						+ "' but must be of type 'bool'");
 			}
+		}
+
+		if (lemma.getName() == null) {
+			info(lemma, "It is recommended that lemma statements be named."
+					+ " (Hint: an identifier may be placed between the \"lemma\" keyword and the quoted description.)");
 		}
 	}
 
@@ -1960,7 +2004,7 @@ public class AgreeValidator extends AbstractAgreeValidator {
 			type = (ComponentType) container;
 		}
 
-		if (type != null) {
+		if (type != null && (namedEl.getName() != null)) {
 			for (Feature feat : type.getAllFeatures()) {
 				if (namedEl.getName().equals(feat.getName())) {
 					error(feat, "Element of the same name ('" + namedEl.getName() + "') in AGREE Annex in '"

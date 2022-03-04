@@ -176,7 +176,7 @@ class Issue17Test extends XtextTest {
 					sout : out event data port Charlie.impl;
 				annex agree {**
 					const id : Delta1.impl = 123456;
-					guarantee "sout id is set" : sout.id = id;
+					guarantee sout1 "sout id is set" : sout.id = id;
 				**};
 			end ScratchSys;
 		

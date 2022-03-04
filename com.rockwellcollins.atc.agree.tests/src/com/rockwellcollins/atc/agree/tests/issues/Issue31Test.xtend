@@ -127,13 +127,13 @@ class Issue31Test extends XtextTest {
 					Output : out data port H2I.impl;
 				annex agree {**
 		
-					guarantee "Respond to message that Sensor1 is unreliable":
+					guarantee G1 "Respond to message that Sensor1 is unreliable":
 						prev(not InputFromIAS.Sensor1_Reliable, false) <=> ((Output.Sensor1_Unreliable_Response = enum(Response, Agree)) or (Output.Sensor1_Unreliable_Response = enum(Response, Disagree))); 
 		
-					guarantee "Respond to message that Sensor2 is unreliable":
+					guarantee G2 "Respond to message that Sensor2 is unreliable":
 						prev(not InputFromIAS.Sensor2_Reliable, false) <=> ((Output.Sensor2_Unreliable_Response = enum(Response, Agree)) or (Output.Sensor2_Unreliable_Response = enum(Response, Disagree)));
 		
-					guarantee "Respond to message that Sensor3 is unreliable":
+					guarantee G3 "Respond to message that Sensor3 is unreliable":
 						prev(not InputFromIAS.Sensor2_Reliable, false) <=> ((Output.Sensor3_Unreliable_Response = enum(Response, Agree)) or (Output.Sensor3_Unreliable_Response = enum(Response, Disagree)));		
 		
 				**};
@@ -157,7 +157,7 @@ class Issue31Test extends XtextTest {
 					eq Sensor2_Reliable: bool;
 					eq Sensor3_Reliable: bool;
 		
-					guarantee "Sensor sensor status to pilot":
+					guarantee G1 "Sensor sensor status to pilot":
 							(Output.Sensor1_Reliable = Sensor1_Reliable)
 						and (Output.Sensor2_Reliable = Sensor2_Reliable)
 						and (Output.Sensor3_Reliable = Sensor3_Reliable);
@@ -191,7 +191,7 @@ class Issue31Test extends XtextTest {
 		
 			system Top
 				annex agree {**
-					guarantee "Placeholder gaurantee to get AGREE to run": true;
+					guarantee G0 "Placeholder gaurantee to get AGREE to run": true;
 				**};
 			end Top;
 		
@@ -217,7 +217,7 @@ class Issue31Test extends XtextTest {
 					-- LEMMAS (These should be true based on the guarantees of the subcomponents.)
 					------------------------------------------------------------------------------
 		
-					lemma "Pilot acknowledges unreliable sensor alerts": 
+					lemma L1 "Pilot acknowledges unreliable sensor alerts": 
 							(prev(not IAS.Output.Sensor1_Reliable, false) <=> ((Human.Output.Sensor1_Unreliable_Response = enum(Response, Agree)) or (Human.Output.Sensor1_Unreliable_Response = enum(Response, Disagree))))
 						and (prev(not IAS.Output.Sensor2_Reliable, false) <=> ((Human.Output.Sensor2_Unreliable_Response = enum(Response, Agree)) or (Human.Output.Sensor2_Unreliable_Response = enum(Response, Disagree))))
 						and (prev(not IAS.Output.Sensor3_Reliable, false) <=> ((Human.Output.Sensor3_Unreliable_Response = enum(Response, Agree)) or (Human.Output.Sensor3_Unreliable_Response = enum(Response, Disagree))));

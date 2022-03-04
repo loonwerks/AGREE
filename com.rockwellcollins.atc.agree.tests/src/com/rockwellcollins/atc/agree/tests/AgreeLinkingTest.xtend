@@ -671,7 +671,7 @@ class AgreeLinkingTest extends XtextTest {
               system TestSystem
                 annex agree {**
                   agree_input ain : int;
-                  assume "Input Assumption" : ain > 0;
+                  assume A1 "Input Assumption" : ain > 0;
                 **}; 
               end TestSystem;
             end TestPackage;
@@ -709,7 +709,7 @@ class AgreeLinkingTest extends XtextTest {
                 features
                   inp : in data port Base_Types::Integer;
                 annex agree {**
-                  assume "Input Assumption" : inp > 0;
+                  assume A1 "Input Assumption" : inp > 0;
                 **}; 
               end TestSystem;
             end TestPackage;
@@ -747,7 +747,7 @@ class AgreeLinkingTest extends XtextTest {
                 features
                   outp : out data port Base_Types::Integer;
                 annex agree {**
-                  guarantee "Output Guarantee" : outp > 0;
+                  guarantee G1 "Output Guarantee" : outp > 0;
                 **}; 
               end TestSystem;
             end TestPackage;
@@ -784,7 +784,7 @@ class AgreeLinkingTest extends XtextTest {
                 features
                   inp : in event port;
                 annex agree {**
-                  assume "Input Assumption" : event(inp);
+                  assume A1 "Input Assumption" : event(inp);
                 **}; 
               end TestSystem;
             end TestPackage;
@@ -821,7 +821,7 @@ class AgreeLinkingTest extends XtextTest {
                 features
                   outp : out event port;
                 annex agree {**
-                  guarantee "Output Guarantee" : event(outp);
+                  guarantee G1 "Output Guarantee" : event(outp);
                 **}; 
               end TestSystem;
             end TestPackage;
@@ -859,7 +859,7 @@ class AgreeLinkingTest extends XtextTest {
                 features
                   inp : in event data port Base_Types::Integer;
                 annex agree {**
-                  assume "Input Assumption" : inp > 0;
+                  assume A1 "Input Assumption" : inp > 0;
                 **}; 
               end TestSystem;
             end TestPackage;
@@ -897,7 +897,7 @@ class AgreeLinkingTest extends XtextTest {
                 features
                   outp : out event data port Base_Types::Integer;
                 annex agree {**
-                  guarantee "Output Guarantee" : outp > 0;
+                  guarantee G1 "Output Guarantee" : outp > 0;
                 **}; 
               end TestSystem;
             end TestPackage;
@@ -937,7 +937,7 @@ class AgreeLinkingTest extends XtextTest {
               end TestSystem;
               system implementation TestSystem.impl
                 annex agree {**
-                  lemma "Input Lemma" : ain > 0;
+                  lemma L1 "Input Lemma" : ain > 0;
                 **};
               end TestSystem.impl;
             end TestPackage;
@@ -976,7 +976,7 @@ class AgreeLinkingTest extends XtextTest {
                 features
                   inp : in data port Base_Types::Integer;
                 annex agree {**
-                  assume "Input Assumption" : inp > 0;
+                  assume A1 "Input Assumption" : inp > 0;
                 **}; 
               end TestSystem;
               system implementation TestSystem.impl
@@ -1017,7 +1017,7 @@ class AgreeLinkingTest extends XtextTest {
                 features
                   outp : out data port Base_Types::Integer;
                 annex agree {**
-                  guarantee "Output Guarantee" : outp > 0;
+                  guarantee G1 "Output Guarantee" : outp > 0;
                 **}; 
               end TestSystem;
               system implementation TestSystem.impl
@@ -1058,7 +1058,7 @@ class AgreeLinkingTest extends XtextTest {
                 features
                   outp : out data port Base_Types::Integer;
                 annex agree {**
-                  guarantee "Output Guarantee" : outp > 0;
+                  guarantee G1 "Output Guarantee" : outp > 0;
                 **}; 
               end TestSystem;
               system implementation TestSystem.impl
@@ -1098,7 +1098,7 @@ class AgreeLinkingTest extends XtextTest {
                   outp : out data port Base_Types::Integer;
                 annex agree {**
                   eq x : Base_Types::Integer;
-                  guarantee "Output Guarantee" : outp > x;
+                  guarantee G1 "Output Guarantee" : outp > x;
                 **}; 
               end TestSystem;
             end TestPackage;
@@ -1137,12 +1137,12 @@ class AgreeLinkingTest extends XtextTest {
                   outp : out data port Base_Types::Integer;
                 annex agree {**
                   eq x : Base_Types::Integer;
-                  guarantee "Output Guarantee" : outp > x;
+                  guarantee G1 "Output Guarantee" : outp > x;
                 **}; 
               end TestSystem;
               system implementation TestSystem.impl
                 annex agree {**
-                  lemma "Implementation Lemma" : x > 0;
+                  lemma L1 "Implementation Lemma" : x > 0;
                 **};
               end TestSystem.impl;
             end TestPackage;
@@ -1183,7 +1183,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Inner Output Guarantee" : outp > 0;
+                        guarantee G1 "Inner Output Guarantee" : outp > 0;
                     **};
                 end Inner;
                 system Outer
@@ -1191,7 +1191,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Outer Output Guarantee" : outp > 0;
+                        guarantee G1"Outer Output Guarantee" : outp > 0;
                     **};
                 end Outer;
                 system implementation Outer.impl
@@ -1201,7 +1201,7 @@ class AgreeLinkingTest extends XtextTest {
                         i1 : port inp -> inner_sub.inp;
                         o1 : port inner_sub.outp -> outp;
                     annex agree {**
-                        lemma "Outer Inner subcomponent lemma" : inner_sub.inp > 0;
+                        lemma L1 "Outer Inner subcomponent lemma" : inner_sub.inp > 0;
                     **};
                 end Outer.impl;
             end TestPackage;
@@ -1243,7 +1243,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Inner Output Guarantee" : outp > 0;
+                        guarantee G1"Inner Output Guarantee" : outp > 0;
                     **};
                 end Inner;
                 system Outer
@@ -1251,7 +1251,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Outer Output Guarantee" : outp > 0;
+                        guarantee G1 "Outer Output Guarantee" : outp > 0;
                     **};
                 end Outer;
                 system implementation Outer.impl
@@ -1261,7 +1261,7 @@ class AgreeLinkingTest extends XtextTest {
                         i1 : port inp -> inner_sub.inp;
                         o1 : port inner_sub.outp -> outp;
                     annex agree {**
-                        lemma "Outer Inner subcomponent lemma" : inner_sub.outp > 0;
+                        lemma L1 "Outer Inner subcomponent lemma" : inner_sub.outp > 0;
                     **};
                 end Outer.impl;
             end TestPackage;
@@ -1305,7 +1305,7 @@ class AgreeLinkingTest extends XtextTest {
                         outp : out data port Base_Types::Integer;
                     annex agree {**
                         type Coord3D = struct { x : int, y : int, z : int };
-                        guarantee "Inner Output Guarantee" : outp > 0;
+                        guarantee G1 "Inner Output Guarantee" : outp > 0;
                     **};
                 end Inner;
                 system Outer
@@ -1313,7 +1313,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Outer Output Guarantee" : outp > 0;
+                        guarantee G1 "Outer Output Guarantee" : outp > 0;
                     **};
                 end Outer;
                 system implementation Outer.impl
@@ -1324,7 +1324,7 @@ class AgreeLinkingTest extends XtextTest {
                         o1 : port inner_sub.outp -> outp;
                     annex agree {**
                         eq localCoord : Inner::Coord3D = Inner::Coord3D { x = 0; y = 0; z = 0 };
-                        lemma "Outer Inner subcomponent lemma" : inner_sub.inp > 0;
+                        lemma L1"Outer Inner subcomponent lemma" : inner_sub.inp > 0;
                     **};
                 end Outer.impl;
             end TestPackage;
@@ -1371,7 +1371,7 @@ class AgreeLinkingTest extends XtextTest {
                         outp : out data port Base_Types::Integer;
                     annex agree {**
                         const iconst : int = 10;
-                        guarantee "Inner Output Guarantee" : outp > 0;
+                        guarantee G1 "Inner Output Guarantee" : outp > 0;
                     **};
                 end Inner;
                 system Outer
@@ -1379,7 +1379,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Outer Output Guarantee" : outp > 0;
+                        guarantee G1 "Outer Output Guarantee" : outp > 0;
                     **};
                 end Outer;
                 system implementation Outer.impl
@@ -1389,7 +1389,7 @@ class AgreeLinkingTest extends XtextTest {
                         i1 : port inp -> inner_sub.inp;
                         o1 : port inner_sub.outp -> outp;
                     annex agree {**
-                        lemma "Outer Inner subcomponent lemma" : inner_sub.iconst > 0;
+                        lemma L1 "Outer Inner subcomponent lemma" : inner_sub.iconst > 0;
                     **};
                 end Outer.impl;
             end TestPackage;
@@ -1433,7 +1433,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Inner Output Guarantee" : outp > 0;
+                        guarantee G1 "Inner Output Guarantee" : outp > 0;
                     **};
                 end Inner;
                 system implementation Inner.impl
@@ -1446,7 +1446,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Outer Output Guarantee" : outp > 0;
+                        guarantee G1 "Outer Output Guarantee" : outp > 0;
                     **};
                 end Outer;
                 system implementation Outer.impl
@@ -1456,7 +1456,7 @@ class AgreeLinkingTest extends XtextTest {
                         i1 : port inp -> inner_sub.inp;
                         o1 : port inner_sub.outp -> outp;
                     annex agree {**
-                        lemma "Outer Inner subcomponent lemma" : inner_sub.iconst > 0;
+                        lemma L1 "Outer Inner subcomponent lemma" : inner_sub.iconst > 0;
                     **};
                 end Outer.impl;
             end TestPackage;
@@ -1501,7 +1501,7 @@ class AgreeLinkingTest extends XtextTest {
                         outp : out data port Base_Types::Integer;
                     annex agree {**
                         agree_input iinput : int;
-                        guarantee "Inner Output Guarantee" : outp > 0;
+                        guarantee G1 "Inner Output Guarantee" : outp > 0;
                     **};
                 end Inner;
                 system Outer
@@ -1509,7 +1509,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Outer Output Guarantee" : outp > 0;
+                        guarantee G1 "Outer Output Guarantee" : outp > 0;
                     **};
                 end Outer;
                 system implementation Outer.impl
@@ -1519,7 +1519,7 @@ class AgreeLinkingTest extends XtextTest {
                         i1 : port inp -> inner_sub.inp;
                         o1 : port inner_sub.outp -> outp;
                     annex agree {**
-                        lemma "Outer Inner subcomponent lemma" : inner_sub.iinput > 0;
+                        lemma L1 "Outer Inner subcomponent lemma" : inner_sub.iinput > 0;
                     **};
                 end Outer.impl;
             end TestPackage;
@@ -1564,7 +1564,7 @@ class AgreeLinkingTest extends XtextTest {
                         outp : out data port Base_Types::Integer;
                     annex agree {**
                         eq ivar : int = 10;
-                        guarantee "Inner Output Guarantee" : outp > 0;
+                        guarantee G1 "Inner Output Guarantee" : outp > 0;
                     **};
                 end Inner;
                 system Outer
@@ -1572,7 +1572,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Outer Output Guarantee" : outp > 0;
+                        guarantee G1 "Outer Output Guarantee" : outp > 0;
                     **};
                 end Outer;
                 system implementation Outer.impl
@@ -1582,7 +1582,7 @@ class AgreeLinkingTest extends XtextTest {
                         i1 : port inp -> inner_sub.inp;
                         o1 : port inner_sub.outp -> outp;
                     annex agree {**
-                        lemma "Outer Inner subcomponent lemma" : inner_sub.ivar > 0;
+                        lemma L1 "Outer Inner subcomponent lemma" : inner_sub.ivar > 0;
                     **};
                 end Outer.impl;
             end TestPackage;
@@ -1626,7 +1626,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Inner Output Guarantee" : outp > 0;
+                        guarantee G1 "Inner Output Guarantee" : outp > 0;
                     **};
                 end Inner;
                 system implementation Inner.impl
@@ -1639,7 +1639,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Outer Output Guarantee" : outp > 0;
+                        guarantee G1 "Outer Output Guarantee" : outp > 0;
                     **};
                 end Outer;
                 system implementation Outer.impl
@@ -1649,7 +1649,7 @@ class AgreeLinkingTest extends XtextTest {
                         i1 : port inp -> inner_sub.inp;
                         o1 : port inner_sub.outp -> outp;
                     annex agree {**
-                        lemma "Outer Inner subcomponent lemma" : inner_sub.ivar > 0;
+                        lemma L1 "Outer Inner subcomponent lemma" : inner_sub.ivar > 0;
                     **};
                 end Outer.impl;
             end TestPackage;
@@ -1694,7 +1694,7 @@ class AgreeLinkingTest extends XtextTest {
                         outp : out data port Base_Types::Integer;
                     annex agree {**
                         agree_input ivar : int;
-                        guarantee "Inner Output Guarantee" : outp > 0;
+                        guarantee G1 "Inner Output Guarantee" : outp > 0;
                     **};
                 end Inner;
                 system Outer
@@ -1702,7 +1702,7 @@ class AgreeLinkingTest extends XtextTest {
                         inp : in data port Base_Types::Integer;
                         outp : out data port Base_Types::Integer;
                     annex agree {**
-                        guarantee "Outer Output Guarantee" : outp > 0;
+                        guarantee G1 "Outer Output Guarantee" : outp > 0;
                     **};
                 end Outer;
                 system implementation Outer.impl
@@ -1712,7 +1712,7 @@ class AgreeLinkingTest extends XtextTest {
                         i1 : port inp -> inner_sub.inp;
                         o1 : port inner_sub.outp -> outp;
                     annex agree {**
-                        lemma "Outer Inner subcomponent lemma" : inner_sub.ivar > 0;
+                        lemma L1 "Outer Inner subcomponent lemma" : inner_sub.ivar > 0;
                     **};
                 end Outer.impl;
             end TestPackage;

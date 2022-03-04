@@ -38,7 +38,7 @@ statements specify constraints about a component that are assumed to be
 true. An example of an assume statement is:
 
 ~~~
-assume "System input domain" : Input < 10;
+assume A001 "System input domain" : Input < 10;
 ~~~
 
 The string "System input domain" is used to identify the assumption when
@@ -49,6 +49,11 @@ However, the assumptions of the component implementation’s subcomponents
 must be proved to hold based on the assumptions of the component and the
 guarantees of other subcomponents.
 
+The identifier `A001` names the the assume statement.  Such names are
+optional and may be omitted.  If a name is given it must be unique in the
+local namespace.  Naming of specification statements is provided for
+integration with other tool suites such as requirements tracing.
+
 ### Guarantee Statements{#sec:guarantee_statements}
 
 Guarantee statements specify constraints that the component maintains as
@@ -56,7 +61,7 @@ long as the assumptions have always held. An example of a guarantee
 statement is:
 
 ~~~
-guarantee "System output range" : Output < 50;
+guarantee G001 "System output range" : Output < 50;
 ~~~
 
 The string "System output range" is used to identify the guarantee when
@@ -66,6 +71,11 @@ condition that is guaranteed to hold.
 When verifying a component implementation, guarantee statements are
 proven by the component assumptions and the guarantees present in
 subcomponent contracts.
+
+The identifier `G001` names the the guarantee statement.  Such names are
+optional and may be omitted.  If a name is given it must be unique in the
+local namespace.  Naming of specification statements is provided for
+integration with other tool suites such as requirements tracing.
 
 ### Equation Statements{#sec:equation_statements}
 
@@ -272,7 +282,7 @@ added to the model to support proofs. An example assertion is of the
 form:
 
 ~~~
-assert (FGS_L.LSO.Valid and FGS_R.LSO.Valid) > FGS_L.LSO.Leader = FGS_R.LSO.Leader;
+assert AS001 : (FGS_L.LSO.Valid and FGS_R.LSO.Valid) > FGS_L.LSO.Leader = FGS_R.LSO.Leader;
 ~~~
 
 Assertions are sometimes used for *architectural* *patterns* whose
@@ -295,6 +305,12 @@ in any way by AGREE. Any use of this statement should be exercised with
 great caution. All assert statements should be examined by a domain
 expert and formal verification expert.**
 
+The identifier `AS001` names the the assert statement.  Such names are
+optional and may be omitted.  The separating colon is also omitted in this
+case.  If a name is given it must be unique in the local namespace.  Naming
+of specification statements is provided for integration with other tool
+suites such as requirements tracing.
+
 ### Advanced Topic: Lemma Statements{#sec:lemma_statements}
 
 Assert statements are used to introduce lemmas to assist the model
@@ -312,7 +328,7 @@ proved.
 An example lemma would be:
 
 ~~~
-lemma "drug flow lemma" :
+lemma L001 "drug flow lemma" :
     (not drug_flow_stopped) => spo2_never_below_thresh;
 ~~~
 
@@ -322,6 +338,11 @@ learn facts to improve its ability to prove other properties. However,
 unlike guarantees, lemmas are not made visible when trying to prove
 properties at the next level of abstraction. Subcomponent lemmas are not
 used to prove other subcomponent guarantees or system guarantees.
+
+The identifier `L001` names the the lemma statement.  Such names are
+optional and may be omitted.  If a name is given it must be unique in the
+local namespace.  Naming of specification statements is provided for
+integration with other tool suites such as requirements tracing.
 
 ### Advanced Topic: Reachable Statements{#sec:reachable_statements}
 
@@ -339,9 +360,14 @@ subcomponent guarantees or system guarantees.
 An example would be:
 
 ~~~
-reachable "drug flow might not be stopped" :
+reachable R001 "drug flow might not be stopped" :
     (not drug_flow_stopped);
 ~~~
+
+The identifier `R001` names the the lemma statement.  Such names are
+optional and may be omitted.  If a name is given it must be unique in the
+local namespace.  Naming of specification statements is provided for
+integration with other tool suites such as requirements tracing.
 
 ### Advanced Topic: Linearization Definitions{#sec:linearization_definitions}
 

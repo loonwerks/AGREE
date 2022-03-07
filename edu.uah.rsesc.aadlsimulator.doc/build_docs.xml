@@ -29,6 +29,10 @@
 	<property name="user_guide.dir" value="${basedir}/user_guide" />
 	<property name="user_guide_output.dir" value="${basedir}/user_guide-gen" />
 
+	<echo message="user_guide_output.dir = ${user_guide_output.dir}" />
+	<property name="user_guide_output.dir.relative" value="${user_guide_output.dir}" relative="yes" />
+	<echo message="user_guide_output.dir.relative = ${user_guide_output.dir.relative}" />
+
 	<!-- - target: usage -->
 	<target name="usage" description="Prints help">
 		<echo message="Use -projecthelp to get a list of the available targets." />
@@ -63,7 +67,7 @@
 		</exec>
 
 		<exec executable="pandoc" dir="${user_guide.dir}">
-			<env key="HTML_FILEPATH" value="${user_guide_output.dir}/user_guide.html" />
+			<env key="HTML_FILEPATH" value="${user_guide_output.dir.relative}/user_guide.html" />
 			<arg value="user_guide.md" />
 			<arg value="-t" />
 			<arg value="../create_toc.lua" />

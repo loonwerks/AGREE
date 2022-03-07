@@ -159,13 +159,15 @@
 <p>In this section, we present the various types of AGREE statements and their uses. <strong>Note:</strong> <strong>Assume Statements (<a href="#sec:assume_statements">Assume Statements</a>) and Guarantee Statements (<a href="#sec:guarantee_statements">Guarantee Statements</a>) exclusively live in <em>component type</em>s; while Assert Statements (<a href="#sec:assert_statements">Assert Statements</a>) and Lemma Statements (<a href="#sec:lemma_statements">Lemma Statements</a>) exclusively live in <em>component implementation</em>s.</strong></p>
 <h3 id="sec:assume_statements">Assume Statements</h3>
 <p>Assume statements specify constraints about a component that are assumed to be true. An example of an assume statement is:</p>
-<pre><code>assume &quot;System input domain&quot; : Input &lt; 10;</code></pre>
+<pre><code>assume A001 &quot;System input domain&quot; : Input &lt; 10;</code></pre>
 <p>The string “System input domain” is used to identify the assumption when performing verification. The expression <code>Input &lt; 10</code> expresses the condition that is assumed to hold. When verifying a component implementation, the component’s assumptions are assumed to be true. However, the assumptions of the component implementation’s subcomponents must be proved to hold based on the assumptions of the component and the guarantees of other subcomponents.</p>
+<p>The identifier <code>A001</code> names the the assume statement. Such names are optional and may be omitted. If a name is given it must be unique in the local namespace. Naming of specification statements is provided for integration with other tool suites such as requirements tracing.</p>
 <h3 id="sec:guarantee_statements">Guarantee Statements</h3>
 <p>Guarantee statements specify constraints that the component maintains as long as the assumptions have always held. An example of a guarantee statement is:</p>
-<pre><code>guarantee &quot;System output range&quot; : Output &lt; 50;</code></pre>
+<pre><code>guarantee G001 &quot;System output range&quot; : Output &lt; 50;</code></pre>
 <p>The string “System output range” is used to identify the guarantee when performing verification. The expression <code>Output &lt; 50</code> expresses the condition that is guaranteed to hold.</p>
 <p>When verifying a component implementation, guarantee statements are proven by the component assumptions and the guarantees present in subcomponent contracts.</p>
+<p>The identifier <code>G001</code> names the the guarantee statement. Such names are optional and may be omitted. If a name is given it must be unique in the local namespace. Naming of specification statements is provided for integration with other tool suites such as requirements tracing.</p>
 <h3 id="sec:equation_statements">Equation Statements</h3>
 <p>Equation statements can be used to create local variable declarations within the body of an AGREE subclause. An example of an equation statement is:</p>
 <pre><code>eq ctr : int = prev(ctr + 1, 0);</code></pre>
@@ -260,16 +262,25 @@ TimeInterval:
 </ol>
 <h3 id="sec:assert_statements">Advanced Topic: Assert statements</h3>
 <p>Assert statements allow definition of axioms within the model. Axioms are “facts” about the behavior of the system or the environment that are added to the model to support proofs. An example assertion is of the form:</p>
-<pre><code>assert (FGS_L.LSO.Valid and FGS_R.LSO.Valid) &gt; FGS_L.LSO.Leader = FGS_R.LSO.Leader;</code></pre>
+<pre><code>assert AS001 : (FGS_L.LSO.Valid and FGS_R.LSO.Valid) &gt; FGS_L.LSO.Leader = FGS_R.LSO.Leader;</code></pre>
 <p>Assertions are sometimes used for <em>architectural</em> <em>patterns</em> whose correctness is established in a separate phase of analysis. The assertion above is from a pattern called <em>leader selection</em> that ensures that one of a set of redundant components is the leader.</p>
 <p>Assert statements make unchecked statements about how the component behaves. These are also used to reference variables from a subcomponent in the component contract. For the purpose of analysis assertions are treated just like the system assumptions. However, AGREE never verifies that the assertions actually hold. That is to say, the assertions of a subcomponent are never proven to hold like subcomponent assumptions. Assert statements can refer to equations or features defined in the component type. They are often used to refer to subcomponent variables in contracts higher up in the model hierarchy.</p>
 <p><strong>Note: Assert statements are assumed to be true and are not validated in any way by AGREE. Any use of this statement should be exercised with great caution. All assert statements should be examined by a domain expert and formal verification expert.</strong></p>
+<p>The identifier <code>AS001</code> names the the assert statement. Such names are optional and may be omitted. The separating colon is also omitted in this case. If a name is given it must be unique in the local namespace. Naming of specification statements is provided for integration with other tool suites such as requirements tracing.</p>
 <h3 id="sec:lemma_statements">Advanced Topic: Lemma Statements</h3>
 <p>Assert statements are used to introduce lemmas to assist the model checker when performing verification. AGREE uses <em>k-induction over the transition relation</em> to try to prove properties – see Appendix A for a high-level description of the procedure. For many systems and properties, this works very well and is able to prove interesting properties about the system without assistance. However, sometimes a property is <em>true</em> but not <em>provable</em> using this technique. The reason that this happens is the property to be proved is too weak to be inductively provable. Lemma statements are additional properties that are added to an AGREE model in order to <em>strengthen</em> the property to be proved.</p>
 <p>An example lemma would be:</p>
-<pre><code>lemma &quot;drug flow lemma&quot; :
+<pre><code>lemma L001 &quot;drug flow lemma&quot; :
     (not drug_flow_stopped) =&gt; spo2_never_below_thresh;</code></pre>
 <p>From the perspective of proof, lemmas behave the same as guarantees; they must be proven by AGREE. These are used to help the model checker learn facts to improve its ability to prove other properties. However, unlike guarantees, lemmas are not made visible when trying to prove properties at the next level of abstraction. Subcomponent lemmas are not used to prove other subcomponent guarantees or system guarantees.</p>
+<p>The identifier <code>L001</code> names the the lemma statement. Such names are optional and may be omitted. If a name is given it must be unique in the local namespace. Naming of specification statements is provided for integration with other tool suites such as requirements tracing.</p>
+<h3 id="sec:reachable_statements">Advanced Topic: Reachable Statements</h3>
+<p>Reachable statements may be used to check for vacuity of a guarantee or lemma statement. The typical use is where a guarantee statement is written in the form of an implication. The reachable statement may be used to check that the antecedent (the left hand side) of the guarantee statement is reachable in at least one possible combination of inputs to the model.</p>
+<p>Like lemma statments, reachable statements do not affect the compositional contract analysis, but may assist the model checker when performing verification. That is, reachable statements are not used to prove other subcomponent guarantees or system guarantees.</p>
+<p>An example would be:</p>
+<pre><code>reachable R001 &quot;drug flow might not be stopped&quot; :
+    (not drug_flow_stopped);</code></pre>
+<p>The identifier <code>R001</code> names the the lemma statement. Such names are optional and may be omitted. If a name is given it must be unique in the local namespace. Naming of specification statements is provided for integration with other tool suites such as requirements tracing.</p>
 <h3 id="sec:linearization_definitions">Advanced Topic: Linearization Definitions</h3>
 <p>The linearization definition provides the declaration of a linear approximation of a non-linear expression over segment(s) of its input domain, resulting in a new expression that bounds the non-linear expression with piecewise linear segment(s). The non-linear expression supports a small core of mathematical functions found on a calculator (i.e., ‘+’, ‘-’, ‘*’, ‘/’, ‘^’) and a collection of transcendental mathematical functions. <strong>Note</strong>: The non-linear expression can contain references to only the input variable (no other AGREE identifiers). Figure <a href="#fig:linearization_definition">1</a> demonstrates a linear approximation bounding the output values within the upper and lower bounds.</p>
 <figure>

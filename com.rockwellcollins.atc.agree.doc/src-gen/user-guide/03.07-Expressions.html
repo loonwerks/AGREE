@@ -180,6 +180,7 @@ Expr ::= Literal
     | &#39;this&#39; (&#39;.&#39; NestedDotId)?
     | &#39;(&#39; Expr &#39;)&#39;
     | RecordUpdateExpr
+    | ArrayUpdateExpr
     | (&#39;-&#39; | &#39;not&#39;) Expr
     | Expr (&#39;+&#39; | &#39;-&#39; | &#39;\*&#39; | &#39;/&#39; | &#39;div&#39;| &#39;mod&#39;) Expr
     | Expr RelateOp Expr
@@ -215,7 +216,13 @@ ID | QID | NestedDotID | Literal | pre | this | ()</p>
 <p>For AADL enumerations a special syntax is required. The <code>enum</code> keyword followed by the enumeration type and enumerator name is used as follows:</p>
 <pre><code>enum(Package::Color, Red)</code></pre>
 <h3 id="sec:nesteddotid-field-expressions">NestedDotID (Field) Expressions</h3>
-<p>A NestedDotID expression can have dots in between ID expressions, e.g., <code>food.bar.biz</code>. It can be used to refer to record types or variables of a subcomponent. For example, one could use the NestedDotID expression foo.bar to reference the input, output, or equation variable <code>bar</code> of subcomponent <code>foo</code> within the implementation of some AADL component. A NestedDotID expression can also be used for inputs and outputs that are of record type: if <code>x</code> is a record type containing field <code>y</code>, then the notation <code>x.y</code> is used.</p>
+<p>A NestedDotID expression can have dots in between ID expressions, e.g., <code>food.bar.biz</code>. It can be used to refer to record types or variables of a subcomponent. For example, one could use the NestedDotID expression foo.bar to reference the input, output, or equation variable <code>bar</code> of subcomponent <code>food</code> within the implementation of some AADL component. A NestedDotID expression can also be used for inputs and outputs that are of record type: if <code>x</code> is a record type containing field <code>y</code>, then the notation <code>x.y</code> is used.</p>
+<h3 id="sec:array-subscript-expressions">Array Subscript Expressions</h3>
+<p>Elements of arrays can be accessed by appending square brackets to an expression with array type and containing an integer-typed expression. For example:</p>
+<pre><code>eq arr : int[3];
+eq n : int = arr[1];</code></pre>
+<p>Here the local variable <code>n</code> takes the value of the first element of the array local variable <code>arr</code>.</p>
+<p><strong>Note:</strong> For consistency with AADL, array index values are 1-based rather than zero based.</p>
 <h3 id="sec:node-call-expressions">Node Call Expressions</h3>
 <p>A node call expression is an ID of a defined node followed by parenthesis. If the node is defined in an AADL Package, then the ID should be the AADL Package name followed by a dot (.) and then the node name.</p>
 <h3 id="sec:linearization-call-expressions">Linearization Call Expressions</h3>
@@ -317,6 +324,13 @@ eq bar : foo;</code></pre>
 <pre><code>eq bar2 : foo = foo { a = true; b = 6 };</code></pre>
 <p>Record Update Expression are assignments to all or a specific field of a record type variable. For example, <code>bar2 {a := false}</code> is a valid Record Update Expression, given definition for type <code>foo</code> and variable <code>bar2</code> as above.</p>
 <p>The record update expression expects an expression of record type on the left hand side of the curly braces. It returns the same record as the left hand side expression except with its member IDs set to the value of the expression on the right hand side of the <code>:=</code>;</p>
+<h3 id="sec:array_expressions">Array Expressions</h3>
+<p>An array expression constructs a value that may be assigned to a variable of matching array type or as an actual parameter in a node or function call. Value expressions must be provided for all elements of the array and be of type corresponding to the array element type.</p>
+<pre><code>eq a : int[3] = [| 1, 2, 3 |];</code></pre>
+<p>Array Update Expressions are assignments to all or specific elements of an array typed variable. Array update expressions have form similar to a</p>
+<p>For example, <code>arr [| 2 := 6, 3 := 12 |]</code> is a valid array update expression given that <code>arr</code> is an array as defined above.</p>
+<p>The array update expression expects an expression of array type on the left hand side of the <code>[|</code> … <code>|]</code> braces. It returns the same array as the left hand side expression except with its member elements at the index values to the left of the <code>:=</code> are set to the values of the expressions on the right hand side of the <code>:=</code>;</p>
+<p><strong>Note:</strong> For consistency with AADL, array index values are 1-based rather than zero based.</p>
 <h3 id="sec:arithmetic-operations">Arithmetic Operations</h3>
 <p>Arithmetic operations must be performed on expressions of the same type. They follow the standard order of precedence. Note that AGREE will give a warning if you write an expression that is not linear. Some theorem provers do not reason about non-linear expressions. Non-linear integer arithmetic is undecidable and most theorem provers do not use a decidable decision procedure for non-linear real arithmetic. So it is recommended that you only use linear expressions.</p>
 <h3 id="sec:relation-expressions">Relation Expressions</h3>

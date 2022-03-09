@@ -48,6 +48,7 @@ Expr ::= Literal
     | 'this' ('.' NestedDotId)?
     | '(' Expr ')'
     | RecordUpdateExpr
+    | ArrayUpdateExpr
     | ('-' | 'not') Expr
     | Expr ('+' | '-' | '\*' | '/' | 'div'| 'mod') Expr
     | Expr RelateOp Expr
@@ -125,10 +126,27 @@ A NestedDotID expression can have dots in between ID expressions, e.g.,
 `food.bar.biz`. It can be used to refer to record types or variables of a
 subcomponent. For example, one could use the NestedDotID expression
 foo.bar to reference the input, output, or equation variable `bar` of
-subcomponent `foo` within the implementation of some AADL component. A
+subcomponent `food` within the implementation of some AADL component. A
 NestedDotID expression can also be used for inputs and outputs that are
 of record type: if `x` is a record type containing field `y`, then the
 notation `x.y` is used.
+
+### Array Subscript Expressions
+
+Elements of arrays can be accessed by appending square brackets to an
+expression with array type and containing an integer-typed expression.  For
+example:
+
+~~~
+eq arr : int[3];
+eq n : int = arr[1];
+~~~
+
+Here the local variable `n` takes the value of the first element of the
+array local variable `arr`.
+
+**Note:** For consistency with AADL, array index values are 1-based rather
+than zero based.
 
 ### Node Call Expressions
 
@@ -297,6 +315,32 @@ The record update expression expects an expression of record type on the
 left hand side of the curly braces. It returns the same record as the
 left hand side expression except with its member IDs set to the value of
 the expression on the right hand side of the `:=`;
+
+### Array Expressions{#sec:array_expressions}
+
+An array expression constructs a value that may be assigned to a variable of
+matching array type or as an actual parameter in a node or function call.
+Value expressions must be provided for all elements of the array and be of
+type corresponding to the array element type.
+
+~~~
+eq a : int[3] = [| 1, 2, 3 |];
+~~~
+
+Array Update Expressions are assignments to all or specific elements of an
+array typed variable.  Array update expressions have form similar to a
+
+For example, `arr [| 2 := 6, 3 := 12 |]` is a valid
+array update expression given that `arr` is an array as defined above. 
+
+The array update expression expects an expression of array type on the
+left hand side of the `[|` ... `|]` braces. It returns the same array as the
+left hand side expression except with its member elements at the index values
+to the left of the `:=` are set to the values of the expressions on the right
+hand side of the `:=`;
+
+**Note:** For consistency with AADL, array index values are 1-based rather
+than zero based.
 
 ### Arithmetic Operations
 

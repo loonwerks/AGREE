@@ -131,3 +131,59 @@ enum card_suit = { spade, heart, club, diamond };
 
 eq color : card_suit;
 ~~~
+
+### Array Types{#sec:array_types}
+
+In AGREE array types, similar to AADL, are not declared as named types.
+Instead array types are specified by appending an array dimension following a
+type specification.  Array dimensions are given as an positive integer literal
+enclosed by square brackets.  For example:
+
+~~~
+eq x : int[3];
+~~~
+
+This declares the local variable `x` as an array of three integer primitives.
+
+Multidimensional arrays may also be specified.
+
+~~~
+eq xx : int[3][2];
+~~~
+
+This declares a local variable `xx` as a two-dimensional array consisting of
+an array of two arrays each of three integer primitives.
+
+Array specifications can also be applied to arguments to specification of
+nodes and functions.
+
+Agree also respects array specifications in AADL data implementations using
+the existing AADL array notation.  However, all AADL arrays must be fixed
+dimension.  Analysis over arrays of unspecified or variable length is not
+permitted.
+
+~~~
+data Location
+end Location;
+
+data implementation Location.Impl
+    subcomponents
+      latitude: data Base_Types::Real;
+      longitude: data Base_Types::Real;
+      altitude: data Base_Types::Real;
+end Location.Impl;
+
+data Track
+end Track;
+
+data implementation Track.Impl
+   subcomponents
+       waypoints : data Location.Impl[4];
+end Track.Impl;
+~~~
+
+**Note:**  Arrays consume a large portion of state space when rendered to the
+model checker and eventually to satisfiability solvers.  Scalability is
+extremely limited even for simple arrays.  However, since AGREE specifications
+may be used for other purposes than analysis full capability to specify
+arrays is supported.

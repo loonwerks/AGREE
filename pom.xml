@@ -427,7 +427,7 @@
 		<repository>
 			<id>Osate2</id>
 			<layout>p2</layout>
-			<url>https://osate-build.sei.cmu.edu/download/osate/testing/updates/</url>
+			<url>https://osate-build.sei.cmu.edu/download/osate/stable/latest/updates/</url>
 		</repository>
 		<repository>
 			<id>codehaus-snapshots</id>

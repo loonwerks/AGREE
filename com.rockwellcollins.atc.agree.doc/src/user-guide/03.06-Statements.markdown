@@ -363,6 +363,33 @@ optional and may be omitted.  If a name is given it must be unique in the
 local namespace.  Naming of specification statements is provided for
 integration with other tool suites such as requirements tracing.
 
+### Advanced Topic: Connection Statements{#sec:connection_statements}
+
+Connection statements are intended to deconflict simultaneous input to a
+component were multiple sources are connected to a single input.  An example
+of a connection statement is:
+
+~~~
+connection INP1 : event(inp) and inp < 10;
+~~~
+
+where `INP` references the name of an AADL connection to component input
+`inp`, and the expression to the right hand side of the colon is boolean
+valued and true only when no connection statement referencing the same input
+is true.
+
+Since multiple simultaneous inputs are generally logically inconsistent, the
+connection statements are intended to resolve this inconsistency.  However,
+the collection of connection statements referencing an input must universally
+have at most one connection statement true at a time.  As it is often
+difficult to avoid defining such an inconsistency, connecting multiple sources
+to a single input is discouraged.
+
+Multiple connections into an AADL component is illegal in AADL unless only one
+of the connections is active in each mode.  OSATE now flags an error when such
+fan in occurs.  Accordingly, connection statements are now deem deprecated
+and will be removed from a future version of AGREE.
+
 ### Advanced Topic: Reachable Statements{#sec:reachable_statements}
 
 Reachable statements may be used to check for vacuity of a guarantee or lemma
@@ -371,7 +398,7 @@ form of an implication.  The reachable statement may be used to check that the
 antecedent (the left hand side) of the guarantee statement is reachable in at
 least one possible combination of inputs to the model.
 
-Like lemma statments, reachable statements do not affect the compositional
+Like lemma statements, reachable statements do not affect the compositional
 contract analysis, but may assist the model checker when performing
 verification.  That is, reachable statements  are not used to prove other
 subcomponent guarantees or system guarantees.

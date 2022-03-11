@@ -239,14 +239,22 @@ public class AgreeValidator extends AbstractAgreeValidator {
 			if (aadlConn == null) {
 				return;
 			}
+
 			if (!(aadlConn instanceof Connection)) {
 				error(conn, "The connection label in the connection statement is not a connection");
 				return;
 			}
 
+			TypeDef rhsType = (AgreeTypeSystem.infer(conn.getExpr()));
+			if (!AgreeTypeSystem.typesEqual(AgreeTypeSystem.Prim.BoolTypeDef, rhsType)) {
+				error(conn, "The expression for the connection statement is of type '" + nameOfTypeDef(rhsType)
+						+ "' but must be of type 'bool'");
+			}
+
 		} else {
 			error(conn, "Connection statements are allowed only in component implementations.");
 		}
+		warning(conn, "Connection statements are deprecated and will be removed in a future version of AGREE.");
 	}
 
 	@Check(CheckType.FAST)

@@ -32,6 +32,7 @@ import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.XtextRunner
+import com.itemis.xtext.testing.FluentIssueCollection
 import com.itemis.xtext.testing.XtextTest
 
 import org.osate.aadl2.AadlPackage
@@ -62,6 +63,8 @@ import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuild
 import com.rockwellcollins.atc.agree.tests.AgreeUiInjectorProvider
 import com.rockwellcollins.atc.agree.tests.testsupport.AssertHelper
 import com.rockwellcollins.atc.agree.tests.testsupport.TestHelper
+
+import static extension org.osate.testsupport.AssertHelper.assertWarning
 
 @RunWith(XtextRunner)
 @InjectWith(AgreeUiInjectorProvider)
@@ -120,6 +123,7 @@ class Issue17Test extends XtextTest {
 	@Test
 	def void testConnectionStatementSubcomponentsReferencesCorrect() {
 		val testFileResult = issues = testHelper.testString(alphaBravoModel)
+		val issueCollection = new FluentIssueCollection(testFileResult.resource, newArrayList, newArrayList)
 
 		val expectedAadlConnection = EcoreUtil2.getAllContentsOfType(testFileResult.resource.contents.head,
 			PortConnection).head
@@ -129,6 +133,8 @@ class Issue17Test extends XtextTest {
 			SystemSubcomponent).filter['b'.equals(name)].head
 		EcoreUtil2.getAllContentsOfType(testFileResult.resource.contents.head, ConnectionStatement).head => [
 			Assert.assertEquals(expectedAadlConnection, conn)
+			assertWarning(testFileResult.issues, issueCollection,
+				"Connection statements are deprecated and will be removed in a future version of AGREE.")
 			Assert.assertTrue(expr instanceof BinaryExpr)
 			expr as BinaryExpr => [
 				Assert.assertTrue(left instanceof SelectionExpr)
@@ -147,6 +153,9 @@ class Issue17Test extends XtextTest {
 				]
 			]
 		]
+
+		issueCollection.sizeIs(testFileResult.issues.size)
+		assertConstraints(issueCollection)
 	}
 
 	static val deltaCharlieModel = '''

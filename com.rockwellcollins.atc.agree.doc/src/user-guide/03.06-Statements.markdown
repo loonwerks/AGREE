@@ -387,7 +387,7 @@ to a single input is discouraged.
 
 Multiple connections into an AADL component is illegal in AADL unless only one
 of the connections is active in each mode.  OSATE now flags an error when such
-fan in occurs.  Accordingly, connection statements are now deem deprecated
+fan-in occurs.  Accordingly, connection statements are now deprecated
 and will be removed from a future version of AGREE.
 
 ### Advanced Topic: Reachable Statements{#sec:reachable_statements}

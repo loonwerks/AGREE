@@ -101,6 +101,25 @@ might do this to constrain a list of variables to the results of a node
 statement that has multiple return values or to more cleanly list a set
 of implicitly defined variables.
 
+### Assign Statements{#sec:assign_statements}
+
+Assign statements can be used to assign the value of a component output to a
+closed expression of local variables and inputs to that component.  An example
+of an assign statement is:
+
+~~~
+assign output_voltage = input_voltage + compensation_voltage;
+~~~
+
+In this example, the component output port `output_voltage` is assigned the
+result of the addition of the input port `input_voltage` and a local variable
+`compensation_voltage`.
+
+Assign statements are syntactic sugar for `assert` statements but with
+validator checks that a single output cannot be assigned more than once.  As 
+such, the logic introduced by `assign` statements is not included in the set
+of logic used to compute inductive validity cores.
+
 ### Property Statements{#sec:property_statements}
 
 Property statements allow specification of named Boolean expressions. An

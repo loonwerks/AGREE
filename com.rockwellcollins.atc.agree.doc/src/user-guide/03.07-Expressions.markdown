@@ -280,6 +280,17 @@ AADL component in the instance model or 'this' if the property exists in
 the component in which get property statement lives. The second argument
 is the name of the AADL property.
 
+AGREE can reason over properties with unspecified values and of type
+AadlBoolean, AadlInteger, and AadlReal.  Properties of other types (e.g.
+AadlString and AadlEnumeration) are not supported.
+
+For properties where a value is associated, AGREE applies that value in
+analysis.  For properties where a value is not associate AGREE treats these as
+an unbound input and generates a constraint that the value does not change
+from step to step in the analysis.  Further, for the AadlInteger and AadlReal
+types AGREE recognizes range constraints and generate range constraint
+assertions into the logic.
+
 ### Unary Minus and Not Expressions
 
 An Unary Minus expression is used to negate integer or real valued

@@ -4,7 +4,7 @@ Bundle-Name: AGREE extensions to the OSATE Graphical Editor
 Bundle-SymbolicName: edu.uah.rsesc.agree.ge;singleton:=true
 Bundle-Version: 2.8.1.qualifier
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.20.0,4.0.0)",
- com.rockwellcollins.atc.agree;bundle-version="[3.0.0,4.0.0)",
+ com.rockwellcollins.atc.agree;bundle-version="[4.0.0,5.0.0)",
  org.osate.aadl2;bundle-version="[4.0.0,5.0.0)",
  org.osate.ge;bundle-version="[2.0.0,4.0.0)",
  org.osate.annexsupport;bundle-version="[1.0.1,5.0.0)"

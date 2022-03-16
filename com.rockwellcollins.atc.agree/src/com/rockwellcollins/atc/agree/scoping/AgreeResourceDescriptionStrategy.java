@@ -13,7 +13,7 @@ import com.rockwellcollins.atc.agree.agree.FoldRightExpr;
 import com.rockwellcollins.atc.agree.agree.ForallExpr;
 
 /**
- * @since 3.0
+ * @since 4.0
  */
 @Singleton
 public class AgreeResourceDescriptionStrategy extends DefaultResourceDescriptionStrategy {

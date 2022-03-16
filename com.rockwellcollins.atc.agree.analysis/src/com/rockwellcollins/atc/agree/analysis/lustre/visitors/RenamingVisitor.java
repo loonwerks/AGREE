@@ -34,6 +34,7 @@ import org.osate.aadl2.SystemImplementation;
 import org.osate.aadl2.instance.ComponentInstance;
 
 import com.rockwellcollins.atc.agree.agree.Arg;
+import com.rockwellcollins.atc.agree.agree.ArrayType;
 import com.rockwellcollins.atc.agree.agree.AssertStatement;
 import com.rockwellcollins.atc.agree.agree.AssumeStatement;
 import com.rockwellcollins.atc.agree.agree.DoubleDotRef;
@@ -45,6 +46,7 @@ import com.rockwellcollins.atc.agree.agree.LemmaStatement;
 import com.rockwellcollins.atc.agree.agree.PrimType;
 import com.rockwellcollins.atc.agree.agree.PropertyStatement;
 import com.rockwellcollins.atc.agree.agree.ReachableStatement;
+import com.rockwellcollins.atc.agree.agree.Type;
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout;
 import com.rockwellcollins.atc.agree.analysis.AgreeLayout.SigType;
@@ -160,22 +162,29 @@ public class RenamingVisitor extends AstIterVisitor {
 		return null;
 	}
 
-	private String argToString(Arg arg) {
-		String result = arg.getName() + " : ";
-		if (arg.getType() instanceof PrimType) {
-			PrimType primType = (PrimType) arg.getType();
-			result += primType.getName();
+	private String typeToString(Type ty) {
+		if (ty instanceof PrimType) {
+			PrimType primType = (PrimType) ty;
+			String result = primType.getName();
 			String lowLit = (primType.getLowNeg() != null) ? primType.getLowNeg() : "";
 			String highLit = (primType.getHighNeg() != null) ? primType.getHighNeg() : "";
 			if (primType.getRangeLow() != null) {
 				result += " [" + lowLit + primType.getRangeLow() + ", " + highLit
 						+ primType.getRangeHigh() + "]";
 			}
+			return result;
+		} else if (ty instanceof ArrayType) {
+			ArrayType arrayType = (ArrayType) ty;
+			return typeToString(arrayType.getStem()) + "[" + arrayType.getSize() + "]";
+		} else if (ty instanceof DoubleDotRef) {
+			return ((DoubleDotRef) ty).getElm().getName();
 		} else {
-
-			result += ((DoubleDotRef) arg.getType()).getElm().getName();
+			throw new AgreeException("Unrecognized AGREE type " + ty.getClass().getName());
 		}
-		return result;
+	}
+
+	private String argToString(Arg arg) {
+		return arg.getName() + " : " + typeToString(arg.getType());
 	}
 
 	private String getReferenceStr(AgreeVar var) {

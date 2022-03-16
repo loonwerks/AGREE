@@ -502,7 +502,7 @@ public class AgreeScopeProvider extends org.osate.xtext.aadl2.properties.scoping
 	protected IScope scope_DoubleDotRef_elm(DoubleDotRef ctx, EReference ref) {
 
 		IScope prevScope = prevScope(ctx, ref);
-		EObject container = ((GetPropertyExpr) ctx.eContainer()).getContainingComponentImpl();
+		EObject container = ctx.getContainingComponentImpl();
 		if (container instanceof ComponentImplementation) {
 			return Scopes.scopeFor(((ComponentImplementation) ctx).getAllSubcomponents(), prevScope);
 		}

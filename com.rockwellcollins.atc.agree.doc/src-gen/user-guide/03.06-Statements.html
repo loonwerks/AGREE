@@ -172,6 +172,11 @@
 <p>Equation statements can be used to create local variable declarations within the body of an AGREE subclause. An example of an equation statement is:</p>
 <pre><code>eq ctr : int = prev(ctr + 1, 0);</code></pre>
 <p>In this example, we create a variable that counts up from zero. Variables defined with equation statements can be thought of as ‘’intermediate’’ variables or variables that are not meant to be visible in the architectural model (unlike component outputs or inputs). Equation statements can define variables explicitly by setting the equation equal to an expression immediately after it is defined. Equation statements can also define variables implicitly by not setting them equal to anything, but constraining them with assumption, assertion, or guarantee statements. Equation statements can define more than one variable at once by writing them in a comma delimited list. One might do this to constrain a list of variables to the results of a node statement that has multiple return values or to more cleanly list a set of implicitly defined variables.</p>
+<h3 id="sec:assign_statements">Assign Statements</h3>
+<p>Assign statements can be used to assign the value of a component output to a closed expression of local variables and inputs to that component. An example of an assign statement is:</p>
+<pre><code>assign output_voltage = input_voltage + compensation_voltage;</code></pre>
+<p>In this example, the component output port <code>output_voltage</code> is assigned the result of the addition of the input port <code>input_voltage</code> and a local variable <code>compensation_voltage</code>.</p>
+<p>Assign statements are syntactic sugar for <code>assert</code> statements but with validator checks that a single output cannot be assigned more than once. As such, the logic introduced by <code>assign</code> statements is not included in the set of logic used to compute inductive validity cores.</p>
 <h3 id="sec:property_statements">Property Statements</h3>
 <p>Property statements allow specification of named Boolean expressions. An example property statement is:</p>
 <pre><code>property not_system_start_implies_mode_0 =
@@ -274,9 +279,15 @@ TimeInterval:
     (not drug_flow_stopped) =&gt; spo2_never_below_thresh;</code></pre>
 <p>From the perspective of proof, lemmas behave the same as guarantees; they must be proven by AGREE. These are used to help the model checker learn facts to improve its ability to prove other properties. However, unlike guarantees, lemmas are not made visible when trying to prove properties at the next level of abstraction. Subcomponent lemmas are not used to prove other subcomponent guarantees or system guarantees.</p>
 <p>The identifier <code>L001</code> names the the lemma statement. Such names are optional and may be omitted. If a name is given it must be unique in the local namespace. Naming of specification statements is provided for integration with other tool suites such as requirements tracing.</p>
+<h3 id="sec:connection_statements">Advanced Topic: Connection Statements</h3>
+<p>Connection statements are intended to deconflict simultaneous input to a component were multiple sources are connected to a single input. An example of a connection statement is:</p>
+<pre><code>connection INP1 : event(inp) and inp &lt; 10;</code></pre>
+<p>where <code>INP</code> references the name of an AADL connection to component input <code>inp</code>, and the expression to the right hand side of the colon is boolean valued and true only when no connection statement referencing the same input is true.</p>
+<p>Since multiple simultaneous inputs are generally logically inconsistent, the connection statements are intended to resolve this inconsistency. However, the collection of connection statements referencing an input must universally have at most one connection statement true at a time. As it is often difficult to avoid defining such an inconsistency, connecting multiple sources to a single input is discouraged.</p>
+<p>Multiple connections into an AADL component is illegal in AADL unless only one of the connections is active in each mode. OSATE now flags an error when such fan in occurs. Accordingly, connection statements are now deem deprecated and will be removed from a future version of AGREE.</p>
 <h3 id="sec:reachable_statements">Advanced Topic: Reachable Statements</h3>
 <p>Reachable statements may be used to check for vacuity of a guarantee or lemma statement. The typical use is where a guarantee statement is written in the form of an implication. The reachable statement may be used to check that the antecedent (the left hand side) of the guarantee statement is reachable in at least one possible combination of inputs to the model.</p>
-<p>Like lemma statments, reachable statements do not affect the compositional contract analysis, but may assist the model checker when performing verification. That is, reachable statements are not used to prove other subcomponent guarantees or system guarantees.</p>
+<p>Like lemma statements, reachable statements do not affect the compositional contract analysis, but may assist the model checker when performing verification. That is, reachable statements are not used to prove other subcomponent guarantees or system guarantees.</p>
 <p>An example would be:</p>
 <pre><code>reachable R001 &quot;drug flow might not be stopped&quot; :
     (not drug_flow_stopped);</code></pre>

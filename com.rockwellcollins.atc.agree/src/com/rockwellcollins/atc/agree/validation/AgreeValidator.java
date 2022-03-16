@@ -85,6 +85,7 @@ import com.rockwellcollins.atc.agree.agree.AgreeSubclause;
 import com.rockwellcollins.atc.agree.agree.Arg;
 import com.rockwellcollins.atc.agree.agree.ArrayLiteralExpr;
 import com.rockwellcollins.atc.agree.agree.ArraySubExpr;
+import com.rockwellcollins.atc.agree.agree.ArrayType;
 import com.rockwellcollins.atc.agree.agree.ArrayUpdateExpr;
 import com.rockwellcollins.atc.agree.agree.AssertStatement;
 import com.rockwellcollins.atc.agree.agree.AssignStatement;
@@ -239,14 +240,22 @@ public class AgreeValidator extends AbstractAgreeValidator {
 			if (aadlConn == null) {
 				return;
 			}
+
 			if (!(aadlConn instanceof Connection)) {
 				error(conn, "The connection label in the connection statement is not a connection");
 				return;
 			}
 
+			TypeDef rhsType = (AgreeTypeSystem.infer(conn.getExpr()));
+			if (!AgreeTypeSystem.typesEqual(AgreeTypeSystem.Prim.BoolTypeDef, rhsType)) {
+				error(conn, "The expression for the connection statement is of type '" + nameOfTypeDef(rhsType)
+						+ "' but must be of type 'bool'");
+			}
+
 		} else {
 			error(conn, "Connection statements are allowed only in component implementations.");
 		}
+		warning(conn, "Connection statements are deprecated and will be removed in a future version of AGREE.");
 	}
 
 	@Check(CheckType.FAST)
@@ -409,9 +418,7 @@ public class AgreeValidator extends AbstractAgreeValidator {
 
 	}
 
-	@Check(CheckType.FAST)
-	public void checkArg(Arg arg) {
-		Type type = arg.getType();
+	protected void checkArgType(Type type) {
 		if (type instanceof PrimType) {
 			PrimType primType = (PrimType) type;
 			String strType = primType.getName();
@@ -420,25 +427,25 @@ public class AgreeValidator extends AbstractAgreeValidator {
 
 			if (rangeLow != null && rangeHigh != null) {
 
-				// this is a ranged argument. It can show up only in an equation statement
-				EObject container = arg.eContainer();
-				if (!(container instanceof EqStatement || container instanceof InputStatement)) {
-					error(arg, "Ranged arguments can appear only in equation statements or agree_input statements");
-				}
+//				// this is a ranged argument. It can show up only in an equation statement
+//				EObject container = arg.eContainer();
+//				if (!(container instanceof EqStatement || container instanceof InputStatement)) {
+//					error(type, "Ranged arguments can appear only in equation statements or agree_input statements");
+//				}
 
 				boolean rangeLowDot = rangeLow.contains(".");
 				boolean rangeHighDot = rangeHigh.contains(".");
 
 				if (rangeLowDot != rangeHighDot) {
-					error(arg, "The range intervals are of differing types");
+					error(type, "The range intervals are of differing types");
 				}
 
 				if (strType.equals("int") && (rangeLowDot || rangeHighDot)) {
-					error(arg, "Ranged variable of type 'int' contains a 'real' value in its interval");
+					error(type, "Ranged variable of type 'int' contains a 'real' value in its interval");
 				}
 
 				if (strType.equals("real") && (!rangeLowDot || !rangeHighDot)) {
-					error(arg, "Ranged variable of type 'real' contains an 'int' value in its interval");
+					error(type, "Ranged variable of type 'real' contains an 'int' value in its interval");
 				}
 
 				float low = Float.valueOf(rangeLow);
@@ -448,9 +455,13 @@ public class AgreeValidator extends AbstractAgreeValidator {
 				high *= primType.getHighNeg() == null ? 1.0 : -1.0;
 
 				if (low >= high) {
-					error(arg, "The low value of the interval is greater than or equal to the high end");
+					error(type, "The low value of the interval is greater than or equal to the high end");
 				}
 			}
+
+		} else if (type instanceof ArrayType) {
+			ArrayType arrayType = (ArrayType) type;
+			checkArgType(arrayType.getStem());
 
 		} else if (type instanceof DoubleDotRef) {
 			DoubleDotRef recType = (DoubleDotRef) type;
@@ -494,6 +505,11 @@ public class AgreeValidator extends AbstractAgreeValidator {
 			}
 
 		}
+	}
+
+	@Check(CheckType.FAST)
+	public void checkArg(Arg arg) {
+		checkArgType(arg.getType());
 	}
 
 	@Check(CheckType.FAST)

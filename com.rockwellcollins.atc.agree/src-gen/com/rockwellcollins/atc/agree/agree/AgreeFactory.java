@@ -772,15 +772,6 @@ public interface AgreeFactory extends EFactory
   RecordUpdateExpr createRecordUpdateExpr();
 
   /**
-   * Returns a new object of class '<em>Array Sub Expr</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Array Sub Expr</em>'.
-   * @generated
-   */
-  ArraySubExpr createArraySubExpr();
-
-  /**
    * Returns a new object of class '<em>Tag Expr</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -788,6 +779,15 @@ public interface AgreeFactory extends EFactory
    * @generated
    */
   TagExpr createTagExpr();
+
+  /**
+   * Returns a new object of class '<em>Array Sub Expr</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Array Sub Expr</em>'.
+   * @generated
+   */
+  ArraySubExpr createArraySubExpr();
 
   /**
    * Returns a new object of class '<em>Selection Expr</em>'.

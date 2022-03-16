@@ -506,14 +506,14 @@ public class AgreeAdapterFactory extends AdapterFactoryImpl
         return createRecordUpdateExprAdapter();
       }
       @Override
-      public Adapter caseArraySubExpr(ArraySubExpr object)
-      {
-        return createArraySubExprAdapter();
-      }
-      @Override
       public Adapter caseTagExpr(TagExpr object)
       {
         return createTagExprAdapter();
+      }
+      @Override
+      public Adapter caseArraySubExpr(ArraySubExpr object)
+      {
+        return createArraySubExprAdapter();
       }
       @Override
       public Adapter caseSelectionExpr(SelectionExpr object)
@@ -1868,21 +1868,6 @@ public class AgreeAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link com.rockwellcollins.atc.agree.agree.ArraySubExpr <em>Array Sub Expr</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see com.rockwellcollins.atc.agree.agree.ArraySubExpr
-   * @generated
-   */
-  public Adapter createArraySubExprAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link com.rockwellcollins.atc.agree.agree.TagExpr <em>Tag Expr</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -1893,6 +1878,21 @@ public class AgreeAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTagExprAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.rockwellcollins.atc.agree.agree.ArraySubExpr <em>Array Sub Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.rockwellcollins.atc.agree.agree.ArraySubExpr
+   * @generated
+   */
+  public Adapter createArraySubExprAdapter()
   {
     return null;
   }

@@ -22,6 +22,7 @@
 <?eclipse version="3.0"?>
 
 <plugin>
+   <extension-point id="examples" name="AGREE Examples" schema="schema/examples.exsd"/>
 
     <extension
             point="org.eclipse.ui.editors">
@@ -419,6 +420,25 @@
            class="com.rockwellcollins.atc.agree.parsing.AgreeAnnexLinkingService"
            id="com.rockwellcollins.atc.agree.linkingservice">
      </linkingservice>
+  </extension>
+  <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.rockwellcollins.atc.agree.Wizard.category.examples"
+            name="AGREE Examples"
+            parentCategory="org.eclipse.ui.Examples">
+      </category>
+      <wizard
+            category="org.eclipse.ui.Examples/com.rockwellcollins.atc.agree.Wizard.category.examples"
+            class="com.rockwellcollins.atc.agree.ui.wizards.AgreeExampleWizard"
+            icon="icons/aadl.gif"
+            id="com.rockwellcollins.atc.agree.wizard.examples"
+            name="AGREE Examples"
+            project="true">
+         <description>
+            Import an AGREE example into the workspace
+         </description>
+      </wizard>
   </extension>
   <extension
         point="org.osate.annexsupport.parser">

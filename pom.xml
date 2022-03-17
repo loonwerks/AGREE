@@ -51,6 +51,9 @@
 		<module>com.rockwellcollins.atc.agree.target</module>
 		<module>com.rockwellcollins.atc.agree.tests</module>
 		<module>com.rockwellcollins.atc.agree.ui</module>
+		<module>com.rockwellcollins.atc.agree.examples/examples</module>
+		<module>com.rockwellcollins.atc.agree.examples</module>
+		<module>com.rockwellcollins.atc.agree.examples.feature</module>
 		<module>edu.uah.rsesc.agree.ge</module>
 		<module>edu.uah.rsesc.agree.ge.ui</module>
 		<module>edu.uah.rsesc.aadlsimulator</module>
@@ -210,6 +213,20 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>com.ruleoftech</groupId>
+					<artifactId>markdown-page-generator-plugin</artifactId>
+					<version>2.4.0</version>
+					<executions>
+						<execution>
+							<?m2e ignore?>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>generate</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 				<plugin>
 					<groupId>org.eclipse.xtend</groupId>
 					<artifactId>xtend-maven-plugin</artifactId>

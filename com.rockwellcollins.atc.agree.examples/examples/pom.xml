@@ -39,6 +39,7 @@
 
 	<modules>
 		<module>toy_example</module>
+		<module>codependence</module>
 	</modules>
 
 </project>

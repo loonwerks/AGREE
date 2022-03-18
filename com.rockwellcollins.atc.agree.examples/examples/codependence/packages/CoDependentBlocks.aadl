@@ -31,10 +31,10 @@ public
 			Response_in : in data port Message.impl;
 			Request_out : out data port Message.impl;	
 		annex agree {**
-			assume "After the initial timestep, Response Message ID equals GOLDEN_ID":
+			assume A1 "After the initial timestep, Response Message ID equals GOLDEN_ID":
 				true -> (Response_in.ID = GOLDEN_ID);
 
-			guarantee "Request Message ID equals GOLDEN_ID":
+			guarantee G1 "Request Message ID equals GOLDEN_ID":
 				Request_out.ID = GOLDEN_ID;
 
 		**};
@@ -62,17 +62,17 @@ public
 		    -- AGREE rightly declares that neither can be established and
 		    -- gives a counterexample.  
 		    --  
---			assume "Request Message ID equals GOLDEN_ID":
+--			assume A1 "Request Message ID equals GOLDEN_ID":
 --				Request_in.ID = GOLDEN_ID;
 				
-			guarantee "Response Message ID equals the previous Request Message ID":
+			guarantee G1 "Response Message ID equals the previous Request Message ID":
 				Response_out.ID = prev(Request_in.ID, 0);
 		**};
 	end B;
 	
 	system top_level
 		annex agree {**
-			guarantee "Placeholder guarantee to get AGREE to run": true;
+			guarantee G0 "Placeholder guarantee to get AGREE to run": true;
 		**};
 	end top_level;
 	
@@ -84,11 +84,11 @@ public
 			A_to_B : port A.Request_out -> B.Request_in;
 			B_to_A : port B.Response_out -> A.Response_in;
 		annex agree{**
-			lemma "The ID in A's request is always GOLDEN_ID":
+			lemma L1 "The ID in A's request is always GOLDEN_ID":
 				(A.Request_out.ID = GOLDEN_ID)
 				and (B.Request_in.ID = GOLDEN_ID);
 				
-			lemma "After the first timestep, the ID in B's response is always GOLDEN_ID":
+			lemma L2 "After the first timestep, the ID in B's response is always GOLDEN_ID":
 				true -> ((B.Response_out.ID = GOLDEN_ID)
 						and (A.Response_in.ID = GOLDEN_ID));
 		**};

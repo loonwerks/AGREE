@@ -1,4 +1,4 @@
-Toy Example
+# Toy Example
 
 The Toy Example is the simple three-component model used in the overview
 chapter of the AGREE User Guide to introduce the fundamental concepts of AGREE

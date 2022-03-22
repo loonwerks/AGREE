@@ -50,5 +50,12 @@
             name="Microwave">
          <project path=""/>
       </example>
+      <example
+            exampleURI="/examples/BSCU"
+            readmeURI="doc/html/README.html"
+            category="AGREE Examples"
+            name="BSCU">
+         <project path=""/>
+      </example>
    </extension>
 </plugin>

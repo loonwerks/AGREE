@@ -43,5 +43,12 @@
             name="Car">
          <project path=""/>
       </example>
+      <example
+            exampleURI="/examples/Microwave"
+            readmeURI="doc/html/README.html"
+            category="AGREE Examples"
+            name="Microwave">
+         <project path=""/>
+      </example>
    </extension>
 </plugin>

@@ -18,7 +18,7 @@ public
 			eq e_int : real = prev(e, 0.0) + e;
 			eq e_dot : real = prev(e, 0.0) - e;
 			eq u : real = P*e + D*e_dot + I*e_int;
-			guarantee G1 "Acuator_Behavior" : Actuator_Input = u;
+			guarantee G_speed_1 "Acuator_Behavior" : Actuator_Input = u;
 		**};
 
 	end Speed_Control;
@@ -38,7 +38,7 @@ public
 			Actual: out data port Types::speed.speed_impl;
 
 		annex agree {**
-			guarantee G1 "Throttle_Behavior" : Actual.val = prev(Actual.val, 0.0) + 0.1*Actuator_Input;
+			guarantee G_throttle_1 "Throttle_Behavior" : Actual.val = prev(Actual.val, 0.0) + 0.1*Actuator_Input;
 		**};
 
 	end Throttle;
@@ -58,7 +58,7 @@ public
 
 		annex agree {**
 			-- lift SSM; 
-			guarantee G1 "behavior" : State_Out.val = prev(State_Out.val, 0);
+			guarantee G_tstate_1 "behavior" : State_Out.val = prev(State_Out.val, 0);
 		**};
 
 	end State_Machine;
@@ -82,7 +82,7 @@ public
 
 		annex agree {**
 			--guarantee G0 "test" : true;
-			guarantee G1 "sub behavior" : State_Out.val = prev(State_Out.val, 0);
+			guarantee G_tsubstate_1 "sub behavior" : State_Out.val = prev(State_Out.val, 0);
 		**};
 
 	end Sub_State_Machine;

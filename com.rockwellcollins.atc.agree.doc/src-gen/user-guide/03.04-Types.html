@@ -213,6 +213,21 @@ end Pixel.Impl;</code></pre>
 <pre><code>enum card_suit = { spade, heart, club, diamond };
 
 eq color : card_suit;</code></pre>
+<h3 id="sec:subrange_types">Subrange Types</h3>
+<p>Integer and real scalar types in AGREE may be restricted to a subrange type. Subranges types are declared directly in AGREE by appending square brackets containing integer or real literals inclusively constraining the range of the type. For example"</p>
+<pre><code>eq n : int[1,3];
+eq x : real[0.0, 10.0];</code></pre>
+<p>declares an integer local variable <code>n</code> with subrange constraint of <code>1</code> to <code>3</code>, inclusive and declares a real local variable <code>x</code> with subrange constraint of <code>0.0</code> to <code>10.0</code>, inclusive.</p>
+<p>Subranges may also be declared using the AADL Data Model integer and real range properties. For example:</p>
+<pre><code>    data Step_Count extends Base_Types::Integer
+        properties
+            Data_Model::Integer_Range =&gt;  1 .. 12;
+    end Step_Count;
+    
+    data Audio_Volume_Level extends Base_Types::Float
+        properties
+            Data_Model::Real_Range =&gt;  0.0 .. 11.0;
+    end Audio_Volume_Level;</code></pre>
 <h3 id="sec:array_types">Array Types</h3>
 <p>In AGREE array types, similar to AADL, are not declared as named types. Instead array types are specified by appending an array dimension following a type specification. Array dimensions are given as an positive integer literal enclosed by square brackets. For example:</p>
 <pre><code>eq x : int[3];</code></pre>

@@ -312,6 +312,8 @@ lemma &quot;sq() range positive&quot; : sq(y) &lt;= -0.10;</code></pre>
 <p>A real expression takes an expression of type <em>int</em> as argument and returns a <em>real</em> equal to its value.</p>
 <h3 id="sec:get-property-expressions">Get Property Expressions</h3>
 <p>A get property expression allows a user to reason about values of AADL properties in the model. The first argument is the relative path to an AADL component in the instance model or ‘this’ if the property exists in the component in which get property statement lives. The second argument is the name of the AADL property.</p>
+<p>AGREE can reason over properties with unspecified values and of type AadlBoolean, AadlInteger, and AadlReal. Properties of other types (e.g. AadlString and AadlEnumeration) are not supported.</p>
+<p>For properties where a value is associated, AGREE applies that value in analysis. For properties where a value is not associated, AGREE treats these as an unbound input and generates a constraint that the value does not change from step to step in the analysis. Further, for the AadlInteger and AadlReal types AGREE recognizes range constraints and generate range constraint assertions into the logic.</p>
 <h3 id="sec:unary-minus-and-not-expressions">Unary Minus and Not Expressions</h3>
 <p>An Unary Minus expression is used to negate integer or real valued expressions.</p>
 <p>A Not Expression is used to negate boolean valued expressions.</p>

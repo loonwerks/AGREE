@@ -33,9 +33,6 @@ import org.osate.annexsupport.AnnexUnparser;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.rockwellcollins.atc.agree.agree.AgreeContract;
-import com.rockwellcollins.atc.agree.agree.Expr;
-import com.rockwellcollins.atc.agree.agree.NamedSpecStatement;
 import com.rockwellcollins.atc.agree.serializer.AgreeSerializer;
 import com.rockwellcollins.atc.agree.ui.internal.AgreeActivator;
 
@@ -54,25 +51,13 @@ public class AgreeAnnexUnparser implements AnnexUnparser {
 	@Override
 	public String unparseAnnexLibrary(AnnexLibrary library, String indent) {
 		library.setName(null);
-		return indent + getSerializer().serialize(library);
+		return System.lineSeparator() + indent + getSerializer().serialize(library).replaceAll("^\\\n*", "");
 	}
 
 	@Override
 	public String unparseAnnexSubclause(AnnexSubclause subclause, String indent) {
 		subclause.setName(null);
-		return indent + getSerializer().serialize(subclause);
-	}
-
-	public String unparseContract(AgreeContract agreeContract, String indent) {
-		return indent + getSerializer().serialize(agreeContract);
-	}
-
-	public String unparseNamedSpecStatement(NamedSpecStatement namedSpecStatement, String indent) {
-		return indent + getSerializer().serialize(namedSpecStatement);
-	}
-
-	public String unparseExpr(Expr expr, String indent) {
-		return indent + getSerializer().serialize(expr);
+		return System.lineSeparator() + indent + getSerializer().serialize(subclause).replaceAll("^\\\n*", "");
 	}
 
 }

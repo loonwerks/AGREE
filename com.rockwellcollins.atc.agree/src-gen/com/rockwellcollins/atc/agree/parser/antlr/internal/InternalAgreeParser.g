@@ -7207,11 +7207,11 @@ ruleRecordUpdateExpr returns [EObject current=null]
 }:
 	(
 		{
-			newCompositeNode(grammarAccess.getRecordUpdateExprAccess().getArraySubExprParserRuleCall_0());
+			newCompositeNode(grammarAccess.getRecordUpdateExprAccess().getTagExprParserRuleCall_0());
 		}
-		this_ArraySubExpr_0=ruleArraySubExpr
+		this_TagExpr_0=ruleTagExpr
 		{
-			$current = $this_ArraySubExpr_0.current;
+			$current = $this_TagExpr_0.current;
 			afterParserOrEnumRuleCall();
 		}
 		(
@@ -7290,83 +7290,6 @@ ruleRecordUpdateExpr returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleArraySubExpr
-entryRuleArraySubExpr returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getArraySubExprRule()); }
-	iv_ruleArraySubExpr=ruleArraySubExpr
-	{ $current=$iv_ruleArraySubExpr.current; }
-	EOF;
-
-// Rule ArraySubExpr
-ruleArraySubExpr returns [EObject current=null]
-@init {
-	enterRule();
-}
-@after {
-	leaveRule();
-}:
-	(
-		{
-			newCompositeNode(grammarAccess.getArraySubExprAccess().getTagExprParserRuleCall_0());
-		}
-		this_TagExpr_0=ruleTagExpr
-		{
-			$current = $this_TagExpr_0.current;
-			afterParserOrEnumRuleCall();
-		}
-		(
-			((
-				(
-				)
-				LeftSquareBracket
-				(
-					(
-						ruleExpr
-					)
-				)
-				RightSquareBracket
-			)
-			)=>
-			(
-				(
-					{
-						$current = forceCreateModelElementAndSet(
-							grammarAccess.getArraySubExprAccess().getArraySubExprExprAction_1_0_0(),
-							$current);
-					}
-				)
-				otherlv_2=LeftSquareBracket
-				{
-					newLeafNode(otherlv_2, grammarAccess.getArraySubExprAccess().getLeftSquareBracketKeyword_1_0_1());
-				}
-				(
-					(
-						{
-							newCompositeNode(grammarAccess.getArraySubExprAccess().getIndexExprParserRuleCall_1_0_2_0());
-						}
-						lv_index_3_0=ruleExpr
-						{
-							if ($current==null) {
-								$current = createModelElementForParent(grammarAccess.getArraySubExprRule());
-							}
-							set(
-								$current,
-								"index",
-								lv_index_3_0,
-								"com.rockwellcollins.atc.agree.Agree.Expr");
-							afterParserOrEnumRuleCall();
-						}
-					)
-				)
-				otherlv_4=RightSquareBracket
-				{
-					newLeafNode(otherlv_4, grammarAccess.getArraySubExprAccess().getRightSquareBracketKeyword_1_0_3());
-				}
-			)
-		)*
-	)
-;
-
 // Entry rule entryRuleTagExpr
 entryRuleTagExpr returns [EObject current=null]:
 	{ newCompositeNode(grammarAccess.getTagExprRule()); }
@@ -7384,11 +7307,11 @@ ruleTagExpr returns [EObject current=null]
 }:
 	(
 		{
-			newCompositeNode(grammarAccess.getTagExprAccess().getSelectionExprParserRuleCall_0());
+			newCompositeNode(grammarAccess.getTagExprAccess().getProjectionExprParserRuleCall_0());
 		}
-		this_SelectionExpr_0=ruleSelectionExpr
+		this_ProjectionExpr_0=ruleProjectionExpr
 		{
-			$current = $this_SelectionExpr_0.current;
+			$current = $this_ProjectionExpr_0.current;
 			afterParserOrEnumRuleCall();
 		}
 		(
@@ -7426,15 +7349,15 @@ ruleTagExpr returns [EObject current=null]
 	)
 ;
 
-// Entry rule entryRuleSelectionExpr
-entryRuleSelectionExpr returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getSelectionExprRule()); }
-	iv_ruleSelectionExpr=ruleSelectionExpr
-	{ $current=$iv_ruleSelectionExpr.current; }
+// Entry rule entryRuleProjectionExpr
+entryRuleProjectionExpr returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getProjectionExprRule()); }
+	iv_ruleProjectionExpr=ruleProjectionExpr
+	{ $current=$iv_ruleProjectionExpr.current; }
 	EOF;
 
-// Rule SelectionExpr
-ruleSelectionExpr returns [EObject current=null]
+// Rule ProjectionExpr
+ruleProjectionExpr returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -7443,7 +7366,7 @@ ruleSelectionExpr returns [EObject current=null]
 }:
 	(
 		{
-			newCompositeNode(grammarAccess.getSelectionExprAccess().getTermExprParserRuleCall_0());
+			newCompositeNode(grammarAccess.getProjectionExprAccess().getTermExprParserRuleCall_0());
 		}
 		this_TermExpr_0=ruleTermExpr
 		{
@@ -7451,39 +7374,79 @@ ruleSelectionExpr returns [EObject current=null]
 			afterParserOrEnumRuleCall();
 		}
 		(
-			((
-				(
+			(
+				((
+					(
+					)
+					LeftSquareBracket
+					(
+						(
+							ruleExpr
+						)
+					)
+					RightSquareBracket
 				)
-				FullStop
+				)=>
 				(
 					(
-						RULE_ID
+						{
+							$current = forceCreateModelElementAndSet(
+								grammarAccess.getProjectionExprAccess().getArraySubExprExprAction_1_0_0_0(),
+								$current);
+						}
 					)
+					otherlv_2=LeftSquareBracket
+					{
+						newLeafNode(otherlv_2, grammarAccess.getProjectionExprAccess().getLeftSquareBracketKeyword_1_0_0_1());
+					}
+					(
+						(
+							{
+								newCompositeNode(grammarAccess.getProjectionExprAccess().getIndexExprParserRuleCall_1_0_0_2_0());
+							}
+							lv_index_3_0=ruleExpr
+							{
+								if ($current==null) {
+									$current = createModelElementForParent(grammarAccess.getProjectionExprRule());
+								}
+								set(
+									$current,
+									"index",
+									lv_index_3_0,
+									"com.rockwellcollins.atc.agree.Agree.Expr");
+								afterParserOrEnumRuleCall();
+							}
+						)
+					)
+					otherlv_4=RightSquareBracket
+					{
+						newLeafNode(otherlv_4, grammarAccess.getProjectionExprAccess().getRightSquareBracketKeyword_1_0_0_3());
+					}
 				)
 			)
-			)=>
+			    |
 			(
 				(
 					{
 						$current = forceCreateModelElementAndSet(
-							grammarAccess.getSelectionExprAccess().getSelectionExprTargetAction_1_0_0(),
+							grammarAccess.getProjectionExprAccess().getSelectionExprTargetAction_1_1_0(),
 							$current);
 					}
 				)
-				otherlv_2=FullStop
+				otherlv_6=FullStop
 				{
-					newLeafNode(otherlv_2, grammarAccess.getSelectionExprAccess().getFullStopKeyword_1_0_1());
+					newLeafNode(otherlv_6, grammarAccess.getProjectionExprAccess().getFullStopKeyword_1_1_1());
 				}
 				(
 					(
 						{
 							if ($current==null) {
-								$current = createModelElement(grammarAccess.getSelectionExprRule());
+								$current = createModelElement(grammarAccess.getProjectionExprRule());
 							}
 						}
-						otherlv_3=RULE_ID
+						otherlv_7=RULE_ID
 						{
-							newLeafNode(otherlv_3, grammarAccess.getSelectionExprAccess().getFieldNamedElementCrossReference_1_0_2_0());
+							newLeafNode(otherlv_7, grammarAccess.getProjectionExprAccess().getFieldNamedElementCrossReference_1_1_2_0());
 						}
 					)
 				)

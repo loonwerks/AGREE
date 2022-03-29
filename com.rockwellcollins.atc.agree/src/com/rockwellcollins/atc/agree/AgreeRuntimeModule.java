@@ -61,7 +61,7 @@ public class AgreeRuntimeModule extends com.rockwellcollins.atc.agree.AbstractAg
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public Class<? extends org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
 		return AgreeResourceDescriptionStrategy.class;

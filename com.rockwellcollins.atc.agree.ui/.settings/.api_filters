@@ -1,37 +1,181 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <component id="com.rockwellcollins.atc.agree.ui" version="2">
-    <resource path="src-gen/com/rockwellcollins/atc/agree/ide/contentassist/antlr/AgreeParser.java" type="com.rockwellcollins.atc.agree.ide.contentassist.antlr.AgreeParser">
-        <filter id="1110441988">
-            <message_arguments>
-                <message_argument value="com.rockwellcollins.atc.agree.ide.contentassist.antlr.AgreeParser"/>
-            </message_arguments>
-        </filter>
-    </resource>
-    <resource path="src-gen/com/rockwellcollins/atc/agree/ide/contentassist/antlr/PartialAgreeContentAssistParser.java" type="com.rockwellcollins.atc.agree.ide.contentassist.antlr.PartialAgreeContentAssistParser">
-        <filter id="1110441988">
-            <message_arguments>
-                <message_argument value="com.rockwellcollins.atc.agree.ide.contentassist.antlr.PartialAgreeContentAssistParser"/>
-            </message_arguments>
-        </filter>
-    </resource>
     <resource path="src-gen/com/rockwellcollins/atc/agree/ide/contentassist/antlr/internal/InternalAgreeParser.java" type="com.rockwellcollins.atc.agree.ide.contentassist.antlr.internal.InternalAgreeParser">
-        <filter id="1110441988">
-            <message_arguments>
-                <message_argument value="com.rockwellcollins.atc.agree.ide.contentassist.antlr.internal.InternalAgreeParser"/>
-            </message_arguments>
-        </filter>
-    </resource>
-    <resource path="src-gen/com/rockwellcollins/atc/agree/ide/contentassist/antlr/lexer/InternalAgreeLexer.java" type="com.rockwellcollins.atc.agree.ide.contentassist.antlr.lexer.InternalAgreeLexer">
-        <filter id="1110441988">
-            <message_arguments>
-                <message_argument value="com.rockwellcollins.atc.agree.ide.contentassist.antlr.lexer.InternalAgreeLexer"/>
-            </message_arguments>
-        </filter>
-    </resource>
-    <resource path="src-gen/com/rockwellcollins/atc/agree/ui/internal/AgreeActivator.java" type="com.rockwellcollins.atc.agree.ui.internal.AgreeActivator">
         <filter id="1143996420">
             <message_arguments>
-                <message_argument value="PLUGIN_ID"/>
+                <message_argument value="dfa101"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="dfa38"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="dfa42"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="entryRuleProjectionExpr()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="ruleProjectionExpr()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Alternatives_1()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__FieldAssignment_1_1_2()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0_0__0()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0_0__0__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0_0__1()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0_0__1__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0_0__2()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0_0__2__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0_0__3()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0_0__3__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0__0()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_0__0__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_1__0()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_1__0__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_1__1()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_1__1__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_1__2()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group_1_1__2__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group__0()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group__0__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group__1()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__Group__1__Impl()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="rule__ProjectionExpr__IndexAssignment_1_0_0_2()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="synpred107_InternalAgreeParser()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="synpred107_InternalAgreeParser_fragment()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="synpred185_InternalAgreeParser()"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="synpred185_InternalAgreeParser_fragment()"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src-gen/com/rockwellcollins/atc/agree/ui/contentassist/AbstractAgreeProposalProvider.java" type="com.rockwellcollins.atc.agree.ui.contentassist.AbstractAgreeProposalProvider">
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="completeProjectionExpr_Field(EObject, Assignment, ContentAssistContext, ICompletionProposalAcceptor)"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="completeProjectionExpr_Index(EObject, Assignment, ContentAssistContext, ICompletionProposalAcceptor)"/>
+            </message_arguments>
+        </filter>
+        <filter id="1143996420">
+            <message_arguments>
+                <message_argument value="complete_ProjectionExpr(EObject, RuleCall, ContentAssistContext, ICompletionProposalAcceptor)"/>
             </message_arguments>
         </filter>
     </resource>

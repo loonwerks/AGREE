@@ -165,8 +165,8 @@ public class AgreeFactoryImpl extends EFactoryImpl implements AgreeFactory
       case AgreePackage.GET_PROPERTY_EXPR: return createGetPropertyExpr();
       case AgreePackage.ARRAY_UPDATE_EXPR: return createArrayUpdateExpr();
       case AgreePackage.RECORD_UPDATE_EXPR: return createRecordUpdateExpr();
-      case AgreePackage.ARRAY_SUB_EXPR: return createArraySubExpr();
       case AgreePackage.TAG_EXPR: return createTagExpr();
+      case AgreePackage.ARRAY_SUB_EXPR: return createArraySubExpr();
       case AgreePackage.SELECTION_EXPR: return createSelectionExpr();
       case AgreePackage.NAMED_ELM_EXPR: return createNamedElmExpr();
       case AgreePackage.TIME_EXPR: return createTimeExpr();
@@ -1168,10 +1168,10 @@ public class AgreeFactoryImpl extends EFactoryImpl implements AgreeFactory
    * @generated
    */
   @Override
-  public ArraySubExpr createArraySubExpr()
+  public TagExpr createTagExpr()
   {
-    ArraySubExprImpl arraySubExpr = new ArraySubExprImpl();
-    return arraySubExpr;
+    TagExprImpl tagExpr = new TagExprImpl();
+    return tagExpr;
   }
 
   /**
@@ -1180,10 +1180,10 @@ public class AgreeFactoryImpl extends EFactoryImpl implements AgreeFactory
    * @generated
    */
   @Override
-  public TagExpr createTagExpr()
+  public ArraySubExpr createArraySubExpr()
   {
-    TagExprImpl tagExpr = new TagExprImpl();
-    return tagExpr;
+    ArraySubExprImpl arraySubExpr = new ArraySubExprImpl();
+    return arraySubExpr;
   }
 
   /**

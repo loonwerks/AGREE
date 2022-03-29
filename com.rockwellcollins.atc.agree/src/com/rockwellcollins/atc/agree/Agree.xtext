@@ -308,21 +308,34 @@ ArrayUpdateExpr returns Expr:
                               '[|' indices+=Expr ':=' ) valueExprs+=Expr
                               (';' indices+=Expr ':=' valueExprs+=Expr)* '|]')?;
 
+//RecordUpdateExpr returns Expr:
+//	ArraySubExpr (=> ({RecordUpdateExpr.record=current} '{' key=[aadl2::NamedElement|ID] ':=' expr=Expr '}'))*
+//;
+//
+//ArraySubExpr returns Expr:
+//  TagExpr (=>({ArraySubExpr.expr=current} '[' index=Expr ']'))*;
+//  
+//TagExpr returns Expr:
+//	SelectionExpr ({TagExpr.stem=current} '.' tag=ReservedVarTag)?
+//;
+//  
+//SelectionExpr returns Expr:
+//  TermExpr (=>({SelectionExpr.target=current} '.' field=[aadl2::NamedElement|ID]))*;
+
 RecordUpdateExpr returns Expr:
-	ArraySubExpr (=> ({RecordUpdateExpr.record=current} '{' key=[aadl2::NamedElement|ID] ':=' expr=Expr '}'))*
+	TagExpr (=> ({RecordUpdateExpr.record=current} '{' key=[aadl2::NamedElement|ID] ':=' expr=Expr '}'))*
 ;
 
-ArraySubExpr returns Expr:
-  TagExpr (=>({ArraySubExpr.expr=current} '[' index=Expr ']'))*;
-  
 TagExpr returns Expr:
-	SelectionExpr ({TagExpr.stem=current} '.' tag=ReservedVarTag)?
+	ProjectionExpr ({TagExpr.stem=current} '.' tag=ReservedVarTag)?
 ;
-  
-SelectionExpr returns Expr:
-  TermExpr (=>({SelectionExpr.target=current} '.' field=[aadl2::NamedElement|ID]))*;
-  
- 
+
+ProjectionExpr returns Expr:
+	TermExpr (
+		=> ({ArraySubExpr.expr=current} '[' index=Expr ']')
+		| ({SelectionExpr.target=current} '.' field=[aadl2::NamedElement|ID])
+	)*;
+
 TermExpr returns Expr:
 	=> ({NamedElmExpr} elm=[aadl2::NamedElement|DCID])
 	| {TimeExpr} 'time'

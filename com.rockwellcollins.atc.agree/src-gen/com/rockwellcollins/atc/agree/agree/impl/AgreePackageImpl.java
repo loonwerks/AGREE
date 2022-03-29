@@ -716,14 +716,14 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass arraySubExprEClass = null;
+  private EClass tagExprEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass tagExprEClass = null;
+  private EClass arraySubExprEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -3135,39 +3135,6 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
    * @generated
    */
   @Override
-  public EClass getArraySubExpr()
-  {
-    return arraySubExprEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getArraySubExpr_Expr()
-  {
-    return (EReference)arraySubExprEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getArraySubExpr_Index()
-  {
-    return (EReference)arraySubExprEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EClass getTagExpr()
   {
     return tagExprEClass;
@@ -3193,6 +3160,39 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
   public EAttribute getTagExpr_Tag()
   {
     return (EAttribute)tagExprEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getArraySubExpr()
+  {
+    return arraySubExprEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getArraySubExpr_Expr()
+  {
+    return (EReference)arraySubExprEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getArraySubExpr_Index()
+  {
+    return (EReference)arraySubExprEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -3948,13 +3948,13 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
     createEReference(recordUpdateExprEClass, RECORD_UPDATE_EXPR__KEY);
     createEReference(recordUpdateExprEClass, RECORD_UPDATE_EXPR__EXPR);
 
-    arraySubExprEClass = createEClass(ARRAY_SUB_EXPR);
-    createEReference(arraySubExprEClass, ARRAY_SUB_EXPR__EXPR);
-    createEReference(arraySubExprEClass, ARRAY_SUB_EXPR__INDEX);
-
     tagExprEClass = createEClass(TAG_EXPR);
     createEReference(tagExprEClass, TAG_EXPR__STEM);
     createEAttribute(tagExprEClass, TAG_EXPR__TAG);
+
+    arraySubExprEClass = createEClass(ARRAY_SUB_EXPR);
+    createEReference(arraySubExprEClass, ARRAY_SUB_EXPR__EXPR);
+    createEReference(arraySubExprEClass, ARRAY_SUB_EXPR__INDEX);
 
     selectionExprEClass = createEClass(SELECTION_EXPR);
     createEReference(selectionExprEClass, SELECTION_EXPR__TARGET);
@@ -4144,8 +4144,8 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
     getPropertyExprEClass.getESuperTypes().add(this.getExpr());
     arrayUpdateExprEClass.getESuperTypes().add(this.getExpr());
     recordUpdateExprEClass.getESuperTypes().add(this.getExpr());
-    arraySubExprEClass.getESuperTypes().add(this.getExpr());
     tagExprEClass.getESuperTypes().add(this.getExpr());
+    arraySubExprEClass.getESuperTypes().add(this.getExpr());
     selectionExprEClass.getESuperTypes().add(this.getExpr());
     namedElmExprEClass.getESuperTypes().add(this.getExpr());
     timeExprEClass.getESuperTypes().add(this.getExpr());
@@ -4448,13 +4448,13 @@ public class AgreePackageImpl extends EPackageImpl implements AgreePackage
     initEReference(getRecordUpdateExpr_Key(), theAadl2Package.getNamedElement(), null, "key", null, 0, 1, RecordUpdateExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getRecordUpdateExpr_Expr(), this.getExpr(), null, "expr", null, 0, 1, RecordUpdateExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(arraySubExprEClass, ArraySubExpr.class, "ArraySubExpr", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getArraySubExpr_Expr(), this.getExpr(), null, "expr", null, 0, 1, ArraySubExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getArraySubExpr_Index(), this.getExpr(), null, "index", null, 0, 1, ArraySubExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
     initEClass(tagExprEClass, TagExpr.class, "TagExpr", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTagExpr_Stem(), this.getExpr(), null, "stem", null, 0, 1, TagExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTagExpr_Tag(), theEcorePackage.getEString(), "tag", null, 0, 1, TagExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(arraySubExprEClass, ArraySubExpr.class, "ArraySubExpr", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getArraySubExpr_Expr(), this.getExpr(), null, "expr", null, 0, 1, ArraySubExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getArraySubExpr_Index(), this.getExpr(), null, "index", null, 0, 1, ArraySubExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(selectionExprEClass, SelectionExpr.class, "SelectionExpr", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSelectionExpr_Target(), this.getExpr(), null, "target", null, 0, 1, SelectionExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

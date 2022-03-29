@@ -418,6 +418,9 @@ public class AgreeValidator extends AbstractAgreeValidator {
 
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	protected void checkArgType(Type type) {
 		if (type instanceof PrimType) {
 			PrimType primType = (PrimType) type;
@@ -1118,6 +1121,9 @@ public class AgreeValidator extends AbstractAgreeValidator {
 		}
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	@Check(CheckType.FAST)
 	public void checkReachable(ReachableStatement reachable) {
 		Classifier comp = reachable.getContainingClassifier();

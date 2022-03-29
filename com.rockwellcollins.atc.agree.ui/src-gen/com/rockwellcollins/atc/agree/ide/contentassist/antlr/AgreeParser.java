@@ -88,6 +88,7 @@ public class AgreeParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getIfThenElseExprAccess().getAlternatives(), "rule__IfThenElseExpr__Alternatives");
 			builder.put(grammarAccess.getComponentRefAccess().getAlternatives(), "rule__ComponentRef__Alternatives");
 			builder.put(grammarAccess.getPreDefFnExprAccess().getAlternatives(), "rule__PreDefFnExpr__Alternatives");
+			builder.put(grammarAccess.getProjectionExprAccess().getAlternatives_1(), "rule__ProjectionExpr__Alternatives_1");
 			builder.put(grammarAccess.getTermExprAccess().getAlternatives(), "rule__TermExpr__Alternatives");
 			builder.put(grammarAccess.getArrayLiteralExprAccess().getAlternatives(), "rule__ArrayLiteralExpr__Alternatives");
 			builder.put(grammarAccess.getReservedVarTagAccess().getAlternatives(), "rule__ReservedVarTag__Alternatives");
@@ -260,14 +261,12 @@ public class AgreeParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getRecordUpdateExprAccess().getGroup(), "rule__RecordUpdateExpr__Group__0");
 			builder.put(grammarAccess.getRecordUpdateExprAccess().getGroup_1(), "rule__RecordUpdateExpr__Group_1__0");
 			builder.put(grammarAccess.getRecordUpdateExprAccess().getGroup_1_0(), "rule__RecordUpdateExpr__Group_1_0__0");
-			builder.put(grammarAccess.getArraySubExprAccess().getGroup(), "rule__ArraySubExpr__Group__0");
-			builder.put(grammarAccess.getArraySubExprAccess().getGroup_1(), "rule__ArraySubExpr__Group_1__0");
-			builder.put(grammarAccess.getArraySubExprAccess().getGroup_1_0(), "rule__ArraySubExpr__Group_1_0__0");
 			builder.put(grammarAccess.getTagExprAccess().getGroup(), "rule__TagExpr__Group__0");
 			builder.put(grammarAccess.getTagExprAccess().getGroup_1(), "rule__TagExpr__Group_1__0");
-			builder.put(grammarAccess.getSelectionExprAccess().getGroup(), "rule__SelectionExpr__Group__0");
-			builder.put(grammarAccess.getSelectionExprAccess().getGroup_1(), "rule__SelectionExpr__Group_1__0");
-			builder.put(grammarAccess.getSelectionExprAccess().getGroup_1_0(), "rule__SelectionExpr__Group_1_0__0");
+			builder.put(grammarAccess.getProjectionExprAccess().getGroup(), "rule__ProjectionExpr__Group__0");
+			builder.put(grammarAccess.getProjectionExprAccess().getGroup_1_0(), "rule__ProjectionExpr__Group_1_0__0");
+			builder.put(grammarAccess.getProjectionExprAccess().getGroup_1_0_0(), "rule__ProjectionExpr__Group_1_0_0__0");
+			builder.put(grammarAccess.getProjectionExprAccess().getGroup_1_1(), "rule__ProjectionExpr__Group_1_1__0");
 			builder.put(grammarAccess.getTermExprAccess().getGroup_0(), "rule__TermExpr__Group_0__0");
 			builder.put(grammarAccess.getTermExprAccess().getGroup_0_0(), "rule__TermExpr__Group_0_0__0");
 			builder.put(grammarAccess.getTermExprAccess().getGroup_1(), "rule__TermExpr__Group_1__0");
@@ -551,9 +550,9 @@ public class AgreeParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getArrayUpdateExprAccess().getValueExprsAssignment_1_2_3(), "rule__ArrayUpdateExpr__ValueExprsAssignment_1_2_3");
 			builder.put(grammarAccess.getRecordUpdateExprAccess().getKeyAssignment_1_0_2(), "rule__RecordUpdateExpr__KeyAssignment_1_0_2");
 			builder.put(grammarAccess.getRecordUpdateExprAccess().getExprAssignment_1_0_4(), "rule__RecordUpdateExpr__ExprAssignment_1_0_4");
-			builder.put(grammarAccess.getArraySubExprAccess().getIndexAssignment_1_0_2(), "rule__ArraySubExpr__IndexAssignment_1_0_2");
 			builder.put(grammarAccess.getTagExprAccess().getTagAssignment_1_2(), "rule__TagExpr__TagAssignment_1_2");
-			builder.put(grammarAccess.getSelectionExprAccess().getFieldAssignment_1_0_2(), "rule__SelectionExpr__FieldAssignment_1_0_2");
+			builder.put(grammarAccess.getProjectionExprAccess().getIndexAssignment_1_0_0_2(), "rule__ProjectionExpr__IndexAssignment_1_0_0_2");
+			builder.put(grammarAccess.getProjectionExprAccess().getFieldAssignment_1_1_2(), "rule__ProjectionExpr__FieldAssignment_1_1_2");
 			builder.put(grammarAccess.getTermExprAccess().getElmAssignment_0_0_1(), "rule__TermExpr__ElmAssignment_0_0_1");
 			builder.put(grammarAccess.getTermExprAccess().getArrayAssignment_2_3(), "rule__TermExpr__ArrayAssignment_2_3");
 			builder.put(grammarAccess.getTermExprAccess().getRefAssignment_3_0_0_1(), "rule__TermExpr__RefAssignment_3_0_0_1");

@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +62,7 @@ import org.osate.aadl2.FeatureGroup;
 import org.osate.aadl2.FeatureGroupType;
 import org.osate.aadl2.ModelUnit;
 import org.osate.aadl2.NamedElement;
+import org.osate.aadl2.Namespace;
 import org.osate.aadl2.Port;
 import org.osate.aadl2.Property;
 import org.osate.aadl2.PropertyConstant;
@@ -780,6 +780,17 @@ public class AgreeValidator extends AbstractAgreeValidator {
 		return specs;
 	}
 
+	private Namespace getContainingNamespace(NamedElement namedElement) {
+		EObject container = namedElement.eContainer();
+		while (container != null) {
+			if (container instanceof Namespace) {
+				return (Namespace) container;
+			}
+			container = container.eContainer();
+		}
+		return null;
+	}
+
 	@Check(CheckType.NORMAL)
 	public void checkNoDuplicateIdInSpec(AadlPackage toppkg) {
 
@@ -806,24 +817,22 @@ public class AgreeValidator extends AbstractAgreeValidator {
 
 		// Get the agree specs in the current package
 		List<NamedSpecStatement> specs = getNamedSpecStatements(toppkg);
-		Iterator<NamedSpecStatement> i = specs.iterator();
-		while (i.hasNext()) {
-
-			NamedSpecStatement spec = i.next();
+		for (NamedSpecStatement spec : specs) {
 			String id = spec.getName();
 			// If the current spec name is associated with multiple agree specs, we've found a duplicate
 			if (namedSpecs.get(id).size() > 1) {
-				Iterator<NamedSpecStatement> ii = namedSpecs.get(id).iterator();
-				while (ii.hasNext()) {
-					String pkgName = AadlUtil.getContainingPackage(ii.next()).getName();
-//					// If the specs are from the same package, the error will be generated from the
-//					// NamedElement check.
-//					if (!pkgName.contentEquals(AadlUtil.getContainingPackage(spec).getName())) {
-					error("Duplicate AGREE property ID in package " + pkgName, spec,
-							Aadl2Package.eINSTANCE.getNamedElement_Name());
-//					}
+				for (NamedSpecStatement dup : namedSpecs.get(id)) {
+					if (!spec.equals(dup)) {
+						Namespace namespace = getContainingNamespace(dup);
+						String pkgName = AadlUtil.getContainingPackage(dup).getName();
+						String message = "Duplicate AGREE property ID "
+								+ (namespace != null ? "at " + namespace.getQualifiedName() + '.' + dup.getName()
+										: "in package " + pkgName);
+//						// If the specs are from the same package, the error will be generated from the
+//						// NamedElement check.
+						info(message, spec, Aadl2Package.eINSTANCE.getNamedElement_Name());
+					}
 				}
-				namedSpecs.removeAll(id);
 			}
 		}
 

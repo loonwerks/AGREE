@@ -22,7 +22,7 @@
 <feature
       id="com.rockwellcollins.atc.tcg.feature"
       label="AGREE Test Case Generator"
-      version="2.8.0"
+      version="2.8.0.qualifier"
       provider-name="Collins Aerospace">
 
    <description url="http://www.example.com/description">

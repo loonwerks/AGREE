@@ -272,6 +272,7 @@
 						<completionGoals>org.eclipse.tycho:tycho-versions-plugin:${tycho.version}:update-eclipse-metadata
 							org.apache.maven.plugins:maven-scm-plugin:1.9.5:add
 							org.apache.maven.plugins:maven-scm-plugin:1.9.5:checkin</completionGoals>
+						<updateWorkingCopyVersions>false</updateWorkingCopyVersions>
 					</configuration>
 				</plugin>
 				<plugin>

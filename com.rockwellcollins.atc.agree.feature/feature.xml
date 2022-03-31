@@ -58,6 +58,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    </license>
 
    <includes
+         id="com.rockwellcollins.atc.agree.examples.feature"
+         version="0.0.0"/>
+
+   <includes
          id="com.collins.trustedsystems.z3.feature"
          version="4.8.14"/>
 

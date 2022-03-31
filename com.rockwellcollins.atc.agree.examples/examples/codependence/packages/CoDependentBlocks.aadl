@@ -1,0 +1,97 @@
+---------------------
+-- The top_level system looks like this:
+--
+--  A --request--> B
+--  |              | 
+--   <---response--
+--
+-- There is co-dependence, but it is "reasonable." 
+-- See the comments before the assumption in system B
+---------------------
+
+package CoDependentBlocks
+public
+	with Base_Types;
+	
+	annex agree{**
+		const GOLDEN_ID : int = 2; 
+	**};
+		
+	data Message		
+	end Message;
+	
+	data implementation Message.impl
+		subcomponents
+			ID : data Base_Types::Integer;
+			msg_details : data Base_Types::Integer;
+	end Message.impl;
+	
+	system A
+		features
+			Response_in : in data port Message.impl;
+			Request_out : out data port Message.impl;	
+		annex agree {**
+			assume A_A_1 "After the initial timestep, Response Message ID equals GOLDEN_ID":
+				true -> (Response_in.ID = GOLDEN_ID);
+
+			guarantee G_A_1 "Request Message ID equals GOLDEN_ID":
+				Request_out.ID = GOLDEN_ID;
+
+		**};
+	end A;
+	
+	system B
+		features
+			Request_in : in data port Message.impl;
+			Response_out : out data port Message.impl;	
+		annex agree {**
+			-- If the following assumption is uncommented, all guarantees
+			-- (except the placeholder at the top-level) become false.
+			-- However, as the system is designed and by the lemmas proven at
+			-- the top-level, we know this assumption is true.  There is
+			-- similar behavior with the assumption on A. We can have one but
+			-- not both.  The rationale for this is that in second step (the
+		    -- step after the initial step), the logic established is that
+		    -- guarantee A.G1 holds only if assumption A.A1 holds, guarantee
+		    -- B.G1 holds only if assumption B.A1 holds, and the connections
+		    -- from A.Request_out to B.Request_in and B.Response_out to
+		    -- A.Response_in hold.  Thus, the contract for A depends on the
+		    -- contact for B and the contract for B depends on the contract
+		    -- for A.  Thas at the top level, the truth of both contracts
+		    -- cannot be established as they depend on each other.  Here,
+		    -- AGREE rightly declares that neither can be established and
+		    -- gives a counterexample.  
+		    --  
+--			assume A_B_1 "Request Message ID equals GOLDEN_ID":
+--				Request_in.ID = GOLDEN_ID;
+				
+			guarantee G_B_1 "Response Message ID equals the previous Request Message ID":
+				Response_out.ID = prev(Request_in.ID, 0);
+		**};
+	end B;
+	
+	system top_level
+		annex agree {**
+			guarantee G_Top_0 "Placeholder guarantee to get AGREE to run": true;
+		**};
+	end top_level;
+	
+	system implementation top_level.impl
+		subcomponents
+			A : system A;
+			B : system B;
+		connections
+			A_to_B : port A.Request_out -> B.Request_in;
+			B_to_A : port B.Response_out -> A.Response_in;
+		annex agree{**
+			lemma L_Top_1 "The ID in A's request is always GOLDEN_ID":
+				(A.Request_out.ID = GOLDEN_ID)
+				and (B.Request_in.ID = GOLDEN_ID);
+				
+			lemma L_Top_2 "After the first timestep, the ID in B's response is always GOLDEN_ID":
+				true -> ((B.Response_out.ID = GOLDEN_ID)
+						and (A.Response_in.ID = GOLDEN_ID));
+		**};
+	end top_level.impl;
+	
+end CoDependentBlocks;

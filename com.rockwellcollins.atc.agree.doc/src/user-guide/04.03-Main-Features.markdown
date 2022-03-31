@@ -23,6 +23,16 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
 In this section we walk through the main features involved with the
 AGREE tool suite.
 
+### Import Example Projects
+
+A collection of example projects, including the Toy Example described in this
+guide, have been made available via the AGREE Example Projects Wizard.  To
+access the wizard, selecting the "File" menu -&gt; "New" -&gt;
+"Example…", and selecting the "AGREE Examples" category.  Alternatively, the
+AGREE Example Projects Wizard may be opened by right clicking in the
+"AADL Navigator" to open the context menu and selecting "New" -&gt;
+"Example…", and select the "AGREE Examples" category.
+
 ### Import Existing Projects
 
 To import an existing project into AGREE, users need to first select
@@ -63,8 +73,8 @@ specific project folder to import.
 
 **Note**: Example projects with AGREE contracts in the AADL models can
 be obtained from the
-[SMACCM Git repository](https://github.com/smaccm/smaccm/tree/master/models).
-These files are
+[Formal Methods Workbench](https://github.com/loonwerks/formal-methods-workbench/tree/master/models/agree)
+Git repository.  These files are
 from GitHub and could be retrieved via the Git configuration control
 tool. More information about the Git tool and the download information
 can be found at [Git-SCM](https://git-scm.com/).

@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Examples
+Bundle-SymbolicName: com.rockwellcollins.atc.agree.examples;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: com.rockwellcollins.atc.agree.examples
+Require-Bundle: com.rockwellcollins.atc.agree.ui;bundle-version="[3.1.0,4.0.0)"
+Bundle-Vendor: Collins Aerospace
+Eclipse-BundleShape: dir

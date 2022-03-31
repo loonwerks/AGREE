@@ -1,0 +1,36 @@
+package Steering
+public
+	with Agree_Nodes;
+	with Types;
+
+	system Axle
+		features
+			Target_Tire_Direction: in data port Types::pitch.pitch_impl;
+			Actual_Tire_Direction: out data port Types::pitch.pitch_impl;
+			Speed: in data port Types::speed.speed_impl;
+
+		annex agree {**
+			--		assume G0 "reasonable tire pitch" :
+			--			Agree_Nodes.abs(Target_Tire_Direction.val) <= 0.45;
+			guarantee G_axle_1 "roll limiter" :
+				if (Agree_Nodes::abs(Target_Tire_Direction.val) > 0.20 and Speed.val > 45.0)
+					then
+						Actual_Tire_Direction.val = 0.20
+					else
+						Actual_Tire_Direction.val = Target_Tire_Direction.val;
+		**};
+
+	end Axle;
+
+	system implementation Axle.Axle_Impl
+
+		annex agree {**
+			assign Actual_Tire_Direction = Types::pitch.pitch_impl {
+				 val = if (Agree_Nodes::abs(Target_Tire_Direction.val) > 0.20 and Speed.val > 45.0)
+				 	then 0.20 else Target_Tire_Direction.val
+				 };
+		**};
+
+	end Axle.Axle_Impl;
+
+end Steering;

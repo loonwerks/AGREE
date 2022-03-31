@@ -18,15 +18,31 @@
  * IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE 
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
- -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.rockwellcollins.atc.agree</groupId>
-    <artifactId>com.rockwellcollins.atc.agree.parent</artifactId>
-    <version>2.8.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>com.rockwellcollins.atc.agree.ui</artifactId>
-  <version>3.1.0-SNAPSHOT</version>
-  <packaging>eclipse-plugin</packaging>
+-->
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.rockwellcollins.atc.agree</groupId>
+		<artifactId>com.rockwellcollins.atc.agree.parent</artifactId>
+		<version>2.8.1-SNAPSHOT</version>
+		<relativePath>../..</relativePath>
+	</parent>
+
+	<groupId>com.rockwellcollins.atc.agree</groupId>
+	<artifactId>examples</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>toy_example</module>
+		<module>codependence</module>
+		<module>car</module>
+		<module>microwave</module>
+		<module>bscu</module>
+	</modules>
+
 </project>

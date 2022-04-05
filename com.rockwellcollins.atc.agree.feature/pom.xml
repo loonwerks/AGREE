@@ -28,6 +28,7 @@
   </parent>
   <artifactId>com.rockwellcollins.atc.agree.feature</artifactId>
   <packaging>eclipse-feature</packaging>
+  <version>2.9.1-SNAPSHOT</version>
   
 	<build>
 		<plugins>

@@ -30,28 +30,28 @@
          <project path=""/>
       </example>
       <example
-            exampleURI="/examples/Codependence"
+            exampleURI="/examples/codependence"
             readmeURI="doc/html/README.html"
             category="AGREE Examples"
             name="Codependence">
          <project path=""/>
       </example>
       <example
-            exampleURI="/examples/Car"
+            exampleURI="/examples/car"
             readmeURI="doc/html/README.html"
             category="AGREE Examples"
             name="Car">
          <project path=""/>
       </example>
       <example
-            exampleURI="/examples/Microwave"
+            exampleURI="/examples/microwave"
             readmeURI="doc/html/README.html"
             category="AGREE Examples"
             name="Microwave">
          <project path=""/>
       </example>
       <example
-            exampleURI="/examples/BSCU"
+            exampleURI="/examples/bscu"
             readmeURI="doc/html/README.html"
             category="AGREE Examples"
             name="BSCU">

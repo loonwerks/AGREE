@@ -496,7 +496,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/loonwerks/AGREE.git</connection>
 		<developerConnection>scm:git:https://github.com/loonwerks/AGREE.git</developerConnection>
-		<tag>2.9.0-RELEASE</tag>
+		<tag>2.9.1-RELEASE</tag>
 	</scm>
 
 </project>

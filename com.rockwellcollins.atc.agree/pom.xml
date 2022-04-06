@@ -27,6 +27,6 @@
     <version>2.9.1</version>
   </parent>
   <artifactId>com.rockwellcollins.atc.agree</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.0.2</version>
   <packaging>eclipse-plugin</packaging>
 </project>

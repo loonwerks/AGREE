@@ -91,6 +91,7 @@ import com.rockwellcollins.atc.agree.agree.WheneverImpliesStatement
 import com.rockwellcollins.atc.agree.agree.WheneverOccursStatement
 import org.eclipse.xtext.formatting2.IFormattableDocument
 import org.osate.xtext.aadl2.properties.formatting2.PropertiesFormatter
+import com.rockwellcollins.atc.agree.agree.LiftContractStatement
 
 class AgreeFormatter extends PropertiesFormatter {
 	
@@ -183,6 +184,12 @@ class AgreeFormatter extends PropertiesFormatter {
 		
 //		format(lemmastatement.getExpr(), document);
 		format(lemmastatement.getPattern(), document);
+	}
+	
+	def dispatch void format(LiftContractStatement liftcontractstatement, extension IFormattableDocument document) {
+		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
+		
+		liftcontractstatement.regionFor.keyword(";").prepend[noSpace]
 	}
 
 	def dispatch void format(AlwaysStatement alwaysstatement, extension IFormattableDocument document) {

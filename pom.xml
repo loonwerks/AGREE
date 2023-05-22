@@ -28,8 +28,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 		<!-- Tycho settings -->
 		<tycho.version>2.4.0</tycho.version>
 		<tycho-extras.version>2.4.0</tycho-extras.version>
@@ -39,7 +39,7 @@
 		<systemProperties />
 		<tycho.testArgLine />
 		<eclipse.mirror>http://download.eclipse.org</eclipse.mirror>
-		<xtext-version>2.20.0</xtext-version>
+		<xtext-version>2.27.0</xtext-version>
 	</properties>
 
 	<modules>
@@ -439,12 +439,12 @@
 		<repository>
 			<id>Eclipse</id>
 			<layout>p2</layout>
-			<url>${eclipse.mirror}/releases/2021-03/</url>
+			<url>${eclipse.mirror}/releases/2022-06/</url>
 		</repository>
 		<repository>
 			<id>Osate2</id>
 			<layout>p2</layout>
-			<url>https://osate-build.sei.cmu.edu/download/osate/stable/latest/updates/</url>
+			<url>https://osate-build.sei.cmu.edu/download/osate/stable/2.12.0/updates/</url>
 		</repository>
 		<repository>
 			<id>codehaus-snapshots</id>

@@ -26,6 +26,6 @@ Require-Bundle: com.google.guava,
  org.apache.log4j,
  org.junit;bundle-version="4.13.0",
  org.osate.testsupport;bundle-version="3.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.rockwellcollins.atc.agree.tests;x-internal=true
 Bundle-Activator: com.rockwellcollins.atc.agree.tests.Activator

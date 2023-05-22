@@ -4,7 +4,7 @@ Bundle-Name: AADL Simulator AGREE UI
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator.agree.ui;singleton:=true
 Bundle-Version: 2.8.2.qualifier
 Bundle-Vendor: The University of Alabama in Huntsville
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: edu.uah.rsesc.aadlsimulator.ui;bundle-version="[2.8.0,3.0.0)",
  edu.uah.rsesc.aadlsimulator;bundle-version="[2.8.0,3.0.0)",
  edu.uah.rsesc.aadlsimulator.agree;bundle-version="[2.8.0,3.0.0)",

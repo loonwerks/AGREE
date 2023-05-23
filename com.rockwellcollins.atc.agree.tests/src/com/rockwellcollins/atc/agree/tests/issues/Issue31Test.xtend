@@ -172,17 +172,17 @@ class Issue31Test extends XtextTest {
 		
 			system Sensor1
 				features
-					Output : out data port Position.impl;
+					Output : out data port Sensor_Data.impl;
 			end Sensor1;
 		
 			system Sensor2
 				features
-					Output : out data port Position.impl;
+					Output : out data port Sensor_Data.impl;
 			end Sensor2;
 		
 			system Sensor3
 				features
-					Output : out data port Position.impl;
+					Output : out data port Sensor_Data.impl;
 			end Sensor3;
 		
 			-------------------------------------

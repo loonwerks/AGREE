@@ -28,11 +28,13 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!--
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
+		-->
 		<!-- Tycho settings -->
-		<tycho.version>2.4.0</tycho.version>
-		<tycho-extras.version>2.4.0</tycho-extras.version>
+		<tycho.version>2.7.3</tycho.version>
+		<tycho-extras.version>2.7.3</tycho-extras.version>
 		<!-- Define overridable properties for tycho-surefire-plugin -->
 		<platformSystemProperties />
 		<moduleProperties />
@@ -184,6 +186,8 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
+					<executionEnvironment>JavaSE-17</executionEnvironment>
+					<resolveWithExecutionEnvironmentConstraints>false</resolveWithExecutionEnvironmentConstraints>
 					<target>
 						<artifact>
 							<groupId>com.rockwellcollins.atc.agree</groupId>
@@ -191,6 +195,7 @@
 							<version>${project.parent.version}</version>
 						</artifact>
 					</target>
+					<ignoreTychoRepositories>true</ignoreTychoRepositories>
 					<environments>
 						<environment>
 							<os>win32</os>
@@ -444,7 +449,7 @@
 		<repository>
 			<id>Osate2</id>
 			<layout>p2</layout>
-			<url>https://osate-build.sei.cmu.edu/download/osate/stable/2.12.0/updates/</url>
+			<url>https://osate-build.sei.cmu.edu/download/osate/stable/2.12.0-vfinal/updates/</url>
 		</repository>
 		<repository>
 			<id>codehaus-snapshots</id>

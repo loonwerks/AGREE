@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target includeMode="feature" name="com.rockwellcollins.atc.agree.target" sequenceNumber="24">
+<target includeMode="feature" name="com.rockwellcollins.atc.agree.target" sequenceNumber="25">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>

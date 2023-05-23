@@ -45,30 +45,30 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS
    </license>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="com.collins.trustedsystems.jkindapi" version="4.0.0" match="compatible"/>
       <import plugin="com.rockwellcollins.atc.agree"/>
       <import plugin="com.rockwellcollins.atc.agree.analysis"/>
+      <import plugin="com.rockwellcollins.atc.tcg"/>
       <import plugin="edu.uah.rsesc.aadlsimulator"/>
       <import plugin="edu.uah.rsesc.aadlsimulator.ui"/>
-      <import plugin="org.eclipse.swt"/>
-      <import plugin="org.eclipse.jface"/>
-      <import plugin="org.eclipse.equinox.registry"/>
-      <import plugin="org.eclipse.osgi"/>
-      <import plugin="org.osate.aadl2" version="4.0.0" match="compatible"/>
-      <import plugin="org.osate.annexsupport" version="1.0.1"/>
       <import plugin="edu.uah.rsesc.aadlsimulator.xtext"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.osate.workspace" version="4.0.0" match="compatible"/>
-      <import plugin="org.osate.aadl2.modelsupport" version="2.0.0"/>
-      <import plugin="com.collins.trustedsystems.jkindapi" version="4.0.0" match="compatible"/>
       <import plugin="org.eclipse.core.expressions"/>
-      <import plugin="org.eclipse.e4.core.contexts"/>
-      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.debug.ui"/>
-      <import plugin="com.rockwellcollins.atc.tcg"/>
+      <import plugin="org.eclipse.e4.core.contexts"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.equinox.registry"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.xtext.ui"/>
+      <import plugin="org.osate.aadl2" version="5.0.0" match="compatible"/>
+      <import plugin="org.osate.aadl2.modelsupport" version="7.0.0" match="compatible"/>
+      <import plugin="org.osate.annexsupport" version="4.0.1" match="compatible"/>
+      <import plugin="org.osate.workspace" version="4.0.0" match="compatible"/>
    </requires>
 
    <plugin

@@ -361,6 +361,26 @@
 										</versionRange>
 										<goals>
 											<goal>compile</goal>
+											<goal>validate-classpath</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.eclipse.tycho
+										</groupId>
+										<artifactId>
+											tycho-ds-plugin
+										</artifactId>
+										<versionRange>
+											[0.23.1,)
+										</versionRange>
+										<goals>
+											<goal>declarative-services</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

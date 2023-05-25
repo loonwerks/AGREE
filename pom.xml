@@ -148,18 +148,24 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-source-feature-plugin</artifactId>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<executions>
 					<execution>
-						<id>source-feature</id>
-						<phase>package</phase>
+						<id>plugin-source</id>
 						<goals>
-							<goal>source-feature</goal>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>feature-source</id>
+						<goals>
+							<goal>feature-source</goal>
 						</goals>
 						<configuration>
 							<excludes>
+								<feature id="com.rockwellcollins.atc.agree.examples.feature" />
 								<feature id="com.collins.trustedsystems.z3.feature" />
 								<feature id="com.collins.trustedsystems.jkindapi.feature" />
 							</excludes>

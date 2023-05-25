@@ -201,7 +201,6 @@
 							<version>${project.parent.version}</version>
 						</artifact>
 					</target>
-					<ignoreTychoRepositories>true</ignoreTychoRepositories>
 					<environments>
 						<environment>
 							<os>win32</os>

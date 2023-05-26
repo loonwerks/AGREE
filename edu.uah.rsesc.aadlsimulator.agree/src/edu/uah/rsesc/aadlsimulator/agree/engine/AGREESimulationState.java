@@ -53,7 +53,6 @@ import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AnnexLibrary;
 import org.osate.aadl2.DefaultAnnexLibrary;
 import org.osate.aadl2.instance.InstanceObject;
-import org.osate.workspace.WorkspacePlugin;
 
 import com.rockwellcollins.atc.agree.agree.AgreeContract;
 import com.rockwellcollins.atc.agree.agree.AgreeContractLibrary;
@@ -726,7 +725,8 @@ public class AGREESimulationState implements SimulationEngineState, LustreProgra
 					getAadlFiles(((IContainer)res).members(), aadlFiles);
 				} else if(res instanceof IFile) {
 					final IFile file = (IFile)res;
-					if(WorkspacePlugin.SOURCE_FILE_EXT.equalsIgnoreCase(file.getFileExtension())) {
+					if (org.osate.aadl2.modelsupport.FileNameConstants.SOURCE_FILE_EXT
+							.equalsIgnoreCase(file.getFileExtension())) {
 						aadlFiles.add(file);
 					}
 				}

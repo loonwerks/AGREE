@@ -42,7 +42,7 @@ import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.agree.SelectionExpr;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import com.rockwellcollins.atc.agree.analysis.AgreeException;
-import com.rockwellcollins.atc.agree.validation.AgreeJavaValidator;
+import com.rockwellcollins.atc.agree.validation.AgreeValidator;
 
 public class Util {
 
@@ -74,7 +74,7 @@ public class Util {
 
 	public static Double getDoubleValue(Expr expr) {
 		Double result = Double.valueOf(0.0);
-		assert (AgreeJavaValidator.exprIsConst(expr));
+		assert (AgreeValidator.exprIsConst(expr));
 		if (expr instanceof NamedElement) {
 			if (expr instanceof ConstStatement) {
 				result = getDoubleValue(((ConstStatement) expr).getExpr());

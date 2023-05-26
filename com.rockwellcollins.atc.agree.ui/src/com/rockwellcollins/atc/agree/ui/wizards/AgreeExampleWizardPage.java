@@ -93,7 +93,6 @@ public class AgreeExampleWizardPage extends WizardPage {
 			// Nothing to do.
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			treeContent = (PluginInfo) newInput;
@@ -113,7 +112,6 @@ public class AgreeExampleWizardPage extends WizardPage {
 			}
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public Object getParent(Object element) {
 			if (element instanceof PluginInfo) {
@@ -201,7 +199,7 @@ public class AgreeExampleWizardPage extends WizardPage {
 							try {
 								File f = new File(selectedProject.readmeURI.getPath());
 								if (f.exists()) {
-									browser.setUrl(f.toURL().toString());
+									browser.setUrl(f.toURI().toURL().toString());
 								} else {
 									throw new IOException("Readme file not found");
 								}

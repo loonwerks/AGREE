@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AADL Simulator UI
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator.ui;singleton:=true
-Bundle-Version: 2.9.0
+Bundle-Version: 2.9.1.qualifier
 Bundle-Vendor: The University of Alabama in Huntsville
 Bundle-Classpath: .,
  lib/jogamp-fat.jar,
@@ -38,10 +38,10 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Service-Component: components/DefaultSimulationUIService.xml
-Export-Package: edu.uah.rsesc.aadlsimulator.ui;version="2.9.0",
- edu.uah.rsesc.aadlsimulator.ui.ext;version="2.9.0",
- edu.uah.rsesc.aadlsimulator.ui.launch;version="2.9.0",
- edu.uah.rsesc.aadlsimulator.ui.services;version="2.9.0"
+Export-Package: edu.uah.rsesc.aadlsimulator.ui;version="2.9.1",
+ edu.uah.rsesc.aadlsimulator.ui.ext;version="2.9.1",
+ edu.uah.rsesc.aadlsimulator.ui.launch;version="2.9.1",
+ edu.uah.rsesc.aadlsimulator.ui.services;version="2.9.1"
 Bundle-Activator: edu.uah.rsesc.aadlsimulator.ui.Activator
 Import-Package: org.apache.log4j;version="[1.2.15,2.0.0)",
  org.osgi.service.event;version="[1.0.0,2.0.0)"

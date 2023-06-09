@@ -36,10 +36,10 @@ import org.osate.aadl2.ComponentImplementation
 import org.osate.aadl2.instantiation.InstantiateModel
 import org.osate.aadl2.modelsupport.errorreporting.AnalysisErrorReporterManager
 import org.osate.aadl2.modelsupport.errorreporting.QueuingAnalysisErrorReporter
+import org.osate.testsupport.TestHelper
 
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder
 import com.rockwellcollins.atc.agree.tests.AgreeUiInjectorProvider
-import com.rockwellcollins.atc.agree.tests.testsupport.TestHelper
 import com.rockwellcollins.atc.agree.analysis.AgreeException
 import com.rockwellcollins.atc.agree.analysis.ast.AgreeAADLConnection
 

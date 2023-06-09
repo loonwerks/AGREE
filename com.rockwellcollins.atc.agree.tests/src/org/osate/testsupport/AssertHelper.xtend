@@ -1,4 +1,4 @@
-package com.rockwellcollins.atc.agree.tests.testsupport
+package org.osate.testsupport
 
 import com.google.inject.Inject
 import com.itemis.xtext.testing.FluentIssueCollection

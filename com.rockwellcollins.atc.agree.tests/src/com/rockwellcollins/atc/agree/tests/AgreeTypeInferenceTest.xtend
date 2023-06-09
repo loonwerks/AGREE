@@ -39,6 +39,7 @@ import org.osate.aadl2.DataPort
 import org.osate.aadl2.DataType
 import org.osate.aadl2.DefaultAnnexSubclause
 import org.osate.aadl2.SystemType
+import org.osate.testsupport.TestHelper
 
 import com.rockwellcollins.atc.agree.AgreeTypeSystem
 import com.rockwellcollins.atc.agree.agree.AgreeContract
@@ -47,7 +48,6 @@ import com.rockwellcollins.atc.agree.agree.EqStatement
 import com.rockwellcollins.atc.agree.agree.GetPropertyExpr
 import com.rockwellcollins.atc.agree.agree.NamedElmExpr
 
-import com.rockwellcollins.atc.agree.tests.testsupport.TestHelper
 
 @RunWith(XtextRunner)
 @InjectWith(AgreeInjectorProvider)

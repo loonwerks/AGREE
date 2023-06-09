@@ -43,6 +43,8 @@ import org.osate.aadl2.SystemSubcomponent
 import org.osate.aadl2.SystemType
 import org.osate.aadl2.instance.SystemInstance
 import org.osate.aadl2.instantiation.InstantiateModel
+import org.osate.testsupport.TestHelper
+import org.osate.testsupport.AssertHelper
 
 import com.rockwellcollins.atc.agree.AgreeTypeSystem
 import com.rockwellcollins.atc.agree.AgreeTypeSystem.Prim
@@ -61,8 +63,6 @@ import com.rockwellcollins.atc.agree.analysis.ast.AgreeASTBuilder
 import com.rockwellcollins.atc.agree.analysis.translation.LustreContractAstBuilder
 
 import com.rockwellcollins.atc.agree.tests.AgreeUiInjectorProvider
-import com.rockwellcollins.atc.agree.tests.testsupport.AssertHelper
-import com.rockwellcollins.atc.agree.tests.testsupport.TestHelper
 
 import static extension org.osate.testsupport.AssertHelper.assertWarning
 

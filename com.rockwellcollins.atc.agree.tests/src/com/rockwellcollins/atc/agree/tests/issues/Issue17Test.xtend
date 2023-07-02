@@ -44,7 +44,7 @@ import org.osate.aadl2.SystemType
 import org.osate.aadl2.instance.SystemInstance
 import org.osate.aadl2.instantiation.InstantiateModel
 import org.osate.testsupport.TestHelper
-import org.osate.testsupport.AssertHelper
+import com.rockwellcollins.atc.agree.tests.issues.AssertHelper
 
 import com.rockwellcollins.atc.agree.AgreeTypeSystem
 import com.rockwellcollins.atc.agree.AgreeTypeSystem.Prim

@@ -747,6 +747,7 @@ public class AgreeTypeSystem {
 				// Circular type inference
 				return Prim.ErrorTypeDef;
 			}
+			try {
 			seenExprs.add(expr);
 
 			if (expr instanceof SelectionExpr) {
@@ -1002,6 +1003,9 @@ public class AgreeTypeSystem {
 
 				}
 			}
+		} finally {
+			seenExprs.remove(expr);
+		}
 			return Prim.ErrorTypeDef;
 		}
 

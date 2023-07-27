@@ -1,0 +1,131 @@
+name: Push and publish release to GitHub
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  parse_tag:
+    runs-on: ubuntu-latest
+    outputs: 
+      version: ${{ steps.tag_ref.outputs._0 }}
+      suffix: ${{ steps.tag_ref.outputs._1 }}
+    steps:
+    - name: Get version number
+      uses: jungwinter/split@v2
+      id: tag_ref
+      with:
+        msg: ${{ github.ref_name }}
+        separator: '-'
+
+  verify:
+    runs-on: ubuntu-latest
+    needs: parse_tag
+    if: ${{ needs.parse_tag.outputs.suffix == 'RELEASE' }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set Up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Install Dependencies
+      run: sudo apt-get install -y pandoc
+    - name: Build release
+      run: mvn verify -Pbuild-release
+    - name: Upload p2 repo artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: p2-artifact
+        path: ${{ github.workspace }}/com.rockwellcollins.atc.agree.site/target/repository/
+
+  parse_version:
+    runs-on: ubuntu-latest
+    needs: verify
+    outputs:
+      version: ${{ env.RELEASE_VERSION }}
+    steps:
+    - name: Download p2 repo artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: p2-artifact
+        path: ${{ github.workspace }}/p2-artifact
+    - name: Parse version number
+      run: echo "RELEASE_VERSION=$(ls ${{ github.workspace }}/p2-artifact/features/com.rockwellcollins.atc.agree.feature_*.jar | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]")" >> $GITHUB_ENV
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [verify, parse_tag, parse_version]
+    if: ${{ needs.parse_tag.outputs.version == needs.parse_version.outputs.version }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set Up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Install Eclipse
+      run: sudo snap install --classic eclipse
+    - name: Checkout current update site
+      uses: actions/checkout@v3
+      with:
+        repository: loonwerks/AGREE-Updates
+        path: AGREE-Updates
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
+        persist-credentials: true
+    - name: Download p2 repo artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: p2-artifact
+        path: ${{ github.workspace }}/p2-artifact
+    - name: Rename p2-artifact and move to release directory
+      run: |
+          mv ${{ github.workspace }}/p2-artifact ${{ github.workspace }}/${{ needs.parse_tag.outputs.version }}
+          mkdir -p ${{ github.workspace }}/AGREE-Updates/releases
+          mv ${{ github.workspace }}/${{ needs.parse_tag.outputs.version }} ${{ github.workspace }}/AGREE-Updates/releases
+    - name: Build with Ant
+      run: java -jar $(find /snap/eclipse -name org.eclipse.equinox.launcher_*.jar) -application org.eclipse.ant.core.antRunner -buildfile  ${{ github.workspace }}/com.rockwellcollins.atc.agree.site/packaging-p2composite.ant p2.composite.add.release -Dcomposite.base.dir=${{ github.workspace }}/AGREE-Updates -Dfull.version=${{ needs.parse_tag.outputs.version }}
+    - name: Push new release to AGREE-Updates
+      run: | 
+          cd AGREE-Updates
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'GH_Actions@users.noreply.github.com'
+          git add .
+          git commit -m 'Release ${{ needs.parse_tag.outputs.version }}'
+          git push
+          
+  release:
+    runs-on: ubuntu-latest
+    needs: [verify, parse_tag, parse_version]
+    if: ${{ needs.parse_tag.outputs.version == needs.parse_version.outputs.version }}
+    steps:
+    - name: Get current date
+      id: date
+      run: echo "date=$(date +'%B %e, %Y')" >> $GITHUB_ENV
+    - name: Download p2 repo artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: p2-artifact
+    - name: Zip Release
+      uses: thedoctor0/zip-release@0.7.1
+      with:
+        type: 'zip'
+        filename: 'com.rockwellcollins.atc.agree.repository-${{ needs.parse_tag.outputs.version }}.zip'
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        name: Release ${{ needs.parse_tag.outputs.version }}
+        artifacts: 'com.rockwellcollins.atc.agree.repository-${{ needs.parse_tag.outputs.version }}.zip'
+        body: |
+              # Version ${{ needs.parse_tag.outputs.version }}
+
+              -   GIT tag: ${{ github.ref_name }}
+              -   Release date: ${{ env.date }}
+              -   OSATE version: 2.12.0
+              -   Eclipse base version: 2022-06
+              -   Java version: Java 17
+              -   Eclipse Update-Site: https://loonwerks.github.io/AGREE-Updates/releases/${{ needs.parse_tag.outputs.version }}
+        generateReleaseNotes: true

@@ -1,0 +1,163 @@
+name: Push snapshot to Github Pages
+
+on:
+  workflow_run:
+    workflows: [Build and Test Project]
+    types: [completed]
+    branches: [master]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success'}}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set Up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Install Dependencies
+      run: sudo apt-get install -y pandoc
+    - name: Build snapshot
+      run: mvn verify -Pbuild-snapshot
+    - name: Upload p2 repo artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: p2-artifact
+        path: ${{ github.workspace }}/com.rockwellcollins.atc.agree.site/target/repository/
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: verify
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Install Eclipse
+      run: sudo snap install --classic eclipse
+    - name: Checkout current update site
+      uses: actions/checkout@v3
+      with:
+        repository: loonwerks/AGREE-Updates
+        path: AGREE-Updates
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
+        persist-credentials: true
+    - name: Download p2 repo artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: p2-artifact
+        path: ${{ github.workspace }}/p2-artifact
+    - name: Parse version number
+      run: echo "SNAPSHOT_VERSION=$(ls ${{ github.workspace }}/p2-artifact/features/com.rockwellcollins.atc.agree.feature_*.jar | grep -o "[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\{12\\}")" >> $GITHUB_ENV
+    - name: Rename p2-artifact and move to snapshot directory
+      run: |
+          mv ${{ github.workspace }}/p2-artifact ${{ github.workspace }}/${{ env.SNAPSHOT_VERSION }}
+          mkdir -p ${{ github.workspace }}/AGREE-Updates/snapshots
+          mv ${{ github.workspace }}/${{ env.SNAPSHOT_VERSION }} ${{ github.workspace }}/AGREE-Updates/snapshots
+    - name: Build with Ant
+      run: java -jar $(find /snap/eclipse -name org.eclipse.equinox.launcher_*.jar) -application org.eclipse.ant.core.antRunner -buildfile  ${{ github.workspace }}/com.rockwellcollins.atc.agree.site/packaging-p2composite.ant p2.composite.add.snapshot -Dcomposite.base.dir=${{ github.workspace }}/AGREE-Updates -Dfull.version=${{ env.SNAPSHOT_VERSION }}
+    - name: Push new snapshot to AGREE-Updates
+      run: | 
+          cd AGREE-Updates
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'GH_Actions@users.noreply.github.com'
+          git add .
+          git commit -m 'Snapshot ${{ env.SNAPSHOT_VERSION }}'
+          git push
+
+  find_snapshots_to_delete:
+    runs-on: ubuntu-latest
+    needs: publish
+    outputs:
+      delete_snapshots: ${{ steps.python_script.outputs.delete_snapshots }}
+      matrix: ${{ steps.python_script.outputs.snapshots_to_delete }}
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 
+    - name: Set Up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    - name: Checkout current update site
+      uses: actions/checkout@v3
+      with:
+        repository: loonwerks/AGREE-Updates
+        path: AGREE-Updates
+    - name: Install GitPython
+      run: pip install GitPython
+    - name: Run python script
+      uses: jannekem/run-python-script-action@v1
+      id: python_script
+      with:
+        script: |
+          import os
+          import git
+          import json
+          repo = git.Repo(os.getcwd())
+          tags = str(repo.tags).split(",")
+          path = os.path.join(os.getcwd(), "AGREE-Updates/snapshots")
+          snapshots = sorted([f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))])
+          snapshots_to_delete = list()
+          for i in range(len(snapshots)-10):
+            tag_protected = False
+            for tag in tags:
+              tag = tag[tag.find("\"refs/tags/")+11:tag.rfind("\"")]
+              if (snapshots[i] + "-SNAPSHOT") == tag:
+                tag_protected = True
+                break 
+            if not tag_protected:
+              set_output("delete_snapshots", "true")
+              snapshots_to_delete.append(snapshots[i])
+          set_output("snapshots_to_delete", json.dumps(snapshots_to_delete))
+
+  delete_snapshots:
+    runs-on: ubuntu-latest
+    needs: find_snapshots_to_delete
+    if: ${{ needs.find_snapshots_to_delete.outputs.delete_snapshots == 'true' }}
+    strategy:
+      matrix:
+        version: ${{ fromJson(needs.find_snapshots_to_delete.outputs.matrix) }}
+      max-parallel: 1
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set Up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Install Eclipse
+      run: sudo snap install --classic eclipse
+    - name: Checkout current update site
+      uses: actions/checkout@v3
+      with:
+        repository: loonwerks/AGREE-Updates
+        path: AGREE-Updates
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
+        persist-credentials: true
+    - name: Install git filter repo
+      run: sudo apt-get install git-filter-repo
+    - name: Push changes to git
+      run: |
+          cd AGREE-Updates
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'GH_Actions@users.noreply.github.com'
+          java -jar $(find /snap/eclipse -name org.eclipse.equinox.launcher_*.jar) -application org.eclipse.ant.core.antRunner -buildfile  ${{ github.workspace }}/com.rockwellcollins.atc.agree.site/packaging-p2composite.ant p2.composite.remove.snapshot -Dcomposite.base.dir=${{ github.workspace }}/AGREE-Updates -Dfull.version=${{ matrix.version }}
+          git add .
+          git commit -m 'Delete Snapshot ${{ matrix.version }}'
+          git push
+          git filter-repo --invert-paths --path snapshots/${{ matrix.version }} --force
+          git remote add origin git@github.com:loonwerks/AGREE-Updates
+          git push origin --force --all
+  

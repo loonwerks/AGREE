@@ -138,83 +138,44 @@ the issue base the branch might be named 'fix-issue-x' where x is the
 sequence number assigned to the issue.
 
 Tags are typically reserved for releases, but may be used to mark
-special points in the development process.
+special points in the development process (i.e. snapshot tags).
 
-### Continuous Integration / Continuous Deployment
+## Continuous Integration / Continuous Deployment
+The CI/CD pipeline is carried out via GitHub actions. There are three different workflows defined. They are as follows:
+   1. "Build and Test Project" (defined in [.github/workflows/build_and_test.yml](https://github.com/loonwerks/AGREE/blob/main/.github/workflows/build_and_test.yml))
+      - Trigger(s): 
+         * push is made to master 
+         * pull request is opened, reopened, or editted
+      - Job(s):
+         * *verify*: verifies that the project builds without errors and all tests pass by running the command `mvn clean verify` 
+   2. "Push snapshot to Github Pages" (defined in [.github/workflows/snapshot.yml](https://github.com/loonwerks/AGREE/blob/main/.github/workflows/snapshot.yml))
+      - Trigger(s):
+         * "Build and Test Project" successfully completes on master branch
+      - Job(s):
+         * *verify*: verifies that the project builds without errors all tests pass, and build is a snapshot by running the command `mvn verify -Pbuild-snapshot` 
+         * *publish*: publishes the p2 repo of the current build to [AGREE-Updates/snapshots/x.x.x.yyyyMMddHHmm](https://github.com/loonwerks/AGREE-Updates)
+         * *find_snapshots_to_delete*: finds snapshots that should be deleted; the repo only keeps the 10 latest snapshots and those that have a tag
+         * *delete_snapshots*: deletes the snapshots indicated in *find_snapshots_to_delete*
+   3. "Push and publish release to GitHub" (defined in [.github/workflows/release.yml](https://github.com/loonwerks/AGREE/blob/main/.github/workflows/release.yml))
+      - Trigger(s):
+         * a tag was pushed
+      - Job(s): 
+         * *parse_tag*: parses the tag "x.x.x-RELEASE" into "x.x.x" and "RELEASE"
+         * *verify*: if the suffix of tag is "-RELEASE", verifies that the project builds without errors all tests pass, and build is a release by running the command `mvn verify -Pbuild-release` 
+         * *parse_version*: parses the version from the built p2 repo
+         * *publish*: if the tag and version of the built p2 repo match, publishes the p2 repo of the current build to [AGREE-Updates/releases/x.x.x](https://github.com/loonwerks/AGREE-Updates)
+         * *release*: if the tag and version of the built p2 repo match, generates a release on the AGREE repo and attaches the p2 repo as an artifact
 
-AGREE continuous integration is carried out at
-[Amazon CodeBuild](https://aws.amazon.com).  Builds of developmental
-snapshots are uploaded to the AWS bucket
-[AGREE snapshots](http://ca-trustedsystems-dev-us-east-1.s3-website-us-east-1.amazonaws.com/p2/snapshots/agree/) page.
-Additionally, CodeBuild conducts builds and tests in response to pull
-requests against the AGREE repository.
+**Important Details about Snapshot Tags** 
+- The tag should be in the format x.x.x.yyyyMMddHHmm-SNAPSHOT where x is the major version number, y is the minor version number, and z is the patch version number.
+- Make the tag by using the following git commands:
+   1. `git tag x.x.x.yyyyMMddHHmm-SNAPSHOT`
+   2. `git push origin x.x.x.yyyyMMddHHmm-SNAPSHOT`
+- The tag number should match an already existing snapshot.
 
-### Releases (Updated!)
-
-Since AGREE has converted to the [Semantic
-Versioning](https://semver.org/) model, each of the plugins that
-compose the AGREE, TCG, and AADL Simulator features now have
-individual version numbers that reflect the updates to that plugin.
-Thus, they are no longer synchronized to the feature versions.
-
-The AGREE code base has been modified to enable Eclipse plugin API
-analysis which will result in error messages and warnings (in the
-"Problems" tab of the IDE) to guide developers as to how and when to
-update version numbers and apply API tags such as @since to added or
-modified elements.  The Oomph version management analysis has also
-been enabled to assist with version number markings.
-
-The process for a release updates master branch with the release
-version number, commits the master branch version number updates,
-builds the release version, updates the version numbering to the new
-development snapshot numbers, and finally commits the master branch
-with the new development version numbering.  To accomplish the release
-preparation, the AGREE release process applies the [Tycho Release
-Workflow](https://wiki.eclipse.org/Tycho/Release_Workflow) to help
-automate the process.  The steps in the release workflow are as
-follows:
-
-1. Prepare for the release by running the release workflow plugin:
-
-   `mvn release:prepare`
-
-   During this process maven will ask to confirm all of the plugin and
-   feature versions and for the tag to applied to the
-   release. Release tags shall be of the form 'x.y.z-RELEASE' where
-   `x` is the major version number, `y` is the minor version number,
-   and `z` is the patch version number.
-
-1. Ordinarily one would expect to actually perform the release using
-   the customary `mvn release:perform -Dgoals="clean verify"` command.
-   However, this appears to run into difficulty fetching the appropriate
-   tag to build.  Instead do the following:
-
-   `git checkout x.x.x-RELEASE`
-   `mvn clean verify`
-
-   where `x.x.x` is the version number to be released.
-
-1. Commit the release binaries into the companion releases repository at
-   git@github.com:loonwerks/AGREE-Updates.git:
-
-   `cp -r <path to built AGREE release>/repository/target/repository agree-<release-version-number>`
-
-   Update the contents of the compositeArtifacts.xml and compositeContent.xml files.
-
-   `git add ...`
-
-   `git commit -m "Add AGREE <release-version-number>"`
-
-1. Finally, push the update stable branch to the origin repository:
-
-   `git push`
-
-Note that the previous instructions assume that the developer has set
-up appropriate ssh keys such that interactive query for authentication
-is necessary.  If this is not done, the `release:prepare` and
-`release:perform` steps will apparently just hang when such
-interaction is required as they are in fact headless operations.
-Alternatively to setting up ssh keys, the developer may add necessary
-authenication information to the maven settings as described in [Tycho
-Release Workflow -- Configure the
-SCM](https://wiki.eclipse.org/Tycho/Release_Workflow#Configure_the_SCM).
+**Important Details about Release Tags** 
+- The tag should be in the format x.x.x-RELEASE where x is the major version number, y is the minor version number, and z is the patch version number.
+- Make the tag by using the following git commands:
+   1. `git tag x.x.x-RELEASE`
+   2. `git push origin x.x.x-RELEASE`
+- The version number of com.rockwellcollins.atc.agree needs to match the tag number when triggering a release.

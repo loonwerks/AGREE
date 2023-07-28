@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<project name="project">
+
+	<!--
+	This is the directory layout:
+
+	AGREE-Updates
+	├── releases
+    |   ├── 2.4.0
+	|	|   ├── features ...
+	|	|   ├── plugins ...
+	|	|   ├── ...
+	|	|   ├── content.jar
+	|	|   └── artifacts.jar
+	|	├── ...
+    |   ├── 3.1.0 ...
+    |   ├── 4.0.0 ...
+	|	├──	compositeArtifacts.xml
+	|	└── compositeContent.xml
+    ├── snapshots
+    |   ├── 2.4.0-v20200121-1005
+	|	|   ├── features ...
+	|	|   ├── plugins ...
+	|	|   ├── ...
+	|	|   ├── content.jar
+	|	|   └── artifacts.jar
+	|	├── ...
+    |   ├── 4.0.0-v20230415-0159 ...
+    |   ├── 4.0.0-v20230428-0835 ...
+	|	├──	compositeArtifacts.xml
+	|	└── compositeContent.xml
+	├──	compositeArtifacts.xml
+	└── compositeContent.xml
+	-->
+
+	<!--
+		full.version	 				The current version of AGREE (default 1.0.0)
+		composite.base.dir				The directory of the main composite (default "target")
+		releases.path					The directory of the releases composite (default "releases")
+		snapshots.path					The directory of the releases composite (default "snapshots")
+	-->
+	<target name="compute.child.repository.data">
+		<property name="main.site.composite.name"
+			value="AGREE All Versions" />
+		<property name="releases.site.composite.name"
+			value="AGREE Releases" />
+		<property name="snapshots.site.composite.name"
+			value="AGREE Snapshots" />
+		
+		<!-- composite.base.dir	The base directory for the local composite metadata,
+			e.g., from Maven, ${project.build.directory}
+		-->
+		<property name="full.version" value="1.0.0" />
+		<property name="composite.base.dir" value="target"/>
+		<property name="releases.path" value="releases"/>
+		<property name="snapshots.path" value="snapshots"/>
+
+		<property name="main.site.composite.directory"
+			location="${composite.base.dir}" />
+		<property name="releases.site.composite.directory"
+			location="${composite.base.dir}/${releases.path}" />
+		<property name="snapshots.site.composite.directory"
+			location="${composite.base.dir}/${snapshots.path}" />
+	</target>
+
+	<target name="p2.composite.add.release" depends="compute.child.repository.data">
+		<add.composite.repository.internal
+			composite.repository.location="${main.site.composite.directory}"
+			composite.repository.name="${main.site.composite.name}"
+			composite.repository.child="${releases.path}" />
+		<add.composite.repository.internal
+			composite.repository.location="${releases.site.composite.directory}"
+			composite.repository.name="${releases.site.composite.name}"
+			composite.repository.child="${full.version}" />
+	</target>
+
+	<target name="p2.composite.add.snapshot" depends="compute.child.repository.data">
+		<add.composite.repository.internal
+			composite.repository.location="${main.site.composite.directory}"
+			composite.repository.name="${main.site.composite.name}"
+			composite.repository.child="${snapshots.path}" />
+		<add.composite.repository.internal
+			composite.repository.location="${snapshots.site.composite.directory}"
+			composite.repository.name="${snapshots.site.composite.name}"
+			composite.repository.child="${full.version}" />
+	</target>
+
+	<target name="p2.composite.remove.snapshot" depends="compute.child.repository.data">
+		<remove.composite.repository.internal
+			composite.repository.location="${snapshots.site.composite.directory}"
+			composite.repository.name="${snapshots.site.composite.name}"
+			composite.repository.child="${full.version}" />
+	</target>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: add.composite.repository.internal          
+         = = = = = = = = = = = = = = = = = -->
+	<macrodef name="add.composite.repository.internal">
+		<attribute name="composite.repository.location" />
+		<attribute name="composite.repository.name" />
+		<attribute name="composite.repository.child" />
+		<sequential>
+
+			<echo message=" " />
+			<echo message="Composite repository       : @{composite.repository.location}" />
+			<echo message="Composite name             : @{composite.repository.name}" />
+			<echo message="Adding child repository    : @{composite.repository.child}" />
+
+			<p2.composite.repository>
+				<repository
+					compressed="false"
+					location="@{composite.repository.location}"
+					name="@{composite.repository.name}" />
+				<add>
+					<repository location="@{composite.repository.child}" />
+				</add>
+			</p2.composite.repository>
+
+			<echo file="@{composite.repository.location}/p2.index">version=1.0.0
+			metadata.repository.factory.order=compositeContent.xml,\!
+			artifact.repository.factory.order=compositeArtifacts.xml,\!
+			</echo>
+
+		</sequential>
+	</macrodef>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: remove.composite.repository.internal          
+         = = = = = = = = = = = = = = = = = -->
+	<macrodef name="remove.composite.repository.internal">
+		<attribute name="composite.repository.location" />
+		<attribute name="composite.repository.name" />
+		<attribute name="composite.repository.child" />
+		<sequential>
+
+			<echo message=" " />
+			<echo message="Composite repository       : @{composite.repository.location}" />
+			<echo message="Composite name             : @{composite.repository.name}" />
+			<echo message="Removing child repository  : @{composite.repository.child}" />
+
+			<p2.composite.repository>
+				<repository
+					compressed="false"
+					location="@{composite.repository.location}"
+					name="@{composite.repository.name}" />
+				<remove>
+					<repository location="@{composite.repository.child}" />
+				</remove>
+			</p2.composite.repository>
+
+		</sequential>
+	</macrodef>
+
+</project>

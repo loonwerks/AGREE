@@ -69,7 +69,7 @@
 		<module>edu.uah.rsesc.aadlsimulator.xtext.ui</module>
 		<module>com.rockwellcollins.atc.tcg</module>
 		<module>com.rockwellcollins.atc.tcg.feature</module>
-		<module>repository</module>
+		<module>com.rockwellcollins.atc.agree.site</module>
 	</modules>
 
 	<profiles>
@@ -94,11 +94,71 @@
 				<moduleProperties>--add-modules=ALL-SYSTEM</moduleProperties>
 			</properties>
 		</profile>
+<profile>
+			<id>build-release</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<pluginManagement>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
+								<id>enforce-no-snapshots</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireReleaseVersion>
+											<message>No Snapshots Allowed!</message>
+										</requireReleaseVersion>
+									</rules>
+									<fail>true</fail>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
 		<profile>
-			<id>build-update-site</id>
-			<modules>
-				<module>update-site</module>
-			</modules>
+			<id>build-snapshot</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<pluginManagement>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
+								<id>enforce-no-releases</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireSnapshotVersion>
+											<message>No Releases Allowed!</message>
+										</requireSnapshotVersion>
+									</rules>
+									<fail>true</fail>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>	
+				</plugins>
+				</pluginManagement>
+			</build>
 		</profile>
 	</profiles>
 

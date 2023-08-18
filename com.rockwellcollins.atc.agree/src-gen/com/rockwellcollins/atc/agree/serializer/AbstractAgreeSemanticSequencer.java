@@ -704,7 +704,7 @@ public abstract class AbstractAgreeSemanticSequencer extends PropertiesSemanticS
 	 *     ArrayLiteralExpr returns ArrayLiteralExpr
 	 *
 	 * Constraint:
-	 *     (elems+=Expr | (elems+=Expr elems+=Expr elems+=Expr*))
+	 *     (elems+=Expr elems+=Expr*)?
 	 * </pre>
 	 */
 	protected void sequence_ArrayLiteralExpr(ISerializationContext context, ArrayLiteralExpr semanticObject) {

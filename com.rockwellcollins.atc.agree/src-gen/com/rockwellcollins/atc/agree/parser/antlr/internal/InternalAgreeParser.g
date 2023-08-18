@@ -8347,70 +8347,45 @@ ruleArrayLiteralExpr returns [EObject current=null]
 }:
 	(
 		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getArrayLiteralExprAccess().getArrayLiteralExprAction_0(),
+					$current);
+			}
+		)
+		(
 			((
 				LeftSquareBracketVerticalLine
 				(
-					(
-						ruleExpr
-					)
-				)
-				VerticalLineRightSquareBracket
-			)
-			)=>
-			(
-				otherlv_0=LeftSquareBracketVerticalLine
-				{
-					newLeafNode(otherlv_0, grammarAccess.getArrayLiteralExprAccess().getLeftSquareBracketVerticalLineKeyword_0_0_0());
-				}
-				(
-					(
-						{
-							newCompositeNode(grammarAccess.getArrayLiteralExprAccess().getElemsExprParserRuleCall_0_0_1_0());
-						}
-						lv_elems_1_0=ruleExpr
-						{
-							if ($current==null) {
-								$current = createModelElementForParent(grammarAccess.getArrayLiteralExprRule());
-							}
-							add(
-								$current,
-								"elems",
-								lv_elems_1_0,
-								"com.rockwellcollins.atc.agree.Agree.Expr");
-							afterParserOrEnumRuleCall();
-						}
-					)
-				)
-				otherlv_2=VerticalLineRightSquareBracket
-				{
-					newLeafNode(otherlv_2, grammarAccess.getArrayLiteralExprAccess().getVerticalLineRightSquareBracketKeyword_0_0_2());
-				}
-			)
-		)
-		    |
-		(
-			(
-				((
-					LeftSquareBracketVerticalLine
 					(
 						(
 							ruleExpr
 						)
 					)
-					Comma
-				)
-				)=>
+					(
+						Comma
+						(
+							(
+								ruleExpr
+							)
+						)
+					)*
+				)?
+				VerticalLineRightSquareBracket
+			)
+			)=>
+			(
+				otherlv_1=LeftSquareBracketVerticalLine
+				{
+					newLeafNode(otherlv_1, grammarAccess.getArrayLiteralExprAccess().getLeftSquareBracketVerticalLineKeyword_1_0_0());
+				}
 				(
-					otherlv_3=LeftSquareBracketVerticalLine
-					{
-						newLeafNode(otherlv_3, grammarAccess.getArrayLiteralExprAccess().getLeftSquareBracketVerticalLineKeyword_1_0_0_0());
-					}
 					(
 						(
 							{
-								newCompositeNode(grammarAccess.getArrayLiteralExprAccess().getElemsExprParserRuleCall_1_0_0_1_0());
+								newCompositeNode(grammarAccess.getArrayLiteralExprAccess().getElemsExprParserRuleCall_1_0_1_0_0());
 							}
-							lv_elems_4_0=ruleExpr
+							lv_elems_2_0=ruleExpr
 							{
 								if ($current==null) {
 									$current = createModelElementForParent(grammarAccess.getArrayLiteralExprRule());
@@ -8418,66 +8393,43 @@ ruleArrayLiteralExpr returns [EObject current=null]
 								add(
 									$current,
 									"elems",
-									lv_elems_4_0,
+									lv_elems_2_0,
 									"com.rockwellcollins.atc.agree.Agree.Expr");
 								afterParserOrEnumRuleCall();
 							}
 						)
 					)
-					otherlv_5=Comma
-					{
-						newLeafNode(otherlv_5, grammarAccess.getArrayLiteralExprAccess().getCommaKeyword_1_0_0_2());
-					}
-				)
-			)
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getArrayLiteralExprAccess().getElemsExprParserRuleCall_1_1_0());
-					}
-					lv_elems_6_0=ruleExpr
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getArrayLiteralExprRule());
-						}
-						add(
-							$current,
-							"elems",
-							lv_elems_6_0,
-							"com.rockwellcollins.atc.agree.Agree.Expr");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-			(
-				otherlv_7=Comma
-				{
-					newLeafNode(otherlv_7, grammarAccess.getArrayLiteralExprAccess().getCommaKeyword_1_2_0());
-				}
-				(
 					(
+						otherlv_3=Comma
 						{
-							newCompositeNode(grammarAccess.getArrayLiteralExprAccess().getElemsExprParserRuleCall_1_2_1_0());
+							newLeafNode(otherlv_3, grammarAccess.getArrayLiteralExprAccess().getCommaKeyword_1_0_1_1_0());
 						}
-						lv_elems_8_0=ruleExpr
-						{
-							if ($current==null) {
-								$current = createModelElementForParent(grammarAccess.getArrayLiteralExprRule());
-							}
-							add(
-								$current,
-								"elems",
-								lv_elems_8_0,
-								"com.rockwellcollins.atc.agree.Agree.Expr");
-							afterParserOrEnumRuleCall();
-						}
-					)
-				)
-			)*
-			otherlv_9=VerticalLineRightSquareBracket
-			{
-				newLeafNode(otherlv_9, grammarAccess.getArrayLiteralExprAccess().getVerticalLineRightSquareBracketKeyword_1_3());
-			}
+						(
+							(
+								{
+									newCompositeNode(grammarAccess.getArrayLiteralExprAccess().getElemsExprParserRuleCall_1_0_1_1_1_0());
+								}
+								lv_elems_4_0=ruleExpr
+								{
+									if ($current==null) {
+										$current = createModelElementForParent(grammarAccess.getArrayLiteralExprRule());
+									}
+									add(
+										$current,
+										"elems",
+										lv_elems_4_0,
+										"com.rockwellcollins.atc.agree.Agree.Expr");
+									afterParserOrEnumRuleCall();
+								}
+							)
+						)
+					)*
+				)?
+				otherlv_5=VerticalLineRightSquareBracket
+				{
+					newLeafNode(otherlv_5, grammarAccess.getArrayLiteralExprAccess().getVerticalLineRightSquareBracketKeyword_1_0_2());
+				}
+			)
 		)
 	)
 ;

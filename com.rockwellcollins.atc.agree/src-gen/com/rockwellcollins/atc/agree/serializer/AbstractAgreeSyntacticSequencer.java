@@ -124,6 +124,7 @@ public abstract class AbstractAgreeSyntacticSequencer extends AbstractSyntacticS
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     (rule start) (ambiguity) 'Get_Property' '(' componentRef=ComponentRef
+	 *     (rule start) (ambiguity) '[|' '|]' (rule start)
 	 *     (rule start) (ambiguity) '[|' elems+=Expr
 	 *     (rule start) (ambiguity) 'enum' '(' enumType=DoubleDotRef
 	 *     (rule start) (ambiguity) 'event' '(' port=Expr

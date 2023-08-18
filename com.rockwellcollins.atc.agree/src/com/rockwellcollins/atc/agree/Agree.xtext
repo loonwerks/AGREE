@@ -347,8 +347,7 @@ TermExpr returns Expr:
 	
 
 ArrayLiteralExpr:
-	=>('[|' elems+=Expr '|]') |
-	=>('[|' elems+=Expr ',') (elems+=Expr) (',' elems+=Expr)* '|]'
+	{ArrayLiteralExpr} =>('[|' (elems+=Expr (',' elems+=Expr)*)? '|]')
 ;
 
 

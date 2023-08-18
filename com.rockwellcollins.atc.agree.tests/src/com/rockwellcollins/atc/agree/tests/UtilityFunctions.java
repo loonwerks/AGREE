@@ -998,4 +998,20 @@ public class UtilityFunctions {
 		}
 		return null;
 	}
+
+	/**
+	 * Takes an list of issues and returns the info message with the matching message
+	 *
+	 * @param issues the list of issues
+	 * @param message the message of the info message
+	 * @return the info message with the matching message
+	 */
+	public static Issue getInfo(List<Issue> issues, String message) {
+		for (Issue i : issues) {
+			if (i.getMessage().equals(message) && i.getSeverity() == Severity.INFO) {
+				return i;
+			}
+		}
+		return null;
+	}
 }

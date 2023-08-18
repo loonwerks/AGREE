@@ -49,28 +49,21 @@ The validation tests are declared in [AgreeValidationTest.java](https://github.c
 To insert a new test, insert `@Test` and then define the test as `public void test{GrammarElement}{ValidationCheckDescription}() throws Exception{...}` (e.g., `public void testProveStatementMustContainClaimError() throws Exception{...}`). Every test should like like this (or something very similar) with its own specific `String test` and testing functionality indicated by `...`:
 
 ```
-String test = "package TestPackage\r\n"
-				+ "public\r\n"
-				+ "\r\n" + "with Base_Types;\r\n" + "\r\n" + "annex agree {**\r\n"
-				+ "	const TEST_VAL: real = 10; -- should throw an error;\r\n"
-				+ "**};\r\n"
-				+ "\r\n"
-				+ "system A\r\n" + "	features\r\n" + "		Input_Val: in data port Base_Types::Float;\r\n"
-				+ "		Output_Val: out data port Base_Types::Float;\r\n" + "	annex agree {**\r\n"
-				+ "		assume A1 \"\" : Input_Val < 20; -- should throw an error\r\n" + "	**};\r\n" + "end A;\r\n"
-				+ "\r\n"
-				+ "system S\r\n" + "	features\r\n" + "		Input_Val: in data port Base_Types::Float;\r\n"
-				+ "		Output_Val: out data port Base_Types::Float;\r\n" + "	annex agree {**\r\n"
-				+ "		assume A1 \"\" : Input_Val < TEST_VAL;\r\n"
-				+ "	**};\r\n"
-				+ "end S;\r\n"
-				+ "\r\n"
-				+ "system implementation S.impl\r\n" + "	subcomponents\r\n" + "		A: system A;\r\n"
-				+ "	connections\r\n" + "		c1_a: port Input_Val -> A.Input_Val; \r\n"
-				+ "		c2_a: port A.Output_Val -> Output_Val;\r\n" + "end S.impl;\r\n"
-				+ "\r\n"
-				+ "end TestPackage;";
-		FluentIssueCollection issueCollection = testHelper.testString(test);
+@Test
+public void testEnumStatementMultipleUsesOfValueError() throws Exception {
+   String test = "package TestPackage\r\n"
+         + "public\r\n"
+         + "	\r\n"
+         + "annex agree {**\r\n"
+         + "	enum test1 = {alpha, beta, gamma};\r\n"
+         + "	enum test2 = {gamma, phi, epsilon};\r\n"
+         + "**};\r\n"
+         + "\r\n"
+         + "end TestPackage;";
+   FluentIssueCollection issueCollection = testHelper.testString(test);
+   List<Issue> issues = issueCollection.getIssues();
+   assertFalse(issues.isEmpty());
+   assertNotNull(UtilityFunctions.getError(issues, "Multiple uses of the same enum value 'gamma' in 'TestPackage::test1' and 'TestPackage::test2'"));
    ...
 }
 ```

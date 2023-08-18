@@ -150,15 +150,6 @@ public class CallRecursionHelper extends AgreeSwitch<Expr> {
 
 		try {
 			callDef = (Abstraction) id.getElm();
-//=======
-//	public Expr caseFnCallExpr(FnCallExpr object) {
-//
-//		CallDef callDef = null;
-//
-//		try {
-//			callDef = (CallDef) object.getFn().getBase();
-//>>>>>>> origin/develop:fm-workbench/agree/com.rockwellcollins.atc.agree/src/com/rockwellcollins/atc/agree/validation/FnCallRecursionHelper.java
-//
 		} catch (ClassCastException e) {
 			return null;
 		}

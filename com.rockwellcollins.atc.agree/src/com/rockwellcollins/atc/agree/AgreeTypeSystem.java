@@ -747,6 +747,7 @@ public class AgreeTypeSystem {
 				// Circular type inference
 				return Prim.ErrorTypeDef;
 			}
+			try {
 			seenExprs.add(expr);
 
 			if (expr instanceof SelectionExpr) {
@@ -945,6 +946,9 @@ public class AgreeTypeSystem {
 
 			} else if (expr instanceof ArrayLiteralExpr) {
 				EList<Expr> elems = ((ArrayLiteralExpr) expr).getElems();
+				if (elems.isEmpty()) {
+					return new ArrayTypeDef(Prim.ErrorTypeDef, 0, Optional.empty());
+				}
 				Expr first = elems.get(0);
 				int size = elems.size();
 				TypeDef firstType = infer(first);
@@ -1002,6 +1006,9 @@ public class AgreeTypeSystem {
 
 				}
 			}
+		} finally {
+			seenExprs.remove(expr);
+		}
 			return Prim.ErrorTypeDef;
 		}
 

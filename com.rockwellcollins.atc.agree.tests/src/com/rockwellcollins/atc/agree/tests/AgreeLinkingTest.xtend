@@ -37,6 +37,7 @@ import org.osate.aadl2.DefaultAnnexLibrary
 import org.osate.aadl2.DefaultAnnexSubclause
 import org.osate.aadl2.SystemImplementation
 import org.osate.aadl2.SystemType
+import org.osate.testsupport.TestHelper
 
 import com.rockwellcollins.atc.agree.agree.AgreeContract
 import com.rockwellcollins.atc.agree.agree.AgreeContractLibrary
@@ -57,15 +58,12 @@ import com.rockwellcollins.atc.agree.agree.LemmaStatement
 import com.rockwellcollins.atc.agree.agree.LinearizationDef
 import com.rockwellcollins.atc.agree.agree.NamedElmExpr
 import com.rockwellcollins.atc.agree.agree.NamedID
-import com.rockwellcollins.atc.agree.agree.NodeBodyExpr
 import com.rockwellcollins.atc.agree.agree.NodeDef
 import com.rockwellcollins.atc.agree.agree.NodeEq
 import com.rockwellcollins.atc.agree.agree.PreExpr
 import com.rockwellcollins.atc.agree.agree.RecordDef
 import com.rockwellcollins.atc.agree.agree.RecordLitExpr
 import com.rockwellcollins.atc.agree.agree.SelectionExpr
-
-import com.rockwellcollins.atc.agree.tests.testsupport.TestHelper
 
 @RunWith(XtextRunner)
 @InjectWith(AgreeInjectorProvider)

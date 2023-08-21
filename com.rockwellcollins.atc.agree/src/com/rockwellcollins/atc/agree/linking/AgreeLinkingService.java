@@ -75,6 +75,9 @@ import com.rockwellcollins.atc.agree.agree.SpecStatement;
 import com.rockwellcollins.atc.agree.agree.SynchStatement;
 import com.rockwellcollins.atc.agree.agree.TagExpr;
 import com.rockwellcollins.atc.agree.agree.ThisRef;
+import com.rockwellcollins.atc.agree.agree.TimeFallExpr;
+import com.rockwellcollins.atc.agree.agree.TimeOfExpr;
+import com.rockwellcollins.atc.agree.agree.TimeRiseExpr;
 import com.rockwellcollins.atc.agree.agree.UninterpretedFnDef;
 public class AgreeLinkingService extends PropertiesLinkingService {
 	public AgreeLinkingService() {
@@ -123,7 +126,9 @@ public class AgreeLinkingService extends PropertiesLinkingService {
 				|| context instanceof NodeEq || context instanceof SynchStatement
 				|| context instanceof RecordLitExpr || context instanceof GetPropertyExpr
 				|| context instanceof RecordUpdateExpr || context instanceof EventExpr
-				|| context instanceof OrderStatement || context instanceof ConnectionStatement) {
+				|| context instanceof OrderStatement || context instanceof ConnectionStatement
+				|| context instanceof TimeOfExpr || context instanceof TimeRiseExpr
+				|| context instanceof TimeFallExpr) {
 
 
 			EObject e = getIndexedObject(context, reference, name);

@@ -35,22 +35,35 @@ import com.rockwellcollins.atc.agree.agree.FloorCast;
 import com.rockwellcollins.atc.agree.agree.GetPropertyExpr;
 import com.rockwellcollins.atc.agree.agree.IfThenElseExpr;
 import com.rockwellcollins.atc.agree.agree.IntLitExpr;
+import com.rockwellcollins.atc.agree.agree.NamedElmExpr;
 import com.rockwellcollins.atc.agree.agree.PreExpr;
 import com.rockwellcollins.atc.agree.agree.PrevExpr;
 import com.rockwellcollins.atc.agree.agree.RealCast;
 import com.rockwellcollins.atc.agree.agree.RealLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordLitExpr;
 import com.rockwellcollins.atc.agree.agree.RecordUpdateExpr;
+import com.rockwellcollins.atc.agree.agree.SelectionExpr;
 import com.rockwellcollins.atc.agree.agree.UnaryExpr;
 import com.rockwellcollins.atc.agree.agree.util.AgreeSwitch;
 
 public class ExprCycleVisitor extends AgreeSwitch<Set<EObject>> {
 
-	@SuppressWarnings("unused")
-	private String id;
+	public ExprCycleVisitor() {
+	}
 
-	public ExprCycleVisitor(String id) {
-		this.id = id;
+	@Override
+	public Set<EObject> caseNamedElmExpr(NamedElmExpr e) {
+		Set<EObject> result = new HashSet<>();
+		result.add(e.getElm());
+		return result;
+	}
+
+	@Override
+	public Set<EObject> caseSelectionExpr(SelectionExpr e) {
+		Set<EObject> result = new HashSet<>();
+		result.add(e.getTarget());
+		result.add(e.getField());
+		return result;
 	}
 
 	@Override

@@ -99,7 +99,7 @@ NamedSpecStatement:
 //The following are patterns from the CESAR RSL
 PatternStatement returns PatternStatement:
 	WheneverStatement
-|	{AlwaysStatement} 'always' expr=Expr ';'
+|	{AlwaysStatement} 'always' expr=Expr
 |   WhenStatement
 |   RealTimeStatement
 ;
@@ -347,8 +347,7 @@ TermExpr returns Expr:
 	
 
 ArrayLiteralExpr:
-	=>('[|' elems+=Expr '|]') |
-	=>('[|' elems+=Expr ',') (elems+=Expr) (',' elems+=Expr)* '|]'
+	{ArrayLiteralExpr} =>('[|' (elems+=Expr (',' elems+=Expr)*)? '|]')
 ;
 
 

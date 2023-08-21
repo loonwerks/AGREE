@@ -35,7 +35,7 @@ public class AgreeResourceDescriptionStrategy extends DefaultResourceDescription
 				|| ((FoldLeftExpr) container).getBinding().equals(eObject))) {
 			return false;
 		} else if (container instanceof FoldRightExpr && (((FoldRightExpr) container).getAccumulator().equals(eObject)
-				|| ((FoldLeftExpr) container).getBinding().equals(eObject))) {
+				|| ((FoldRightExpr) container).getBinding().equals(eObject))) {
 			return false;
 		}
 		return super.createEObjectDescriptions(eObject, acceptor);

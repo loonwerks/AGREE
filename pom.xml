@@ -33,8 +33,8 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		-->
 		<!-- Tycho settings -->
-		<tycho.version>2.7.3</tycho.version>
-		<tycho-extras.version>2.7.3</tycho-extras.version>
+		<tycho.version>2.7.5</tycho.version>
+		<tycho-extras.version>2.7.5</tycho-extras.version>
 		<!-- Define overridable properties for tycho-surefire-plugin -->
 		<platformSystemProperties />
 		<moduleProperties />

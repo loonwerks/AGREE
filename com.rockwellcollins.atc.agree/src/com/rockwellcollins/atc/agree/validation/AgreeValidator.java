@@ -2250,6 +2250,9 @@ public class AgreeValidator extends AbstractAgreeValidator {
 		return result;
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public static boolean isInConstBody(Expr expr) {
 		boolean result = false;
 		EObject current = expr;

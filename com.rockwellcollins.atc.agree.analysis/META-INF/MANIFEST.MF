@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AGREE Analysis
 Bundle-SymbolicName: com.rockwellcollins.atc.agree.analysis; singleton:=true
-Bundle-Version: 2.10.1.qualifier
+Bundle-Version: 2.10.2.qualifier
 Bundle-Activator: com.rockwellcollins.atc.agree.analysis.Activator
 Bundle-Vendor: Rockwell Collins, Inc.
 Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
@@ -14,8 +14,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
  org.osate.aadl2;bundle-version="[5.0.0,6.0.0)",
  org.osate.ui;bundle-version="[6.0.0,7.0.0)",
  org.osate.xtext.aadl2.properties;bundle-version="[3.0.0,4.0.0)",
- com.rockwellcollins.atc.agree;bundle-version="[3.0.0,4.0.0)",
- com.rockwellcollins.atc.agree.ui;bundle-version="[3.1.0,4.0.0)",
+ com.rockwellcollins.atc.agree;bundle-version="[4.0.0,5.0.0)",
+ com.rockwellcollins.atc.agree.ui;bundle-version="[4.0.0,5.0.0)",
  org.osate.ge;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.emf.ecore;bundle-version="[2.23.0,3.0.0)",
  com.collins.trustedsystems.z3;bundle-version="[4.0.0,5.0.0)",
@@ -28,14 +28,14 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/gson.jar
 Import-Package: org.apache.commons.lang;version="[2.6.0,3.0.0)"
-Export-Package: com.rockwellcollins.atc.agree.analysis;version="2.10.1",
- com.rockwellcollins.atc.agree.analysis.ast;version="2.10.1",
- com.rockwellcollins.atc.agree.analysis.ast.visitors;version="2.10.1",
- com.rockwellcollins.atc.agree.analysis.extentions;version="2.10.1",
- com.rockwellcollins.atc.agree.analysis.handlers;version="2.10.1",
- com.rockwellcollins.atc.agree.analysis.lustre.visitors;version="2.10.1",
- com.rockwellcollins.atc.agree.analysis.preferences;version="2.10.1",
- com.rockwellcollins.atc.agree.analysis.saving;version="2.10.1",
- com.rockwellcollins.atc.agree.analysis.translation;version="2.10.1",
- com.rockwellcollins.atc.agree.analysis.views;version="2.10.1"
+Export-Package: com.rockwellcollins.atc.agree.analysis;version="2.10.2",
+ com.rockwellcollins.atc.agree.analysis.ast;version="2.10.2",
+ com.rockwellcollins.atc.agree.analysis.ast.visitors;version="2.10.2",
+ com.rockwellcollins.atc.agree.analysis.extentions;version="2.10.2",
+ com.rockwellcollins.atc.agree.analysis.handlers;version="2.10.2",
+ com.rockwellcollins.atc.agree.analysis.lustre.visitors;version="2.10.2",
+ com.rockwellcollins.atc.agree.analysis.preferences;version="2.10.2",
+ com.rockwellcollins.atc.agree.analysis.saving;version="2.10.2",
+ com.rockwellcollins.atc.agree.analysis.translation;version="2.10.2",
+ com.rockwellcollins.atc.agree.analysis.views;version="2.10.2"
 Automatic-Module-Name: com.rockwellcollins.atc.agree.analysis

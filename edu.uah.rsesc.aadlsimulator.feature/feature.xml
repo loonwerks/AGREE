@@ -492,7 +492,7 @@ A.7) The JOGL source tree _may_ contain code from Oculus VR, Inc.
    </license>
 
    <includes
-         id="org.eclipse.emf.mwe.utils"
+         id="org.eclipse.emf.mwe.sdk"
          version="0.0.0"/>
 
    <requires>

@@ -138,6 +138,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          version="0.0.0"
          unpack="false"/>
 
+	<plugin
+         id="com.rockwellcollins.atc.agree.cli"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
    <plugin
          id="com.rockwellcollins.atc.agree.codegen"
          download-size="0"
@@ -162,5 +169,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+
+   <plugin
+         id="com.rockwellcollins.atc.agree.cli"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>

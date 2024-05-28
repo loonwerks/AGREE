@@ -38,23 +38,5 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-	
-	// Gets the workspace path contained in the -data framework cmd line arg
-	public static String getWorkspace() {
-		final ServiceReference<EnvironmentInfo> infoRef = context.getServiceReference(EnvironmentInfo.class);
-		if (infoRef != null) {
-			final EnvironmentInfo envInfo = context.getService(infoRef);
-			if (envInfo != null) {
-				context.ungetService(infoRef);
-				for (int i = 0; i < envInfo.getFrameworkArgs().length; ++i) {
-					if ("-data".equals(envInfo.getFrameworkArgs()[i].toLowerCase())
-							&& i < envInfo.getFrameworkArgs().length - 1) {
-						return envInfo.getFrameworkArgs()[i + 1];
-					}
-				}
-			}
-		}
-		return null;
-	}
 
 }

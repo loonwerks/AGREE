@@ -34,7 +34,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.PREF_MODEL_CHECKER, PreferenceConstants.MODEL_CHECKER_JKIND);
 		store.setDefault(PreferenceConstants.PREF_SOLVER, PreferenceConstants.SOLVER_SMTINTERPOL);
+		store.setDefault(PreferenceConstants.PREF_NO_KINDUCTION, false);
 		store.setDefault(PreferenceConstants.PREF_INDUCT_CEX, true);
+		store.setDefault(PreferenceConstants.PREF_SUPPORT, false);
 		store.setDefault(PreferenceConstants.PREF_SMOOTH_CEX, false);
 		store.setDefault(PreferenceConstants.PREF_UNSPECIFIED_AADL_PROPERTIES, false);
 		store.setDefault(PreferenceConstants.PREF_DISPLAY_DECIMAL_CEX, false);

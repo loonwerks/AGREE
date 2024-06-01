@@ -10,13 +10,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -31,13 +38,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 import com.rockwellcollins.atc.agree.cli.results.AgreeOutput;
 import com.rockwellcollins.atc.agree.cli.results.SyntaxValidationIssue;
 import com.rockwellcollins.atc.agree.cli.results.SyntaxValidationResults;
-
 
 public class Util {
 
@@ -49,6 +57,17 @@ public class Util {
 		final File projectRootDirectory = new File(projPath);
 		final File projectFile = new File(projectRootDirectory, ".project");
 		final String projName = getProjectName(projectFile);
+
+		// Add project to workspace
+		addProjectToWorkspace(projPath, projName);
+
+		// Map project folder to project name (they could be different)
+		final Map<String, String> projMap = new HashMap<>();
+		final List<String> dotProjFiles = findFiles(projectRootDirectory.getParentFile().toPath(), "project");
+		for (String dotProjFile : dotProjFiles) {
+			final File projFile = new File(dotProjFile);
+			projMap.put(getProjectName(projFile), projFile.getParentFile().getAbsolutePath());
+		}
 
 		for (String pFile : projectFiles) {
 			final File projFile = new File(pFile);
@@ -63,16 +82,17 @@ public class Util {
 		}
 
 		// load referenced project AADL files
-		final String projParentPath = projectRootDirectory.getParent();
 		final List<String> refProjNames = new ArrayList<>();
-		getRefProjName(refProjNames, projName, projParentPath);
+		getRefProjName(refProjNames, projName, projMap);
 		for (String refProjName : refProjNames) {
-			// assuming reference project is at the same level of main project
-			final File refProj = new File(projParentPath, refProjName);
+			// Add reference project to workspace
+			addProjectToWorkspace(projMap.get(refProjName), refProjName);
+
+			final File refProj = new File(projMap.get(refProjName));
 			final List<String> refProjFileNames = findFiles(refProj.toPath(), "aadl");
 			for (String refProjFileName : refProjFileNames) {
 				final File refProjFile = new File(refProjFileName);
-				loadFile(projectRootDirectory, projName, refProjFile, resourceSet);
+				loadFile(new File(projMap.get(refProjName)), refProjName, refProjFile, resourceSet);
 			}
 		}
 	}
@@ -85,7 +105,6 @@ public class Util {
 		int numWarnings = 0;
 		for (Resource resource : resourceSet.getResources()) {
 			if (resource.getURI().isPlatformResource()) {
-//				System.out.println("Validating " + resource.getURI().toString());
 				final IResourceValidator validator = ((XtextResource) resource).getResourceServiceProvider()
 						.getResourceValidator();
 				final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
@@ -102,7 +121,6 @@ public class Util {
 					valIssue.setFile(resource.getURI().toPlatformString(true));
 					valIssue.setLine(issue.getLineNumber());
 					syntaxValidationIssues.add(valIssue);
-//					System.out.println(issue.getMessage());
 				}
 			}
 		}
@@ -121,7 +139,7 @@ public class Util {
 		try (Stream<Path> walk = Files.walk(path)) {
 			result = walk
 					.filter(p -> !Files.isDirectory(p))
-					.map(p -> p.toString().toLowerCase())
+					.map(p -> p.toString())
 					.filter(f -> f.endsWith(fileExtension))
 					.collect(Collectors.toList());
 		}
@@ -158,7 +176,6 @@ public class Util {
 			throw new Exception("Error loading file " + projectName + "/" + normalizedRelPath);
 		}
 		try {
-//			System.out.println("Loading " + file.getAbsolutePath());
 			res.load(stream, Collections.EMPTY_MAP);
 			return res;
 		} catch (IOException e) {
@@ -176,11 +193,9 @@ public class Util {
 			final URI resourceUri = URI.createPlatformResourceURI("Lib/" + path.getFileName().toString(), true);
 			final Resource res = rs.createResource(resourceUri);
 
-//			System.out.println("Loading " + filePath);
 			res.load(stream, Collections.EMPTY_MAP);
 			return res;
 		} catch (IOException e) {
-//			System.err.println("Error loading file " + filePath);
 			return null;
 		}
 	}
@@ -211,23 +226,26 @@ public class Util {
 	}
 
 	// A reference project could depend on another reference project
-	private static void getRefProjName(List<String> list, String project, String parent) throws Exception {
+	private static void getRefProjName(List<String> list, String projectName, Map<String, String> projMap)
+			throws Exception {
 
-		final File refProj = new File(parent, project);
-		final File projectFile = new File(refProj, ".project");
-		final List<String> refProjList = getReferenceProjectName(projectFile);
+		final File projectFile = new File(projMap.get(projectName), ".project");
+		if (!projectFile.exists()) {
+			throw new Exception("Project " + projectName + " was not found in the workspace.");
+		}
+		final List<String> refProjList = getReferenceProjectNames(projectFile);
 		if (!refProjList.isEmpty()) {
 			for (String refProjName : refProjList) {
 				// avoid duplicate and break circular reference
 				if (!list.contains(refProjName)) {
 					list.add(refProjName);
-					getRefProjName(list, refProjName, parent);
+					getRefProjName(list, refProjName, projMap);
 				}
-            }
+			}
 		}
-	}
+		}
 
-	private static List<String> getReferenceProjectName(File projectFile) throws Exception {
+	private static List<String> getReferenceProjectNames(File projectFile) throws Exception {
 		final List<String> refProjNameList = new ArrayList<>();
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -249,10 +267,52 @@ public class Util {
 		return refProjNameList;
 	}
 
+	/**
+	 * When running from the command line, project must be explicitly added to the workspace
+	 * @param projPath - Absolute path to project directory
+	 * @param projName - Name of project
+	 */
+	private static void addProjectToWorkspace(String projPath, String projName) throws Exception {
+
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projName);
+		IProjectDescription projectDescription = ResourcesPlugin.getWorkspace()
+				.newProjectDescription(project.getName());
+		projectDescription.setLocation(new org.eclipse.core.runtime.Path(projPath));
+
+		try {
+			if (!project.exists()) {
+				project.create(projectDescription, new NullProgressMonitor());
+			}
+			if (!project.isOpen()) {
+				project.open(new NullProgressMonitor());
+			}
+		} catch (CoreException e) {
+			throw new Exception("Problem accessing project " + projName + ": " + e.getMessage());
+		}
+	}
+
 	public static void writeOutput(AgreeOutput output, String outputPath) {
 
+		ExclusionStrategy exStrat = new ExclusionStrategy() {
+
+			@Override
+			public boolean shouldSkipClass(Class<?> arg0) {
+				return false;
+			}
+
+			@Override
+			public boolean shouldSkipField(FieldAttributes f) {
+				return (f.getName().equals("pcs") || f.getName().equals("ticker")
+						|| f.getName().equals("renaming")
+						|| f.getName().equals("parent"));
+			}
+		};
+
 		// Convert to json
-		final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		final Gson gson = new GsonBuilder().setExclusionStrategies(exStrat)
+				.setPrettyPrinting()
+				.disableHtmlEscaping()
+				.create();
 		try {
 			if (outputPath != null) {
 				final File outputFile = new File(outputPath);

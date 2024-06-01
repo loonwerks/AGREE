@@ -103,7 +103,7 @@ public class Agree implements IApplication {
 	private final static String OUTPUT = "o";
 	private final static String FILES = "f";
 	// Run options
-	private final static String VERIFICATION = "v";
+	private final static String STRATEGY = "strategy";
 	// Preferences
 	private final static String MODEL_CHECKER = "m";
 	private final static String SOLVER = "s";
@@ -116,7 +116,7 @@ public class Agree implements IApplication {
 	private final static String GENERATE_BLAMED_COUNTEREXAMPLES = "generateBlamedCounterexamples";
 	private final static String MAX_INDUCTION_DEPTH = "maxInductionDepth";
 	private final static String MAX_PDR_INSTANCES = "maxPDRInstances";
-	private final static String TIMEOUT = "timeout";
+	private final static String TIMEOUT = "t";
 	private final static String CONSISTENCY_DEPTH = "consistencyDepth";
 	// Validation options
 	private final static String VALIDATION_ONLY = "v";
@@ -168,6 +168,7 @@ public class Agree implements IApplication {
 		store.setToDefault(PreferenceConstants.PREF_PDR_MAX);
 		store.setToDefault(PreferenceConstants.PREF_TIMEOUT);
 		store.setToDefault(PreferenceConstants.PREF_CONSIST_DEPTH);
+		store.setToDefault(PreferenceConstants.PREF_PROP_LOG);
 		boolean exitOnValidationWarning = false;
 		boolean validationOnly = false;
 		boolean exit = false;
@@ -180,7 +181,7 @@ public class Agree implements IApplication {
 		// create Options
 		final Options options = new Options();
 		options.addOption(HELP, "help", false, "print this message");
-		options.addOption(NO_SPLASH, false, "optional, hide the splash screen, default false");
+		options.addOption(NO_SPLASH, false, "optional, hide the splash screen");
 		options.addOption(DATA, true, "required, path of workspace");
 		options.addOption(APPLICATION, true,
 				"required, the name of this analysis (com.rockwellcollins.atc.agree.cli.Agree)");
@@ -190,7 +191,7 @@ public class Agree implements IApplication {
 		Option option = new Option(FILES, "files", true, "optional, supplementary AADL files (absolute paths)");
 		option.setArgs(Option.UNLIMITED_VALUES);
 		options.addOption(option);
-		options.addOption(VERIFICATION, "verification", true, "required, verification strategy (single, all, monolithic, realizability)");
+		options.addOption(STRATEGY, true, "required, verification strategy (single, all, monolithic, realizability)");
 		options.addOption(MODEL_CHECKER, "modelChecker", true, "optional, model checker, default " + store.getString(PreferenceConstants.PREF_MODEL_CHECKER));
 		options.addOption(SOLVER, "solver", true, "optional, SMT solver, default " + store.getString(PreferenceConstants.PREF_SOLVER));
 		options.addOption(DISABLE_K_INDUCTION, false, "optional, disable k-induction");
@@ -202,8 +203,8 @@ public class Agree implements IApplication {
 		options.addOption(GENERATE_BLAMED_COUNTEREXAMPLES, false, "optional, generate blamed counterexamples");
 		options.addOption(MAX_INDUCTION_DEPTH, true, "optional, maximum induction depth, default " + store.getInt(PreferenceConstants.PREF_DEPTH));
 		options.addOption(MAX_PDR_INSTANCES, true, "optional, maximum number of PDR instances, default " + store.getInt(PreferenceConstants.PREF_PDR_MAX));
-		options.addOption(TIMEOUT, true, "optional, timeout (ms), default " + store.getInt(PreferenceConstants.PREF_TIMEOUT));
-		options.addOption(CONSISTENCY_DEPTH, true, "optional, consistency depth, default " + store.getInt(PreferenceConstants.PREF_CONSIST_DEPTH));		
+		options.addOption(TIMEOUT, "timeout", true, "optional, timeout (ms), default " + store.getInt(PreferenceConstants.PREF_TIMEOUT));
+		options.addOption(CONSISTENCY_DEPTH, true, "optional, consistency depth, default " + store.getInt(PreferenceConstants.PREF_CONSIST_DEPTH));
 		options.addOption(VALIDATION_ONLY, "validationOnly", false, "validation only, default false");
 		options.addOption(EXIT_ON_VALIDATION_WARNING, "exitOnValidtionWarning", false,
 				"exit on validation warning, default false");
@@ -246,8 +247,8 @@ public class Agree implements IApplication {
 			if (commandLine.hasOption(FILES)) {
 				fileArray = commandLine.getOptionValues(FILES);
 			}
-			if (commandLine.hasOption(VERIFICATION)) {
-				switch (commandLine.getOptionValue(VERIFICATION).toLowerCase()) {
+			if (commandLine.hasOption(STRATEGY)) {
+				switch (commandLine.getOptionValue(STRATEGY).toLowerCase()) {
 				case "single":
 					strategy = VerificationStrategy.Single;
 					break;
@@ -263,7 +264,7 @@ public class Agree implements IApplication {
 				default:
 					exit = true;
 					output.setStatus(AgreeOutput.INTERRUPTED);
-					output.addStatusMessage("Invalid verification type.  " + commandLine.getOptionValue(VERIFICATION) + " is not supported.");
+					output.addStatusMessage("Invalid verification strategy.  " + commandLine.getOptionValue(STRATEGY) + " is not supported.");
 				}
 			} else {
 				exit = true;
@@ -340,7 +341,7 @@ public class Agree implements IApplication {
 			if (commandLine.hasOption(GENERATE_BLAMED_COUNTEREXAMPLES)) {
 				store.setValue(PreferenceConstants.PREF_BLAME_CEX, true);
 			}
-			if (commandLine.hasOption(MAX_INDUCTION_DEPTH)) {				
+			if (commandLine.hasOption(MAX_INDUCTION_DEPTH)) {
 				try {
 					final int i = Integer.parseInt(commandLine.getOptionValue(MAX_INDUCTION_DEPTH));
 					if (i < 0) {
@@ -489,10 +490,18 @@ public class Agree implements IApplication {
 		}
 		if (compImpl != null) {
 			try {
-				final AnalysisResult results = runAgree(compImpl);
-				output.setStatus(AgreeOutput.COMPLETED);
-				// TODO deal with output
-//				output.setResults(results);
+				final CompositeAnalysisResult results = runAgree(compImpl);
+				output.setResults(results);
+				final jkind.api.results.Status status = results.getMultiStatus().getOverallStatus();
+				if (status.equals(jkind.api.results.Status.VALID)
+						|| status.equals(jkind.api.results.Status.VALID_REFINED)) {
+					output.setStatus(AgreeOutput.VALID);
+				} else if (status.equals(jkind.api.results.Status.INVALID)
+						|| status.equals(jkind.api.results.Status.INCONSISTENT)) {
+					output.setStatus(AgreeOutput.INVALID);
+				} else {
+					output.setStatus(AgreeOutput.INTERRUPTED);
+				}
 				Util.writeOutput(output, outputPath);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -512,7 +521,7 @@ public class Agree implements IApplication {
 
 	}
 
-	private AnalysisResult runAgree(ComponentImplementation compImpl) throws Exception {
+	private CompositeAnalysisResult runAgree(ComponentImplementation compImpl) throws Exception {
 
 		final SystemInstance si = InstantiateModel.instantiate(compImpl);
 		AnalysisResult result;
@@ -542,9 +551,9 @@ public class Agree implements IApplication {
 		doAnalysis(compImpl, new NullProgressMonitor());
 		System.out.println(result.toString());
 
-		return result;
+		return wrapper;
 	}
-	
+
 	private AnalysisResult buildAnalysisResult(String name, ComponentInstance ci) {
 		CompositeAnalysisResult result = new CompositeAnalysisResult("Verification for " + name);
 
@@ -567,7 +576,7 @@ public class Agree implements IApplication {
 		}
 		return null;
 	}
-	
+
 	private boolean containsAGREEAnnex(ComponentInstance ci) {
 		ComponentClassifier compClass = ci.getComponentClassifier();
 		if (compClass instanceof ComponentImplementation) {

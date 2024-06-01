@@ -1,13 +1,15 @@
 package com.rockwellcollins.atc.agree.cli.results;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import jkind.api.results.CompositeAnalysisResult;
 
 public class AgreeOutput {
 
 	public final static String COMPLETED = "Analysis Completed";
 	public final static String INTERRUPTED = "Analysis Interrupted";
+	public final static String VALID = "No Counterexamples Found";
+	public final static String INVALID = "Counterexamples Found";
 
 	private String date;
 	private String project;
@@ -15,7 +17,7 @@ public class AgreeOutput {
 	private ArrayList<String> statusMessages;
 	private String status;
 	private SyntaxValidationResults syntaxValidation;
-	private List<AgreeJsonResult> results;
+	private CompositeAnalysisResult results;
 
 	public AgreeOutput() {
 
@@ -89,13 +91,13 @@ public class AgreeOutput {
 	public void setSyntaxValidationResults(SyntaxValidationResults syntaxValidationResults) {
 		this.syntaxValidation = syntaxValidationResults;
 	}
-	
-	public List<AgreeJsonResult> getResults() {
+
+
+	public CompositeAnalysisResult getResults() {
 		return this.results;
 	}
 
-	public void setResults(List<AgreeJsonResult> results) {
+	public void setResults(CompositeAnalysisResult results) {
 		this.results = results;
 	}
-	
 }

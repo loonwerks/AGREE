@@ -76,6 +76,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import plugin="com.collins.trustedsystems.z3" version="4.0.0" match="compatible"/>
       <import plugin="com.rockwellcollins.atc.agree" version="3.0.0" match="compatible"/>
       <import plugin="com.rockwellcollins.atc.agree.analysis" version="2.8.0" match="compatible"/>
+      <import plugin="com.rockwellcollins.atc.agree.cli" version="1.0.1" match="compatible"/>
       <import plugin="com.rockwellcollins.atc.agree.ui" version="3.1.0" match="compatible"/>
       <import plugin="edu.uah.rsesc.agree.ge" version="2.8.0" match="compatible"/>
       <import plugin="org.antlr.runtime" version="3.2.0" match="compatible"/>
@@ -169,12 +170,5 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-
-   <plugin
-         id="com.rockwellcollins.atc.agree.cli"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
 </feature>

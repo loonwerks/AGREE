@@ -53,9 +53,10 @@ public class Util {
 	public static void loadProjectAadlFiles(String projPath, String[] libArray, XtextResourceSet resourceSet)
 			throws Exception {
 
-		final List<String> projectFiles = findFiles(Paths.get(projPath), "aadl");
-		final File projectRootDirectory = new File(projPath);
-		final File projectFile = new File(projectRootDirectory, ".project");
+		final String workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+		final Path absProjPath = Paths.get(workspace, projPath);
+		final List<String> projectFiles = findFiles(absProjPath, "aadl");
+		final File projectFile = new File(absProjPath.toFile(), ".project");
 		final String projName = getProjectName(projectFile);
 
 		// Add project to workspace
@@ -63,7 +64,14 @@ public class Util {
 
 		// Map project folder to project name (they could be different)
 		final Map<String, String> projMap = new HashMap<>();
-		final List<String> dotProjFiles = findFiles(projectRootDirectory.getParentFile().toPath(), "project");
+		Path topLevelDir = absProjPath;
+		for (int i = 0; i < URI.createURI(projPath).segmentCount() - 1; ++i) {
+			if (topLevelDir.getParent() != null) {
+				topLevelDir = topLevelDir.getParent();
+			}
+		}
+
+		final List<String> dotProjFiles = findFiles(topLevelDir, "project");
 		for (String dotProjFile : dotProjFiles) {
 			final File projFile = new File(dotProjFile);
 			projMap.put(getProjectName(projFile), projFile.getParentFile().getAbsolutePath());
@@ -71,7 +79,7 @@ public class Util {
 
 		for (String pFile : projectFiles) {
 			final File projFile = new File(pFile);
-			loadFile(projectRootDirectory, projName, projFile, resourceSet);
+			loadFile(absProjPath.toFile(), projName, projFile, resourceSet);
 		}
 
 		// load user specified AADL libs
@@ -129,10 +137,6 @@ public class Util {
 	}
 
 	private static List<String> findFiles(Path path, String fileExtension) throws Exception {
-
-		if (!Files.isDirectory(path)) {
-			throw new IllegalArgumentException("Path must be a directory!");
-		}
 
 		final List<String> result;
 

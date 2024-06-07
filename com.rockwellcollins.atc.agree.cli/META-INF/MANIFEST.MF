@@ -5,11 +5,7 @@ Bundle-SymbolicName: com.rockwellcollins.atc.agree.cli;singleton:=true
 Bundle-Version: 1.0.1.qualifier
 Bundle-Activator: com.rockwellcollins.atc.agree.cli.Activator
 Bundle-Vendor: ROCKWELLCOLLINS
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.emf.ecore;bundle-version="2.27.0",
- org.eclipse.xtext,
- org.osate.xtext.aadl2,
+Require-Bundle: org.osate.xtext.aadl2,
  com.rockwellcollins.atc.agree,
  org.osate.aadl2,
  org.osate.pluginsupport,

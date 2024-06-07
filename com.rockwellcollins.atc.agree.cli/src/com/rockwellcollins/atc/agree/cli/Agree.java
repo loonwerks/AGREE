@@ -1,6 +1,9 @@
 package com.rockwellcollins.atc.agree.cli;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +101,7 @@ public class Agree implements IApplication {
 	private final static String DATA = "data";
 	private final static String APPLICATION = "application";
 	private final static String NO_SPLASH = "noSplash";
-	private final static String PROJECT = "p";
+	private final static String PROJECT_PATH = "p";
 	private final static String COMP_IMPL = "c";
 	private final static String OUTPUT = "o";
 	private final static String FILES = "f";
@@ -149,7 +152,7 @@ public class Agree implements IApplication {
 		output.setDate((new Date()).toString());
 
 		// Process command line options
-		String workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+		final String workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
 		String projPath = null;
 		String component = null;
 		String outputPath = null;
@@ -185,7 +188,7 @@ public class Agree implements IApplication {
 		options.addOption(DATA, true, "required, path of workspace");
 		options.addOption(APPLICATION, true,
 				"required, the name of this analysis (com.rockwellcollins.atc.agree.cli.Agree)");
-		options.addOption(PROJECT, "project", true, "required, project path (relative to workspace)");
+		options.addOption(PROJECT_PATH, "projectPath", true, "required, project path (relative to workspace)");
 		options.addOption(COMP_IMPL, "compImpl", true, "required, qualified component implementation name");
 		options.addOption(OUTPUT, "output", true, "required, output JSON file absolute path");
 		Option option = new Option(FILES, "files", true, "optional, supplementary AADL files (absolute paths)");
@@ -216,11 +219,9 @@ public class Agree implements IApplication {
 
 			if (commandLine.hasOption(HELP)) {
 				exit = true;
-				output.setStatus(AgreeOutput.INTERRUPTED);
 			}
 			if (workspace == null || workspace.isBlank()) {
 				exit = true;
-				output.setStatus(AgreeOutput.INTERRUPTED);
 				output.addStatusMessage("A workspace must be specified.");
 			}
 			if (commandLine.hasOption(COMP_IMPL)) {
@@ -228,21 +229,27 @@ public class Agree implements IApplication {
 				output.setComponent(component);
 				// expects qualified name
 				if (!component.contains("::")) {
-					output.setStatus(AgreeOutput.INTERRUPTED);
 					output.addStatusMessage("Component implementation qualified name must be specified.");
 					exit = true;
 				}
 			}
-			if (commandLine.hasOption(PROJECT)) {
-				projPath = workspace + File.separator + commandLine.getOptionValue(PROJECT);
-				output.setProject(projPath);
+			if (commandLine.hasOption(PROJECT_PATH)) {
+				projPath = commandLine.getOptionValue(PROJECT_PATH);
+				final Path projectPath = Paths.get(workspace, projPath);
+				if (!Files.isDirectory(projectPath)) {
+					exit = true;
+					output.addStatusMessage("Specified project directory doesn't exist: " + projectPath.toString());
+				} else {
+					output.setProject(projPath);
+				}
 			} else {
-				output.setStatus(AgreeOutput.INTERRUPTED);
 				output.addStatusMessage("Project path must be specified.");
 				exit = true;
 			}
 			if (commandLine.hasOption(OUTPUT)) {
 				outputPath = commandLine.getOptionValue(OUTPUT);
+				// Make sure output directory exists
+				new File(outputPath).mkdirs();
 			}
 			if (commandLine.hasOption(FILES)) {
 				fileArray = commandLine.getOptionValues(FILES);
@@ -263,12 +270,10 @@ public class Agree implements IApplication {
 					break;
 				default:
 					exit = true;
-					output.setStatus(AgreeOutput.INTERRUPTED);
 					output.addStatusMessage("Invalid verification strategy.  " + commandLine.getOptionValue(STRATEGY) + " is not supported.");
 				}
 			} else {
 				exit = true;
-				output.setStatus(AgreeOutput.INTERRUPTED);
 				output.addStatusMessage("A verification type must be specified (single, all, monolithic, realizability).");
 			}
 			if (commandLine.hasOption(MODEL_CHECKER)) {
@@ -287,7 +292,6 @@ public class Agree implements IApplication {
 					break;
 				default:
 					exit = true;
-					output.setStatus(AgreeOutput.INTERRUPTED);
 					output.addStatusMessage("Invalid model checker.  " + commandLine.getOptionValue(MODEL_CHECKER) + " is not supported. Valid options are: JKind, Kind2, Kind2Remote, Sally.");
 				}
 			}
@@ -316,7 +320,6 @@ public class Agree implements IApplication {
 					break;
 				default:
 					exit = true;
-					output.setStatus(AgreeOutput.INTERRUPTED);
 					output.addStatusMessage("Invalid solver.  " + commandLine.getOptionValue(SOLVER) + " is not supported.  Valid options are: SMTInterpol, Yices, Yices2, Z3, CVC4, CVC5, dReal.");
 				}
 			}
@@ -350,7 +353,6 @@ public class Agree implements IApplication {
 					store.setValue(PreferenceConstants.PREF_DEPTH, i);
 				} catch (NumberFormatException e) {
 					exit = true;
-					output.setStatus(AgreeOutput.INTERRUPTED);
 					output.addStatusMessage("Invalid maximum induction depth specified.  " + e.getMessage());
 				}
 			}
@@ -363,7 +365,6 @@ public class Agree implements IApplication {
 					store.setValue(PreferenceConstants.PREF_PDR_MAX, i);
 				} catch (NumberFormatException e) {
 					exit = true;
-					output.setStatus(AgreeOutput.INTERRUPTED);
 					output.addStatusMessage("Invalid maximum PDR instances specified.  " + e.getMessage());
 				}
 			}
@@ -376,7 +377,6 @@ public class Agree implements IApplication {
 					store.setValue(PreferenceConstants.PREF_TIMEOUT, i);
 				} catch (NumberFormatException e) {
 					exit = true;
-					output.setStatus(AgreeOutput.INTERRUPTED);
 					output.addStatusMessage("Invalid timeout specified.  " + e.getMessage());
 				}
 			}
@@ -389,7 +389,6 @@ public class Agree implements IApplication {
 					store.setValue(PreferenceConstants.PREF_CONSIST_DEPTH, i);
 				} catch (NumberFormatException e) {
 					exit = true;
-					output.setStatus(AgreeOutput.INTERRUPTED);
 					output.addStatusMessage("Invalid consistency depth specified.  " + e.getMessage());
 				}
 			}
@@ -417,6 +416,7 @@ public class Agree implements IApplication {
 		if (exit) {
 			final HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp("osate", options);
+			output.setStatus(AgreeOutput.INTERRUPTED);
 			Util.writeOutput(output, outputPath);
 			return IApplication.EXIT_OK;
 		}

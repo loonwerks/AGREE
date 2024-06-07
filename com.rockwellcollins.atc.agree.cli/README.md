@@ -22,7 +22,7 @@ AGREE can be run from the command line.  All AGREE tool preferences, along with 
 | -noInductiveCounterexamples        | optional, do not generate inductive counterexamples | 
 | -noSplash                          | optional, hide the splash screen | 
 | -o,--output <arg>                  | required, output JSON file absolute path | 
-| -p,--project <arg>                 | required, project path (relative to workspace) | 
+| -p,--projectPath <arg>             | required, project path (relative to workspace) | 
 | -s,--solver <arg>                  | optional, SMT solver, default SMTInterpol | 
 | -strategy <arg>                    | required, verification strategy (single, all, monolithic, realizability) | 
 | -t,--timeout <arg>                 | optional, timeout (ms), default 100 | 
@@ -31,10 +31,10 @@ AGREE can be run from the command line.  All AGREE tool preferences, along with 
 
 # Example
 
-Using the AGREE toy_example to demonstrate usage, assume the project folder is located at C:\models\toy_example.  To perform a single layer analysis on the top_level.impl component in the Integer package, run the following command:
+Using the AGREE toy_example to demonstrate usage, assume the project folder is located at C:\models\toy_example.  To perform a single layer analysis on the top_level.impl component in the Integer_Toy package, run the following command:
 
-`osate.exe -application com.rockwellcollins.atc.agree.cli.Agree -noSplash -data C:/models -p Toy_Example -c Integer_Toy::top_level.Impl -strategy single -o C:/models/toy_example/output/AgreeResults.json`
+`osate.exe -application com.rockwellcollins.atc.agree.cli.Agree -noSplash -data C:/models -p toy_example -c Integer_Toy::top_level.Impl -strategy single -o C:/models/toy_example/output/AgreeResults.json`
 
 Executing `osatec.exe` with the same arguments will capture debug output in the terminal.
 
-The AGREE output will be written to a file in json format if the `-o` argument is provided.
+The AGREE output will be written to a file in json format if the `-o` argument is provided.  If the output directory does not exist, it will be created.

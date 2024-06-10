@@ -1,7 +1,7 @@
 package com.rockwellcollins.atc.agree.cli;
 
-import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
@@ -248,8 +248,25 @@ public class Agree implements IApplication {
 			}
 			if (commandLine.hasOption(OUTPUT)) {
 				outputPath = commandLine.getOptionValue(OUTPUT);
-				// Make sure output directory exists
-				new File(outputPath).mkdirs();
+
+				// Make sure output directory exists and is valid
+				try {
+					Paths.get(outputPath).getParent().toFile().mkdirs();
+				} catch (InvalidPathException e1) {
+					exit = true;
+					outputPath = null;
+					output.addStatusMessage("Invalid output path: " + outputPath + ".");
+				} catch (NullPointerException e2) {
+					// Do nothing, this is the root directory (which exists)
+				} catch (UnsupportedOperationException e3) {
+					exit = true;
+					outputPath = null;
+					output.addStatusMessage("No file system access to output path " + outputPath + ".");
+				} catch (SecurityException e4) {
+					exit = true;
+					outputPath = null;
+					output.addStatusMessage("Security settings prohibit writing to output path " + outputPath + ".");
+				}
 			}
 			if (commandLine.hasOption(FILES)) {
 				fileArray = commandLine.getOptionValues(FILES);

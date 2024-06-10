@@ -21,6 +21,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -278,20 +279,40 @@ public class Util {
 	 */
 	private static void addProjectToWorkspace(String projPath, String projName) throws Exception {
 
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projName);
-		IProjectDescription projectDescription = ResourcesPlugin.getWorkspace()
+		final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projName);
+		final IProjectDescription projectDescription = ResourcesPlugin.getWorkspace()
 				.newProjectDescription(project.getName());
-		projectDescription.setLocation(new org.eclipse.core.runtime.Path(projPath));
+		final String absProjPath = Paths
+				.get(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString(), projPath)
+				.toString();
+		projectDescription.setLocation(new org.eclipse.core.runtime.Path(absProjPath));
 
 		try {
 			if (!project.exists()) {
 				project.create(projectDescription, new NullProgressMonitor());
 			}
+		} catch (CoreException e) {
+			boolean name = ResourcesPlugin.getWorkspace().validateName(projName, IResource.PROJECT).isOK();
+			boolean loc = ResourcesPlugin.getWorkspace()
+					.validateProjectLocation(project, new org.eclipse.core.runtime.Path(absProjPath))
+					.isOK();
+			throw new Exception("Problem creating project " + projName + " at " + projPath + ": " + e.getMessage()
+					+ " Project name is " + (name ? "valid" : "not valid") + ". Project location is "
+					+ (loc ? "valid" : "not valid") + ".");
+		}
+
+		try {
 			if (!project.isOpen()) {
 				project.open(new NullProgressMonitor());
 			}
 		} catch (CoreException e) {
-			throw new Exception("Problem accessing project " + projName + ": " + e.getMessage());
+			boolean name = ResourcesPlugin.getWorkspace().validateName(projName, IResource.PROJECT).isOK();
+			boolean loc = ResourcesPlugin.getWorkspace()
+					.validateProjectLocation(project, new org.eclipse.core.runtime.Path(absProjPath))
+					.isOK();
+			throw new Exception("Problem opening project " + projName + " at " + projPath + ": " + e.getMessage()
+					+ " Project name is " + (name ? "valid" : "not valid") + ". Project location is "
+					+ (loc ? "valid" : "not valid") + ".");
 		}
 	}
 

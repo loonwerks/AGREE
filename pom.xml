@@ -47,6 +47,7 @@
 	<modules>
 		<module>com.rockwellcollins.atc.agree</module>
 		<module>com.rockwellcollins.atc.agree.analysis</module>
+		<module>com.rockwellcollins.atc.agree.cli</module>
 		<module>com.rockwellcollins.atc.agree.codegen</module>
 		<module>com.rockwellcollins.atc.agree.doc</module>
 		<module>com.rockwellcollins.atc.agree.feature</module>

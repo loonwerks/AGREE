@@ -3,7 +3,6 @@
 	<name>Codependence</name>
 	<comment></comment>
 	<projects>
-		<project>Plugin_Resources</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

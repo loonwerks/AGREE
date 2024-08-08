@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2022, Collins Aerospace.
+ * Copyright (c) 2024, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
@@ -22,16 +22,16 @@
 <feature
       id="com.rockwellcollins.atc.agree.feature"
       label="AGREE Annex for OSATE2"
-      version="2.10.1.qualifier"
+      version="2.11.0.qualifier"
       provider-name="Collins Aerospace">
 
    <copyright>
-      Copyright (c) 2012-2022, Rockwell Collins
+      Copyright (c) 2012-2024, Rockwell Collins
 All rights reserved.
    </copyright>
 
    <license url="">
-      Copyright (c) 2012-2022, Rockwell Collins
+      Copyright (c) 2012-2024, Rockwell Collins
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -74,10 +74,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <import feature="org.osate.ge.feature" version="2.7.0" match="greaterOrEqual"/>
       <import plugin="com.collins.trustedsystems.jkindapi" version="4.3.0" match="compatible"/>
       <import plugin="com.collins.trustedsystems.z3" version="4.0.0" match="compatible"/>
-      <import plugin="com.rockwellcollins.atc.agree" version="3.0.0" match="compatible"/>
+      <import plugin="com.rockwellcollins.atc.agree" version="4.0.0" match="compatible"/>
       <import plugin="com.rockwellcollins.atc.agree.analysis" version="2.8.0" match="compatible"/>
-      <import plugin="com.rockwellcollins.atc.agree.cli" version="1.0.0" match="compatible"/>
-      <import plugin="com.rockwellcollins.atc.agree.ui" version="3.1.0" match="compatible"/>
+      <import plugin="com.rockwellcollins.atc.agree.ui" version="4.0.0" match="compatible"/>
       <import plugin="edu.uah.rsesc.agree.ge" version="2.8.0" match="compatible"/>
       <import plugin="org.antlr.runtime" version="3.2.0" match="compatible"/>
       <import plugin="org.apache.commons.lang"/>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Collins Aerospace.
+ * Copyright (c) 2024, Collins Aerospace.
  * Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
@@ -2250,6 +2250,9 @@ public class AgreeValidator extends AbstractAgreeValidator {
 		return result;
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public static boolean isInConstBody(Expr expr) {
 		boolean result = false;
 		EObject current = expr;

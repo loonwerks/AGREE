@@ -47,10 +47,15 @@
 	<target name="build_user_guide_eclipse" description="Build the user guide">
 		<mkdir dir="${user_guide_output.dir}" />
 
+		<echo message="eclipse user guide output path: ${user_guide_output.dir}"/>
+
 		<fileset id="markdown-files" dir="${user_guide.dir}" includes="*.markdown"/>
 		<pathconvert refid="markdown-files" pathsep=" " property="markdown-file-list"/>
 
-		<apply executable="pandoc" dir="${user_guide.dir}" dest="${user_guide_output.dir}" parallel="false">
+		<property name="markdown-files.prop" refid='markdown-files'/>
+		<echo message="markdown input files: ${markdown-files.prop}"/>
+		
+		<apply executable="pandoc" dir="${user_guide.dir}" dest="${user_guide_output.dir}" parallel="false" outputproperty="true">
 			<arg value="-o"/>
 			<targetfile/>
 			<arg value="-s"/>

@@ -36,11 +36,6 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.m2e.core.maven2Builder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.eclipse.oomph.version.VersionBuilder</name>
 			<arguments>
 				<dictionary>
@@ -71,6 +66,11 @@
 					<key>release.path</key>
 					<value>/agree-releng/version-management/release.xml</value>
 				</dictionary>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>

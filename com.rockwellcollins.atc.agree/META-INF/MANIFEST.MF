@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AGREE back-end
 Bundle-Vendor: Rockwell Collins, Inc.
-Bundle-Version: 3.1.1.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-SymbolicName: com.rockwellcollins.atc.agree; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext.generator;bundle-version="[2.25.0,3.0.0)";resolution:=optional,
@@ -12,17 +12,17 @@ Require-Bundle: org.eclipse.xtext.generator;bundle-version="[2.25.0,3.0.0)";reso
  org.osate.xtext.aadl2.properties;bundle-version="[3.0.0,4.0.0)",
  org.osate.annexsupport;bundle-version="[4.0.1,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Export-Package: com.rockwellcollins.atc.agree;version="3.1.1",
- com.rockwellcollins.atc.agree.services;version="3.1.1",
- com.rockwellcollins.atc.agree.agree;version="3.1.1",
- com.rockwellcollins.atc.agree.agree.impl;version="3.1.1",
- com.rockwellcollins.atc.agree.agree.util;version="3.1.1",
- com.rockwellcollins.atc.agree.parser.antlr;version="3.1.1",
- com.rockwellcollins.atc.agree.parser.antlr.internal;version="3.1.1",
- com.rockwellcollins.atc.agree.validation;version="3.1.1",
- com.rockwellcollins.atc.agree.scoping;version="3.1.1",
- com.rockwellcollins.atc.agree.formatting2;version="3.1.1",
- com.rockwellcollins.atc.agree.linking;version="3.1.1",
- com.rockwellcollins.atc.agree.serializer;version="3.1.1",
- com.rockwellcollins.atc.agree.parser.antlr.lexer;version="3.1.1"
+Export-Package: com.rockwellcollins.atc.agree;version="4.0.0",
+ com.rockwellcollins.atc.agree.services;version="4.0.0",
+ com.rockwellcollins.atc.agree.agree;version="4.0.0",
+ com.rockwellcollins.atc.agree.agree.impl;version="4.0.0",
+ com.rockwellcollins.atc.agree.agree.util;version="4.0.0",
+ com.rockwellcollins.atc.agree.parser.antlr;version="4.0.0",
+ com.rockwellcollins.atc.agree.parser.antlr.internal;version="4.0.0",
+ com.rockwellcollins.atc.agree.validation;version="4.0.0",
+ com.rockwellcollins.atc.agree.scoping;version="4.0.0",
+ com.rockwellcollins.atc.agree.formatting2;version="4.0.0",
+ com.rockwellcollins.atc.agree.linking;version="4.0.0",
+ com.rockwellcollins.atc.agree.serializer;version="4.0.0",
+ com.rockwellcollins.atc.agree.parser.antlr.lexer;version="4.0.0"
 Automatic-Module-Name: com.rockwellcollins.atc.agree

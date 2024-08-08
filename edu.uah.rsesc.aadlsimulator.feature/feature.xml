@@ -491,6 +491,10 @@ A.7) The JOGL source tree _may_ contain code from Oculus VR, Inc.
          Or within this repository: oculusvr-sdk/LICENSE.txt
    </license>
 
+   <includes
+         id="org.eclipse.emf.mwe.sdk"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="edu.uah.rsesc.aadlsimulator" version="2.8.0" match="compatible"/>
       <import plugin="edu.uah.rsesc.aadlsimulator.xtext" version="3.0.0" match="compatible"/>

@@ -48,7 +48,7 @@ jobs:
       version: ${{ env.RELEASE_VERSION }}
     steps:
     - name: Download p2 repo artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: p2-artifact
         path: ${{ github.workspace }}/p2-artifact
@@ -77,7 +77,7 @@ jobs:
         ssh-key: ${{ secrets.DEPLOY_KEY }}
         persist-credentials: true
     - name: Download p2 repo artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: p2-artifact
         path: ${{ github.workspace }}/p2-artifact
@@ -106,7 +106,7 @@ jobs:
       id: date
       run: echo "date=$(date +'%B %e, %Y')" >> $GITHUB_ENV
     - name: Download p2 repo artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: p2-artifact
     - name: Zip Release

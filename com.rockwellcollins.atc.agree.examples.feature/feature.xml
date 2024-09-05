@@ -2,7 +2,7 @@
 <feature
       id="com.rockwellcollins.atc.agree.examples.feature"
       label="AGREE Example Projects"
-      version="1.0.3"
+      version="1.0.4.qualifier"
       provider-name="Collins Aerospace, Inc.">
 
    <description>
@@ -14,7 +14,7 @@
    </copyright>
 
    <license url="">
-Copyright (c) 2022, Collins Aerospace
+      Copyright (c) 2022, Collins Aerospace
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

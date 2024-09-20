@@ -23,7 +23,7 @@ module edu.uah.rsesc.aadlsimulator.xtext.GenerateInputConstraint
 import org.eclipse.emf.mwe.utils.*
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.generator.model.project.*
-import org.eclipse.xtext.generator.*
+import org.eclipse.xtext.xtext.generator.*
 
 var projectName = "edu.uah.rsesc.aadlsimulator.xtext"
 var rootPath = ".."
@@ -90,10 +90,10 @@ Workflow {
     		}
 
 		    // formatter API 
-		    fragment = adapter.FragmentAdapter {
-		    	fragment = formatting.FormatterFragment {
-		    	}
-		    }
+//		    fragment = adapter.FragmentAdapter {
+//		    	fragment = formatting.FormatterFragment {
+//		    	}
+//		    }
 
     		// a custom ResourceFactory for use with EMF
     		fragment = resourceFactory.ResourceFactoryFragment2 auto-inject {}

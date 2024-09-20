@@ -30,7 +30,7 @@
 
 	<groupId>edu.uah.rsesc.aadlsimulator</groupId>
 	<artifactId>edu.uah.rsesc.aadlsimulator.feature</artifactId>
-	<version>3.1.1</version>
+	<version>3.1.2-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 </project>

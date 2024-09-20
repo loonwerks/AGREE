@@ -30,7 +30,7 @@
 
 	<groupId>com.rockwellcollins.atc.agree</groupId>
 	<artifactId>com.rockwellcollins.atc.agree.examples</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>

@@ -26,8 +26,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.inject.Inject;
-
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
@@ -47,6 +45,7 @@ import org.eclipse.xtext.validation.AbstractInjectableValidator;
 import edu.uah.rsesc.aadlsimulator.xtext.inputConstraint.InputConstraint;
 import edu.uah.rsesc.aadlsimulator.xtext.inputConstraint.InputConstraintPackage;
 import edu.uah.rsesc.aadlsimulator.xtext.validation.InputConstraintValidator;
+import jakarta.inject.Inject;
 
 public class InputConstraintHelper {
 	private final IParser parser;

@@ -2,20 +2,20 @@
 Copyright (c) 2015, Rockwell Collins.
 Developed with the sponsorship of Defense Advanced Research Projects Agency (DARPA).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this data, 
-including any software or models in source or binary form, as well as any drawings, specifications, 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this data,
+including any software or models in source or binary form, as well as any drawings, specifications,
 and documentation (collectively "the Data"), to deal in the Data without restriction, including
-without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, 
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so,
 subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or 
+The above copyright notice and this permission notice shall be included in all copies or
 substantial portions of the Data.
 
-THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
-LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+THE DATA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS, SPONSORS, DEVELOPERS, CONTRIBUTORS, OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.
 */
 package edu.uah.rsesc.aadlsimulator.ui.views;
@@ -28,10 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeSet;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -122,10 +118,13 @@ import edu.uah.rsesc.aadlsimulator.xtext.ui.InputConstraintInjectionHelper;
 import edu.uah.rsesc.aadlsimulator.xtext.util.InputConstraintHelper;
 import edu.uah.rsesc.aadlsimulator.xtext.util.ReferenceTypeResolver;
 import edu.uah.rsesc.aadlsimulator.xtext.util.ResultType;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.inject.Inject;
 
 public class VariablesView {
 	private final static int VARIABLE_NAME_COLUMN_INDEX = 0;
-	
+
 	// Helper classes
 	class VariableContentProvider implements ITreeContentProvider {
 		private SimulatorState currentState;
@@ -154,7 +153,7 @@ public class VariablesView {
 		public Object[] getChildren(final Object parentElement) {
 			if(currentState == null) {
 				return new Object[0];
-			}		
+			}
 
 			return currentState.getEngineState().getChildElements(parentElement).toArray();
 		}
@@ -181,11 +180,11 @@ public class VariablesView {
 			return currentState;
 		}
 	}
-	
+
 	static class ConstraintError {
 		public final String constraint;
 		public final String errorMessage;
-		
+
 		public ConstraintError(final String constraint, final String errorMessage) {
 			this.constraint = Objects.requireNonNull(constraint, "constraint must not be null");
 			this.errorMessage = Objects.requireNonNull(errorMessage, "errorMessage must not be null");
@@ -196,8 +195,8 @@ public class VariablesView {
 		private final SimulationUIService simulationUIService;
 		private final VariableValueCellEditor cellEditor;
 		private Object currentElement;
-		
-		final ReferenceTypeResolver refResolver = new ReferenceTypeResolver() {						
+
+		final ReferenceTypeResolver refResolver = new ReferenceTypeResolver() {
 			@Override
 			public ResultType getElementReferenceType(final ElementRefExpression reference) {
 				final SimulationEngineState engineState = getVariableContentProvider().getCurrentState().getEngineState();
@@ -210,7 +209,7 @@ public class VariablesView {
 				final VariableType referencedVariableType = engineState.getElementType(referencedElement);
 				return variableTypeToResultType(referencedVariableType);
 			}
-			
+
 			@Override
 			public ResultType getConstReferenceType(final ConstRefExpression reference) {
 				final SimulationEngineState engineState = getVariableContentProvider().getCurrentState().getEngineState();
@@ -224,7 +223,7 @@ public class VariablesView {
 				return variableTypeToResultType(referencedVariableType);
 			}
 		};
-		
+
 		public NextValueEditingSupport(final SimulationUIService simulationUIService, final TreeViewer treeViewer) {
 			super(treeViewer);
 			this.simulationUIService = Objects.requireNonNull(simulationUIService, "simulationUIService must not be null");
@@ -232,12 +231,12 @@ public class VariablesView {
 				@Override
 				protected Object openDialogBox(final Control cellEditorWindow) {
 					final SimulationEngineState engineState = getVariableContentProvider().getCurrentState().getEngineState();
-					final Model model = new DefaultInputConstraintDialogModel(inputConstraintHelper, refResolver, engineState);					
+					final Model model = new DefaultInputConstraintDialogModel(inputConstraintHelper, refResolver, engineState);
 					final InputConstraintHelper.Result parseResult = inputConstraintHelper.parse(getRawValue());
 					if(!parseResult.isValid()) {
 						throw new RuntimeException("Unable to parse current constraint.");
 					}
-					
+
 					final VariableType variableType = Objects.requireNonNull(engineState.getElementType(currentElement), "unable to retrieve element type");
 					final String variableName = Objects.requireNonNull(engineState.getElementName(currentElement), "unable to retrieve element name");
 					final Result result = InputConstraintDialog.show(this.getControl().getShell(), model, variableName, parseResult.getInputConstraint(), variableTypeToResultType(variableType), engineState.getNumberOfFrames());
@@ -261,13 +260,13 @@ public class VariablesView {
 					return result.getErrorMessage();
 				}
 			});
-			
+
 			cellEditor.addListener(new ICellEditorListener() {
 				@Override
 				public void applyEditorValue() {
 					// Update the viewer if the value failed validation. If validation succeeded, update() is called as part of setValue()
 					if(cellEditor.getErrorMessage() != null) {
-						getViewer().update(currentElement, null);			
+						getViewer().update(currentElement, null);
 					}
 				}
 
@@ -290,19 +289,19 @@ public class VariablesView {
 							final String errorMessage = cellEditor.getErrorMessage();
 							elementToConstraintErrorMap.put(currentElement, new ConstraintError(cellEditor.getRawValue(), errorMessage));
 						}
-						
+
 						updateCellEditorErrorState();
 					}
-				}				
+				}
 			});
 		}
-		
+
 		public void dispose() {
 			if(cellEditor != null) {
 				cellEditor.dispose();
 			}
 		}
-		
+
 		public void updateCellEditorErrorState() {
 			cellEditor.setErrorState(elementToConstraintErrorMap.get(currentElement));
 		}
@@ -334,13 +333,13 @@ public class VariablesView {
 			final ConstraintError constraintError = elementToConstraintErrorMap.get(element);
 			if(constraintError != null) {
 				return constraintError.constraint;
-			}			
-			
+			}
+
 			final SimulationEngineState engineState = simulationUiService.getCurrentState().getEngineState();
 			if(engineState== null) {
 				return "";
 			}
-			
+
 			final InputConstraint ic = engineState.getElementInputConstraintForNextFrame(element);
 			if(ic == null) {
 				return "";
@@ -351,9 +350,9 @@ public class VariablesView {
 		}
 
 		@Override
-		protected void setValue(final Object element, final Object value) {	
+		protected void setValue(final Object element, final Object value) {
 			try {
-				// Parse the constraint. 
+				// Parse the constraint.
 				final InputConstraintHelper.Result parseResult = inputConstraintHelper.parse(value instanceof String ? value.toString() : null);
 				if(parseResult.isValid()) {
 					// Set constraint
@@ -371,31 +370,31 @@ public class VariablesView {
 				StatusManager.getManager().handle(status, StatusManager.LOG | StatusManager.SHOW);
 			}
 		}
-		
-		
+
+
 		Shell getShell() {
 			return treeViewer.getTree().getShell();
 		}
 	}
-	
+
 	static ResultType variableTypeToResultType(final VariableType vt) {
 		switch(vt) {
 		case BOOLEAN:
 			return ResultType.BOOLEAN;
-						
+
 		case REAL:
 			return ResultType.REAL;
-			
+
 		case INTEGER:
 			return ResultType.INTEGER;
-			
+
 		case NONE:
 			return null;
 		}
-		
+
 		throw new RuntimeException("Unhandled type: " + vt);
 	}
-	
+
 	private class ValueCellLabelProvider extends OwnerDrawLabelProvider {
 		private final VariableContentProvider contentProvider;
 		private int frameIndex = 0;
@@ -420,7 +419,7 @@ public class VariablesView {
 
 			super.update(cell);
 		}
-		
+
 		private Color getForeground(final Object element) {
 			final SimulatorState state = contentProvider.getCurrentState();
 			final Color foreground;
@@ -436,7 +435,7 @@ public class VariablesView {
 					foreground = null;
 				}
 			}
-			
+
 			return foreground;
 		}
 
@@ -448,8 +447,8 @@ public class VariablesView {
 			}
 
 			return ValueFormatter.formatValue(state.getEngineState().getElementValue(frameIndex, element));
-		}		
-		
+		}
+
 		@Override
 		public String getToolTipText(final Object element) {
 			// Get the name of the frame state element
@@ -463,7 +462,7 @@ public class VariablesView {
 					}
 				}
 			}
-			
+
 			return super.getToolTipText(element);
 		}
 
@@ -471,7 +470,7 @@ public class VariablesView {
 		@Override
 		protected void measure(Event event, Object element) {
 		}
-		
+
 		@Override
 		protected void erase(Event event, Object element) {
 			// If the cell is highlighted, draw the color in the background
@@ -484,28 +483,28 @@ public class VariablesView {
 					final Rectangle bounds = event.getBounds();
 					gc.fillRectangle(bounds);
 					gc.setBackground(oldBackground);
-					
+
 					// Ensure that selection and hover indicators are not drawn for the highlighted cell
 					event.detail &= ~SWT.SELECTED;
 					event.detail &= ~SWT.HOT;
 					break;
 				}
 			}
-			
+
 			// Disable drawing foreground. paint() will draw the foreground text in order to fix coloring issues when the row is selected.
 			event.detail &= ~SWT.FOREGROUND;
 		}
-		
+
 		@Override
 		protected void paint(final Event event, final Object element) {
 			// Draw just the text with the appropriate background color
 			final TreeItem item = (TreeItem) event.item;
 			final Rectangle textBounds = item.getTextBounds(event.index);
 			final GC gc = event.gc;
-			final String txt = item.getText(event.index); 
+			final String txt = item.getText(event.index);
 			gc.setForeground(item.getForeground(event.index));
 			String drawTxt = txt;
-			
+
 			// Check the width of the text and truncate it as necessary
 			final int maxWidth = Math.max(gc.getClipping().width-6, textBounds.width);
 			if(maxWidth > 0) {
@@ -514,7 +513,7 @@ public class VariablesView {
 					truncatedTxt = truncatedTxt.substring(0, truncatedTxt.length()-1);
 					drawTxt = truncatedTxt + "...";
 				}
-				
+
 				gc.drawString(drawTxt, textBounds.x, textBounds.y, true);
 			}
 		}
@@ -533,7 +532,7 @@ public class VariablesView {
 		public TreeItem findTreeItemByElement(final Object element) {
 			final Widget w = super.findItem(element);
 			return w instanceof TreeItem ? (TreeItem)w : null;
-		}		
+		}
 	}
 
 	// Stores information about a column. Needed because TreeViewer/TreeViewerColumn doesn't provide a mechanism for accessing the TreeViewerColumn and label provider
@@ -571,7 +570,7 @@ public class VariablesView {
 
 		public TreeSelectionTracker(final TreeViewer treeViewer) {
 			treeViewer.getTree().addMenuDetectListener(e -> {
-				final Point point = Display.getDefault().map(null, treeViewer.getTree(), new Point(e.x, e.y));  
+				final Point point = Display.getDefault().map(null, treeViewer.getTree(), new Point(e.x, e.y));
 				final ViewerCell cell = treeViewer.getCell(point);
 				if(cell != null && cell.getItem() != null) {
 					treeItemData = cell.getItem().getData();
@@ -583,7 +582,7 @@ public class VariablesView {
 		}
 
 		public boolean isSelectionValid() {
-			return treeItemData != null; 
+			return treeItemData != null;
 		}
 
 		public Object getSelectedTreeItemData() {
@@ -606,7 +605,7 @@ public class VariablesView {
 			this.frameIndex = frameIndex;
 			this.cellBackgroundColor = colorManager.createColor(Objects.requireNonNull(cellBackgroundRgb, "cellBackgroundRgb must not be null"));
 		}
-		
+
 		public void dispose() {
 			colorManager.destroy(ColorDescriptor.createFrom(cellBackgroundColor));
 		}
@@ -629,15 +628,15 @@ public class VariablesView {
 	private void update(SimulatorState simulatorState) {
 		// Store the simulation engine state and store the element to constraint error map when the number of frames changes.
 		// Don't clear in all cases because there are other changes which shouldn't affect the simulation variables view
-		if(currentEngineState == null || 
+		if(currentEngineState == null ||
 				simulatorState.getEngineState() == null ||
 				simulatorState.getEngineState().getNumberOfFrames() != currentEngineState.getNumberOfFrames()) {
 			elementToConstraintErrorMap.clear();
 			currentEngineState = simulatorState.getEngineState();
 		}
-		
+
 		if(treeViewer != null && !editingTreeViewer) {
-			startEditingTreeViewer();					
+			startEditingTreeViewer();
 			final TreeItem topItem = treeViewer.getTree().getTopItem();
 			final Object topElement = topItem == null ? null : topItem.getData();
 
@@ -695,18 +694,18 @@ public class VariablesView {
 	private MenuManager contextMenuMgr = new MenuManager();
 	Map<Object, ConstraintError> elementToConstraintErrorMap = new HashMap<>(); // Stores the current errors related to user inputs
 	private SimulationEngineState currentEngineState;
-	
+
 	final ControlListener resizeListener = new ControlAdapter() {
 		@Override
 		public void controlResized(final ControlEvent e) {
 			if(!editingTreeViewer) {
 				startEditingTreeViewer();
-				update();				
+				update();
 				stopEditingTreeViewer();
 			}
 		}
 	};
-	
+
 	final SelectionListener valueColumnSelectedListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(final SelectionEvent e) {
@@ -716,7 +715,7 @@ public class VariablesView {
 			}
 		}
 	};
-	
+
 	// Disabled when introducing the VariableViewPart to prevent workspaces from using this class directly due to stored workspace settings. @Inject
 	public VariablesView(final SimulationUIService simulationUiService, final SimulatorUIExtensionService extService) {
 		this.simulationUiService = Objects.requireNonNull(simulationUiService, "simulationUiService must not be null");
@@ -724,7 +723,7 @@ public class VariablesView {
 	}
 
 	@PostConstruct
-	void createView(final Composite parent) {		
+	void createView(final Composite parent) {
 		final Display display = parent.getDisplay();
 		colorManager = new DeviceResourceManager(display);
 		unchangedValueColor = colorManager.createColor(new RGB(192, 192, 192));
@@ -733,7 +732,7 @@ public class VariablesView {
 		redImage = createColorIconImage(display, red);
 		yellowImage = createColorIconImage(display, yellow);
 		customColorImage = createColorIconImage(display, customRgb);
-		
+
 		// Create root composite
 		final Composite root = new Composite(parent, SWT.NONE);
 		final GridLayout rootLayout = new GridLayout(1, false);
@@ -765,29 +764,29 @@ public class VariablesView {
 				} else if(io2 instanceof ComponentInstance && !(io1 instanceof ComponentInstance)) {
 					return 1;
 				}
-				
+
 				// Sort feature instances before the remainder
 				if(io1 instanceof FeatureInstance && !(io2 instanceof FeatureInstance)) {
 					return -1;
 				} else if(io2 instanceof FeatureInstance && !(io1 instanceof FeatureInstance)) {
 					return 1;
 				}
-				
+
 				final String n1 = contentProvider.currentState.getEngineState().getElementName(e1);
 				final String n2 = contentProvider.currentState.getEngineState().getElementName(e2);
 				return getComparator().compare(n1, n2);
 			}
 		});
-		
+
 		treeViewer.setFilters(new ViewerFilter[] {
 			new ViewerFilter() {
 				@Override
 				public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 					return !contentProvider.currentState.getEngineState().isElementHidden(element);
-				}				
+				}
 			}
 		});
-		
+
 		// Create columns
 		final TreeViewerColumn nameColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		nameColumn.getColumn().setWidth(200);
@@ -799,7 +798,7 @@ public class VariablesView {
 				cell.setText(getText(cell.getElement()));
 				cell.setImage(getImage(cell.getElement()));
 			}
-			
+
 			private String getText(final Object element) {
 				// Get the name of the frame state element
 				final SimulatorState state = contentProvider.getCurrentState();
@@ -809,14 +808,14 @@ public class VariablesView {
 
 				return state.getEngineState().getElementName(element);
 			}
-			
+
 			private Image getImage(final Object element) {
 				final SimulatorState state = contentProvider.getCurrentState();
 				if(state == null) {
 					return null;
 				}
 
-				final InstanceObject instanceObject = state.getEngineState().getElementInstanceObject(element);				
+				final InstanceObject instanceObject = state.getEngineState().getElementInstanceObject(element);
 				return instanceObject == null ? null : UiUtil.getModelElementLabelProvider().getImage(instanceObject);
 			}
 		});
@@ -829,45 +828,45 @@ public class VariablesView {
 			public void initialize(final ColumnViewer viewer, final ViewerColumn column) {
 				super.initialize(viewer, column, true);
 			}
-			
+
 			@Override
 			public void update(final ViewerCell cell) {
 				final String constraintTxt = getConstraintText(cell.getElement());
 				final String txt;
 				final Color foreground;
 				if(constraintTxt == null) {
-					// Attempt to retrieve the value for the next frame from from the engine state.					
+					// Attempt to retrieve the value for the next frame from from the engine state.
 					final SimulatorState state = contentProvider.getCurrentState();
 					if(state == null) {
 						txt = "";
 					} else {
 						final SimulationEngineState engineState = state.getEngineState();
-						txt = ValueFormatter.formatValue(engineState.getElementValue(engineState.getNumberOfFrames(), cell.getElement()));						
+						txt = ValueFormatter.formatValue(engineState.getElementValue(engineState.getNumberOfFrames(), cell.getElement()));
 					}
 					foreground = unchangedValueColor;
 				} else {
 					txt = constraintTxt;
 					foreground = null;
 				}
-				
+
 				cell.setText(txt);
 				cell.setForeground(foreground);
-				
+
 				super.update(cell);
 			}
-			
+
 			private String getConstraintText(final Object element) {
 				// Return the invalid value if the input that was entered is not correct
 				final ConstraintError constraintError = elementToConstraintErrorMap.get(element);
 				if(constraintError != null) {
 					return constraintError.constraint;
 				}
-				
+
 				final SimulationEngineState engineState = simulationUiService.getCurrentState().getEngineState();
 				if(engineState == null) {
 					return null;
 				}
-						
+
 				final InputConstraint ic = engineState.getElementInputConstraintForNextFrame(element);
 				if(ic == null) {
 					return null;
@@ -875,7 +874,7 @@ public class VariablesView {
 
 				return inputConstraintHelper.unparse(ic);
 			}
-			
+
 			@Override
 			public String getToolTipText(final Object element) {
 				final ConstraintError constraintError = elementToConstraintErrorMap.get(element);
@@ -887,9 +886,9 @@ public class VariablesView {
 			}
 
 			@Override
-			protected void measure(final Event event, final Object element) {				
+			protected void measure(final Event event, final Object element) {
 			}
-			
+
 			@Override
 			protected void erase(final Event event, final Object element) {
 				// Color cells which contain invalid values
@@ -900,12 +899,12 @@ public class VariablesView {
 					final Rectangle bounds = event.getBounds();
 					gc.fillRectangle(bounds);
 					gc.setBackground(oldBackground);
-					
+
 					// Ensure that selection and hover indicators are not drawn for the highlighted cell
 					event.detail &= ~SWT.SELECTED;
 					event.detail &= ~SWT.HOT;
 				}
-				
+
 				// Disable drawing foreground. paint() will draw the foreground text in order to fix coloring issues when the row is selected.
 				event.detail &= ~SWT.FOREGROUND;
 			}
@@ -916,10 +915,10 @@ public class VariablesView {
 				final TreeItem item = (TreeItem) event.item;
 				final Rectangle textBounds = item.getTextBounds(event.index);
 				final GC gc = event.gc;
-				final String txt = item.getText(event.index); 
+				final String txt = item.getText(event.index);
 				gc.setForeground(item.getForeground(event.index));
 				String drawTxt = txt;
-				
+
 				// Check the width of the text and truncate it as necessary
 				final int maxWidth = Math.max(gc.getClipping().width-6, textBounds.width);
 				if(maxWidth > 0) {
@@ -928,7 +927,7 @@ public class VariablesView {
 						truncatedTxt = truncatedTxt.substring(0, truncatedTxt.length()-1);
 						drawTxt = truncatedTxt + "...";
 					}
-					
+
 					gc.drawString(drawTxt, textBounds.x, textBounds.y, true);
 				}
 			}
@@ -958,7 +957,7 @@ public class VariablesView {
 					update();
 					stopEditingTreeViewer();
 				}
-			}			
+			}
 		});
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(frameSlider);
 
@@ -1067,11 +1066,11 @@ public class VariablesView {
 	@PreDestroy
 	public void preDestroy() {
 		simulationUiService.removeStateChangeListener(stateListener);
-		
+
 		if(nextValueEditingSupport != null) {
 			nextValueEditingSupport.dispose();
 		}
-		
+
 		// Dispose of OS resources
 		colorManager.dispose();
 		greenImage.dispose();
@@ -1080,24 +1079,24 @@ public class VariablesView {
 		customColorImage.dispose();
 		contextMenuMgr.dispose();
 	}
-	
+
 	public void scrollToAndSelectStateElement(final Object stateElement) {
 		// Expand the tree so that the item is visible
 		treeViewer.expandToLevel(stateElement, 1);
-		
+
 		// Find the tree item
 		final TreeItem treeItem = treeViewer.findTreeItemByElement(stateElement);
-		
+
 		if(treeItem != null) {
 			// Scroll if the item is not visible
 			final Rectangle treeItemBounds = treeItem.getBounds();
 			final Rectangle treeBounds = treeViewer.getTree().getBounds();
-			final int treeItemAreaHeight = treeBounds.height - treeViewer.getTree().getHeaderHeight(); // Take into account the size of the header because tree item bounds start at Y=0 but are not drawn at Y=0			
+			final int treeItemAreaHeight = treeBounds.height - treeViewer.getTree().getHeaderHeight(); // Take into account the size of the header because tree item bounds start at Y=0 but are not drawn at Y=0
 			final boolean treeItemVisible = treeItemBounds.y >= 0 && treeItemAreaHeight >= treeItemBounds.y && treeItemAreaHeight >= (treeItemBounds.y+treeItemBounds.height);
 			if(!treeItemVisible) {
 				treeViewer.getTree().setTopItem(treeItem);
 			}
-			
+
 			// Select the item
 			treeViewer.getTree().select(treeItem);
 		}
@@ -1116,7 +1115,7 @@ public class VariablesView {
 				}
 			}
 		}
-		
+
 		// Cancel the step
 		if(elementToConstraintErrorMap.size() > 0) {
 			event.cancelStep(new Throwable("One or more user constraints is invalid."));
@@ -1142,7 +1141,7 @@ public class VariablesView {
 			final int valueColumnsSize = valueColumns.size();
 			final int valueColumnIndex = selectedColumnIndex - (treeViewer.getTree().getColumnCount() - valueColumnsSize);
 			final SimulationEngine engine = simulationUiService.getCurrentState().getSimulationEngine();
-			
+
 			// Create the Show in Graphical View Menu Item
 			if(selectedColumnIndex == VARIABLE_NAME_COLUMN_INDEX) {
 				final Object element = treeSelectionTracker.getSelectedTreeItemData();
@@ -1155,10 +1154,10 @@ public class VariablesView {
 						}
 					});
 				}
-				
+
 				// Populate context menu using command extensions
 				final CommandContext cmdCtx = new SimpleCommandContext(element, engine.getCurrentState(), engine);
-				
+
 				for(final Command cmd : extService.getCommands()) {
 					if(cmd.isAvailable(cmdCtx)) {
 						contextMenu.add(new Action(cmd.getLabel(cmdCtx)) {
@@ -1166,7 +1165,7 @@ public class VariablesView {
 							public boolean isEnabled() {
 								return cmd.isActivatable(cmdCtx);
 							}
-							
+
 							@Override
 							public void run() {
 								cmd.activate(cmdCtx);
@@ -1175,7 +1174,7 @@ public class VariablesView {
 					}
 				}
 			}
-			
+
 			// Highlight Menu
 			final MenuManager subMenu = new MenuManager("Highlight");
 			if (valueColumnIndex >= 0) {
@@ -1234,7 +1233,7 @@ public class VariablesView {
 					}
 				});
 				contextMenu.add(subMenu);
-				
+
 				final CellColorInfo cellColorInfo = getCellColorInfo(treeItemData, frameIndex);
 				if (cellColorInfo != null) {
 					final CellColorInfo removeCellColorInfo = cellColorInfo;
@@ -1249,7 +1248,7 @@ public class VariablesView {
 					});
 				}
 			}
-			
+
 			// Reset all Highlights
 			if (!cellColorInfos.isEmpty()) {
 				//Resets tree, erases highlights
@@ -1265,31 +1264,31 @@ public class VariablesView {
 								cellColorInfos.clear();
 								treeViewer.getTree().redraw();
 							}
-						}		
+						}
 					}
 				});
 			}
 		}
 	}
-	
+
 	public void setFocus() {
 		if(treeViewer != null) {
 			treeViewer.getTree().setFocus();
 		}
 	}
-	
+
 	private void showInGraphicalView(final InstanceObject io) {
-		assert(io != null);	
-		
+		assert(io != null);
+
 		// Open the graphical editor
 		final GraphicalEditorService editorService = Objects.requireNonNull(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getService(GraphicalEditorService.class), "unable to retrieve Graphical Editor Service");
 		final SimulationEngine engine = simulationUiService.getCurrentState().getSimulationEngine();
-		if(engine != null && engine.getSystemInstance() != null) {			
+		if(engine != null && engine.getSystemInstance() != null) {
 			final GraphicalEditor editor = editorService.openBusinessObject(engine.getSystemInstance());
 			editor.selectDiagramElementsForBusinessObject(io);
-		};				
+		};
 	}
-	
+
 	private Image createColorIconImage(final Device device, final RGB rgb) {
 		final Image image = new Image(device, 16, 16);
 
@@ -1299,7 +1298,7 @@ public class VariablesView {
 
 		return image;
 	}
-	
+
 	private void fillColorIconImage(final Image image, final RGB rgb) {
 		final GC gc = new GC(image);
 		final Color color = new Color(image.getDevice(), rgb);
@@ -1308,20 +1307,20 @@ public class VariablesView {
 		color.dispose();
 		gc.dispose();
 	}
-	
+
 	private void highlightCell(final Object treeItemData, final int frameIndex, final RGB rgb) {
 		final CellColorInfo existingCellColorInfo = getCellColorInfo(treeItemData, frameIndex);
 		//If selected cell is already in cellColorInfos, update color
 		if (existingCellColorInfo != null) {
 			existingCellColorInfo.dispose();
 			cellColorInfos.remove(existingCellColorInfo);
-		} 
-		
+		}
+
 		// Create a new cell color info
 		cellColorInfos.add(new CellColorInfo(treeItemData, frameIndex, rgb));
 		treeViewer.getTree().redraw();
 	}
-	
+
 	private CellColorInfo getCellColorInfo(final Object treeItemData, final int frameIndex) {
 		for (final CellColorInfo cellColorInfo : cellColorInfos) {
 			if (cellColorInfo.getFrameIndex() == frameIndex && cellColorInfo.getTreeItemData().equals(treeItemData)) {
@@ -1330,17 +1329,17 @@ public class VariablesView {
 		}
 		return null;
 	}
-	
+
 	private ValueColumn getValueColumn(final TreeColumn treeColumn) {
 		for(final ValueColumn valueColumn : valueColumns) {
 			if(valueColumn.column == treeColumn) {
 				return valueColumn;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	private String buildColumnHeader(final int columnFrameIndex) {
 		String columnTxt = "Step " + (columnFrameIndex + 1);
 		if(simulationUiService.getCurrentState().getSelectedFrameIndex() == columnFrameIndex) {

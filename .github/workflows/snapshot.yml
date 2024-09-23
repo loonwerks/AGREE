@@ -23,7 +23,7 @@ jobs:
     - name: Build snapshot
       run: mvn verify -Pbuild-snapshot
     - name: Upload p2 repo artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: p2-artifact
         path: ${{ github.workspace }}/com.rockwellcollins.atc.agree.site/target/repository/
@@ -48,7 +48,7 @@ jobs:
         ssh-key: ${{ secrets.DEPLOY_KEY }}
         persist-credentials: true
     - name: Download p2 repo artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: p2-artifact
         path: ${{ github.workspace }}/p2-artifact
@@ -86,7 +86,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.x'
     - name: Checkout current update site

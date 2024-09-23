@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AGREE UI extensions to the OSATE Graphical Editor
 Bundle-SymbolicName: edu.uah.rsesc.agree.ge.ui;singleton:=true
-Bundle-Version: 2.9.2.qualifier
+Bundle-Version: 2.9.200.qualifier
 Bundle-Vendor: The University of Alabama in Huntsville
 Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
  org.eclipse.core.runtime;bundle-version="[3.20.0,4.0.0)",
@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
  org.osate.aadl2.edit;bundle-version="[5.0.0,6.0.0)",
  org.osate.ui;bundle-version="[6.0.0,7.0.0)",
  org.osate.annexsupport;bundle-version="[4.0.1,5.0.0)",
- edu.uah.rsesc.agree.ge;bundle-version="[2.8.0,3.0.0)",
+ edu.uah.rsesc.agree.ge;bundle-version="[2.9.0,3.0.0)",
  com.rockwellcollins.atc.agree.ui;bundle-version="[4.0.0,5.0.0)",
  org.osate.xtext.aadl2.ui;bundle-version="[7.0.0,8.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17

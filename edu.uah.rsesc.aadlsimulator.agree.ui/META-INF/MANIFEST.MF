@@ -2,17 +2,17 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AADL Simulator AGREE UI
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator.agree.ui;singleton:=true
-Bundle-Version: 2.9.2.qualifier
+Bundle-Version: 2.9.200.qualifier
 Bundle-Vendor: The University of Alabama in Huntsville
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Require-Bundle: edu.uah.rsesc.aadlsimulator.ui;bundle-version="[2.8.0,3.0.0)",
- edu.uah.rsesc.aadlsimulator;bundle-version="[2.8.0,3.0.0)",
- edu.uah.rsesc.aadlsimulator.agree;bundle-version="[2.8.0,3.0.0)",
+Require-Bundle: edu.uah.rsesc.aadlsimulator.ui;bundle-version="[2.9.0,3.0.0)",
+ edu.uah.rsesc.aadlsimulator;bundle-version="[2.9.0,3.0.0)",
+ edu.uah.rsesc.aadlsimulator.agree;bundle-version="[2.9.0,3.0.0)",
  org.eclipse.swt;bundle-version="[3.116.0,4.0.0)",
  org.eclipse.jface;bundle-version="[3.22.0,4.0.0)",
  org.eclipse.equinox.registry;bundle-version="[3.10.0,4.0.0)",
  org.eclipse.osgi;bundle-version="[3.16.0,4.0.0)",
- com.rockwellcollins.atc.agree.analysis;bundle-version="[2.8.0,3.0.0)",
+ com.rockwellcollins.atc.agree.analysis;bundle-version="[2.10.0,3.0.0)",
  org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
  org.eclipse.core.expressions;bundle-version="[3.7.0,4.0.0)",
  org.eclipse.e4.core.contexts;bundle-version="[1.8.0,2.0.0)",
@@ -21,9 +21,9 @@ Require-Bundle: edu.uah.rsesc.aadlsimulator.ui;bundle-version="[2.8.0,3.0.0)",
  org.eclipse.debug.core;bundle-version="[3.18.0,4.0.0)",
  com.rockwellcollins.atc.agree;bundle-version="[4.0.0,5.0.0)",
  org.eclipse.debug.ui;bundle-version="[3.14.0,4.0.0)",
- com.rockwellcollins.atc.tcg;bundle-version="[2.8.0,3.0.0)",
+ com.rockwellcollins.atc.tcg;bundle-version="[2.9.0,3.0.0)",
  org.eclipse.xtext.ui;bundle-version="[2.25.0,3.0.0)",
- edu.uah.rsesc.aadlsimulator.xtext;bundle-version="[3.0.0,4.0.0)",
+ edu.uah.rsesc.aadlsimulator.xtext;bundle-version="[3.1.0,4.0.0)",
  com.collins.trustedsystems.jkindapi;bundle-version="[4.0.0,5.0.0)"
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: edu.uah.rsesc.aadlsimulator.agree.ui

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AADL Simulator UI
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator.ui;singleton:=true
-Bundle-Version: 2.9.2.qualifier
+Bundle-Version: 2.9.200.qualifier
 Bundle-Vendor: The University of Alabama in Huntsville
 Bundle-Classpath: .,
  lib/jogamp-fat.jar,
@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
  org.eclipse.emf.ecore.xmi;bundle-version="[2.16.0,3.0.0)",
  org.osate.aadl2.modelsupport;bundle-version="[7.0.0,8.0.0)",
  org.osate.aadl2;bundle-version="[5.0.0,6.0.0)",
- edu.uah.rsesc.aadlsimulator;bundle-version="[2.8.0,3.0.0)",
+ edu.uah.rsesc.aadlsimulator;bundle-version="[2.9.0,3.0.0)",
  org.eclipse.core.expressions;bundle-version="[3.7.0,4.0.0)",
  org.eclipse.ui.workbench;bundle-version="[3.122.0,4.0.0)",
  org.eclipse.xtext.util;bundle-version="[2.25.0,3.0.0)",
@@ -33,15 +33,15 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
  org.eclipse.e4.ui.model.workbench;bundle-version="[2.1.0,3.0.0)",
  org.eclipse.emf.common;bundle-version="[2.22.0,3.0.0)",
  org.osate.ge;bundle-version="[3.0.0,4.0.0)",
- edu.uah.rsesc.aadlsimulator.xtext.ui;bundle-version="[3.0.0,4.0.0)",
+ edu.uah.rsesc.aadlsimulator.xtext.ui;bundle-version="[3.1.0,4.0.0)",
  jakarta.annotation-api;bundle-version="[2.1.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Service-Component: components/DefaultSimulationUIService.xml
-Export-Package: edu.uah.rsesc.aadlsimulator.ui;version="2.9.2",
- edu.uah.rsesc.aadlsimulator.ui.ext;version="2.9.2",
- edu.uah.rsesc.aadlsimulator.ui.launch;version="2.9.2",
- edu.uah.rsesc.aadlsimulator.ui.services;version="2.9.2"
+Export-Package: edu.uah.rsesc.aadlsimulator.ui;version="2.9.200",
+ edu.uah.rsesc.aadlsimulator.ui.ext;version="2.9.200",
+ edu.uah.rsesc.aadlsimulator.ui.launch;version="2.9.200",
+ edu.uah.rsesc.aadlsimulator.ui.services;version="2.9.200"
 Bundle-Activator: edu.uah.rsesc.aadlsimulator.ui.Activator
 Import-Package: org.apache.log4j;version="[1.2.15,2.0.0)",
  org.osgi.service.event;version="[1.0.0,2.0.0)"

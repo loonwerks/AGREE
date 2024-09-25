@@ -2,7 +2,7 @@
 <feature
       id="com.rockwellcollins.atc.agree.examples.feature"
       label="AGREE Example Projects"
-      version="1.0.5"
+      version="1.0.5.qualifier"
       provider-name="Collins Aerospace, Inc.">
 
    <description>

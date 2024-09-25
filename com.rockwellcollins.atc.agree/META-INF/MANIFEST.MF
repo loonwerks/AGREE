@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AGREE back-end
 Bundle-Vendor: Rockwell Collins, Inc.
-Bundle-Version: 4.0.200.qualifier
+Bundle-Version: 4.0.200
 Bundle-SymbolicName: com.rockwellcollins.atc.agree; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext.xtext.generator;bundle-version="[2.25.0,3.0.0)";resolution:=optional,

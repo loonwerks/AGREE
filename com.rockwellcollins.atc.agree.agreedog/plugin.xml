@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.rockwellcollins.atc.agree.analysis.cexextractor">
+      <cexextractor
+            class="com.rockwellcollins.atc.agree.agreedog.AgreeDog"
+            id="com.rockwellcollins.atc.agree.agreedog.cexextractor"
+            pluginName="com.rockwellcollins.atc.agree.agreedog">
+      </cexextractor>
+   </extension>
+
+</plugin>

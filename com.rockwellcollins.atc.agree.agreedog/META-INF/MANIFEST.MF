@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: AgreeDog
+Bundle-SymbolicName: com.rockwellcollins.atc.agree.agreedog;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Import-Package: jkind.results
+Bundle-Activator: com.rockwellcollins.atc.agree.agreedog.Activator
+Bundle-Vendor: ROCKWELLCOLLINS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.rockwellcollins.atc.agree.analysis,
+ org.osate.aadl2,
+ org.eclipse.emf.ecore
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Automatic-Module-Name: com.rockwellcollins.atc.agree.agreedog
+Bundle-ActivationPolicy: lazy

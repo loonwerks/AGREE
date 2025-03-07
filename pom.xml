@@ -32,6 +32,8 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		-->
+		<!-- CycloneDX settings -->
+		<cyclonedx.version>2.9.1</cyclonedx.version>
 		<!-- Tycho settings -->
 		<tycho.version>3.0.5</tycho.version>
 		<tycho-extras.version>3.0.5</tycho-extras.version>
@@ -95,7 +97,7 @@
 				<moduleProperties>--add-modules=ALL-SYSTEM</moduleProperties>
 			</properties>
 		</profile>
-<profile>
+		<profile>
 			<id>build-release</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
@@ -271,6 +273,19 @@
 						</environment>
 					</environments>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+				<version>${cyclonedx.version}</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>makeAggregateBom</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<pluginManagement>

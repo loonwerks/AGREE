@@ -358,6 +358,12 @@
             name="Analysis">
             <keywordReference id="com.rockwellcollins.atc.agree.ui.keyword_Agree"/>
       </page>
+      <page
+            category="com.rockwellcollins.atc.agree.Agree"
+            class="com.rockwellcollins.atc.agree.analysis.preferences.SavingPreferencePage"
+            id="com.rockwellcollins.atc.agree.analysis.preferences.SavingPreferencePage"
+            name="Saving">
+      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

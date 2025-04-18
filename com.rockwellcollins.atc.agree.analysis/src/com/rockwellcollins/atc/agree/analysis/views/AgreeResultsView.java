@@ -31,12 +31,16 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.osate.aadl2.Element;
 
+import com.rockwellcollins.atc.agree.analysis.Activator;
 import com.rockwellcollins.atc.agree.analysis.handlers.AadlHandler;
 import com.rockwellcollins.atc.agree.analysis.handlers.RerunHandler;
 import com.rockwellcollins.atc.agree.analysis.handlers.TerminateHandler;
 import com.rockwellcollins.atc.agree.analysis.handlers.VerifyHandler;
+import com.rockwellcollins.atc.agree.analysis.preferences.PreferenceConstants;
+import com.rockwellcollins.atc.agree.analysis.saving.AgreeFileUtil;
 
 import jkind.api.results.AnalysisResult;
+import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.ui.results.AnalysisResultTree;
 
 public class AgreeResultsView extends ViewPart {
@@ -107,6 +111,14 @@ public class AgreeResultsView extends ViewPart {
 				handlerService.deactivateHandler(rerunActivation);
 				rerunActivation = null;
 			});
+		}
+	}
+
+	public void saveResultsHandler() {
+		if (Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.PREF_SAVE_RESULTS)) {
+			if (tree.getViewer().getInput() instanceof CompositeAnalysisResult) {
+				AgreeFileUtil.saveResult((CompositeAnalysisResult) tree.getViewer().getInput());
+			}
 		}
 	}
 

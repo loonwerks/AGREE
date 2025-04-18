@@ -559,24 +559,10 @@ public abstract class VerifyHandler extends AadlHandler {
 							System.out.println("******** JKindException Text ********");
 							e.printStackTrace(System.out);
 
-//						System.out.println("******** JKind Output ********");
-//						System.out.println(result.getText());
-//						System.out.println("******** Agree Lustre ********");
-//						System.out.println(program);
-
 							String errStr = e.getMessage();
 							int l = Math.min(errStr.length(), 300);
 							System.out.println(e.getMessage().substring(0, l));
 
-//=======
-//						System.out.println("******** JKind Output ********");
-//						System.out.println(result.getText());
-//						System.out.println("******** Agree Lustre ********");
-//						System.out.println(program);
-//
-//
-//						System.out.println(e.getMessage());
-//>>>>>>> origin/develop
 							break;
 						}
 
@@ -594,6 +580,7 @@ public abstract class VerifyHandler extends AadlHandler {
 				} finally {
 					deactivateTerminateHandlers();
 					enableRerunHandler(root);
+					saveResultsHandler();
 				}
 
 			}
@@ -634,6 +621,15 @@ public abstract class VerifyHandler extends AadlHandler {
 			AgreeResultsView agreeResultsView = findView();
 			if (agreeResultsView != null) {
 				agreeResultsView.disableRerunHandler();
+			}
+		});
+	}
+
+	private void saveResultsHandler() {
+		getWindow().getShell().getDisplay().syncExec(() -> {
+			AgreeResultsView agreeResultsView = findView();
+			if (agreeResultsView != null) {
+				agreeResultsView.saveResultsHandler();
 			}
 		});
 	}

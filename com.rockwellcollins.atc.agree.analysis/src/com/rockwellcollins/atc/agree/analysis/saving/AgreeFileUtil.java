@@ -49,7 +49,10 @@ import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.ModelUnit;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -57,6 +60,7 @@ import com.rockwellcollins.atc.agree.analysis.Activator;
 import com.rockwellcollins.atc.agree.analysis.preferences.PreferenceConstants;
 
 import jkind.api.results.AnalysisResult;
+import jkind.api.results.CompositeAnalysisResult;
 import jkind.api.results.JKindResult;
 import jkind.api.results.MultiStatus;
 import jkind.api.results.PropertyResult;
@@ -67,6 +71,47 @@ public class AgreeFileUtil {
 	private final static Semaphore mutex = new Semaphore(1);
 	private static final java.lang.reflect.Type AGREE_PROP_LOG_TYPE = new TypeToken<List<AgreeLogResult>>() {
 	}.getType();
+
+	/**
+	 * Saves AGREE composite result in json format
+	 * @param results - The result of the AGREE analysis
+	 */
+	public static void saveResult(CompositeAnalysisResult results) {
+
+		final String outputPath = Activator.getDefault().getPreferenceStore()
+				.getString(PreferenceConstants.PREF_SAVE_RESULTS_FILENAME);
+		if (outputPath.isBlank()) {
+			System.out.println("Cannot save AGREE analysis result. Save location must bed specified in preferences.");
+			return;
+		}
+
+		final ExclusionStrategy exStrat = new ExclusionStrategy() {
+
+			@Override
+			public boolean shouldSkipClass(Class<?> arg0) {
+				return false;
+			}
+
+			@Override
+			public boolean shouldSkipField(FieldAttributes f) {
+				return (f.getName().equals("pcs") || f.getName().equals("ticker") || f.getName().equals("renaming")
+						|| f.getName().equals("parent"));
+			}
+		};
+
+		// Convert to json
+		final Gson gson = new GsonBuilder().setExclusionStrategies(exStrat).setPrettyPrinting().disableHtmlEscaping()
+				.create();
+		try {
+			final File outputFile = new File(outputPath);
+			final JsonWriter jsonWriter = new JsonWriter(new FileWriter(outputFile));
+			jsonWriter.setIndent("    ");
+			gson.toJson(results, results.getClass(), jsonWriter);
+			jsonWriter.close();
+		} catch (Exception e) {
+			System.out.println("Error writing to " + outputPath);
+		}
+	}
 
 	/**
 	 * Prints the AGREE analysis result in json format to the property log file

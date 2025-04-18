@@ -44,6 +44,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_TIMEOUT, 100);
 		store.setDefault(PreferenceConstants.PREF_CONSIST_DEPTH, 1);
 		store.setDefault(PreferenceConstants.PREF_PROP_LOG, false);
+		store.setDefault(PreferenceConstants.PREF_SAVE_RESULTS, false);
 		store.setDefault(PreferenceConstants.PREF_DEBUG, false);
 	}
 }

@@ -67,5 +67,8 @@ public class PreferenceConstants {
 	public static final String PREF_PROP_LOG = "propLog";
 	public static final String PREF_PROP_LOG_FILENAME = "propLogFileName";
 
+	public static final String PREF_SAVE_RESULTS = "saveResults";
+	public static final String PREF_SAVE_RESULTS_FILENAME = "propLogFileName";
+
 	public static final String PREF_DEBUG = "debug";
 }

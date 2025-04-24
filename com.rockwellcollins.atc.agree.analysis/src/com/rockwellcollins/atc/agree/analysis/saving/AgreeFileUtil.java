@@ -197,6 +197,10 @@ public class AgreeFileUtil {
 			throw new Exception("AGREE log file name was not specified in AGREE preferences.");
 		}
 
+		if (!logFile.exists()) {
+			logFile.createNewFile();
+		}
+
 		// Read in the agree property log file
 		try {
 			Gson gson = new Gson();

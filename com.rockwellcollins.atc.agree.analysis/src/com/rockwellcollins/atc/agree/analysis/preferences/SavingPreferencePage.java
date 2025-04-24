@@ -162,7 +162,15 @@ public class SavingPreferencePage extends FieldEditorPreferencePage implements I
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		super.propertyChange(event);
+		if (propLogFieldEditor.getBooleanValue() && saveResultsFieldEditor.getBooleanValue()
+				&& propLogFileFieldEditor.getStringValue().contentEquals(saveResultsFileFieldEditor.getStringValue())) {
+			setValid(false);
+			setErrorMessage("AGREE property analysis log and analysis results cannot have the same filename.");
+		} else {
+			setValid(true);
+			setErrorMessage(null);
+			super.propertyChange(event);
+		}
 		configureEnabledFieldEditors();
 	}
 

@@ -69,9 +69,10 @@ public class AgreePreferencePage extends FieldEditorPreferencePage implements IW
 	private static final String[][] SOLVERS = {
 			{ PreferenceConstants.SOLVER_SMTINTERPOL, PreferenceConstants.SOLVER_SMTINTERPOL },
 			{ PreferenceConstants.SOLVER_YICES, PreferenceConstants.SOLVER_YICES },
+			{ PreferenceConstants.SOLVER_YICES2, PreferenceConstants.SOLVER_YICES2 },
 			{ PreferenceConstants.SOLVER_Z3, PreferenceConstants.SOLVER_Z3 },
 			{ PreferenceConstants.SOLVER_CVC4, PreferenceConstants.SOLVER_CVC4 },
-			{ PreferenceConstants.SOLVER_YICES2, PreferenceConstants.SOLVER_YICES2 } };
+			{ PreferenceConstants.SOLVER_CVC5, PreferenceConstants.SOLVER_CVC5 } };
 
 	private ComboFieldEditor solverFieldEditor;
 	private String selectedSolver;

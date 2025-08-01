@@ -446,8 +446,7 @@ public class Agree implements IApplication {
 
 		// Add plug-in contributions to resource set
 		for (URI uri : PluginSupportUtil.getContributedAadl()) {
-			Resource res = resourceSet.getResource(uri, true);
-			System.out.println("... " + res.getURI() + (res.isLoaded() ? " is loaded" : " is not loaded"));
+			resourceSet.getResource(uri, true);
 		}
 
 		// Load project AADL files

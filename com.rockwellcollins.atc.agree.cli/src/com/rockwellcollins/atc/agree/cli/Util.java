@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,15 +20,11 @@ import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
@@ -51,36 +48,18 @@ import com.rockwellcollins.atc.agree.cli.results.SyntaxValidationResults;
 public class Util {
 
 	// Load project specific AADL files
-	public static void loadProjectAadlFiles(String projPath, String[] libArray, XtextResourceSet resourceSet)
+	public static void loadProjectAadlFiles(Path workspace, Path projectPath, String[] libArray,
+			XtextResourceSet resourceSet)
 			throws Exception {
 
-		final String workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
-		final Path absProjPath = Paths.get(workspace, projPath);
-		final List<String> projectFiles = findFiles(absProjPath, "aadl");
-		final File projectFile = new File(absProjPath.toFile(), ".project");
-		final String projName = getProjectName(projectFile);
+		final List<File> projectAadlFiles = findFiles(projectPath, "aadl");
+		final File projectFile = projectPath.resolve(".project").toFile();
+		final String projectName = getProjectName(projectFile);
 
-		// Add project to workspace
-		addProjectToWorkspace(projPath, projName);
+		EcorePlugin.getPlatformResourceMap().put(projectName, URI.createFileURI(projectPath.toString()));
 
-		// Map project folder to project name (they could be different)
-		final Map<String, String> projMap = new HashMap<>();
-		Path topLevelDir = absProjPath;
-		for (int i = 0; i < URI.createURI(projPath).segmentCount() - 1; ++i) {
-			if (topLevelDir.getParent() != null) {
-				topLevelDir = topLevelDir.getParent();
-			}
-		}
-
-		final List<String> dotProjFiles = findFiles(topLevelDir, "project");
-		for (String dotProjFile : dotProjFiles) {
-			final File projFile = new File(dotProjFile);
-			projMap.put(getProjectName(projFile), projFile.getParentFile().getAbsolutePath());
-		}
-
-		for (String pFile : projectFiles) {
-			final File projFile = new File(pFile);
-			loadFile(absProjPath.toFile(), projName, projFile, resourceSet);
+		for (File pFile : projectAadlFiles) {
+			loadFile(projectPath, projectName, pFile, resourceSet);
 		}
 
 		// load user specified AADL libs
@@ -91,20 +70,30 @@ public class Util {
 		}
 
 		// load referenced project AADL files
-		final List<String> refProjNames = new ArrayList<>();
-		getRefProjName(refProjNames, projName, projMap);
-		for (String refProjName : refProjNames) {
-			// Add reference project to workspace
-			addProjectToWorkspace(projMap.get(refProjName), refProjName);
-
-			final File refProj = new File(projMap.get(refProjName));
-			final List<String> refProjFileNames = findFiles(refProj.toPath(), "aadl");
-			for (String refProjFileName : refProjFileNames) {
-				final File refProjFile = new File(refProjFileName);
-				loadFile(new File(projMap.get(refProjName)), refProjName, refProjFile, resourceSet);
+		final Map<String, List<Path>> projectMap = findProjects(workspace);
+		// If there are multiple projects in the workspace with the same name as the project being analyzed,
+		// ignore them by removing from list
+		final ListIterator<Path> i = projectMap.get(projectName).listIterator();
+		while (i.hasNext()) {
+			final Path p = i.next();
+			if (p.compareTo(projectPath) != 0) {
+				i.remove();
 			}
 		}
+
+		final List<Path> refProjPaths = new ArrayList<>();
+		getRefProjPaths(refProjPaths, projectName, projectMap);
+		for (Path refProjPath : refProjPaths) {
+			final List<File> refProjFiles = findFiles(refProjPath, "aadl");
+			for (File refProjFile : refProjFiles) {
+				loadFile(projectPath, projectName, refProjFile, resourceSet);
+			}
+		}
+
+		EcoreUtil.resolveAll(resourceSet);
+
 	}
+
 
 	// Validation resource set
 	public static SyntaxValidationResults validateResourceSet(XtextResourceSet resourceSet) {
@@ -125,6 +114,8 @@ public class Util {
 					} else if (issue.getSeverity().equals(Severity.WARNING)) {
 						++numWarnings;
 						valIssue.setSeverity("warning");
+					} else {
+						continue;
 					}
 					valIssue.setIssue(issue.getMessage());
 					valIssue.setFile(resource.getURI().toPlatformString(true));
@@ -137,18 +128,63 @@ public class Util {
 		return new SyntaxValidationResults(numWarnings, numErrors, syntaxValidationIssues);
 	}
 
-	private static List<String> findFiles(Path path, String fileExtension) throws Exception {
+	public static boolean reflectDoSetup(String className) {
+		try {
+			Class.forName(className).getMethod("doSetup").invoke(null);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 
-		final List<String> result;
+	private static List<File> findFiles(Path path, String fileExtension) throws Exception {
+
+		if (!Files.isDirectory(path)) {
+			throw new IllegalArgumentException("Path must be a directory!");
+		}
+
+		final List<File> result;
 
 		try (Stream<Path> walk = Files.walk(path)) {
 			result = walk
 					.filter(p -> !Files.isDirectory(p))
-					.map(p -> p.toString())
-					.filter(f -> f.endsWith(fileExtension))
+					.filter(p -> p.toString().toLowerCase().endsWith(fileExtension))
+					.map(p -> p.toFile())
 					.collect(Collectors.toList());
 		}
 		return result;
+	}
+
+
+	// Finds all projects in workspace
+	// Returns a map of project name to project path
+	private static Map<String, List<Path>> findProjects(Path workspace) throws Exception {
+
+		if (!Files.isDirectory(workspace)) {
+			throw new IllegalArgumentException("Workspace must be a directory!");
+		}
+
+		final List<Path> projectPaths;
+
+		try (Stream<Path> walk = Files.walk(workspace)) {
+			projectPaths = walk.filter(p -> !Files.isDirectory(p))
+					.filter(f -> f.toString().toLowerCase().endsWith(".project"))
+					.collect(Collectors.toList());
+		}
+
+		final Map<String, List<Path>> projectMap = new HashMap<>();
+		for (Path p : projectPaths) {
+			final String projectName = getProjectName(p.toFile());
+			if (projectMap.containsKey(projectName)) {
+				projectMap.get(projectName).add(p.getParent());
+			} else {
+				final List<Path> projectPath = new ArrayList<>();
+				projectPath.add(p.getParent());
+				projectMap.put(projectName, projectPath);
+			}
+		}
+
+		return projectMap;
 	}
 
 	/** Adapted from
@@ -161,7 +197,7 @@ public class Util {
 	 */
 	//https://github.com/sireum/osate-plugin/blob/master/org.sireum.aadl.osate/src/main/java/org/sireum/aadl/osate/util/AadlProjectUtil.java
 
-	private static Resource loadFile(File projectRootDirectory, String projectName, File file, ResourceSet rs)
+	private static Resource loadFile(Path projectRootDirectory, String projectName, File file, ResourceSet rs)
 			throws Exception {
 
 		final URL url = new URL("file:" + file.getAbsolutePath());
@@ -172,19 +208,19 @@ public class Util {
 			throw new Exception("Error loading file " + file.toString());
 		}
 
-		final String normalizedRelPath = relativize(projectRootDirectory, file).replace("\\", "/");
+		final String normalizedRelPath = relativize(projectRootDirectory.toFile(), file).replace("\\", "/");
 
 		// came up with this uri by comparing what OSATE IDE serialized AIR produces
 		final URI resourceUri = URI.createPlatformResourceURI(projectName + "/" + normalizedRelPath, true);
 		final Resource res = rs.createResource(resourceUri);
 		if (res == null) {
-			throw new Exception("Error loading file " + projectName + "/" + normalizedRelPath);
+			throw new Exception("Error loading file /" + projectName + "/" + normalizedRelPath);
 		}
 		try {
 			res.load(stream, Collections.EMPTY_MAP);
 			return res;
 		} catch (IOException e) {
-			throw new Exception("Error loading file " + projectName + "/" + normalizedRelPath);
+			throw new Exception("Error loading file /" + projectName + "/" + normalizedRelPath);
 		}
 	}
 
@@ -209,6 +245,39 @@ public class Util {
 		return Paths.get(root.toURI()).relativize(Paths.get(other.toURI())).toString();
 	}
 
+	// Maps reference project names to project paths
+	// Note there could be multiple projects with the same name in the workspace
+	// A reference project could depend on another reference project
+	private static void getRefProjPaths(List<Path> refProjPaths, String projectName, Map<String, List<Path>> projectMap)
+			throws Exception {
+
+		List<Path> projectPaths = projectMap.get(projectName);
+		Path projectPath = null;
+		if (projectPaths.size() == 1) {
+			projectPath = projectPaths.get(0);
+		} else {
+			throw new Exception("Multiple projects found in workspace with same name: " + projectName);
+		}
+		final File projectFile = projectPath.resolve(".project").toFile();
+		final List<String> refProjList = getReferenceProjectNames(projectFile);
+		for (String refProjName : refProjList) {
+
+			projectPaths = projectMap.get(refProjName);
+			projectPath = null;
+			if (projectPaths.size() == 1) {
+				projectPath = projectPaths.get(0);
+			} else {
+				throw new Exception("Multiple projects found in workspace with same name: " + refProjName);
+			}
+
+			// avoid duplicate and break circular reference
+			if (!refProjPaths.contains(projectPath)) {
+				refProjPaths.add(projectPath);
+				getRefProjPaths(refProjPaths, refProjName, projectMap);
+			}
+		}
+	}
+
 	private static String getProjectName(File projectFile) throws Exception {
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -230,25 +299,6 @@ public class Util {
 		throw new Exception("Error getting project name from file " + projectFile.toString());
 	}
 
-	// A reference project could depend on another reference project
-	private static void getRefProjName(List<String> list, String projectName, Map<String, String> projMap)
-			throws Exception {
-
-		final File projectFile = new File(projMap.get(projectName), ".project");
-		if (!projectFile.exists()) {
-			throw new Exception("Project " + projectName + " was not found in the workspace.");
-		}
-		final List<String> refProjList = getReferenceProjectNames(projectFile);
-		if (!refProjList.isEmpty()) {
-			for (String refProjName : refProjList) {
-				// avoid duplicate and break circular reference
-				if (!list.contains(refProjName)) {
-					list.add(refProjName);
-					getRefProjName(list, refProjName, projMap);
-				}
-			}
-		}
-		}
 
 	private static List<String> getReferenceProjectNames(File projectFile) throws Exception {
 		final List<String> refProjNameList = new ArrayList<>();
@@ -272,51 +322,8 @@ public class Util {
 		return refProjNameList;
 	}
 
-	/**
-	 * When running from the command line, project must be explicitly added to the workspace
-	 * @param projPath - Absolute path to project directory
-	 * @param projName - Name of project
-	 */
-	private static void addProjectToWorkspace(String projPath, String projName) throws Exception {
 
-		final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projName);
-		final IProjectDescription projectDescription = ResourcesPlugin.getWorkspace()
-				.newProjectDescription(project.getName());
-		final String absProjPath = Paths
-				.get(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString(), projPath)
-				.toString();
-		projectDescription.setLocation(new org.eclipse.core.runtime.Path(absProjPath));
-
-		try {
-			if (!project.exists()) {
-				project.create(projectDescription, new NullProgressMonitor());
-			}
-		} catch (CoreException e) {
-			boolean name = ResourcesPlugin.getWorkspace().validateName(projName, IResource.PROJECT).isOK();
-			boolean loc = ResourcesPlugin.getWorkspace()
-					.validateProjectLocation(project, new org.eclipse.core.runtime.Path(absProjPath))
-					.isOK();
-			throw new Exception("Problem creating project " + projName + " at " + projPath + ": " + e.getMessage()
-					+ " Project name is " + (name ? "valid" : "not valid") + ". Project location is "
-					+ (loc ? "valid" : "not valid") + ".");
-		}
-
-		try {
-			if (!project.isOpen()) {
-				project.open(new NullProgressMonitor());
-			}
-		} catch (CoreException e) {
-			boolean name = ResourcesPlugin.getWorkspace().validateName(projName, IResource.PROJECT).isOK();
-			boolean loc = ResourcesPlugin.getWorkspace()
-					.validateProjectLocation(project, new org.eclipse.core.runtime.Path(absProjPath))
-					.isOK();
-			throw new Exception("Problem opening project " + projName + " at " + projPath + ": " + e.getMessage()
-					+ " Project name is " + (name ? "valid" : "not valid") + ". Project location is "
-					+ (loc ? "valid" : "not valid") + ".");
-		}
-	}
-
-	public static void writeOutput(AgreeOutput output, String outputPath) {
+	public static void writeOutput(AgreeOutput output, Path outputPath) {
 
 		ExclusionStrategy exStrat = new ExclusionStrategy() {
 
@@ -340,7 +347,7 @@ public class Util {
 				.create();
 		try {
 			if (outputPath != null) {
-				final File outputFile = new File(outputPath);
+				final File outputFile = outputPath.toFile();
 				final JsonWriter jsonWriter = new JsonWriter(new FileWriter(outputFile));
 				jsonWriter.setIndent("    ");
 				gson.toJson(output, output.getClass(), jsonWriter);

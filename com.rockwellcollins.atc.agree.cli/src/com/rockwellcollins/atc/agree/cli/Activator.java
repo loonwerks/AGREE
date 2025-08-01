@@ -1,9 +1,7 @@
 package com.rockwellcollins.atc.agree.cli;
 
-import org.eclipse.osgi.service.environment.EnvironmentInfo;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 
 
 //public class Activator implements BundleActivator {

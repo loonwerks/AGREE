@@ -1,6 +1,5 @@
 package com.rockwellcollins.atc.agree.cli;
 
-import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,7 +29,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -140,22 +138,19 @@ public class Agree implements IApplication {
 	@Override
 	public Object start(IApplicationContext context) throws Exception {
 
-		System.out.println("Starting AGREE analysis");
-
 		context.applicationRunning();
 
-		// Read the meta information about the plug-ins to get the annex information.
-		EcorePlugin.ExtensionProcessor.process(null);
+		System.out.println("Starting AGREE analysis");
 
 		// Output Json object
 		final AgreeOutput output = new AgreeOutput();
 		output.setDate((new Date()).toString());
 
 		// Process command line options
-		final String workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
-		String projPath = null;
+		final Path workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toPath();
+		Path projPath = null;
 		String component = null;
-		String outputPath = null;
+		Path outputPath = null;
 		String[] fileArray = null;
 		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		// Reset preferences to default values
@@ -188,7 +183,7 @@ public class Agree implements IApplication {
 		options.addOption(DATA, true, "required, path of workspace");
 		options.addOption(APPLICATION, true,
 				"required, the name of this analysis (com.rockwellcollins.atc.agree.cli.Agree)");
-		options.addOption(PROJECT_PATH, "projectPath", true, "required, project path (relative to workspace)");
+		options.addOption(PROJECT_PATH, "projectPath", true, "optional, project path relative to workspace");
 		options.addOption(COMP_IMPL, "compImpl", true, "required, qualified component implementation name");
 		options.addOption(OUTPUT, "output", true, "required, output JSON file absolute path");
 		Option option = new Option(FILES, "files", true, "optional, supplementary AADL files (absolute paths)");
@@ -220,7 +215,7 @@ public class Agree implements IApplication {
 			if (commandLine.hasOption(HELP)) {
 				exit = true;
 			}
-			if (workspace == null || workspace.isBlank()) {
+			if (workspace == null) {
 				exit = true;
 				output.addStatusMessage("A workspace must be specified.");
 			}
@@ -234,24 +229,17 @@ public class Agree implements IApplication {
 				}
 			}
 			if (commandLine.hasOption(PROJECT_PATH)) {
-				projPath = commandLine.getOptionValue(PROJECT_PATH);
-				final Path projectPath = Paths.get(workspace, projPath);
-				if (!Files.isDirectory(projectPath)) {
-					exit = true;
-					output.addStatusMessage("Specified project directory doesn't exist: " + projectPath.toString());
-				} else {
-					output.setProject(projPath);
-				}
+				projPath = workspace.resolve(commandLine.getOptionValue(PROJECT_PATH));
 			} else {
-				output.addStatusMessage("Project path must be specified.");
-				exit = true;
+				projPath = workspace;
 			}
+			output.setProject(projPath.toString());
 			if (commandLine.hasOption(OUTPUT)) {
-				outputPath = commandLine.getOptionValue(OUTPUT);
+				outputPath = Paths.get(commandLine.getOptionValue(OUTPUT));
 
 				// Make sure output directory exists and is valid
 				try {
-					Paths.get(outputPath).getParent().toFile().mkdirs();
+					outputPath.getParent().toFile().mkdirs();
 				} catch (InvalidPathException e1) {
 					exit = true;
 					outputPath = null;
@@ -429,7 +417,6 @@ public class Agree implements IApplication {
 			exit = true;
 		}
 
-
 		if (exit) {
 			final HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp("osate", options);
@@ -459,12 +446,13 @@ public class Agree implements IApplication {
 
 		// Add plug-in contributions to resource set
 		for (URI uri : PluginSupportUtil.getContributedAadl()) {
-			resourceSet.getResource(uri, true);
+			Resource res = resourceSet.getResource(uri, true);
+			System.out.println("... " + res.getURI() + (res.isLoaded() ? " is loaded" : " is not loaded"));
 		}
 
 		// Load project AADL files
 		try {
-			Util.loadProjectAadlFiles(projPath, fileArray, resourceSet);
+			Util.loadProjectAadlFiles(workspace, projPath, fileArray, resourceSet);
 		} catch (Exception e) {
 			output.setStatus(AgreeOutput.INTERRUPTED);
 			output.addStatusMessage(e.getMessage());

@@ -22,7 +22,7 @@
 <feature
       id="com.rockwellcollins.atc.agree.feature"
       label="AGREE Annex for OSATE2"
-      version="2.11.3.qualifier"
+      version="2.12.0"
       provider-name="Collins Aerospace">
 
    <copyright>

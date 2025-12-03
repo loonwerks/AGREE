@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AADL Simulator Xtext UI
 Bundle-Vendor: The University of Alabama in Huntsville
-Bundle-Version: 3.1.300
+Bundle-Version: 3.1.301.qualifier
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator.xtext.ui;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: edu.uah.rsesc.aadlsimulator.xtext;bundle-version="[3.1.0,4.0.0)";visibility:=reexport,
@@ -16,5 +16,5 @@ Require-Bundle: edu.uah.rsesc.aadlsimulator.xtext;bundle-version="[3.1.0,4.0.0)"
 Import-Package: org.apache.log4j;version="[1.1.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Activator: edu.uah.rsesc.aadlsimulator.xtext.ui.internal.XtextActivator
-Export-Package: edu.uah.rsesc.aadlsimulator.xtext.ui;version="3.1.300"
+Export-Package: edu.uah.rsesc.aadlsimulator.xtext.ui;version="3.1.301"
 Automatic-Module-Name: edu.uah.rsesc.aadlsimulator.xtext.ui

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AADL Simulator AGREE Components
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator.agree;singleton:=true
-Bundle-Version: 2.9.300
+Bundle-Version: 2.9.301.qualifier
 Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
  org.eclipse.core.runtime;bundle-version="[3.20.0,4.0.0)",
  com.rockwellcollins.atc.agree;bundle-version="[4.0.0,5.0.0)",
@@ -17,10 +17,10 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
  com.collins.trustedsystems.jkindapi;bundle-version="[4.0.0,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
-Export-Package: edu.uah.rsesc.aadlsimulator.agree;version="2.9.300",
- edu.uah.rsesc.aadlsimulator.agree.engine;version="2.9.300",
- edu.uah.rsesc.aadlsimulator.agree.ext;version="2.9.300",
- edu.uah.rsesc.aadlsimulator.agree.services;version="2.9.300",
- edu.uah.rsesc.aadlsimulator.agree.sim;version="2.9.300"
+Export-Package: edu.uah.rsesc.aadlsimulator.agree;version="2.9.301",
+ edu.uah.rsesc.aadlsimulator.agree.engine;version="2.9.301",
+ edu.uah.rsesc.aadlsimulator.agree.ext;version="2.9.301",
+ edu.uah.rsesc.aadlsimulator.agree.services;version="2.9.301",
+ edu.uah.rsesc.aadlsimulator.agree.sim;version="2.9.301"
 Bundle-Vendor: The University of Alabama in Huntsville
 Automatic-Module-Name: edu.uah.rsesc.aadlsimulator.agree

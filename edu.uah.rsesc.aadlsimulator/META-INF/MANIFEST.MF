@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AADL Simulator
 Bundle-SymbolicName: edu.uah.rsesc.aadlsimulator;singleton:=true
-Bundle-Version: 2.9.300
+Bundle-Version: 2.9.301.qualifier
 Bundle-Vendor: The University of Alabama in Huntsville
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.20.0,4.0.0)",
  org.eclipse.debug.core;bundle-version="[3.18.0,4.0.0)",
@@ -19,8 +19,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.20.0,4.0.0)",
  edu.uah.rsesc.aadlsimulator.xtext;bundle-version="[3.1.0,4.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
-Export-Package: edu.uah.rsesc.aadlsimulator;version="2.9.300",
- edu.uah.rsesc.aadlsimulator.launch;version="2.9.300",
- edu.uah.rsesc.aadlsimulator.services;version="2.9.300"
+Export-Package: edu.uah.rsesc.aadlsimulator;version="2.9.301",
+ edu.uah.rsesc.aadlsimulator.launch;version="2.9.301",
+ edu.uah.rsesc.aadlsimulator.services;version="2.9.301"
 Service-Component: components/DefaultSimulationService.xml
 Automatic-Module-Name: edu.uah.rsesc.aadlsimulator
